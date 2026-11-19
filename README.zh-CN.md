@@ -78,6 +78,8 @@
 
 ## 运行
 
+[最新发布](https://github.com/yldm-ai/mirra/releases/latest)里有 macOS 磁盘映像、Windows 安装程序、Android APK（发布了的话）和网页版；网页版也可以直接在 [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/) 打开。想自己构建：
+
 仓库里每个 App 放在 `apps/` 下；Mirra 的代码、Go 模块和打包配置（`nsgo.yaml`）都在 `apps/mirra`，Go 和 NSGo 命令在那里运行。
 
 需要 Go 1.27.4 或更高版本。在 Mac 上（也能构建 iOS 和 Android 版本）：
@@ -111,8 +113,10 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 
 | 平台 | 状态 |
 | --- | --- |
-| macOS | 可以运行；在真实窗口里测试过 |
-| iOS、Android、Windows | `nsgo build` 能打包（iOS 模拟器 App、用调试密钥签名的 APK、Windows 安装程序）；还没有在设备或模拟器上运行过 |
+| macOS | 可以运行；在真实窗口里测试过。发布里的磁盘映像用 Developer ID 签名并经过公证 |
+| Windows | 发布里的安装程序用代码签名证书签过名；还没有在设备上运行过 |
+| Android | `nsgo build` 能打出 APK；配置好签名密钥后随发布提供。还没有在设备上运行过 |
+| iOS | 从源码构建（`go tool nsgo dev -target ios_simulator`）；还没有在设备上运行过 |
 | Linux | 还不在构建目标里；NSGo 支持，这里没测过 |
 | 网页 | 在 [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/) 打开，和官网一起构建发布。浏览器里没有安全存储和文件系统，所以 Key、作品和上传的衣服只保存在当前页面，想保留的图片要导出 |
 
@@ -130,7 +134,7 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 ```sh
 go tool nsgo test .                                    # headless 测试，图库和接口都用本地模拟
 go tool nsgo test -target macos .                      # 同一套测试在真实窗口里跑
-go tool nsgo check -target macos,ios,android,windows   # 对每个平台做 vet
+go tool nsgo check -target macos,ios,android,windows,web   # 对每个平台做 vet
 go run ./tools/appicon                                 # 重新绘制图标
 ```
 
@@ -151,6 +155,10 @@ bun run og          # 从 dev server 的 /og/<语言>/ 卡片重新截出 public
 ```
 
 推送到 `main` 且改动了官网、App 或截图时，`.github/workflows/website.yml` 会把它发布到 GitHub Pages，App 的网页版（在 `apps/mirra` 里 `go tool nsgo build -target web`）放在 `app/` 下。
+
+### 发布
+
+`.github/workflows/ci.yml` 在 PR 和 `main` 上跑测试、对每个平台做 vet、构建所有安装包和官网。`main` 上通过后，`.github/workflows/release.yml` 按上一个 tag 以来的 Conventional Commits 决定版本：`feat` 升次版本号，`fix` 和 `perf` 升修订号，`docs`、`chore` 和 `website` scope 不发版。它把版本号写进 `apps/mirra/nsgo.yaml`，把 `CHANGELOG.md` 的 Unreleased 一节改成这个版本的一节（Unreleased 为空时按提交生成），提交并打 `vX.Y.Z` tag，构建安装包（`.github/workflows/package.yml`），连同校验和与来源证明一起发布，再重新构建官网，让下载卡片指向这些文件。在 `main` 上手动运行 Release 可以强制升版本。macOS 安装包用组织的证书签名并公证，Windows 安装包也用组织的证书签名；Android APK 要等 `ANDROID_KEYSTORE`、`NSGO_KEYSTORE_PASSWORD`、`NSGO_KEY_PASSWORD` 这几个 secret 存好正式签名密钥后才会发布，因为已安装的 App 只能升级到同一个密钥签名的 APK。
 
 ## 许可
 

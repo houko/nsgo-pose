@@ -78,6 +78,8 @@ The code map, with the boundaries the code keeps, is in [ARCHITECTURE.md](ARCHIT
 
 ## Run it
 
+The [latest release](https://github.com/yldm-ai/mirra/releases/latest) has the macOS disk image, the Windows installer, the Android APK when there is one, and the web build; the web app also runs at [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/). To build it yourself:
+
 The repository keeps each app under `apps/`; Mirra, its Go module and its packaging configuration (`nsgo.yaml`) are in `apps/mirra`, and Go and NSGo commands run from there.
 
 Requires Go 1.27.4 or later. On a Mac, which also builds the iOS and Android apps:
@@ -111,8 +113,10 @@ A local server has to speak the same OpenAI-compatible API; ComfyUI's own protoc
 
 | Platform | State |
 | --- | --- |
-| macOS | Runs; tested in a real window |
-| iOS, Android, Windows | `nsgo build` packages them (an iOS Simulator app, an APK signed with the debug key, a Windows installer); not yet run on a device or simulator |
+| macOS | Runs; tested in a real window. Releases carry a disk image signed with a Developer ID and notarized |
+| Windows | Releases carry an installer signed with a code signing certificate; not yet run on a device |
+| Android | `nsgo build` makes an APK; releases carry it once its signing key is set up. Not yet run on a device |
+| iOS | Build from source (`go tool nsgo dev -target ios_simulator`); not yet run on a device |
 | Linux | Not in the build targets yet; NSGo supports it, untested here |
 | Web | Runs at [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/), built with the website. A browser has no secure store or file system for the app, so the key, works and added clothes last as long as the page; export pictures to keep them |
 
@@ -130,7 +134,7 @@ From `apps/mirra`:
 ```sh
 go tool nsgo test .                                    # headless tests, with local fakes of the galleries and the API
 go tool nsgo test -target macos .                      # the same tests in a real window
-go tool nsgo check -target macos,ios,android,windows   # vet every target
+go tool nsgo check -target macos,ios,android,windows,web   # vet every target
 go run ./tools/appicon                                 # redraw the icon
 ```
 
@@ -151,6 +155,10 @@ bun run og          # retake public/og-<lang>.png from the dev server's /og/<lan
 ```
 
 Pushes to `main` that touch it, the app or the screenshots publish it to GitHub Pages through `.github/workflows/website.yml`, with the app's web build (`go tool nsgo build -target web` in `apps/mirra`) under `app/`.
+
+### Releases
+
+`.github/workflows/ci.yml` tests the app, vets every target, builds every package and the website on pull requests and on `main`. Once it passes on `main`, `.github/workflows/release.yml` releases what the Conventional Commits since the last tag call for: `feat` is a minor version, `fix` and `perf` a patch, and `docs`, `chore` and the `website` scope release nothing. It writes the version into `apps/mirra/nsgo.yaml`, makes `CHANGELOG.md`'s Unreleased section the version's section (or writes one from the commits when Unreleased is empty), commits and tags `vX.Y.Z`, builds the packages (`.github/workflows/package.yml`), publishes them with their checksums and provenance, and rebuilds the website, whose download cards link them. Run Release by hand from `main` to force a bump. The macOS package is signed and notarized and the Windows one signed with the organization's certificates; the Android APK ships once the `ANDROID_KEYSTORE`, `NSGO_KEYSTORE_PASSWORD` and `NSGO_KEY_PASSWORD` secrets hold its release key, since installed copies update only to an APK signed with the same key.
 
 ## License
 

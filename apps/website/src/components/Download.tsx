@@ -3,6 +3,16 @@ import { links, site } from '../site'
 import { GlobeIcon, LaptopIcon, PhoneIcon } from './icons'
 import { Button, Card, Section } from './ui'
 
+// The end of each platform's file name in a release, after mirra-<version>- (.github/workflows/package.yml); iOS is built from source and the web app is published with this site.
+const files = [undefined, 'android-arm64.apk', 'macos-arm64.dmg', 'windows-x64-setup.exe', undefined]
+
+// file is the address of the latest release's file of a platform, when the release holds one: a release may leave a platform out, such as Android before its signing key is set up.
+function file(i: number): string | undefined {
+  const suffix = files[i]
+  if (!suffix || !site.release) return undefined
+  return site.release.files[`mirra-${site.release.tag.replace(/^v/, '')}-${suffix}`]
+}
+
 export function Download() {
   const t = useCopy()
   return (
@@ -12,8 +22,7 @@ export function Download() {
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {t.download.platforms.map(([name, requirement, action], i) => {
           const Icon = i < 2 ? PhoneIcon : i < 4 ? LaptopIcon : GlobeIcon
-          // iOS is built from source, the web app is published with this site, and the others download from the latest release once there is one.
-          const href = i === 0 ? links.development : i === 4 ? links.webApp : site.release?.url
+          const href = i === 0 ? links.development : i === 4 ? links.webApp : file(i)
           return (
             <Card key={name} className="flex flex-col p-6">
               <Icon className="size-6 text-muted" />

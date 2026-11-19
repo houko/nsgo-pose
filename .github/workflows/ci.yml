@@ -1,0 +1,97 @@
+name: CI
+
+# Tests the app, checks it compiles for every platform, builds every package and the website, and checks the release scripts, on pull requests and on pushes to main. A push to main that passes starts the Release workflow, which releases it when its commits call for a version.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/mirra/go.mod
+          cache-dependency-path: apps/mirra/go.sum
+      # NSGo's tester runs the app headless, with no window or display, so the tests need none of the system's GTK or fonts; they never reach the network.
+      - name: Test
+        working-directory: apps/mirra
+        run: go tool nsgo test .
+
+  # iOS needs Xcode's SDK, so the check runs on macOS.
+  check:
+    name: Check (macOS, iOS, Android, Windows, web)
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/mirra/go.mod
+          cache-dependency-path: apps/mirra/go.sum
+      - name: nsgo check
+        working-directory: apps/mirra
+        run: go tool nsgo check -target macos,ios,android,windows,web
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/mirra/go.mod
+          cache-dependency-path: apps/mirra/go.sum
+      - name: gofmt
+        working-directory: apps/mirra
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "::error::Not gofmt-formatted: $unformatted"
+            exit 1
+          fi
+      - name: go mod tidy
+        working-directory: apps/mirra
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+      - name: shellcheck
+        run: shellcheck .github/scripts/*.sh
+      - name: Release scripts
+        run: .github/scripts/changelog-test.sh
+
+  website:
+    name: Website
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.4"
+      - name: Install the website's dependencies
+        working-directory: apps/website
+        run: bun install --frozen-lockfile
+      - name: Type-check
+        working-directory: apps/website
+        run: bun run typecheck
+      - name: Build
+        working-directory: apps/website
+        run: bun run build
+
+  # Every package builds, unsigned, so that a release does not find a broken one after it has tagged.
+  package:
+    name: Package
+    uses: ./.github/workflows/package.yml

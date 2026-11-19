@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Releases on GitHub with a signed and notarized macOS disk image, a signed Windows installer and the web build, made from `main` when its commits call for a version; the website's download cards link them.
+- The app is named Mirra, capitalized, on the web page and in the installed apps.
 - A web version at https://yldm-ai.github.io/mirra/app/, published with the website; its key, works and clothes last as long as the page.
 - A website at https://yldm-ai.github.io/mirra/ in Chinese, English and Japanese, with share cards, language alternates and a sitemap for search engines.
 - The Chinese README's phone screenshot, which was blank, shows the studio again.
