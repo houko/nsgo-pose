@@ -25,7 +25,9 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/website/` | The website: TanStack Start prerendered to static pages in Chinese, English and Japanese, published by `.github/workflows/website.yml`. |
 | `apps/website/src/i18n/copy.ts` | The website's words in each language. |
 | `apps/website/src/components/` | The website's sections, from the hero to the FAQ. |
-| `apps/website/vite.config.ts` | The build: the Pages path, prerendering, and the version, stars, contributors and latest release it reads. |
+| `apps/website/vite.config.ts` | The build: the site's address and Pages path, the pages it prerenders and the sitemap, and the version, stars, contributors and latest release it reads. |
+| `apps/website/src/i18n/head.ts` | Each page's title, description, canonical and alternate links, Open Graph and Twitter cards and structured data. |
+| `apps/website/src/routes/og.$lang.tsx`, `apps/website/scripts/og.sh` | The 1200x630 card each language's Open Graph image is taken from, served by the dev server only, and the script that takes them into `public/`. |
 
 ## Boundaries
 

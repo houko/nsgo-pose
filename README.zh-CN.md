@@ -141,13 +141,14 @@ go run ./tools/appicon                                 # 重新绘制图标
 
 ### 官网
 
-[官网](https://yldm-ai.github.io/mirra/)在 `apps/website`：React 上的 TanStack Start 和 Router，加 Tailwind 和 react-i18next，用 Vite+ 和 Bun 构建，预渲染成中文（`/`）、英文（`/en/`）和日文（`/ja/`）三个静态页面。文案在 `src/i18n/copy.ts`；版本号、Star 数、贡献者和最新发布在构建时从 `apps/mirra/nsgo.yaml` 和 GitHub API 读取。在 `apps/website` 目录下：
+[官网](https://yldm-ai.github.io/mirra/)在 `apps/website`：React 上的 TanStack Start 和 Router，加 Tailwind 和 react-i18next，用 Vite+ 和 Bun 构建，预渲染成中文（`/`）、英文（`/en/`）和日文（`/ja/`）三个静态页面。文案在 `src/i18n/copy.ts`；版本号、Star 数、贡献者和最新发布在构建时从 `apps/mirra/nsgo.yaml` 和 GitHub API 读取。每个页面都带 canonical 地址、语言版本链接、Open Graph 和 Twitter 卡片以及结构化数据，构建时还会生成 `sitemap.xml`。在 `apps/website` 目录下：
 
 ```sh
 bun install
 bun run dev         # http://localhost:5175/
 bun run typecheck
 bun run build       # 输出到 dist/client；Pages 路径用 BASE_PATH=/mirra/
+bun run og          # 从 dev server 的 /og/<语言>/ 卡片重新截出 public/og-<语言>.png
 ```
 
 推送到 `main` 且改动了官网、截图或 App 版本号时，`.github/workflows/website.yml` 会把它发布到 GitHub Pages。

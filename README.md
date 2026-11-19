@@ -141,13 +141,14 @@ If a gallery changes its page format, the picker shows "Couldn't load the galler
 
 ### Website
 
-The [website](https://yldm-ai.github.io/mirra/) is in `apps/website`: TanStack Start and Router on React, Tailwind and react-i18next, built with Vite+ and Bun and prerendered into static pages in Chinese (`/`), English (`/en/`) and Japanese (`/ja/`). Its words are in `src/i18n/copy.ts`; the version, stars, contributors and latest release come from `apps/mirra/nsgo.yaml` and GitHub's API at build time. From `apps/website`:
+The [website](https://yldm-ai.github.io/mirra/) is in `apps/website`: TanStack Start and Router on React, Tailwind and react-i18next, built with Vite+ and Bun and prerendered into static pages in Chinese (`/`), English (`/en/`) and Japanese (`/ja/`). Its words are in `src/i18n/copy.ts`; the version, stars, contributors and latest release come from `apps/mirra/nsgo.yaml` and GitHub's API at build time. Each page carries its canonical address, language alternates, Open Graph and Twitter cards and structured data, and the build writes `sitemap.xml`. From `apps/website`:
 
 ```sh
 bun install
 bun run dev         # http://localhost:5175/
 bun run typecheck
 bun run build       # dist/client; BASE_PATH=/mirra/ for the Pages path
+bun run og          # retake public/og-<lang>.png from the dev server's /og/<lang>/ cards
 ```
 
 Pushes to `main` that touch it, the screenshots or the app's version publish it to GitHub Pages through `.github/workflows/website.yml`.

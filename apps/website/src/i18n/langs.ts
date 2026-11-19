@@ -1,7 +1,7 @@
 export const LANGS = [
-  { code: 'zh', path: '/', html: 'zh-Hans', label: '简体中文' },
-  { code: 'en', path: '/en', html: 'en', label: 'English' },
-  { code: 'ja', path: '/ja', html: 'ja', label: '日本語' },
+  { code: 'zh', path: '/', html: 'zh-Hans', og: 'zh_CN', label: '简体中文' },
+  { code: 'en', path: '/en/', html: 'en', og: 'en_US', label: 'English' },
+  { code: 'ja', path: '/ja/', html: 'ja', og: 'ja_JP', label: '日本語' },
 ] as const
 
 export type Lang = (typeof LANGS)[number]['code']
@@ -10,4 +10,9 @@ export type Lang = (typeof LANGS)[number]['code']
 export function langOf(pathname: string): (typeof LANGS)[number] {
   const first = pathname.split('/').filter(Boolean)[0]
   return LANGS.find((l) => l.code === first) ?? LANGS[0]
+}
+
+// pageURL is a language's page as an absolute address; its path ends in a slash, as Pages serves it.
+export function pageURL(siteURL: string, lang: (typeof LANGS)[number]): string {
+  return `${siteURL}${lang.path.slice(1)}`
 }

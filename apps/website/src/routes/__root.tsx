@@ -1,7 +1,7 @@
 import { HeadContent, Outlet, Scripts, createRootRoute, useLocation } from '@tanstack/react-router'
 
 import icon from '../../../mirra/assets/Icon.png'
-import { LANGS, langOf } from '../i18n/langs'
+import { langOf } from '../i18n/langs'
 import css from '../styles/app.css?url'
 
 export const Route = createRootRoute({
@@ -11,7 +11,6 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: css },
       { rel: 'icon', type: 'image/png', href: icon },
       { rel: 'apple-touch-icon', href: icon },
-      ...LANGS.map((l) => ({ rel: 'alternate', hrefLang: l.html, href: `${import.meta.env.BASE_URL}${l.path.slice(1)}${l.path === '/' ? '' : '/'}` })),
     ],
   }),
   component: Root,

@@ -1,7 +1,9 @@
-// What the build knows about the project: the app's version and, when GitHub answered, its stars, contributors and latest release.
+// What the build knows about the project: the app's version, the site's address and, when GitHub answered, its stars, contributors and latest release.
 export type SiteData = {
   version: string
   repo: string
+  // url is the site's absolute address with its base path, ending in a slash.
+  url: string
   stars?: number
   contributors: { login: string; avatar: string; url: string }[]
   release?: { tag: string; url: string }
