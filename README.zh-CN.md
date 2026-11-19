@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/icon.png" alt="" width="96">
+  <img src="apps/mirra/assets/Icon.png" alt="" width="96">
 </p>
 
 <h1 align="center">Mirra 镜衣</h1>
@@ -14,16 +14,16 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/zh-CN/phone-home.png" alt="手机上的工作室：今日造型和三个要素" width="260">
-  <img src="docs/screenshots/zh-CN/phone-me.png" alt="我的：App 信息和 AI 服务" width="260">
+  <img src="screenshots/phone-home-zh-Hans.png" alt="手机上的工作室：今日造型和三个要素" width="260">
+  <img src="screenshots/phone-me-zh-Hans.png" alt="我的：App 信息和 AI 服务" width="260">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/zh-CN/desktop.png" alt="桌面工作室：素材库、画布和本次造型" width="800">
+  <img src="screenshots/desktop-zh-Hans.png" alt="桌面工作室：素材库、画布和本次造型" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/zh-CN/desktop-settings.png" alt="桌面上的 AI 服务设置" width="800">
+  <img src="screenshots/desktop-settings-zh-Hans.png" alt="桌面上的 AI 服务设置" width="800">
 </p>
 
 ## 功能
@@ -71,29 +71,17 @@
 
 图片按姿势、服装、人脸的顺序发送，prompt 按这个顺序给它们编号，并说明每张的用途：人偶的姿势和机位、要穿上的服装、要用的脸和发型。
 
-| 文件 | 内容 |
-| --- | --- |
-| [`gallery.go`](gallery.go) | 读取三个图库的目录，以及过滤掉哪些内容 |
-| [`generate.go`](generate.go) | prompt 和 `/images/edits` 请求 |
-| [`works.go`](works.go) | 造型册：带编号的作品，造型和收藏状态存在旁边的 JSON 里 |
-| [`service.go`](service.go) | 云端 / 本地服务和连接测试 |
-| [`wardrobe.go`](wardrobe.go) | 收藏的服装、你上传的衣服、当前正在穿的那套 |
-| [`app.go`](app.go) | App 的状态、布局选择和生成流程 |
-| [`library.go`](library.go) | 两种布局共用的部分：素材库的筛选和网格、本次造型的条目、预览 |
-| [`phone.go`](phone.go) | 手机布局和三步编辑页 |
-| [`desktop.go`](desktop.go) | 桌面工作室的顶栏和三栏 |
-| [`pages.go`](pages.go) | 结果、作品和 AI 服务设置 |
-| [`theme.yaml`](theme.yaml) | App 固定使用的深色琥珀主题 |
-| [`locales/`](locales) | 英文和中文文案 |
-| [`tools/appicon`](tools/appicon) | 绘制 `assets/Icon.png` |
+代码地图以及代码遵守的边界见 [ARCHITECTURE.md](ARCHITECTURE.md)。
 
 ## 运行
+
+仓库里每个 App 放在 `apps/` 下；Mirra 的代码、Go 模块和打包配置（`nsgo.yaml`）都在 `apps/mirra`，Go 和 NSGo 命令在那里运行。
 
 需要 Go 1.27.4 或更高版本。在 Mac 上（也能构建 iOS 和 Android 版本）：
 
 ```sh
 git clone https://github.com/yldm-ai/mirra
-cd mirra
+cd mirra/apps/mirra
 go tool nsgo dev                     # 本机
 go tool nsgo dev -lang zh-Hans       # 中文界面
 go tool nsgo dev -target ios_simulator
@@ -134,6 +122,8 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 
 ## 开发
 
+在 `apps/mirra` 目录下：
+
 ```sh
 go tool nsgo test .                                    # headless 测试，图库和接口都用本地模拟
 go tool nsgo test -target macos .                      # 同一套测试在真实窗口里跑
@@ -141,9 +131,9 @@ go tool nsgo check -target macos,ios,android,windows   # 对每个平台做 vet
 go run ./tools/appicon                                 # 重新绘制图标
 ```
 
-测试不访问网络：`fixtures_test.go` 按图库的格式提供虚构的页面数据，以及一个模拟的 `/images/edits`。
+测试不访问网络：`apps/mirra/fixtures_test.go` 按图库的格式提供虚构的页面数据，以及一个模拟的 `/images/edits`。
 
-如果哪个图库改了页面格式，选择页会显示「图库加载失败」和解析器的报错；解析代码在 `gallery.go`。
+如果哪个图库改了页面格式，选择页会显示「图库加载失败」和解析器的报错；解析代码在 `apps/mirra/gallery.go`。
 
 ## 许可
 

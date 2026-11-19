@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yldm-ai/mirra/locales"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"

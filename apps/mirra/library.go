@@ -3,7 +3,7 @@ package main
 import (
 	"strings"
 
-	"github.com/yldm-ai/mirra/locales"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"

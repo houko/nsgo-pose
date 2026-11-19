@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/icon.png" alt="" width="96">
+  <img src="apps/mirra/assets/Icon.png" alt="" width="96">
 </p>
 
 <h1 align="center">Mirra 镜衣</h1>
@@ -14,16 +14,16 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/en/phone-home.png" alt="Studio on a phone: today's look and its three elements" width="260">
-  <img src="docs/screenshots/en/phone-me.png" alt="Me: the app and its AI service" width="260">
+  <img src="screenshots/phone-home-en.png" alt="Studio on a phone: today's look and its three elements" width="260">
+  <img src="screenshots/phone-me-en.png" alt="Me: the app and its AI service" width="260">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/en/desktop.png" alt="The desktop studio: library, canvas and the look" width="800">
+  <img src="screenshots/desktop-en.png" alt="The desktop studio: library, canvas and the look" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/en/desktop-settings.png" alt="AI service settings on the desktop" width="800">
+  <img src="screenshots/desktop-settings-en.png" alt="AI service settings on the desktop" width="800">
 </p>
 
 ## What it does
@@ -71,29 +71,17 @@ gallery index (HTML / JS)  ──►  catalog: id, group, title, thumbnail, full
 
 The images are sent pose first, then the outfit and the face, and the prompt numbers them in that order and says what each one is for: the mannequin's pose and camera angle, the outfit to put on, the face and hair to use.
 
-| File | What is in it |
-| --- | --- |
-| [`gallery.go`](gallery.go) | Reading the three galleries' indexes and what is left out |
-| [`generate.go`](generate.go) | The prompt and the `/images/edits` request |
-| [`works.go`](works.go) | The lookbook: numbered pictures with their look and star in a sidecar |
-| [`service.go`](service.go) | Cloud or local service and the connection test |
-| [`wardrobe.go`](wardrobe.go) | Favorite outfits, your own clothes and what is being worn |
-| [`app.go`](app.go) | The app's state, the choice of layout and generating |
-| [`library.go`](library.go) | What both layouts share: a gallery's chips and grid, the look's rows, the preview |
-| [`phone.go`](phone.go) | The phone layout and its three-step editor |
-| [`desktop.go`](desktop.go) | The desktop studio's top bar and three columns |
-| [`pages.go`](pages.go) | A result, Works and the AI service settings |
-| [`theme.yaml`](theme.yaml) | The dark amber theme the app always shows |
-| [`locales/`](locales) | English and Chinese messages |
-| [`tools/appicon`](tools/appicon) | Draws `assets/Icon.png` |
+The code map, with the boundaries the code keeps, is in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Run it
+
+The repository keeps each app under `apps/`; Mirra, its Go module and its packaging configuration (`nsgo.yaml`) are in `apps/mirra`, and Go and NSGo commands run from there.
 
 Requires Go 1.27.4 or later. On a Mac, which also builds the iOS and Android apps:
 
 ```sh
 git clone https://github.com/yldm-ai/mirra
-cd mirra
+cd mirra/apps/mirra
 go tool nsgo dev                     # this machine
 go tool nsgo dev -lang zh-Hans       # in Chinese
 go tool nsgo dev -target ios_simulator
@@ -134,6 +122,8 @@ A local server has to speak the same OpenAI-compatible API; ComfyUI's own protoc
 
 ## Development
 
+From `apps/mirra`:
+
 ```sh
 go tool nsgo test .                                    # headless tests, with local fakes of the galleries and the API
 go tool nsgo test -target macos .                      # the same tests in a real window
@@ -141,9 +131,9 @@ go tool nsgo check -target macos,ios,android,windows   # vet every target
 go run ./tools/appicon                                 # redraw the icon
 ```
 
-The tests never reach the network: `fixtures_test.go` serves made-up gallery pages in the galleries' formats and a fake `/images/edits`.
+The tests never reach the network: `apps/mirra/fixtures_test.go` serves made-up gallery pages in the galleries' formats and a fake `/images/edits`.
 
-If a gallery changes its page format, the picker shows "Couldn't load the gallery" with the parser's error; the parsers are in `gallery.go`.
+If a gallery changes its page format, the picker shows "Couldn't load the gallery" with the parser's error; the parsers are in `apps/mirra/gallery.go`.
 
 ## License
 
