@@ -2,7 +2,7 @@
   <img src="docs/icon.png" alt="" width="96">
 </p>
 
-<h1 align="center">换装换脸</h1>
+<h1 align="center">Mirra 镜衣</h1>
 
 <p align="center">
   <a href="README.md">English</a> |
@@ -10,20 +10,26 @@
 </p>
 
 <p align="center">
-  把姿势、服装和人脸组合在一起，或者给自己的照片换一张脸，交给图像模型画出结果。用 Go 和 <a href="https://github.com/nsgo-dev/nsgo">NSGo</a> 写成，界面由各平台自己的原生控件绘制；同一份代码构建 macOS、iOS、Android 和 Windows 版本。
+  从三个参考图库里挑一张脸、一套服装和一个姿势，交给图像模型画出它们描述的那个人。用 Go 和 <a href="https://github.com/nsgo-dev/nsgo">NSGo</a> 写成，界面由各平台自己的原生控件绘制；同一份代码构建 macOS、iOS、Android 和 Windows 版本。
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/zh-CN/create.png" alt="创作页：姿势、服装、人脸三个槽位" width="260">
-  <img src="docs/screenshots/zh-CN/faces.png" alt="选择人脸" width="260">
-  <img src="docs/screenshots/zh-CN/settings.png" alt="设置页：生图接口和素材来源" width="260">
+  <img src="docs/screenshots/zh-CN/phone-home.png" alt="手机上的工作室：本次造型的参考图和三个条目" width="260">
+  <img src="docs/screenshots/zh-CN/phone-face.png" alt="第 1 步：选择人脸" width="260">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/zh-CN/desktop.png" alt="桌面工作室：素材库、画布和本次造型" width="800">
 </p>
 
 ## 功能
 
-- **姿势 + 服装 + 人脸。** 选一个姿势（无脸的灰色人偶）、一套服装（没有人穿的衣服）和一张脸，App 让图像模型生成一张具备这个姿势、服装和脸的成年人照片。
-- **给自己的照片换脸。** 底图切到「我的照片」，从相册选一张，再选一张脸。照片里的姿势、体型、衣服、构图和背景保持不变。服装只能用在姿势上，因为服装库的条款禁止用它的图片表现真实的人；这一点除了界面，`Request.Validate` 里也做了限制。
+- **人脸、服装、姿势。** 选一张脸（AI 生成，CC0）、一套服装（没有人穿的衣服）和一个姿势（无脸的灰色人偶），App 让图像模型生成一张具备这些的成年人照片。只有姿势是必选的。
+- **两种布局。** 窗口窄于 900pt 时是手机布局：底部有工作室、衣橱、作品、我的四个标签，造型分三步选好。更宽时是桌面工作室：左边是素材库，中间是本次造型或生成结果，右边是汇总和「生成造型」。
+- **贴合图库的筛选。** 人脸按发长，服装按季节和场合，姿势按机位。
+- **一次多张。** 一次请求可以生成 1、2 或 4 张，生成过程中可以取消。
 - **补充要求。** 写一句光线、背景之类的要求，随 prompt 一起发送。
+- **不用你的照片。** App 不读取用户本人的照片：姿势库和服装库的条款禁止用它们的图片表现真实的人。
 - **作品。** 每张结果都保存在本机，可以保存、分享、删除。
 - **自带模型。** 支持任何 OpenAI 兼容的图片编辑接口（`POST /images/edits`）；API Key 存在系统钥匙串里。
 - 界面有英文和简体中文。
@@ -49,23 +55,28 @@
 ```
 图库目录（HTML / JS）  ──►  条目：id、分类、标题、缩略图、原图
                                 │
-     选「姿势 + 服装 + 人脸」，或者「照片 + 人脸」
+           选人脸、服装和姿势
                                 │
-原图（各下载一次）+ 你的照片 + prompt
+     原图（各下载一次）+ prompt
                                 │
             POST {接口地址}/images/edits（multipart，image[] 按顺序）
                                 │
        b64_json 或 url  ──►  保存到 App 的数据目录
 ```
 
-prompt 按图片发送的顺序给它们编号，并说明每张的用途：人偶的姿势和机位，或者要保留的照片；要穿上的服装；要用的脸和发型。
+图片按姿势、服装、人脸的顺序发送，prompt 按这个顺序给它们编号，并说明每张的用途：人偶的姿势和机位、要穿上的服装、要用的脸和发型。
 
 | 文件 | 内容 |
 | --- | --- |
 | [`gallery.go`](gallery.go) | 读取三个图库的目录，以及过滤掉哪些内容 |
 | [`generate.go`](generate.go) | prompt 和 `/images/edits` 请求 |
 | [`works.go`](works.go) | 保存和列出结果 |
-| [`app.go`](app.go) | 各个页面：创作、选择页、结果、作品、设置 |
+| [`app.go`](app.go) | App 的状态、布局选择和生成流程 |
+| [`library.go`](library.go) | 两种布局共用的部分：素材库的筛选和网格、本次造型的条目、预览 |
+| [`phone.go`](phone.go) | 手机布局和三步编辑页 |
+| [`desktop.go`](desktop.go) | 桌面工作室的顶栏和三栏 |
+| [`pages.go`](pages.go) | 结果、作品和设置页 |
+| [`theme.yaml`](theme.yaml) | 颜色和圆角，浅色与深色 |
 | [`locales/`](locales) | 英文和中文文案 |
 | [`tools/appicon`](tools/appicon) | 绘制 `assets/Icon.png` |
 
@@ -109,7 +120,7 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 
 ## 隐私
 
-- 你的照片只会在按下「生成」时，随请求发给你配置的接口。
+- 只有按下「生成」时，App 才会把你选的图库图片和 prompt 发给你配置的接口。
 - 图库会看到你打开的缩略图和原图的请求，和用浏览器访问一样。
 - 结果保存在 App 的数据目录里，直到你删除。
 
