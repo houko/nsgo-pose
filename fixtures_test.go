@@ -114,6 +114,14 @@ func newServer(t testing.TB, api *fakeAPI) (*httptest.Server, Sites) {
 		mu.Unlock()
 		w.Write(pic)
 	})
+	mux.HandleFunc("/v1/models", func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Authorization") == "Bearer bad" {
+			w.WriteHeader(http.StatusUnauthorized)
+			io.WriteString(w, `{"error":{"message":"Incorrect API key provided."}}`)
+			return
+		}
+		io.WriteString(w, `{"data":[{"id":"test-model"}]}`)
+	})
 	mux.HandleFunc("/v1/images/edits", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseMultipartForm(32 << 20); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)

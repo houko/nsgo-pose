@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestValidate(t *testing.T) {
@@ -89,5 +90,48 @@ func TestGenerateErrors(t *testing.T) {
 	}
 	if _, err := Generate(context.Background(), http.DefaultClient, Config{APIKey: "k"}, Request{}); !errors.Is(err, ErrNoPose) {
 		t.Errorf("without a pose: err = %v", err)
+	}
+}
+
+func TestGenerateLocalWithoutKey(t *testing.T) {
+	api := &fakeAPI{}
+	srv, _ := newServer(t, api)
+	pose := &Item{Full: srv.URL + "/pose/img/a.png"}
+	if _, err := Generate(context.Background(), http.DefaultClient, Config{BaseURL: srv.URL + "/v1", Local: true}, Request{Pose: pose}); err != nil {
+		t.Fatal(err)
+	}
+	if got := api.last().Auth; got != "" {
+		t.Errorf("a keyless local request sent Authorization %q", got)
+	}
+}
+
+func TestGenerateReadsUploadedClothes(t *testing.T) {
+	api := &fakeAPI{}
+	srv, _ := newServer(t, api)
+	up, err := saveUpload(t.TempDir(), tinyPNG(t), time.Unix(0, 42))
+	if err != nil {
+		t.Fatal(err)
+	}
+	pose := &Item{Full: srv.URL + "/pose/img/a.png"}
+	if _, err := Generate(context.Background(), http.DefaultClient, Config{BaseURL: srv.URL + "/v1", APIKey: "k"},
+		Request{Pose: pose, Costume: &Item{Kind: KindCostume, ID: "MY-01", Group: uploadGroup, Full: up}}); err != nil {
+		t.Fatal(err)
+	}
+	if got := api.last().Images; !slices.Equal(got, []string{"a.png", "42.png"}) {
+		t.Errorf("images = %v", got)
+	}
+}
+
+func TestCheckConnection(t *testing.T) {
+	srv, _ := newServer(t, &fakeAPI{})
+	if err := CheckConnection(context.Background(), http.DefaultClient, Config{BaseURL: srv.URL + "/v1/", APIKey: "k"}); err != nil {
+		t.Errorf("a good key: %v", err)
+	}
+	err := CheckConnection(context.Background(), http.DefaultClient, Config{BaseURL: srv.URL + "/v1", APIKey: "bad"})
+	if err == nil || !strings.Contains(err.Error(), "Incorrect API key") {
+		t.Errorf("a bad key: %v", err)
+	}
+	if err := CheckConnection(context.Background(), http.DefaultClient, Config{BaseURL: srv.URL + "/nowhere"}); err == nil {
+		t.Error("a wrong address passed")
 	}
 }

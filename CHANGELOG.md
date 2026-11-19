@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0
+
+- A dark amber look with serif titles, after the second reference design.
+- The AI service is a cloud API or a local server (whose key may be left out), with a connection test and its status at the top of the app; on the desktop it is set up in a dialog.
+- A new picture waits to be saved to Works; generate it again, swap its outfit with one tap, star, export or delete it.
+- Works are numbered, can be starred and filtered, and open again with the look they were made from.
+- The wardrobe keeps favorite outfits and photos of the user's own clothes, and shows what the look is wearing.
+- The desktop canvas zooms, and changes the face or pose from its corner.
+- The picture count is gone from the interface; one Generate makes one picture.
+
 ## 0.2.0
 
 - Renamed Mirra (镜衣), with a warm theme in light and dark.

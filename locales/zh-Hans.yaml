@@ -1,13 +1,28 @@
 appName: 镜衣
 brand: Mirra
 brandTagline: 镜衣
+openSourceBadge: OPEN SOURCE
+openSourceTerms: 开源版 · 免费使用 · 无需账号
 tabStudio: 工作室
 tabWardrobe: 衣橱
 tabWorks: 作品
+worksTabCount: 作品 {n, number}
 tabMe: 我的
-tabSettings: 设置
 tabsLabel: 分区
 lookTitle: 本次造型
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: TODAY'S LOOK · {group}
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: LIVE PREVIEW · {group}
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: NEW LOOK · 第 {n, number} 次生成
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
 slotFace: 人脸
 slotCostume: 服装
 slotPose: 姿势
@@ -17,22 +32,29 @@ stepCostume: 挑选服装
 stepPose: 设定姿势
 stepTab: "{n} {name}"
 stepsLabel: 步骤
+selectedItem: 已选 · {id}
 done: 完成
 back: 返回
-nextCostume: 下一步：选服装
-nextPose: 下一步：选姿势
+close: 关闭
+nextCostume: 下一步 · 选服装
+nextPose: 下一步 · 选姿势
 generate: 生成造型
-countLabel: 生成张数
-countOption: "{n} 张"
+generateNeedsService: 生成造型 · 先配置 AI 服务
 needPose: 先选一个姿势。
-needKey: 先在设置里填写 API Key。
+needService: 先配置 AI 服务。
+viaService: 通过「{service}」生成 · 不经过第三方
+configureOnce: 开源版免费使用，配置一次即可
 generating: 正在生成
 cancel: 取消
 generateFailed: 生成失败
-generatedMany: 已生成 {n} 张，在作品里查看。
-selectedItem: 已选 · {id}
-filtersLabel: 筛选
+changeFace: 换人脸
+changePose: 换姿势
+zoomIn: 放大
+zoomOut: 缩小
+zoomPercent: "{n, number}%"
+filtersLabel: 素材库
 all: 全部
+allCount: 全部 {n, number}
 angleFront: 正面
 angleThreeQuarter: 斜侧
 angleSide: 侧面
@@ -52,23 +74,77 @@ loadFailed: 图库加载失败
 retry: 重试
 noteLabel: 补充要求
 notePlaceholder: 补充要求，例如光线、背景
-resultTitle: 结果
-save: 保存
-share: 分享
+favorite: 收藏
+unfavorite: 取消收藏
+favorites: 收藏
+favoritesCount: 收藏 {n, number}
+myUploads: 我的上传
+uploadsCount: 我的上传 {n, number}
+outfitGallery: 服装库
+galleryCount: 服装库 {n, number}
+uploadName: 我的衣服 {n}
+uploadClothes: 上传衣服
+wearing: 正在穿
+tapToTry: 点一下试穿 · {group}
+wearAndGenerate: 穿上生成
+noFavoritesTitle: 还没有收藏
+noFavoritesBody: 去「服装库」点 ♡ 收藏喜欢的搭配
+noUploadsTitle: 还没上传过衣服
+noUploadsBody: 点「上传衣服」，拍一张平铺或挂拍的照片即可
+swapOutfit: 同一张脸，一键换搭配
+swapTo: 换成「{name}」
+usedFace: 使用的人脸
+usedPose: 使用的姿势
+regenerate: 再生成
+regenerateOnce: 再生成一次
+saveToWorks: 保存到作品
+inWorks: 已在作品中
+savedToWorks: "已保存为作品 No.{no}"
+seeWorks: 去查看
+export: 导出
+exported: 已导出
+deleted: 作品已删除
 delete: 删除
-saved: 已保存
-saveFailed: 保存失败
 deleteConfirm: 删除这张图片？
-deleteConfirmBody: 会从本机的作品里移除。
-noWorks: 生成的图片会出现在这里。
-workLabel: "{date, date, medium} {date, time, short} 的作品"
-apiSection: 生图接口
-apiFooter: 支持任何 OpenAI 兼容的图片编辑接口（POST /images/edits）。Key 存在系统钥匙串里。
+deleteConfirmBody: 会从本机移除。
+saveFailed: 保存失败
+backToEdit: 返回编辑
+worksFilter: 作品筛选
+noWorksTitle: 造型册还是空的
+noWorksBody: 生成后点「保存到作品」，就会收进这本造型册
+noFavoriteWorksTitle: 还没有收藏的作品
+firstLook: 去生成第一套
+openWork: "打开作品 No.{no}"
+aiService: AI 服务
+aiServiceSettings: AI 服务设置
+serviceIntro: 开源版无需账号——配置一次 AI 服务并测试连接，就可以开始生成造型。
+serviceKind: 服务类型
+serviceCloud: 云端 API
+serviceLocal: 本地部署
 baseURL: 接口地址
 apiKey: API Key
+apiKeyOptional: API Key（本地部署可留空）
 apiKeyPlaceholder: sk-…
+showKey: 显示
+hideKey: 隐藏
 model: 模型
 size: 尺寸
+testConnection: 测试连接
+testAgain: 重新测试
+connectionOK: 连接成功，可以开始生成了
+connectionFailed: 连接失败：{error}
+statusUnconfigured: 未配置 AI 服务
+statusConnected: "{service} · 已连接"
+statusUntested: "{service} · 未测试"
+statusTesting: "{service} · 测试中…"
+statusFailed: "{service} · 连接失败"
+privacyCloud: Key 只保存在本机系统钥匙串，不经过任何第三方服务器；请求从你的设备直接发往你配置的服务。
+privacyLocal: 请求从你的设备直接发往你自己部署的服务，不经过任何第三方服务器，也不产生费用。
 keyUnavailable: 这台设备没有可以保存 Key 的安全存储。
-sourcesSection: 素材来源
-sourcesFooter: 姿势来自 POSE-DB-01，服装来自 COSTUME-DB-01，人脸来自 FACE REFERENCE（CC0）。每张图只在你使用时单独获取，App 不内置、也不转发这些图片。
+aboutSection: 关于
+sourceCode: 源代码
+license: 开源许可
+sourcesPose: 姿势素材
+sourcesOutfit: 服装素材
+sourcesFace: 人脸素材
+sourcesFooter: 每张图库图片只在你使用时单独获取，App 不内置、也不转发这些图片。
