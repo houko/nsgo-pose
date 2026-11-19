@@ -1,0 +1,279 @@
+name: Package
+
+# Builds Mirra's packages with nsgo build (go tool nsgo, the version apps/mirra/go.mod pins), each platform on a runner of its own, and keeps each platform's files from nsgo build's releases folder, with a checksums-<platform>.txt of their SHA-256, as the run's artifact mirra-<platform>: the macOS disk image, the Windows installer, the Android APK and the web build's zip, each with the .sha256 beside it, and from the macOS row the install.sh and install.ps1 that install the latest release. CI calls it to check that every package builds; Release calls it with the tag it made, and its Publish job checks the checksums and uploads the files to that tag's draft release. NSGo's Windows and Android builds need no cgo, so Ubuntu makes them (the Windows installer with NSIS); the disk image needs a macOS runner. iOS is built from source, as the App Store takes only builds signed with a provisioning profile.
+#
+# A release build, or a run by hand that asks for it, signs:
+#
+# - macOS: the app and its disk image with the Developer ID certificate in MACOS_CERTIFICATE (a base64 PKCS#12) and MACOS_CERTIFICATE_PASSWORD, and notarizes the image with the App Store Connect API key in APPSTORE_API_KEY_P8 (base64), APPSTORE_API_KEY_ID and APPSTORE_API_ISSUER_ID, so Gatekeeper opens it without a warning.
+# - Windows: the executable, its libraries and the installer with the Certum SimplySign certificate of CERTUM_EMAIL, through ssign (github.com/Le-Syl21/ssign, built from a pinned commit) with the authenticator's TOTP URI in CERTUM_OTP.
+# - Android: the APK with the release keystore in ANDROID_KEYSTORE (a base64 PKCS#12 or JKS), NSGO_KEYSTORE_PASSWORD and NSGO_KEY_PASSWORD. Installed copies update only to an APK of the same key, so a release without the keystore ships no APK rather than one signed with a key made for the run.
+#
+# Builds without signing, such as CI's, need no secrets: macOS signs ad hoc, Windows leaves the files unsigned and Android uses a debug key.
+on:
+  workflow_dispatch:
+    inputs:
+      sign:
+        description: Sign and notarize the packages, as a release does
+        type: boolean
+        default: true
+  workflow_call:
+    inputs:
+      tag:
+        description: The release tag to build the packages of, which must match the version in nsgo.yaml; empty builds the checked-out commit unsigned
+        type: string
+        default: ""
+    secrets:
+      MACOS_CERTIFICATE:
+        required: false
+      MACOS_CERTIFICATE_PASSWORD:
+        required: false
+      APPSTORE_API_KEY_P8:
+        required: false
+      APPSTORE_API_KEY_ID:
+        required: false
+      APPSTORE_API_ISSUER_ID:
+        required: false
+      CERTUM_EMAIL:
+        required: false
+      CERTUM_OTP:
+        required: false
+      ANDROID_KEYSTORE:
+        required: false
+      NSGO_KEYSTORE_PASSWORD:
+        required: false
+      NSGO_KEY_PASSWORD:
+        required: false
+
+permissions:
+  contents: read
+
+env:
+  # The ssign commit the Windows packages are signed with, the one Kando's releases use: it talks only to Certum's cloudsign.webnotarius.pl and time.certum.pl.
+  SSIGN_REV: 367bf7d3da14d5041d5e47f855ae2397b8028e33
+
+jobs:
+  build:
+    name: Package (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    # Notarizing the disk image can take Apple's service a while.
+    timeout-minutes: ${{ matrix.name == 'macOS' && 60 || 30 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # target: the nsgo build target of the row. file: what it must make in the releases folder, after mirra-<version>-, so that a package nsgo build leaves out (as it does the Windows installer without NSIS) fails the row rather than going missing from the release. scripts: install.sh and install.ps1, which nsgo build writes beside a desktop target's installer.
+          - { name: macOS, os: macos-latest, target: macos_arm64, file: macos-arm64.dmg, scripts: true }
+          - { name: Windows, os: ubuntu-latest, target: windows_x64, file: windows-x64-setup.exe }
+          - { name: Android, os: ubuntu-latest, target: android_arm64, file: android-arm64.apk }
+          - { name: Web, os: ubuntu-latest, target: web, file: web.zip }
+    env:
+      SIGN: ${{ (inputs.tag != '' || inputs.sign) && 'true' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          persist-credentials: false
+      # A tag that does not match the version in nsgo.yaml would upload packages named for another version.
+      - name: Check the version
+        if: inputs.tag != ''
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          test "$TAG" = "v$(sed -nE 's/^version: *"?([0-9.]+)"? *$/\1/p' apps/mirra/nsgo.yaml)"
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/mirra/go.mod
+          cache-dependency-path: apps/mirra/go.sum
+      - name: Install NSIS, for the Windows installer
+        if: matrix.name == 'Windows'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends nsis osslsigncode
+      - name: Cache ssign
+        id: ssign-cache
+        if: matrix.name == 'Windows' && env.SIGN
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/ssign
+          key: ssign-${{ runner.os }}-${{ env.SSIGN_REV }}
+      - name: Build ssign
+        if: matrix.name == 'Windows' && env.SIGN && steps.ssign-cache.outputs.cache-hit != 'true'
+        run: cargo install --locked --root ~/.local/ssign --git https://github.com/Le-Syl21/ssign --rev "$SSIGN_REV" ssign
+      # The certificate goes into a keychain of the job's own, which codesign finds on the user's keychain list; the notary key is written to a file the build reads (NSGO_NOTARY_KEY), deleted with the keychain at the end of the job, and the certificate's file is deleted at once. The identity is the keychain's Developer ID Application one.
+      - name: Import the macOS signing certificate and the notary key
+        id: macos
+        if: matrix.name == 'macOS' && env.SIGN
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          APPSTORE_API_KEY_P8: ${{ secrets.APPSTORE_API_KEY_P8 }}
+          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+          APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
+        run: |
+          for name in MACOS_CERTIFICATE MACOS_CERTIFICATE_PASSWORD APPSTORE_API_KEY_P8 APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::The $name secret is not set, so the macOS package cannot be signed and notarized."
+              exit 1
+            fi
+          done
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          password="$(openssl rand -base64 24)"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          printf '%s' "$MACOS_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security import "$RUNNER_TEMP/certificate.p12" -k "$keychain" -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          rm "$RUNNER_TEMP/certificate.p12"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$password" "$keychain" >/dev/null
+          # shellcheck disable=SC2046 # one argument per keychain path
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | xargs)
+          identity=$(security find-identity -v -p codesigning "$keychain" | sed -nE 's/.*"(Developer ID Application: [^"]+)".*/\1/p' | head -1)
+          if [ -z "$identity" ]; then
+            echo "::error::MACOS_CERTIFICATE holds no Developer ID Application identity."
+            exit 1
+          fi
+          key="$RUNNER_TEMP/notary-key.p8"
+          printf '%s' "$APPSTORE_API_KEY_P8" | base64 --decode > "$key"
+          chmod 600 "$key"
+          {
+            echo "keychain=$keychain"
+            echo "identity=$identity"
+            echo "notary-key=$key"
+          } >> "$GITHUB_OUTPUT"
+      - name: Write the Android keystore
+        id: android
+        if: matrix.name == 'Android' && env.SIGN
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE" ]; then
+            echo "::warning::The ANDROID_KEYSTORE secret is not set, so this release ships no Android APK."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          keystore="$RUNNER_TEMP/release.keystore"
+          printf '%s' "$ANDROID_KEYSTORE" | base64 --decode > "$keystore"
+          chmod 600 "$keystore"
+          echo "keystore=$keystore" >> "$GITHUB_OUTPUT"
+      - name: Build
+        if: steps.android.outputs.skip != 'true'
+        env:
+          TARGET: ${{ matrix.target }}
+          IDENTITY: ${{ steps.macos.outputs.identity }}
+          NOTARY_KEY: ${{ steps.macos.outputs.notary-key }}
+          NOTARY_KEY_ID: ${{ steps.macos.outputs.notary-key != '' && secrets.APPSTORE_API_KEY_ID || '' }}
+          NOTARY_ISSUER: ${{ steps.macos.outputs.notary-key != '' && secrets.APPSTORE_API_ISSUER_ID || '' }}
+          WINDOWS_SIGN: ${{ matrix.name == 'Windows' && env.SIGN }}
+          CERTUM_EMAIL: ${{ matrix.name == 'Windows' && env.SIGN && secrets.CERTUM_EMAIL || '' }}
+          CERTUM_OTP: ${{ matrix.name == 'Windows' && env.SIGN && secrets.CERTUM_OTP || '' }}
+          KEYSTORE: ${{ steps.android.outputs.keystore }}
+          NSGO_KEYSTORE_PASSWORD: ${{ steps.android.outputs.keystore != '' && secrets.NSGO_KEYSTORE_PASSWORD || '' }}
+          NSGO_KEY_PASSWORD: ${{ steps.android.outputs.keystore != '' && secrets.NSGO_KEY_PASSWORD || '' }}
+        run: |
+          sign=()
+          if [ -n "$IDENTITY" ]; then
+            sign=(-sign "$IDENTITY")
+            export NSGO_NOTARY_KEY=$NOTARY_KEY NSGO_NOTARY_KEY_ID=$NOTARY_KEY_ID NSGO_NOTARY_ISSUER=$NOTARY_ISSUER
+          fi
+          if [ "$WINDOWS_SIGN" = true ]; then
+            if [ -z "$CERTUM_EMAIL" ] || [ -z "$CERTUM_OTP" ]; then
+              echo "::error::The CERTUM_EMAIL or CERTUM_OTP secret is not set, so the Windows package cannot be signed."
+              exit 1
+            fi
+            export CERTUM_EMAIL CERTUM_OTP
+            # Certum takes each one-time code once, so the files are signed one at a time under a lock.
+            sign=(-sign-command "flock '$RUNNER_TEMP/ssign.lock' '$HOME/.local/ssign/bin/ssign' -n Mirra -u https://github.com/$GITHUB_REPOSITORY %1")
+          fi
+          if [ -n "$KEYSTORE" ]; then
+            sign=(-keystore "$KEYSTORE")
+          fi
+          cd apps/mirra
+          go tool nsgo build -target "$TARGET" -output "$RUNNER_TEMP/packages" "${sign[@]}"
+      # Gatekeeper's own check of what users download: the app is signed with the Developer ID and the hardened runtime, and the disk image carries its notarization ticket.
+      - name: Check the macOS signature
+        if: steps.macos.outcome == 'success'
+        env:
+          IDENTITY: ${{ steps.macos.outputs.identity }}
+        run: |
+          shopt -s nullglob
+          apps=("$RUNNER_TEMP"/packages/Mirra-*-macos_arm64/Mirra.app)
+          if [ "${#apps[@]}" -ne 1 ]; then
+            echo "::error::nsgo build made ${#apps[@]} Mirra.app, not one"
+            exit 1
+          fi
+          codesign --verify --deep --strict --verbose=2 "${apps[0]}"
+          codesign -dvv "${apps[0]}" 2>&1 | grep -F "Authority=$IDENTITY"
+          for dmg in "$RUNNER_TEMP"/packages/releases/*-macos-arm64.dmg; do
+            xcrun stapler validate "$dmg"
+            spctl --assess --type open --context context:primary-signature --verbose=2 "$dmg"
+          done
+      # What Windows checks of what users download: every executable and library of the app and the installer carries a valid Authenticode signature with a timestamp, which keeps it valid after the certificate expires.
+      - name: Check the Windows signatures
+        if: matrix.name == 'Windows' && env.SIGN
+        run: |
+          shopt -s nullglob globstar
+          dirs=("$RUNNER_TEMP"/packages/Mirra-*-windows_x64)
+          installers=("$RUNNER_TEMP"/packages/releases/*-windows-x64-setup.exe)
+          if [ "${#dirs[@]}" -ne 1 ] || [ "${#installers[@]}" -ne 1 ]; then
+            echo "::error::nsgo build made ${#dirs[@]} app folders and ${#installers[@]} installers, not one each"
+            exit 1
+          fi
+          for file in "${dirs[0]}"/**/*.exe "${dirs[0]}"/**/*.dll "${installers[0]}"; do
+            out=$(osslsigncode verify -in "$file" -CAfile /etc/ssl/certs/ca-certificates.crt -TSA-CAfile /etc/ssl/certs/ca-certificates.crt 2>&1) || {
+              printf '%s\n' "$out"
+              echo "::error::${file#"$RUNNER_TEMP"/packages/} carries no valid signature"
+              exit 1
+            }
+            if ! grep -q "Timestamp time:" <<<"$out"; then
+              echo "::error::${file#"$RUNNER_TEMP"/packages/} carries no timestamp"
+              exit 1
+            fi
+            echo "signed: ${file#"$RUNNER_TEMP"/packages/}"
+          done
+      # The row's file from nsgo build's releases folder, with its .sha256, and on the macOS row the install scripts. Their SHA-256 is taken here from the files nsgo build made, which Publish checks again.
+      - name: Collect the packages
+        if: steps.android.outputs.skip != 'true'
+        env:
+          NAME: ${{ matrix.name }}
+          FILE: ${{ matrix.file }}
+          SCRIPTS: ${{ matrix.scripts && 'true' || '' }}
+        run: |
+          cd "$RUNNER_TEMP/packages/releases"
+          shopt -s nullglob
+          found=(mirra-*-"$FILE")
+          if [ "${#found[@]}" -ne 1 ] || [ ! -f "${found[0]}.sha256" ]; then
+            echo "::error::nsgo build made ${#found[@]} files matching mirra-*-$FILE, not one with its .sha256"
+            exit 1
+          fi
+          files=("${found[0]}" "${found[0]}.sha256")
+          if [ -n "$SCRIPTS" ]; then
+            if [ ! -f install.sh ] || [ ! -f install.ps1 ]; then
+              echo "::error::nsgo build made no install.sh or install.ps1"
+              exit 1
+            fi
+            files+=(install.sh install.ps1)
+          fi
+          out=$RUNNER_TEMP/out
+          mkdir "$out"
+          cp -- "${files[@]}" "$out/"
+          cd "$out"
+          shasum -a 256 -- * > "$RUNNER_TEMP/checksums-$NAME.txt"
+          mv "$RUNNER_TEMP/checksums-$NAME.txt" .
+          cat "checksums-$NAME.txt"
+      - name: Keep the packages
+        if: steps.android.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mirra-${{ matrix.name }}
+          path: ${{ runner.temp }}/out/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Remove the signing keychain and keys
+        if: always()
+        env:
+          KEYCHAIN: ${{ steps.macos.outputs.keychain }}
+          NOTARY_KEY: ${{ steps.macos.outputs.notary-key }}
+          KEYSTORE: ${{ steps.android.outputs.keystore }}
+        run: |
+          rm -f "$NOTARY_KEY" "$KEYSTORE"
+          if [ -n "$KEYCHAIN" ]; then
+            security delete-keychain "$KEYCHAIN"
+          fi

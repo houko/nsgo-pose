@@ -1,0 +1,210 @@
+name: Release
+
+# Releases main once CI has passed on it, with the version the Conventional Commits since the last tag call for (.github/scripts/next-version.sh): a feat is a minor bump, a fix or perf a patch one, and docs, chores and the website's own changes release nothing. It writes the version into apps/mirra/nsgo.yaml (.github/scripts/set-version.sh) and the version's notes into CHANGELOG.md (.github/scripts/changelog.sh: what Unreleased lists, else the commits), commits both to main as chore(release), tags the commit and creates a draft GitHub release with those notes. The Package workflow then builds the packages from the tag, and the last job checks them against the checksums Package took, attests their provenance, uploads them with checksums.txt to the draft, puts a table of the downloads above the notes, publishes it and rebuilds the website, whose download cards link the release's files. Run it by hand from main to force a bump; it releases only a commit main's CI has passed on.
+#
+# The jobs run in one workflow, one after another, because a tag pushed with the workflow's GITHUB_TOKEN starts no other workflow; the website is started by hand (workflow_dispatch), which that token may do.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Bump to make, whatever the commits call for
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: Version
+    # A run by hand must start from main: from another branch it would push that branch's commits to main.
+    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+    outputs:
+      tag: ${{ steps.commit.outputs.sha != '' && steps.version.outputs.version || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Next version
+        id: version
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          BUMP: ${{ inputs.bump }}
+        run: |
+          version=$(.github/scripts/next-version.sh "$SHA" "$BUMP")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ -n "$version" ]; then
+            echo "Releasing $version from $SHA" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Nothing to release at $SHA" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      # A run that CI started follows CI's success on the commit; a run by hand checks that main's CI passed on it.
+      - name: Check CI
+        if: steps.version.outputs.version != '' && github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+        run: |
+          passed=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$SHA&event=push&status=success" --jq .total_count)
+          if [ "$passed" -eq 0 ]; then
+            echo "::error::CI has not passed on $SHA, main's head; release it once it has."
+            exit 1
+          fi
+      # The version goes to main in a commit of its own, which the tag points at, so that the app built from the tagged tree carries it, together with its section of CHANGELOG.md. The push only fast-forwards main from the commit CI tested: if main has moved since, its own CI run releases these commits with it.
+      - name: Commit the version
+        id: commit
+        if: steps.version.outputs.version != ''
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          .github/scripts/set-version.sh "$VERSION"
+          .github/scripts/changelog.sh add "$VERSION"
+          git add -- apps/mirra/nsgo.yaml CHANGELOG.md
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(release): $VERSION"
+          fi
+          if git push origin HEAD:refs/heads/main; then
+            echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          else
+            message="Could not fast-forward main. Either main moved on, and its next release takes these commits, or a rule on main refused github-actions[bot], which then needs a bypass of the rule."
+            echo "::warning::$message"
+            echo "$message" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      # GitHub sometimes refuses a push for a fault of its own, so the tag is pushed again before the run gives up. Should it still fail, main keeps the version commit untagged, and the next release's run tags it: next-version.sh gives the same version, and set-version.sh and changelog.sh change nothing.
+      - name: Tag
+        if: steps.commit.outputs.sha != ''
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          git tag -a "$VERSION" -m "$VERSION" "$SHA"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "refs/tags/$VERSION"; then
+              exit 0
+            fi
+            echo "::warning::Pushing $VERSION failed (attempt $attempt of 5)."
+            sleep $((attempt * 15))
+          done
+          echo "::error::Could not push the tag $VERSION."
+          exit 1
+      - name: Draft the release
+        if: steps.commit.outputs.sha != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          .github/scripts/changelog.sh notes "$VERSION" > "$RUNNER_TEMP/notes.md"
+          gh release create "$VERSION" --repo "$GITHUB_REPOSITORY" --draft --verify-tag --title "Mirra ${VERSION#v}" --notes-file "$RUNNER_TEMP/notes.md"
+
+  package:
+    name: Package
+    needs: version
+    if: needs.version.outputs.tag != ''
+    permissions:
+      contents: read
+    uses: ./.github/workflows/package.yml
+    with:
+      tag: ${{ needs.version.outputs.tag }}
+    secrets:
+      MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+      MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+      APPSTORE_API_KEY_P8: ${{ secrets.APPSTORE_API_KEY_P8 }}
+      APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+      APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
+      CERTUM_EMAIL: ${{ secrets.CERTUM_EMAIL }}
+      CERTUM_OTP: ${{ secrets.CERTUM_OTP }}
+      ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+      NSGO_KEYSTORE_PASSWORD: ${{ secrets.NSGO_KEYSTORE_PASSWORD }}
+      NSGO_KEY_PASSWORD: ${{ secrets.NSGO_KEY_PASSWORD }}
+
+  publish:
+    name: Publish
+    needs: [version, package]
+    if: needs.version.outputs.tag != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: write
+      attestations: write
+      contents: write
+      id-token: write
+    steps:
+      # One artifact per platform, merged into one folder, as a release holds its files side by side.
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: mirra-*
+          merge-multiple: true
+          path: dist
+      # A platform whose artifact went missing would publish a release without it, so each one's checksums must be there. Android's is left out of a release when the ANDROID_KEYSTORE secret is not set (see package.yml).
+      - name: Check every platform is there
+        working-directory: dist
+        run: |
+          for name in macOS Windows Web; do
+            if [ ! -f "checksums-$name.txt" ]; then
+              echo "::error::The mirra-$name artifact is missing."
+              exit 1
+            fi
+          done
+      # The Package jobs took the checksums from the files nsgo build made, so this catches a package changed on its way here.
+      - name: Check the checksums
+        working-directory: dist
+        run: |
+          cat checksums-*.txt > checksums.txt
+          rm checksums-*.txt
+          sha256sum --check --strict checksums.txt
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-checksums: dist/checksums.txt
+      # The notes start with a table of the downloads the release holds, then the version's section of CHANGELOG.md that Version drafted it with.
+      - name: Upload and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
+        run: |
+          v=${TAG#v}
+          d="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          row() {
+            if [ -f "dist/mirra-$v-$2" ]; then
+              echo "| $1 | [mirra-$v-$2]($d/mirra-$v-$2) |"
+            fi
+          }
+          {
+            echo "## Download"
+            echo
+            echo "| System | Download |"
+            echo "|---|---|"
+            row "macOS (Apple silicon)" macos-arm64.dmg
+            row "Windows (x64)" windows-x64-setup.exe
+            row "Android (arm64)" android-arm64.apk
+            echo "| Web | [Open in the browser](https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/app/) · [mirra-$v-web.zip]($d/mirra-$v-web.zip), to serve yourself |"
+            echo "| iOS | [Build from source](https://github.com/$GITHUB_REPOSITORY#development) |"
+            echo
+            echo "\`checksums.txt\` lists the SHA-256 of every file, and \`gh attestation verify <file> --repo $GITHUB_REPOSITORY\` checks that a file was built by this repository's Release workflow."
+            echo
+            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq .body
+          } > notes.md
+          gh release upload "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --clobber
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --notes-file notes.md --draft=false --latest
+      # The website shows the app's version and links the release's files, which it reads as it builds.
+      - name: Rebuild the website
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run website.yml --repo "$GITHUB_REPOSITORY" --ref main
