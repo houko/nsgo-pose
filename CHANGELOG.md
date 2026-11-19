@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.6.0 - 2026-11-20
+
 - The AI settings preset OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, Alibaba Cloud Model Studio, Azure OpenAI and stable-diffusion.cpp, with their logos and a link to get a key, besides any OpenAI-compatible address. Each provider keeps its own key and settings; the cloud or local service set up before carries over.
 
 ## 0.5.0 - 2026-11-20
