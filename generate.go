@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/textproto"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -26,69 +27,50 @@ const (
 	defaultBaseURL = "https://api.openai.com/v1"
 	defaultModel   = "gpt-image-2"
 	defaultSize    = "1024x1536"
+	// maxCount bounds how many pictures one request asks for.
+	maxCount = 4
 )
 
-// Source is a reference image: a gallery item's full image, downloaded when generating, or a photo the user picked.
-type Source struct {
-	Item  *Item
-	Photo []byte
-	Name  string
-	MIME  string
-}
-
-// Request is what the user put together: a pose with an outfit, a face or both, or the user's own photo with a face.
+// Request is what the user put together: a pose, with an outfit and a face when chosen, all from the galleries. The app takes no photo of the user: the pose and outfit galleries' terms forbid depicting real people with their images.
 type Request struct {
-	Base    Source
+	Pose    *Item
 	Costume *Item
 	Face    *Item
 	Note    string
+	// Count is how many pictures to ask for, 1 when 0.
+	Count int
 }
 
 // Errors the UI explains in the user's language.
 var (
-	ErrNoBase      = errors.New("no base image")
-	ErrNothingToDo = errors.New("a photo needs a face")
-	ErrPhotoOutfit = errors.New("outfits go on poses, not photos")
-	ErrNoAPIKey    = errors.New("no API key")
+	ErrNoPose   = errors.New("no pose chosen")
+	ErrNoAPIKey = errors.New("no API key")
 )
 
 // Validate reports what the request still lacks.
 func (r Request) Validate() error {
-	switch {
-	case r.Base.Item == nil && len(r.Base.Photo) == 0:
-		return ErrNoBase
-	// The outfit gallery's terms forbid depicting real people with its images, so an outfit never goes on the user's photo.
-	case r.Base.Item == nil && r.Costume != nil:
-		return ErrPhotoOutfit
-	case r.Base.Item == nil && r.Face == nil:
-		return ErrNothingToDo
+	if r.Pose == nil {
+		return ErrNoPose
 	}
 	return nil
 }
 
+func (r Request) count() int { return min(max(r.Count, 1), maxCount) }
+
 // Prompt says what each attached image is for, in the order the images are sent.
 func (r Request) Prompt() string {
 	var b strings.Builder
-	n := 1
-	if r.Base.Item != nil {
-		fmt.Fprintf(&b, "Image %d is a faceless gray mannequin showing a pose and a camera angle. Create one photorealistic photo of a single adult person in exactly that pose, framing and camera angle, on a plain light studio background.", n)
-	} else {
-		fmt.Fprintf(&b, "Image %d is a photo of a person. Keep their pose, body shape, camera angle, framing, lighting and background exactly as they are.", n)
-	}
-	n++
+	b.WriteString("Image 1 is a faceless gray mannequin showing a pose and a camera angle. Create one photorealistic photo of a single adult person in exactly that pose, framing and camera angle, on a plain light studio background.")
+	n := 2
 	if r.Costume != nil {
 		fmt.Fprintf(&b, " Image %d shows an outfit with no one wearing it: dress the person in exactly that outfit, with the same garments, colors, materials, patterns and details, fitted naturally to their body and pose.", n)
 		n++
-	} else if r.Base.Item != nil {
+	} else {
 		b.WriteString(" Dress them in simple, plain everyday clothes.")
 	}
 	if r.Face != nil {
-		if r.Base.Item != nil {
-			fmt.Fprintf(&b, " Image %d is a portrait: give the person that face, with the same facial features, skin tone, hairstyle and hair color.", n)
-		} else {
-			fmt.Fprintf(&b, " Image %d is a portrait: replace the person's face and hair with that face, hairstyle and hair color, blended naturally into the photo's lighting.", n)
-		}
-	} else if r.Base.Item != nil {
+		fmt.Fprintf(&b, " Image %d is a portrait: give the person that face, with the same facial features, skin tone, hairstyle and hair color.", n)
+	} else {
 		b.WriteString(" Give them a natural adult face.")
 	}
 	if note := strings.TrimSpace(r.Note); note != "" {
@@ -107,8 +89,8 @@ type part struct {
 	data       []byte
 }
 
-// Generate downloads the request's gallery images, one each, sends them with the prompt to cfg's /images/edits, and returns the picture's bytes.
-func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) ([]byte, error) {
+// Generate downloads the request's gallery images, one each, sends them with the prompt to cfg's /images/edits, and returns the pictures' bytes.
+func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) ([][]byte, error) {
 	if err := r.Validate(); err != nil {
 		return nil, err
 	}
@@ -116,16 +98,7 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 		return nil, ErrNoAPIKey
 	}
 	var parts []part
-	if r.Base.Item != nil {
-		p, err := download(ctx, client, *r.Base.Item)
-		if err != nil {
-			return nil, err
-		}
-		parts = append(parts, p)
-	} else {
-		parts = append(parts, part{name: or(r.Base.Name, "photo.jpg"), mime: or(r.Base.MIME, "image/jpeg"), data: r.Base.Photo})
-	}
-	for _, it := range []*Item{r.Costume, r.Face} {
+	for _, it := range []*Item{r.Pose, r.Costume, r.Face} {
 		if it == nil {
 			continue
 		}
@@ -138,7 +111,7 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 
 	var body bytes.Buffer
 	w := multipart.NewWriter(&body)
-	fields := [][2]string{{"model", or(cfg.Model, defaultModel)}, {"prompt", r.Prompt()}, {"size", or(cfg.Size, defaultSize)}, {"n", "1"}}
+	fields := [][2]string{{"model", or(cfg.Model, defaultModel)}, {"prompt", r.Prompt()}, {"size", or(cfg.Size, defaultSize)}, {"n", strconv.Itoa(r.count())}}
 	for _, f := range fields {
 		if err := w.WriteField(f[0], f[1]); err != nil {
 			return nil, err
@@ -191,16 +164,27 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 	if decodeErr != nil {
 		return nil, fmt.Errorf("image API: %w", decodeErr)
 	}
-	if len(out.Data) == 0 {
+	var pictures [][]byte
+	for _, d := range out.Data {
+		switch {
+		case d.B64JSON != "":
+			pic, err := base64.StdEncoding.DecodeString(d.B64JSON)
+			if err != nil {
+				return nil, fmt.Errorf("image API: %w", err)
+			}
+			pictures = append(pictures, pic)
+		case d.URL != "":
+			pic, err := get(ctx, client, d.URL, maxImageBytes)
+			if err != nil {
+				return nil, err
+			}
+			pictures = append(pictures, pic)
+		}
+	}
+	if len(pictures) == 0 {
 		return nil, errors.New("image API returned no image")
 	}
-	if b64 := out.Data[0].B64JSON; b64 != "" {
-		return base64.StdEncoding.DecodeString(b64)
-	}
-	if u := out.Data[0].URL; u != "" {
-		return get(ctx, client, u, maxImageBytes)
-	}
-	return nil, errors.New("image API returned no image")
+	return pictures, nil
 }
 
 func download(ctx context.Context, client *http.Client, it Item) (part, error) {

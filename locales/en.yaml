@@ -1,44 +1,75 @@
 appName:
-  message: Pose Studio
+  message: Mirra
   description: The app's name, which its packages list it under in each language.
-tabCreate: Create
+brand:
+  message: Mirra
+  description: The brand at the top of the app.
+brandTagline:
+  message: ""
+  description: Words beside the brand, empty where the brand says enough.
+tabStudio: Studio
+tabWardrobe: Wardrobe
 tabWorks: Works
+tabMe: Me
 tabSettings: Settings
 tabsLabel: Sections
-baseLabel: Base
-basePose: Pose
-basePhoto: My photo
-slotPose: Pose
-slotPhoto: Photo
-slotCostume: Outfit
+lookTitle: This look
 slotFace: Face
-chooseSlot:
-  message: Choose {slot}
-  description: Accessibility label of an empty slot; slot is Pose, Photo, Outfit or Face.
-removeSlot:
-  message: Remove {slot}
-  description: Accessibility label of the button that clears a slot.
-notePlaceholder: Anything else, such as lighting or background
-noteLabel: Extra instructions
+slotCostume: Outfit
+slotPose: Pose
+notChosen: Not chosen
+stepFace: Choose a face
+stepCostume: Choose an outfit
+stepPose: Set the pose
+stepTab:
+  message: "{n} {name}"
+  description: A step of the look's editor, such as "1 Face".
+stepsLabel: Steps
+done: Done
+back: Back
+nextCostume: "Next: outfit"
+nextPose: "Next: pose"
 generate: Generate
+countLabel: Pictures
+countOption:
+  message: "{n, plural, one {# picture} other {# pictures}}"
+  description: How many pictures one Generate asks for.
 needPose: Choose a pose first.
-needPhoto: Choose a photo first.
-needPhotoChange: Choose a face to put on the photo.
 needKey: Add an API key in Settings first.
+generating: Generating
+cancel: Cancel
 generateFailed: Generation failed
-pickPose: Choose a pose
-pickCostume: Choose an outfit
-pickFace: Choose a face
-groupAll: All
-groupsLabel: Categories
+generatedMany:
+  message: "{n, plural, one {# picture} other {# pictures}} generated; see Works."
+  description: A toast after one Generate made several pictures.
+selectedItem:
+  message: "Selected · {id}"
+  description: Above the chosen outfit's keywords; id is the gallery's code, such as WIN-0090.
+filtersLabel: Filters
+all: All
+angleFront: Front
+angleThreeQuarter: Three-quarter
+angleSide: Side
+angleHigh: From above
+angleLow: From below
+hairShort: Short
+hairMedium: Medium
+hairSemiLong: Shoulder-length
+hairLong: Long
+groupSpring: Spring
+groupSummer: Summer
+groupAutumn: Autumn
+groupWinter: Winter
+groupParty: Party
+groupSwimwear: Swimwear
 loadFailed: Couldn't load the gallery
 retry: Retry
-back: Back
+noteLabel: Extra instructions
+notePlaceholder: Anything else, such as lighting or background
 resultTitle: Result
 save: Save
 share: Share
 delete: Delete
-cancel: Cancel
 saved: Saved
 saveFailed: Couldn't save the picture
 deleteConfirm: Delete this picture?
@@ -57,14 +88,3 @@ size: Size
 keyUnavailable: This device has no secure store for the key.
 sourcesSection: Galleries
 sourcesFooter: Poses come from POSE-DB-01, outfits from COSTUME-DB-01 and faces from FACE REFERENCE (CC0). Each image is fetched only when you use it; the app neither bundles nor redistributes them.
-groupPoseStandard: Full body
-groupPoseGlamour: Full body, glamour
-groupPoseUpper: Upper body
-groupSpring: Spring
-groupSummer: Summer
-groupAutumn: Autumn
-groupWinter: Winter
-groupParty: Party
-groupSwimwear: Swimwear
-groupFace: Face
-groupStyling: Styling

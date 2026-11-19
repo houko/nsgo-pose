@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"sync"
 	"testing"
@@ -34,6 +35,7 @@ const D=[{"id": "SPR-0001", "カテゴリ": "春", "キーワード": "ivory kni
 </script></html>`
 
 const faceScript = `window.GALLERY_IMAGES = [
+  {"id": "f002", "section": "face", "hair": "ロング", "style": "ゆる巻き", "w": 1122, "h": 1402, "full": "img/full/f002.png", "thumb": "img/thumb/f002.webp"},
   {"id": "f001", "section": "face", "hair": "ショート", "style": "", "w": 1122, "h": 1402, "full": "img/full/f001.png", "thumb": "img/thumb/f001.webp"},
   {"id": "s001", "section": "styling", "hair": "ロング", "style": "ゆる巻き", "w": 1122, "h": 1402, "full": "img/full/s001.png", "thumb": "img/thumb/s001.webp"}
 ];
@@ -56,12 +58,14 @@ type fakeAPI struct {
 	requests []editRequest
 	status   int
 	errBody  string
+	// hang keeps each request open until the client gives up.
+	hang bool
 }
 
 type editRequest struct {
-	Auth, Model, Prompt, Size string
-	Images                    []string // file names, in order
-	Downloads                 []string // gallery paths fetched before this request
+	Auth, Model, Prompt, Size, N string
+	Images                       []string // file names, in order
+	Downloads                    []string // gallery paths fetched before this request
 }
 
 func (f *fakeAPI) last() editRequest {
@@ -115,7 +119,7 @@ func newServer(t testing.TB, api *fakeAPI) (*httptest.Server, Sites) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		req := editRequest{Auth: r.Header.Get("Authorization"), Model: r.FormValue("model"), Prompt: r.FormValue("prompt"), Size: r.FormValue("size")}
+		req := editRequest{Auth: r.Header.Get("Authorization"), Model: r.FormValue("model"), Prompt: r.FormValue("prompt"), Size: r.FormValue("size"), N: r.FormValue("n")}
 		for _, fh := range r.MultipartForm.File["image[]"] {
 			req.Images = append(req.Images, fh.Filename)
 		}
@@ -124,15 +128,24 @@ func newServer(t testing.TB, api *fakeAPI) (*httptest.Server, Sites) {
 		mu.Unlock()
 		api.mu.Lock()
 		api.requests = append(api.requests, req)
-		status, errBody := api.status, api.errBody
+		status, errBody, hang := api.status, api.errBody, api.hang
 		api.mu.Unlock()
+		if hang {
+			<-r.Context().Done()
+			return
+		}
 		if status != 0 {
 			w.WriteHeader(status)
 			io.WriteString(w, errBody)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		io.WriteString(w, `{"data":[{"b64_json":"`+base64.StdEncoding.EncodeToString(pic)+`"}]}`)
+		n, _ := strconv.Atoi(req.N)
+		var data []string
+		for range max(n, 1) {
+			data = append(data, `{"b64_json":"`+base64.StdEncoding.EncodeToString(pic)+`"}`)
+		}
+		io.WriteString(w, `{"data":[`+strings.Join(data, ",")+`]}`)
 	})
 	srv := httptest.NewServer(mux)
 	t.Cleanup(srv.Close)

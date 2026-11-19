@@ -8,6 +8,14 @@ import (
 	"testing"
 )
 
+func ids(items []Item) []string {
+	var out []string
+	for _, it := range items {
+		out = append(out, it.ID)
+	}
+	return out
+}
+
 func TestFetchCatalogs(t *testing.T) {
 	_, sites := newServer(t, &fakeAPI{})
 	ctx := context.Background()
@@ -16,22 +24,18 @@ func TestFetchCatalogs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	var ids []string
-	for _, it := range poses.Items {
-		ids = append(ids, it.ID)
+	if got, want := ids(poses.Items), []string{"full_std_P001_front", "upper_P002_side", "full_sexy_P000_front"}; !slices.Equal(got, want) {
+		t.Errorf("pose ids = %v, want %v (everyday poses first; two-person and explicit poses left out)", got, want)
 	}
-	if want := []string{"full_std_P001_front", "upper_P002_side", "full_sexy_P000_front"}; !slices.Equal(ids, want) {
-		t.Errorf("pose ids = %v, want %v (everyday poses first; two-person and explicit poses left out)", ids, want)
+	if want := []string{"正面", "横"}; !slices.Equal(poses.Groups, want) {
+		t.Errorf("pose groups = %v, want the angles %v", poses.Groups, want)
 	}
-	if want := []string{"全身1人・標準系", "上半身1人", "全身1人・セクシー系"}; !slices.Equal(poses.Groups, want) {
-		t.Errorf("pose groups = %v, want %v", poses.Groups, want)
+	if got := ids(poses.InGroup("正面")); !slices.Equal(got, []string{"full_std_P001_front", "full_sexy_P000_front"}) {
+		t.Errorf("front poses = %v", got)
 	}
 	first := poses.Items[0]
-	if first.Full != sites.Pose+"/img/full_std_P001_front.png" || first.Thumb != sites.Pose+"/thumbs/full_std_P001_front.jpg" {
-		t.Errorf("pose urls = %q, %q", first.Thumb, first.Full)
-	}
-	if first.Title != "片手を腰に当てて立つ・正面" {
-		t.Errorf("pose title = %q", first.Title)
+	if first.Full != sites.Pose+"/img/full_std_P001_front.png" || first.Thumb != sites.Pose+"/thumbs/full_std_P001_front.jpg" || first.Title != "片手を腰に当てて立つ" {
+		t.Errorf("first pose = %+v", first)
 	}
 
 	costumes, err := FetchCatalog(ctx, http.DefaultClient, sites, KindCostume)
@@ -44,16 +48,16 @@ func TestFetchCatalogs(t *testing.T) {
 	if got := costumes.InGroup("冬"); len(got) != 1 || got[0].ID != "WIN-0001" || got[0].Full != sites.Costume+"/png/WIN-0001.png" {
 		t.Errorf("winter costumes = %+v", got)
 	}
-	if got := costumes.InGroup(""); len(got) != 2 {
-		t.Errorf("all costumes = %d items", len(got))
-	}
 
 	faces, err := FetchCatalog(ctx, http.DefaultClient, sites, KindFace)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(faces.Items) != 2 || faces.Items[1].Title != "ロング・ゆる巻き" || faces.Items[0].Full != sites.Face+"/img/full/f001.png" {
-		t.Errorf("faces = %+v", faces.Items)
+	if got := ids(faces.Items); !slices.Equal(got, []string{"f002", "f001"}) {
+		t.Errorf("faces = %v, want the face section only", got)
+	}
+	if want := []string{"ショート", "ロング"}; !slices.Equal(faces.Groups, want) {
+		t.Errorf("face groups = %v, want hair lengths shortest first %v", faces.Groups, want)
 	}
 }
 
