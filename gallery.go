@@ -46,9 +46,11 @@ func (s Sites) origin(k Kind) string {
 
 // Item is one reference image: Thumb is shown while browsing, Full is downloaded once, only when the user generates with it.
 type Item struct {
-	Kind  Kind
-	ID    string
+	Kind Kind
+	ID   string
+	// Group is what the picker's chips filter by: a pose's camera angle, an outfit's category, a face's hair length.
 	Group string
+	// Title is a pose's name, an outfit's keywords, or a face's hairstyle, which may be empty.
 	Title string
 	Thumb string
 	Full  string
@@ -170,28 +172,36 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 	}
 	var c Catalog
 	var groups groupOrder
+	lines := map[string]string{}
 	for _, r := range rows {
 		if excludedPoseLines[r.Line] || excludedPoseCategories[r.Category] || r.ID == "" || r.Full == "" {
 			continue
 		}
-		groups.add(r.Line)
-		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Line, Title: r.Name + "・" + r.Angle,
+		groups.add(r.Angle)
+		lines[r.ID] = r.Line
+		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name,
 			Thumb: origin + "/" + r.Thumb, Full: origin + "/" + r.Full})
 	}
 	// The gallery lists its glamour line first; the app opens on the everyday poses.
-	rank := func(g string) int {
-		if i := slices.Index(poseGroupOrder, g); i >= 0 {
-			return i
-		}
-		return len(poseGroupOrder)
-	}
-	slices.SortStableFunc(c.Items, func(a, b Item) int { return rank(a.Group) - rank(b.Group) })
-	slices.SortStableFunc(groups.list, func(a, b string) int { return rank(a) - rank(b) })
+	slices.SortStableFunc(c.Items, func(a, b Item) int { return rank(poseLineOrder, lines[a.ID]) - rank(poseLineOrder, lines[b.ID]) })
+	slices.SortStableFunc(groups.list, func(a, b string) int { return rank(poseAngleOrder, a) - rank(poseAngleOrder, b) })
 	c.Groups = groups.list
 	return nonEmpty(c)
 }
 
-var poseGroupOrder = []string{"全身1人・標準系", "上半身1人", "全身1人・セクシー系"}
+var (
+	poseLineOrder  = []string{"全身1人・標準系", "上半身1人", "全身1人・セクシー系"}
+	poseAngleOrder = []string{"正面", "斜め", "横", "上から", "下から"}
+	faceHairOrder  = []string{"ショート", "ミディアム", "セミロング", "ロング"}
+)
+
+// rank is where v comes in order, after every listed value when it is not listed.
+func rank(order []string, v string) int {
+	if i := slices.Index(order, v); i >= 0 {
+		return i
+	}
+	return len(order)
+}
 
 func parseCostumes(page []byte, origin string) (Catalog, error) {
 	var rows []struct {
@@ -218,6 +228,7 @@ func parseCostumes(page []byte, origin string) (Catalog, error) {
 	return nonEmpty(c)
 }
 
+// parseFaces keeps the gallery's front-facing faces, the "face" section, grouped by hair length; its "styling" section shows whole outfits at any angle, which make weaker face references.
 func parseFaces(script []byte, origin string) (Catalog, error) {
 	var rows []struct {
 		ID      string `json:"id"`
@@ -233,17 +244,14 @@ func parseFaces(script []byte, origin string) (Catalog, error) {
 	var c Catalog
 	var groups groupOrder
 	for _, r := range rows {
-		if r.ID == "" || r.Full == "" {
+		if r.Section != "face" || r.ID == "" || r.Full == "" {
 			continue
 		}
-		groups.add(r.Section)
-		title := r.Hair
-		if r.Style != "" {
-			title += "・" + r.Style
-		}
-		c.Items = append(c.Items, Item{Kind: KindFace, ID: r.ID, Group: r.Section, Title: title,
+		groups.add(r.Hair)
+		c.Items = append(c.Items, Item{Kind: KindFace, ID: r.ID, Group: r.Hair, Title: r.Style,
 			Thumb: origin + "/" + r.Thumb, Full: origin + "/" + r.Full})
 	}
+	slices.SortStableFunc(groups.list, func(a, b string) int { return rank(faceHairOrder, a) - rank(faceHairOrder, b) })
 	c.Groups = groups.list
 	return nonEmpty(c)
 }

@@ -5,6 +5,7 @@ package locales
 import (
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/i18n"
+	"strings"
 	"time"
 )
 
@@ -44,9 +45,11 @@ func For(cx *core.Scope) Messages {
 // its method, for the TSX declarations of the messages
 // (tsx.RegisterMessages).
 var Parameters = map[string][]string{
-	"ChooseSlot": {"slot"},
-	"RemoveSlot": {"slot"},
-	"WorkLabel":  {"date"},
+	"StepTab":       {"n", "name"},
+	"CountOption":   {"n"},
+	"GeneratedMany": {"n"},
+	"SelectedItem":  {"id"},
+	"WorkLabel":     {"date"},
 }
 
 // Translation is a language's messages another package supplies:
@@ -54,10 +57,12 @@ var Parameters = map[string][]string{
 // of the others; a key or a field left out leaves the message to the
 // catalog.
 type Translation struct {
-	Texts      map[string]string
-	ChooseSlot func(slot string) string
-	RemoveSlot func(slot string) string
-	WorkLabel  func(hc string, date time.Time) string
+	Texts         map[string]string
+	StepTab       func(n string, name string) string
+	CountOption   func(n int) string
+	GeneratedMany func(n int) string
+	SelectedItem  func(id string) string
+	WorkLabel     func(hc string, date time.Time) string
 }
 
 var supplied = map[string]Translation{}
@@ -65,38 +70,59 @@ var supplied = map[string]Translation{}
 // The indexes of the messages without arguments in the tables.
 const (
 	textAppName = iota
-	textTabCreate
+	textBrand
+	textBrandTagline
+	textTabStudio
+	textTabWardrobe
 	textTabWorks
+	textTabMe
 	textTabSettings
 	textTabsLabel
-	textBaseLabel
-	textBasePose
-	textBasePhoto
-	textSlotPose
-	textSlotPhoto
-	textSlotCostume
+	textLookTitle
 	textSlotFace
-	textNotePlaceholder
-	textNoteLabel
+	textSlotCostume
+	textSlotPose
+	textNotChosen
+	textStepFace
+	textStepCostume
+	textStepPose
+	textStepsLabel
+	textDone
+	textBack
+	textNextCostume
+	textNextPose
 	textGenerate
+	textCountLabel
 	textNeedPose
-	textNeedPhoto
-	textNeedPhotoChange
 	textNeedKey
+	textGenerating
+	textCancel
 	textGenerateFailed
-	textPickPose
-	textPickCostume
-	textPickFace
-	textGroupAll
-	textGroupsLabel
+	textFiltersLabel
+	textAll
+	textAngleFront
+	textAngleThreeQuarter
+	textAngleSide
+	textAngleHigh
+	textAngleLow
+	textHairShort
+	textHairMedium
+	textHairSemiLong
+	textHairLong
+	textGroupSpring
+	textGroupSummer
+	textGroupAutumn
+	textGroupWinter
+	textGroupParty
+	textGroupSwimwear
 	textLoadFailed
 	textRetry
-	textBack
+	textNoteLabel
+	textNotePlaceholder
 	textResultTitle
 	textSave
 	textShare
 	textDelete
-	textCancel
 	textSaved
 	textSaveFailed
 	textDeleteConfirm
@@ -112,17 +138,6 @@ const (
 	textKeyUnavailable
 	textSourcesSection
 	textSourcesFooter
-	textGroupPoseStandard
-	textGroupPoseGlamour
-	textGroupPoseUpper
-	textGroupSpring
-	textGroupSummer
-	textGroupAutumn
-	textGroupWinter
-	textGroupParty
-	textGroupSwimwear
-	textGroupFace
-	textGroupStyling
 	numTexts
 )
 
@@ -130,38 +145,59 @@ const (
 // index, by which Supply reads a Translation's Texts.
 var keyOfText = [numTexts]string{
 	"appName",
-	"tabCreate",
+	"brand",
+	"brandTagline",
+	"tabStudio",
+	"tabWardrobe",
 	"tabWorks",
+	"tabMe",
 	"tabSettings",
 	"tabsLabel",
-	"baseLabel",
-	"basePose",
-	"basePhoto",
-	"slotPose",
-	"slotPhoto",
-	"slotCostume",
+	"lookTitle",
 	"slotFace",
-	"notePlaceholder",
-	"noteLabel",
+	"slotCostume",
+	"slotPose",
+	"notChosen",
+	"stepFace",
+	"stepCostume",
+	"stepPose",
+	"stepsLabel",
+	"done",
+	"back",
+	"nextCostume",
+	"nextPose",
 	"generate",
+	"countLabel",
 	"needPose",
-	"needPhoto",
-	"needPhotoChange",
 	"needKey",
+	"generating",
+	"cancel",
 	"generateFailed",
-	"pickPose",
-	"pickCostume",
-	"pickFace",
-	"groupAll",
-	"groupsLabel",
+	"filtersLabel",
+	"all",
+	"angleFront",
+	"angleThreeQuarter",
+	"angleSide",
+	"angleHigh",
+	"angleLow",
+	"hairShort",
+	"hairMedium",
+	"hairSemiLong",
+	"hairLong",
+	"groupSpring",
+	"groupSummer",
+	"groupAutumn",
+	"groupWinter",
+	"groupParty",
+	"groupSwimwear",
 	"loadFailed",
 	"retry",
-	"back",
+	"noteLabel",
+	"notePlaceholder",
 	"resultTitle",
 	"save",
 	"share",
 	"delete",
-	"cancel",
 	"saved",
 	"saveFailed",
 	"deleteConfirm",
@@ -177,54 +213,64 @@ var keyOfText = [numTexts]string{
 	"keyUnavailable",
 	"sourcesSection",
 	"sourcesFooter",
-	"groupPoseStandard",
-	"groupPoseGlamour",
-	"groupPoseUpper",
-	"groupSpring",
-	"groupSummer",
-	"groupAutumn",
-	"groupWinter",
-	"groupParty",
-	"groupSwimwear",
-	"groupFace",
-	"groupStyling",
 }
 
 // textsEn are the messages without arguments in en.
 var textsEn = i18n.NewTexts(""+
-	"Pose Studio"+
-	"Create"+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"Studio"+
+	"Wardrobe"+
 	"Works"+
+	"Me"+
 	"Settings"+
 	"Sections"+
-	"Base"+
-	"Pose"+
-	"My photo"+
-	"Pose"+
-	"Photo"+
-	"Outfit"+
+	"This look"+
 	"Face"+
-	"Anything else, such as lighting or background"+
-	"Extra instructions"+
-	"Generate"+
-	"Choose a pose first."+
-	"Choose a photo first."+
-	"Choose a face to put on the photo."+
-	"Add an API key in Settings first."+
-	"Generation failed"+
-	"Choose a pose"+
-	"Choose an outfit"+
+	"Outfit"+
+	"Pose"+
+	"Not chosen"+
 	"Choose a face"+
+	"Choose an outfit"+
+	"Set the pose"+
+	"Steps"+
+	"Done"+
+	"Back"+
+	"Next: outfit"+
+	"Next: pose"+
+	"Generate"+
+	"Pictures"+
+	"Choose a pose first."+
+	"Add an API key in Settings first."+
+	"Generating"+
+	"Cancel"+
+	"Generation failed"+
+	"Filters"+
 	"All"+
-	"Categories"+
+	"Front"+
+	"Three-quarter"+
+	"Side"+
+	"From above"+
+	"From below"+
+	"Short"+
+	"Medium"+
+	"Shoulder-length"+
+	"Long"+
+	"Spring"+
+	"Summer"+
+	"Autumn"+
+	"Winter"+
+	"Party"+
+	"Swimwear"+
 	"Couldn't load the gallery"+
 	"Retry"+
-	"Back"+
+	"Extra instructions"+
+	"Anything else, such as lighting or background"+
 	"Result"+
 	"Save"+
 	"Share"+
 	"Delete"+
-	"Cancel"+
 	"Saved"+
 	"Couldn't save the picture"+
 	"Delete this picture?"+
@@ -239,51 +285,61 @@ var textsEn = i18n.NewTexts(""+
 	"Size"+
 	"This device has no secure store for the key."+
 	"Galleries"+
-	"Poses come from POSE-DB-01, outfits from COSTUME-DB-01 and faces from FACE REFERENCE (CC0). Each image is fetched only when you use it; the app neither bundles nor redistributes them."+
-	"Full body"+
-	"Full body, glamour"+
-	"Upper body"+
-	"Spring"+
-	"Summer"+
-	"Autumn"+
-	"Winter"+
-	"Party"+
-	"Swimwear"+
-	"Face"+
-	"Styling",
+	"Poses come from POSE-DB-01, outfits from COSTUME-DB-01 and faces from FACE REFERENCE (CC0). Each image is fetched only when you use it; the app neither bundles nor redistributes them.",
 	[]uint16{
-		11,
-		6,
 		5,
-		8,
-		8,
-		4,
-		4,
-		8,
-		4,
 		5,
+		0,
+		6,
+		8,
+		5,
+		2,
+		8,
+		8,
+		9,
+		4,
 		6,
 		4,
-		45,
-		18,
-		8,
-		20,
-		21,
-		34,
-		33,
-		17,
+		10,
 		13,
 		16,
-		13,
-		3,
+		12,
+		5,
+		4,
+		4,
+		12,
 		10,
+		8,
+		8,
+		20,
+		33,
+		10,
+		6,
+		17,
+		7,
+		3,
+		5,
+		13,
+		4,
+		10,
+		10,
+		5,
+		6,
+		15,
+		4,
+		6,
+		6,
+		6,
+		6,
+		5,
+		8,
 		25,
 		5,
-		4,
+		18,
+		45,
 		6,
 		4,
 		5,
-		6,
 		6,
 		5,
 		25,
@@ -300,54 +356,64 @@ var textsEn = i18n.NewTexts(""+
 		44,
 		9,
 		183,
-		9,
-		18,
-		10,
-		6,
-		6,
-		6,
-		6,
-		5,
-		8,
-		4,
-		7,
 	})
 
 // textsZhHans are the messages without arguments in zh-Hans.
 var textsZhHans = i18n.NewTexts(""+
-	"换装换脸"+
-	"创作"+
+	"镜衣"+
+	"Mirra"+
+	"镜衣"+
+	"工作室"+
+	"衣橱"+
 	"作品"+
+	"我的"+
 	"设置"+
 	"分区"+
-	"底图"+
-	"姿势"+
-	"我的照片"+
-	"姿势"+
-	"照片"+
-	"服装"+
+	"本次造型"+
 	"人脸"+
-	"补充要求，例如光线、背景"+
-	"补充要求"+
-	"生成"+
-	"先选一个姿势。"+
-	"先选一张照片。"+
-	"给照片选一张人脸才能生成。"+
-	"先在设置里填写 API Key。"+
-	"生成失败"+
-	"选择姿势"+
-	"选择服装"+
+	"服装"+
+	"姿势"+
+	"未选择"+
 	"选择人脸"+
+	"挑选服装"+
+	"设定姿势"+
+	"步骤"+
+	"完成"+
+	"返回"+
+	"下一步：选服装"+
+	"下一步：选姿势"+
+	"生成造型"+
+	"生成张数"+
+	"先选一个姿势。"+
+	"先在设置里填写 API Key。"+
+	"正在生成"+
+	"取消"+
+	"生成失败"+
+	"筛选"+
 	"全部"+
-	"分类"+
+	"正面"+
+	"斜侧"+
+	"侧面"+
+	"俯视"+
+	"仰视"+
+	"短发"+
+	"中发"+
+	"中长发"+
+	"长发"+
+	"春"+
+	"夏"+
+	"秋"+
+	"冬"+
+	"派对"+
+	"泳装"+
 	"图库加载失败"+
 	"重试"+
-	"返回"+
+	"补充要求"+
+	"补充要求，例如光线、背景"+
 	"结果"+
 	"保存"+
 	"分享"+
 	"删除"+
-	"取消"+
 	"已保存"+
 	"保存失败"+
 	"删除这张图片？"+
@@ -362,48 +428,58 @@ var textsZhHans = i18n.NewTexts(""+
 	"尺寸"+
 	"这台设备没有可以保存 Key 的安全存储。"+
 	"素材来源"+
-	"姿势来自 POSE-DB-01，服装来自 COSTUME-DB-01，人脸来自 FACE REFERENCE（CC0）。每张图只在你使用时单独获取，App 不内置、也不转发这些图片。"+
-	"全身"+
-	"全身·魅力"+
-	"半身"+
-	"春"+
-	"夏"+
-	"秋"+
-	"冬"+
-	"派对"+
-	"泳装"+
-	"正脸"+
-	"造型",
+	"姿势来自 POSE-DB-01，服装来自 COSTUME-DB-01，人脸来自 FACE REFERENCE（CC0）。每张图只在你使用时单独获取，App 不内置、也不转发这些图片。",
 	[]uint16{
+		6,
+		5,
+		6,
+		9,
+		6,
+		6,
+		6,
+		6,
+		6,
 		12,
 		6,
 		6,
 		6,
-		6,
-		6,
-		6,
+		9,
+		12,
+		12,
 		12,
 		6,
 		6,
-		6,
-		6,
-		36,
-		12,
 		6,
 		21,
 		21,
-		39,
+		12,
+		12,
+		21,
 		32,
 		12,
+		6,
 		12,
-		12,
-		12,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
+		9,
+		6,
+		3,
+		3,
+		3,
+		3,
 		6,
 		6,
 		18,
 		6,
-		6,
-		6,
+		12,
+		36,
 		6,
 		6,
 		6,
@@ -423,17 +499,6 @@ var textsZhHans = i18n.NewTexts(""+
 		53,
 		12,
 		179,
-		6,
-		14,
-		6,
-		3,
-		3,
-		3,
-		3,
-		6,
-		6,
-		6,
-		6,
 	})
 
 // texts returns the messages without arguments in lang, nil for a
@@ -490,11 +555,17 @@ func Supply(lang string, t Translation) {
 		}
 	}
 	s := supplied[lang]
-	if t.ChooseSlot != nil {
-		s.ChooseSlot = t.ChooseSlot
+	if t.StepTab != nil {
+		s.StepTab = t.StepTab
 	}
-	if t.RemoveSlot != nil {
-		s.RemoveSlot = t.RemoveSlot
+	if t.CountOption != nil {
+		s.CountOption = t.CountOption
+	}
+	if t.GeneratedMany != nil {
+		s.GeneratedMany = t.GeneratedMany
+	}
+	if t.SelectedItem != nil {
+		s.SelectedItem = t.SelectedItem
 	}
 	if t.WorkLabel != nil {
 		s.WorkLabel = t.WorkLabel
@@ -512,7 +583,7 @@ func (msgs Messages) arg(s string) string {
 	return s
 }
 
-// AppName says "Pose Studio"
+// AppName says "Mirra"
 // in the language the app shows under cx.
 //
 // The app's name, which its packages list it under in each language.
@@ -521,12 +592,37 @@ func AppName(cx *core.Scope) string { return For(cx).AppName() }
 // AppName is the package's AppName in the language of msgs.
 func (msgs Messages) AppName() string { return msgs.text(textAppName) }
 
-// TabCreate says "Create"
+// Brand says "Mirra"
 // in the language the app shows under cx.
-func TabCreate(cx *core.Scope) string { return For(cx).TabCreate() }
+//
+// The brand at the top of the app.
+func Brand(cx *core.Scope) string { return For(cx).Brand() }
 
-// TabCreate is the package's TabCreate in the language of msgs.
-func (msgs Messages) TabCreate() string { return msgs.text(textTabCreate) }
+// Brand is the package's Brand in the language of msgs.
+func (msgs Messages) Brand() string { return msgs.text(textBrand) }
+
+// BrandTagline says ""
+// in the language the app shows under cx.
+//
+// Words beside the brand, empty where the brand says enough.
+func BrandTagline(cx *core.Scope) string { return For(cx).BrandTagline() }
+
+// BrandTagline is the package's BrandTagline in the language of msgs.
+func (msgs Messages) BrandTagline() string { return msgs.text(textBrandTagline) }
+
+// TabStudio says "Studio"
+// in the language the app shows under cx.
+func TabStudio(cx *core.Scope) string { return For(cx).TabStudio() }
+
+// TabStudio is the package's TabStudio in the language of msgs.
+func (msgs Messages) TabStudio() string { return msgs.text(textTabStudio) }
+
+// TabWardrobe says "Wardrobe"
+// in the language the app shows under cx.
+func TabWardrobe(cx *core.Scope) string { return For(cx).TabWardrobe() }
+
+// TabWardrobe is the package's TabWardrobe in the language of msgs.
+func (msgs Messages) TabWardrobe() string { return msgs.text(textTabWardrobe) }
 
 // TabWorks says "Works"
 // in the language the app shows under cx.
@@ -534,6 +630,13 @@ func TabWorks(cx *core.Scope) string { return For(cx).TabWorks() }
 
 // TabWorks is the package's TabWorks in the language of msgs.
 func (msgs Messages) TabWorks() string { return msgs.text(textTabWorks) }
+
+// TabMe says "Me"
+// in the language the app shows under cx.
+func TabMe(cx *core.Scope) string { return For(cx).TabMe() }
+
+// TabMe is the package's TabMe in the language of msgs.
+func (msgs Messages) TabMe() string { return msgs.text(textTabMe) }
 
 // TabSettings says "Settings"
 // in the language the app shows under cx.
@@ -549,47 +652,12 @@ func TabsLabel(cx *core.Scope) string { return For(cx).TabsLabel() }
 // TabsLabel is the package's TabsLabel in the language of msgs.
 func (msgs Messages) TabsLabel() string { return msgs.text(textTabsLabel) }
 
-// BaseLabel says "Base"
+// LookTitle says "This look"
 // in the language the app shows under cx.
-func BaseLabel(cx *core.Scope) string { return For(cx).BaseLabel() }
+func LookTitle(cx *core.Scope) string { return For(cx).LookTitle() }
 
-// BaseLabel is the package's BaseLabel in the language of msgs.
-func (msgs Messages) BaseLabel() string { return msgs.text(textBaseLabel) }
-
-// BasePose says "Pose"
-// in the language the app shows under cx.
-func BasePose(cx *core.Scope) string { return For(cx).BasePose() }
-
-// BasePose is the package's BasePose in the language of msgs.
-func (msgs Messages) BasePose() string { return msgs.text(textBasePose) }
-
-// BasePhoto says "My photo"
-// in the language the app shows under cx.
-func BasePhoto(cx *core.Scope) string { return For(cx).BasePhoto() }
-
-// BasePhoto is the package's BasePhoto in the language of msgs.
-func (msgs Messages) BasePhoto() string { return msgs.text(textBasePhoto) }
-
-// SlotPose says "Pose"
-// in the language the app shows under cx.
-func SlotPose(cx *core.Scope) string { return For(cx).SlotPose() }
-
-// SlotPose is the package's SlotPose in the language of msgs.
-func (msgs Messages) SlotPose() string { return msgs.text(textSlotPose) }
-
-// SlotPhoto says "Photo"
-// in the language the app shows under cx.
-func SlotPhoto(cx *core.Scope) string { return For(cx).SlotPhoto() }
-
-// SlotPhoto is the package's SlotPhoto in the language of msgs.
-func (msgs Messages) SlotPhoto() string { return msgs.text(textSlotPhoto) }
-
-// SlotCostume says "Outfit"
-// in the language the app shows under cx.
-func SlotCostume(cx *core.Scope) string { return For(cx).SlotCostume() }
-
-// SlotCostume is the package's SlotCostume in the language of msgs.
-func (msgs Messages) SlotCostume() string { return msgs.text(textSlotCostume) }
+// LookTitle is the package's LookTitle in the language of msgs.
+func (msgs Messages) LookTitle() string { return msgs.text(textLookTitle) }
 
 // SlotFace says "Face"
 // in the language the app shows under cx.
@@ -598,67 +666,106 @@ func SlotFace(cx *core.Scope) string { return For(cx).SlotFace() }
 // SlotFace is the package's SlotFace in the language of msgs.
 func (msgs Messages) SlotFace() string { return msgs.text(textSlotFace) }
 
-// ChooseSlot says "Choose {slot}"
+// SlotCostume says "Outfit"
+// in the language the app shows under cx.
+func SlotCostume(cx *core.Scope) string { return For(cx).SlotCostume() }
+
+// SlotCostume is the package's SlotCostume in the language of msgs.
+func (msgs Messages) SlotCostume() string { return msgs.text(textSlotCostume) }
+
+// SlotPose says "Pose"
+// in the language the app shows under cx.
+func SlotPose(cx *core.Scope) string { return For(cx).SlotPose() }
+
+// SlotPose is the package's SlotPose in the language of msgs.
+func (msgs Messages) SlotPose() string { return msgs.text(textSlotPose) }
+
+// NotChosen says "Not chosen"
+// in the language the app shows under cx.
+func NotChosen(cx *core.Scope) string { return For(cx).NotChosen() }
+
+// NotChosen is the package's NotChosen in the language of msgs.
+func (msgs Messages) NotChosen() string { return msgs.text(textNotChosen) }
+
+// StepFace says "Choose a face"
+// in the language the app shows under cx.
+func StepFace(cx *core.Scope) string { return For(cx).StepFace() }
+
+// StepFace is the package's StepFace in the language of msgs.
+func (msgs Messages) StepFace() string { return msgs.text(textStepFace) }
+
+// StepCostume says "Choose an outfit"
+// in the language the app shows under cx.
+func StepCostume(cx *core.Scope) string { return For(cx).StepCostume() }
+
+// StepCostume is the package's StepCostume in the language of msgs.
+func (msgs Messages) StepCostume() string { return msgs.text(textStepCostume) }
+
+// StepPose says "Set the pose"
+// in the language the app shows under cx.
+func StepPose(cx *core.Scope) string { return For(cx).StepPose() }
+
+// StepPose is the package's StepPose in the language of msgs.
+func (msgs Messages) StepPose() string { return msgs.text(textStepPose) }
+
+// StepTab says "{n} {name}"
 // in the language the app shows under cx.
 //
-// Accessibility label of an empty slot; slot is Pose, Photo, Outfit or Face.
-func ChooseSlot(cx *core.Scope, slot string) string { return For(cx).ChooseSlot(slot) }
+// A step of the look's editor, such as "1 Face".
+func StepTab(cx *core.Scope, n string, name string) string { return For(cx).StepTab(n, name) }
 
-// ChooseSlot is the package's ChooseSlot in the language of msgs.
-func (msgs Messages) ChooseSlot(slot string) string {
+// StepTab is the package's StepTab in the language of msgs.
+func (msgs Messages) StepTab(n string, name string) string {
 	if i18n.IsPseudo(msgs.lang) {
-		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.ChooseSlot(slot))
+		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.StepTab(n, name))
 	}
 	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
-		if f := supplied[lang].ChooseSlot; f != nil {
-			return f(slot)
+		if f := supplied[lang].StepTab; f != nil {
+			return f(n, name)
 		}
 		switch lang {
 		case "", "en":
-			return "Choose " + msgs.arg(slot)
+			return msgs.arg(n) + " " + msgs.arg(name)
 		case "zh-Hans":
-			return "选择" + slot
+			return n + " " + name
 		}
 	}
 }
 
-// RemoveSlot says "Remove {slot}"
+// StepsLabel says "Steps"
 // in the language the app shows under cx.
-//
-// Accessibility label of the button that clears a slot.
-func RemoveSlot(cx *core.Scope, slot string) string { return For(cx).RemoveSlot(slot) }
+func StepsLabel(cx *core.Scope) string { return For(cx).StepsLabel() }
 
-// RemoveSlot is the package's RemoveSlot in the language of msgs.
-func (msgs Messages) RemoveSlot(slot string) string {
-	if i18n.IsPseudo(msgs.lang) {
-		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.RemoveSlot(slot))
-	}
-	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
-		if f := supplied[lang].RemoveSlot; f != nil {
-			return f(slot)
-		}
-		switch lang {
-		case "", "en":
-			return "Remove " + msgs.arg(slot)
-		case "zh-Hans":
-			return "移除" + slot
-		}
-	}
-}
+// StepsLabel is the package's StepsLabel in the language of msgs.
+func (msgs Messages) StepsLabel() string { return msgs.text(textStepsLabel) }
 
-// NotePlaceholder says "Anything else, such as lighting or background"
+// Done says "Done"
 // in the language the app shows under cx.
-func NotePlaceholder(cx *core.Scope) string { return For(cx).NotePlaceholder() }
+func Done(cx *core.Scope) string { return For(cx).Done() }
 
-// NotePlaceholder is the package's NotePlaceholder in the language of msgs.
-func (msgs Messages) NotePlaceholder() string { return msgs.text(textNotePlaceholder) }
+// Done is the package's Done in the language of msgs.
+func (msgs Messages) Done() string { return msgs.text(textDone) }
 
-// NoteLabel says "Extra instructions"
+// Back says "Back"
 // in the language the app shows under cx.
-func NoteLabel(cx *core.Scope) string { return For(cx).NoteLabel() }
+func Back(cx *core.Scope) string { return For(cx).Back() }
 
-// NoteLabel is the package's NoteLabel in the language of msgs.
-func (msgs Messages) NoteLabel() string { return msgs.text(textNoteLabel) }
+// Back is the package's Back in the language of msgs.
+func (msgs Messages) Back() string { return msgs.text(textBack) }
+
+// NextCostume says "Next: outfit"
+// in the language the app shows under cx.
+func NextCostume(cx *core.Scope) string { return For(cx).NextCostume() }
+
+// NextCostume is the package's NextCostume in the language of msgs.
+func (msgs Messages) NextCostume() string { return msgs.text(textNextCostume) }
+
+// NextPose says "Next: pose"
+// in the language the app shows under cx.
+func NextPose(cx *core.Scope) string { return For(cx).NextPose() }
+
+// NextPose is the package's NextPose in the language of msgs.
+func (msgs Messages) NextPose() string { return msgs.text(textNextPose) }
 
 // Generate says "Generate"
 // in the language the app shows under cx.
@@ -667,26 +774,52 @@ func Generate(cx *core.Scope) string { return For(cx).Generate() }
 // Generate is the package's Generate in the language of msgs.
 func (msgs Messages) Generate() string { return msgs.text(textGenerate) }
 
+// CountLabel says "Pictures"
+// in the language the app shows under cx.
+func CountLabel(cx *core.Scope) string { return For(cx).CountLabel() }
+
+// CountLabel is the package's CountLabel in the language of msgs.
+func (msgs Messages) CountLabel() string { return msgs.text(textCountLabel) }
+
+// CountOption says "{n, plural, one {# picture} other {# pictures}}"
+// in the language the app shows under cx.
+//
+// How many pictures one Generate asks for.
+func CountOption(cx *core.Scope, n int) string { return For(cx).CountOption(n) }
+
+// CountOption is the package's CountOption in the language of msgs.
+func (msgs Messages) CountOption(n int) string {
+	if i18n.IsPseudo(msgs.lang) {
+		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.CountOption(n))
+	}
+	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
+		if f := supplied[lang].CountOption; f != nil {
+			return f(n)
+		}
+		switch lang {
+		case "", "en":
+			var b strings.Builder
+			switch i18n.Cardinal("en", float64(n)) {
+			case i18n.One:
+				b.WriteString(msgs.arg(i18n.FormatNumber("en", float64(n))))
+				b.WriteString(" picture")
+			default:
+				b.WriteString(msgs.arg(i18n.FormatNumber("en", float64(n))))
+				b.WriteString(" pictures")
+			}
+			return b.String()
+		case "zh-Hans":
+			return i18n.FormatNumber("zh-Hans", float64(n)) + " 张"
+		}
+	}
+}
+
 // NeedPose says "Choose a pose first."
 // in the language the app shows under cx.
 func NeedPose(cx *core.Scope) string { return For(cx).NeedPose() }
 
 // NeedPose is the package's NeedPose in the language of msgs.
 func (msgs Messages) NeedPose() string { return msgs.text(textNeedPose) }
-
-// NeedPhoto says "Choose a photo first."
-// in the language the app shows under cx.
-func NeedPhoto(cx *core.Scope) string { return For(cx).NeedPhoto() }
-
-// NeedPhoto is the package's NeedPhoto in the language of msgs.
-func (msgs Messages) NeedPhoto() string { return msgs.text(textNeedPhoto) }
-
-// NeedPhotoChange says "Choose a face to put on the photo."
-// in the language the app shows under cx.
-func NeedPhotoChange(cx *core.Scope) string { return For(cx).NeedPhotoChange() }
-
-// NeedPhotoChange is the package's NeedPhotoChange in the language of msgs.
-func (msgs Messages) NeedPhotoChange() string { return msgs.text(textNeedPhotoChange) }
 
 // NeedKey says "Add an API key in Settings first."
 // in the language the app shows under cx.
@@ -695,6 +828,20 @@ func NeedKey(cx *core.Scope) string { return For(cx).NeedKey() }
 // NeedKey is the package's NeedKey in the language of msgs.
 func (msgs Messages) NeedKey() string { return msgs.text(textNeedKey) }
 
+// Generating says "Generating"
+// in the language the app shows under cx.
+func Generating(cx *core.Scope) string { return For(cx).Generating() }
+
+// Generating is the package's Generating in the language of msgs.
+func (msgs Messages) Generating() string { return msgs.text(textGenerating) }
+
+// Cancel says "Cancel"
+// in the language the app shows under cx.
+func Cancel(cx *core.Scope) string { return For(cx).Cancel() }
+
+// Cancel is the package's Cancel in the language of msgs.
+func (msgs Messages) Cancel() string { return msgs.text(textCancel) }
+
 // GenerateFailed says "Generation failed"
 // in the language the app shows under cx.
 func GenerateFailed(cx *core.Scope) string { return For(cx).GenerateFailed() }
@@ -702,40 +849,182 @@ func GenerateFailed(cx *core.Scope) string { return For(cx).GenerateFailed() }
 // GenerateFailed is the package's GenerateFailed in the language of msgs.
 func (msgs Messages) GenerateFailed() string { return msgs.text(textGenerateFailed) }
 
-// PickPose says "Choose a pose"
+// GeneratedMany says "{n, plural, one {# picture} other {# pictures}} generated; see Works."
 // in the language the app shows under cx.
-func PickPose(cx *core.Scope) string { return For(cx).PickPose() }
+//
+// A toast after one Generate made several pictures.
+func GeneratedMany(cx *core.Scope, n int) string { return For(cx).GeneratedMany(n) }
 
-// PickPose is the package's PickPose in the language of msgs.
-func (msgs Messages) PickPose() string { return msgs.text(textPickPose) }
+// GeneratedMany is the package's GeneratedMany in the language of msgs.
+func (msgs Messages) GeneratedMany(n int) string {
+	if i18n.IsPseudo(msgs.lang) {
+		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.GeneratedMany(n))
+	}
+	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
+		if f := supplied[lang].GeneratedMany; f != nil {
+			return f(n)
+		}
+		switch lang {
+		case "", "en":
+			var b strings.Builder
+			switch i18n.Cardinal("en", float64(n)) {
+			case i18n.One:
+				b.WriteString(msgs.arg(i18n.FormatNumber("en", float64(n))))
+				b.WriteString(" picture")
+			default:
+				b.WriteString(msgs.arg(i18n.FormatNumber("en", float64(n))))
+				b.WriteString(" pictures")
+			}
+			b.WriteString(" generated; see Works.")
+			return b.String()
+		case "zh-Hans":
+			return "已生成 " + i18n.FormatNumber("zh-Hans", float64(n)) + " 张，在作品里查看。"
+		}
+	}
+}
 
-// PickCostume says "Choose an outfit"
+// SelectedItem says "Selected · {id}"
 // in the language the app shows under cx.
-func PickCostume(cx *core.Scope) string { return For(cx).PickCostume() }
+//
+// Above the chosen outfit's keywords; id is the gallery's code, such as WIN-0090.
+func SelectedItem(cx *core.Scope, id string) string { return For(cx).SelectedItem(id) }
 
-// PickCostume is the package's PickCostume in the language of msgs.
-func (msgs Messages) PickCostume() string { return msgs.text(textPickCostume) }
+// SelectedItem is the package's SelectedItem in the language of msgs.
+func (msgs Messages) SelectedItem(id string) string {
+	if i18n.IsPseudo(msgs.lang) {
+		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.SelectedItem(id))
+	}
+	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
+		if f := supplied[lang].SelectedItem; f != nil {
+			return f(id)
+		}
+		switch lang {
+		case "", "en":
+			return "Selected · " + msgs.arg(id)
+		case "zh-Hans":
+			return "已选 · " + id
+		}
+	}
+}
 
-// PickFace says "Choose a face"
+// FiltersLabel says "Filters"
 // in the language the app shows under cx.
-func PickFace(cx *core.Scope) string { return For(cx).PickFace() }
+func FiltersLabel(cx *core.Scope) string { return For(cx).FiltersLabel() }
 
-// PickFace is the package's PickFace in the language of msgs.
-func (msgs Messages) PickFace() string { return msgs.text(textPickFace) }
+// FiltersLabel is the package's FiltersLabel in the language of msgs.
+func (msgs Messages) FiltersLabel() string { return msgs.text(textFiltersLabel) }
 
-// GroupAll says "All"
+// All says "All"
 // in the language the app shows under cx.
-func GroupAll(cx *core.Scope) string { return For(cx).GroupAll() }
+func All(cx *core.Scope) string { return For(cx).All() }
 
-// GroupAll is the package's GroupAll in the language of msgs.
-func (msgs Messages) GroupAll() string { return msgs.text(textGroupAll) }
+// All is the package's All in the language of msgs.
+func (msgs Messages) All() string { return msgs.text(textAll) }
 
-// GroupsLabel says "Categories"
+// AngleFront says "Front"
 // in the language the app shows under cx.
-func GroupsLabel(cx *core.Scope) string { return For(cx).GroupsLabel() }
+func AngleFront(cx *core.Scope) string { return For(cx).AngleFront() }
 
-// GroupsLabel is the package's GroupsLabel in the language of msgs.
-func (msgs Messages) GroupsLabel() string { return msgs.text(textGroupsLabel) }
+// AngleFront is the package's AngleFront in the language of msgs.
+func (msgs Messages) AngleFront() string { return msgs.text(textAngleFront) }
+
+// AngleThreeQuarter says "Three-quarter"
+// in the language the app shows under cx.
+func AngleThreeQuarter(cx *core.Scope) string { return For(cx).AngleThreeQuarter() }
+
+// AngleThreeQuarter is the package's AngleThreeQuarter in the language of msgs.
+func (msgs Messages) AngleThreeQuarter() string { return msgs.text(textAngleThreeQuarter) }
+
+// AngleSide says "Side"
+// in the language the app shows under cx.
+func AngleSide(cx *core.Scope) string { return For(cx).AngleSide() }
+
+// AngleSide is the package's AngleSide in the language of msgs.
+func (msgs Messages) AngleSide() string { return msgs.text(textAngleSide) }
+
+// AngleHigh says "From above"
+// in the language the app shows under cx.
+func AngleHigh(cx *core.Scope) string { return For(cx).AngleHigh() }
+
+// AngleHigh is the package's AngleHigh in the language of msgs.
+func (msgs Messages) AngleHigh() string { return msgs.text(textAngleHigh) }
+
+// AngleLow says "From below"
+// in the language the app shows under cx.
+func AngleLow(cx *core.Scope) string { return For(cx).AngleLow() }
+
+// AngleLow is the package's AngleLow in the language of msgs.
+func (msgs Messages) AngleLow() string { return msgs.text(textAngleLow) }
+
+// HairShort says "Short"
+// in the language the app shows under cx.
+func HairShort(cx *core.Scope) string { return For(cx).HairShort() }
+
+// HairShort is the package's HairShort in the language of msgs.
+func (msgs Messages) HairShort() string { return msgs.text(textHairShort) }
+
+// HairMedium says "Medium"
+// in the language the app shows under cx.
+func HairMedium(cx *core.Scope) string { return For(cx).HairMedium() }
+
+// HairMedium is the package's HairMedium in the language of msgs.
+func (msgs Messages) HairMedium() string { return msgs.text(textHairMedium) }
+
+// HairSemiLong says "Shoulder-length"
+// in the language the app shows under cx.
+func HairSemiLong(cx *core.Scope) string { return For(cx).HairSemiLong() }
+
+// HairSemiLong is the package's HairSemiLong in the language of msgs.
+func (msgs Messages) HairSemiLong() string { return msgs.text(textHairSemiLong) }
+
+// HairLong says "Long"
+// in the language the app shows under cx.
+func HairLong(cx *core.Scope) string { return For(cx).HairLong() }
+
+// HairLong is the package's HairLong in the language of msgs.
+func (msgs Messages) HairLong() string { return msgs.text(textHairLong) }
+
+// GroupSpring says "Spring"
+// in the language the app shows under cx.
+func GroupSpring(cx *core.Scope) string { return For(cx).GroupSpring() }
+
+// GroupSpring is the package's GroupSpring in the language of msgs.
+func (msgs Messages) GroupSpring() string { return msgs.text(textGroupSpring) }
+
+// GroupSummer says "Summer"
+// in the language the app shows under cx.
+func GroupSummer(cx *core.Scope) string { return For(cx).GroupSummer() }
+
+// GroupSummer is the package's GroupSummer in the language of msgs.
+func (msgs Messages) GroupSummer() string { return msgs.text(textGroupSummer) }
+
+// GroupAutumn says "Autumn"
+// in the language the app shows under cx.
+func GroupAutumn(cx *core.Scope) string { return For(cx).GroupAutumn() }
+
+// GroupAutumn is the package's GroupAutumn in the language of msgs.
+func (msgs Messages) GroupAutumn() string { return msgs.text(textGroupAutumn) }
+
+// GroupWinter says "Winter"
+// in the language the app shows under cx.
+func GroupWinter(cx *core.Scope) string { return For(cx).GroupWinter() }
+
+// GroupWinter is the package's GroupWinter in the language of msgs.
+func (msgs Messages) GroupWinter() string { return msgs.text(textGroupWinter) }
+
+// GroupParty says "Party"
+// in the language the app shows under cx.
+func GroupParty(cx *core.Scope) string { return For(cx).GroupParty() }
+
+// GroupParty is the package's GroupParty in the language of msgs.
+func (msgs Messages) GroupParty() string { return msgs.text(textGroupParty) }
+
+// GroupSwimwear says "Swimwear"
+// in the language the app shows under cx.
+func GroupSwimwear(cx *core.Scope) string { return For(cx).GroupSwimwear() }
+
+// GroupSwimwear is the package's GroupSwimwear in the language of msgs.
+func (msgs Messages) GroupSwimwear() string { return msgs.text(textGroupSwimwear) }
 
 // LoadFailed says "Couldn't load the gallery"
 // in the language the app shows under cx.
@@ -751,12 +1040,19 @@ func Retry(cx *core.Scope) string { return For(cx).Retry() }
 // Retry is the package's Retry in the language of msgs.
 func (msgs Messages) Retry() string { return msgs.text(textRetry) }
 
-// Back says "Back"
+// NoteLabel says "Extra instructions"
 // in the language the app shows under cx.
-func Back(cx *core.Scope) string { return For(cx).Back() }
+func NoteLabel(cx *core.Scope) string { return For(cx).NoteLabel() }
 
-// Back is the package's Back in the language of msgs.
-func (msgs Messages) Back() string { return msgs.text(textBack) }
+// NoteLabel is the package's NoteLabel in the language of msgs.
+func (msgs Messages) NoteLabel() string { return msgs.text(textNoteLabel) }
+
+// NotePlaceholder says "Anything else, such as lighting or background"
+// in the language the app shows under cx.
+func NotePlaceholder(cx *core.Scope) string { return For(cx).NotePlaceholder() }
+
+// NotePlaceholder is the package's NotePlaceholder in the language of msgs.
+func (msgs Messages) NotePlaceholder() string { return msgs.text(textNotePlaceholder) }
 
 // ResultTitle says "Result"
 // in the language the app shows under cx.
@@ -785,13 +1081,6 @@ func Delete(cx *core.Scope) string { return For(cx).Delete() }
 
 // Delete is the package's Delete in the language of msgs.
 func (msgs Messages) Delete() string { return msgs.text(textDelete) }
-
-// Cancel says "Cancel"
-// in the language the app shows under cx.
-func Cancel(cx *core.Scope) string { return For(cx).Cancel() }
-
-// Cancel is the package's Cancel in the language of msgs.
-func (msgs Messages) Cancel() string { return msgs.text(textCancel) }
 
 // Saved says "Saved"
 // in the language the app shows under cx.
@@ -921,83 +1210,6 @@ func SourcesFooter(cx *core.Scope) string { return For(cx).SourcesFooter() }
 
 // SourcesFooter is the package's SourcesFooter in the language of msgs.
 func (msgs Messages) SourcesFooter() string { return msgs.text(textSourcesFooter) }
-
-// GroupPoseStandard says "Full body"
-// in the language the app shows under cx.
-func GroupPoseStandard(cx *core.Scope) string { return For(cx).GroupPoseStandard() }
-
-// GroupPoseStandard is the package's GroupPoseStandard in the language of msgs.
-func (msgs Messages) GroupPoseStandard() string { return msgs.text(textGroupPoseStandard) }
-
-// GroupPoseGlamour says "Full body, glamour"
-// in the language the app shows under cx.
-func GroupPoseGlamour(cx *core.Scope) string { return For(cx).GroupPoseGlamour() }
-
-// GroupPoseGlamour is the package's GroupPoseGlamour in the language of msgs.
-func (msgs Messages) GroupPoseGlamour() string { return msgs.text(textGroupPoseGlamour) }
-
-// GroupPoseUpper says "Upper body"
-// in the language the app shows under cx.
-func GroupPoseUpper(cx *core.Scope) string { return For(cx).GroupPoseUpper() }
-
-// GroupPoseUpper is the package's GroupPoseUpper in the language of msgs.
-func (msgs Messages) GroupPoseUpper() string { return msgs.text(textGroupPoseUpper) }
-
-// GroupSpring says "Spring"
-// in the language the app shows under cx.
-func GroupSpring(cx *core.Scope) string { return For(cx).GroupSpring() }
-
-// GroupSpring is the package's GroupSpring in the language of msgs.
-func (msgs Messages) GroupSpring() string { return msgs.text(textGroupSpring) }
-
-// GroupSummer says "Summer"
-// in the language the app shows under cx.
-func GroupSummer(cx *core.Scope) string { return For(cx).GroupSummer() }
-
-// GroupSummer is the package's GroupSummer in the language of msgs.
-func (msgs Messages) GroupSummer() string { return msgs.text(textGroupSummer) }
-
-// GroupAutumn says "Autumn"
-// in the language the app shows under cx.
-func GroupAutumn(cx *core.Scope) string { return For(cx).GroupAutumn() }
-
-// GroupAutumn is the package's GroupAutumn in the language of msgs.
-func (msgs Messages) GroupAutumn() string { return msgs.text(textGroupAutumn) }
-
-// GroupWinter says "Winter"
-// in the language the app shows under cx.
-func GroupWinter(cx *core.Scope) string { return For(cx).GroupWinter() }
-
-// GroupWinter is the package's GroupWinter in the language of msgs.
-func (msgs Messages) GroupWinter() string { return msgs.text(textGroupWinter) }
-
-// GroupParty says "Party"
-// in the language the app shows under cx.
-func GroupParty(cx *core.Scope) string { return For(cx).GroupParty() }
-
-// GroupParty is the package's GroupParty in the language of msgs.
-func (msgs Messages) GroupParty() string { return msgs.text(textGroupParty) }
-
-// GroupSwimwear says "Swimwear"
-// in the language the app shows under cx.
-func GroupSwimwear(cx *core.Scope) string { return For(cx).GroupSwimwear() }
-
-// GroupSwimwear is the package's GroupSwimwear in the language of msgs.
-func (msgs Messages) GroupSwimwear() string { return msgs.text(textGroupSwimwear) }
-
-// GroupFace says "Face"
-// in the language the app shows under cx.
-func GroupFace(cx *core.Scope) string { return For(cx).GroupFace() }
-
-// GroupFace is the package's GroupFace in the language of msgs.
-func (msgs Messages) GroupFace() string { return msgs.text(textGroupFace) }
-
-// GroupStyling says "Styling"
-// in the language the app shows under cx.
-func GroupStyling(cx *core.Scope) string { return For(cx).GroupStyling() }
-
-// GroupStyling is the package's GroupStyling in the language of msgs.
-func (msgs Messages) GroupStyling() string { return msgs.text(textGroupStyling) }
 
 // dated is lang with the hour cycle the user set, which times take.
 func (msgs Messages) dated(lang string) string {

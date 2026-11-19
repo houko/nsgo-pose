@@ -1,0 +1,20 @@
+# Mirra's look: warm paper, white cards and one blue accent.
+radius: 14
+light:
+  background: "#f3f2ee"
+  surface: "#ffffff"
+  text: "#1f1e1d"
+  textMuted: "#6b6a68"
+  border: "#e4e2dc"
+  accent: "#2e4be0"
+  accentText: "#ffffff"
+  inset: "#e8e5de"
+dark:
+  background: "#141413"
+  surface: "#1f1f1d"
+  text: "#f1f0ec"
+  textMuted: "#a19f99"
+  border: "#33322f"
+  accent: "#6f86ff"
+  accentText: "#ffffff"
+  inset: "#2a2926"

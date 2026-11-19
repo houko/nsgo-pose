@@ -2,7 +2,7 @@
   <img src="docs/icon.png" alt="" width="96">
 </p>
 
-<h1 align="center">Pose Studio</h1>
+<h1 align="center">Mirra 镜衣</h1>
 
 <p align="center">
   <strong>English</strong> |
@@ -10,20 +10,26 @@
 </p>
 
 <p align="center">
-  Put a pose, an outfit and a face together, or give your own photo another face, and let an image model draw the result. Built in Go with <a href="https://github.com/nsgo-dev/nsgo">NSGo</a>, which draws it with each platform's own views; one codebase builds for macOS, iOS, Android and Windows.
+  Put a face, an outfit and a pose from three reference galleries together, and let an image model draw the person they describe. Built in Go with <a href="https://github.com/nsgo-dev/nsgo">NSGo</a>, which draws it with each platform's own views; one codebase builds for macOS, iOS, Android and Windows.
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/en/create.png" alt="Create: pose, outfit and face slots" width="260">
-  <img src="docs/screenshots/en/faces.png" alt="Choosing a face" width="260">
-  <img src="docs/screenshots/en/settings.png" alt="Settings: image API and galleries" width="260">
+  <img src="docs/screenshots/en/phone-home.png" alt="Studio on a phone: the look's references and a row per gallery" width="260">
+  <img src="docs/screenshots/en/phone-face.png" alt="Step 1 of 3: choosing a face" width="260">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/en/desktop.png" alt="The desktop studio: library, canvas and the look" width="800">
 </p>
 
 ## What it does
 
-- **Pose + outfit + face.** Pick a pose (a faceless gray mannequin), an outfit (clothes with no one wearing them) and a face, and the app asks an image model for a photo of one adult person with that pose, outfit and face.
-- **Face swap on your photo.** Switch the base to *My photo*, pick a picture from your library and a face. The pose, body, clothes, framing and background of your photo are kept. Outfits go on poses only, because the outfit gallery's terms forbid using its images to depict real people; the app enforces this in `Request.Validate` as well as in the UI.
+- **Face, outfit, pose.** Choose a face (AI-generated, CC0), an outfit (clothes with no one wearing them) and a pose (a faceless gray mannequin), and the app asks an image model for a photo of one adult person with them. Only the pose is required.
+- **Two layouts.** In a window narrower than 900 points, the phone layout: Studio, Wardrobe, Works and Me over a tab bar, with the look put together in three steps. Wider, the desktop studio: the galleries on the left, the look or its result in the middle, the summary and Generate on the right.
+- **Filters that match the galleries.** Faces by hair length, outfits by season and occasion, poses by camera angle.
+- **Several pictures at once.** Ask for 1, 2 or 4 pictures in one request, and cancel a request while it runs.
 - **Extra instructions.** Add a line such as lighting or background, sent along with the prompt.
+- **No photos of you.** The app takes no picture of the user: the pose and outfit galleries' terms forbid using their images to depict real people.
 - **Works.** Every result is kept on the device, with save, share and delete.
 - **Bring your own model.** Any OpenAI-compatible image editing endpoint (`POST /images/edits`) works; the API key is kept in the system keychain.
 - English and Simplified Chinese.
@@ -49,23 +55,28 @@ The pose and outfit galleries ask that their images are not used to depict real 
 ```
 gallery index (HTML / JS)  ──►  catalog: id, group, title, thumbnail, full image
                                    │
-  you choose a pose with an outfit and a face, or a photo and a face
+        you choose a face, an outfit and a pose
                                    │
-full images (downloaded once) + your photo + prompt
+     full images (downloaded once) + prompt
                                    │
                 POST {base URL}/images/edits  (multipart, image[] in order)
                                    │
           b64_json or url  ──►  saved in the app's data directory
 ```
 
-The prompt numbers the images in the order they are sent and says what each one is for: the mannequin's pose and camera angle, or the photo to keep; the outfit to put on; the face and hair to use.
+The images are sent pose first, then the outfit and the face, and the prompt numbers them in that order and says what each one is for: the mannequin's pose and camera angle, the outfit to put on, the face and hair to use.
 
 | File | What is in it |
 | --- | --- |
 | [`gallery.go`](gallery.go) | Reading the three galleries' indexes and what is left out |
 | [`generate.go`](generate.go) | The prompt and the `/images/edits` request |
 | [`works.go`](works.go) | Saving and listing results |
-| [`app.go`](app.go) | The screens: Create, the pickers, a result, Works and Settings |
+| [`app.go`](app.go) | The app's state, the choice of layout and generating |
+| [`library.go`](library.go) | What both layouts share: a gallery's chips and grid, the look's rows, the preview |
+| [`phone.go`](phone.go) | The phone layout and its three-step editor |
+| [`desktop.go`](desktop.go) | The desktop studio's top bar and three columns |
+| [`pages.go`](pages.go) | A result, Works and Settings |
+| [`theme.yaml`](theme.yaml) | Colors and corner radius, light and dark |
 | [`locales/`](locales) | English and Chinese messages |
 | [`tools/appicon`](tools/appicon) | Draws `assets/Icon.png` |
 
@@ -109,7 +120,7 @@ Each Generate is one paid call to the API you configured. So far the request has
 
 ## Privacy
 
-- Your photo leaves the device only in the request to the API you set up, and only when you press Generate.
+- The app sends the API you set up only the gallery images you chose and the prompt, and only when you press Generate.
 - The galleries see the requests for the thumbnails and images you open, as a browser visit would.
 - Results stay in the app's data directory until you delete them.
 

@@ -1,6 +1,6 @@
 name: nsgo-pose
 id: dev.nsgo.pose
-version: 0.1.0
+version: 0.2.0
 
 # Every target uses assets/Icon.png, drawn by tools/appicon.
 icon:
