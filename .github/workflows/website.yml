@@ -1,0 +1,74 @@
+name: Website
+
+# Builds apps/website/ and publishes it to GitHub Pages on pushes to main that touch it, the screenshots it shows or the app version it reads.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/website/**"
+      - "screenshots/**"
+      - "apps/mirra/nsgo.yaml"
+      - "apps/mirra/assets/**"
+      - ".github/workflows/website.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.4"
+
+      - name: Install the website's dependencies
+        working-directory: apps/website
+        run: bun install --frozen-lockfile
+
+      - name: Type-check
+        working-directory: apps/website
+        run: bun run typecheck
+
+      - name: Build the website
+        working-directory: apps/website
+        env:
+          # The project site lives under the repository's path; the token lets the build read stars, contributors and the latest release.
+          BASE_PATH: /${{ github.event.repository.name }}/
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun run build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/website/dist/client
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

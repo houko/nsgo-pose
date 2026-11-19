@@ -1,6 +1,6 @@
 # Mirra architecture
 
-Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an outfit and a pose from three public reference galleries together and has an OpenAI-compatible image model, in the cloud or on the user's own server, draw the person they describe. It is a single Go module in `apps/mirra`.
+Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an outfit and a pose from three public reference galleries together and has an OpenAI-compatible image model, in the cloud or on the user's own server, draw the person they describe. It is a single Go module in `apps/mirra`; its website is in `apps/website`.
 
 ## Code map
 
@@ -21,7 +21,11 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/locales/` | NSGo message catalogs in English and Simplified Chinese, and the accessors the `nsgo` tool writes from them. |
 | `apps/mirra/assets/`, `apps/mirra/tools/appicon` | The app icon and the program that draws it. |
 | `apps/mirra/*_test.go` | Headless and target tests; `fixtures_test.go` fakes the galleries and the image API. |
-| `screenshots/` | The README's screenshots. |
+| `screenshots/` | The README's and the website's screenshots. |
+| `apps/website/` | The website: TanStack Start prerendered to static pages in Chinese, English and Japanese, published by `.github/workflows/website.yml`. |
+| `apps/website/src/i18n/copy.ts` | The website's words in each language. |
+| `apps/website/src/components/` | The website's sections, from the hero to the FAQ. |
+| `apps/website/vite.config.ts` | The build: the Pages path, prerendering, and the version, stars, contributors and latest release it reads. |
 
 ## Boundaries
 
@@ -31,6 +35,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 - Do network and file work on a goroutine and hand results back with `cx.Post`; never block a builder or a handler.
 - Keep API keys in `cx.Secrets()`, never in storage.
 - Take colors from the theme. Choose the layout from the window's width (`wideWidth`), not the device.
+- Keep the website to what the app does, and show on it no pose or outfit gallery image: its pictures are CC0 faces and the app's own screenshots.
 
 ## Core flows
 

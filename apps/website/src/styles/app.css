@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+/* Mirra's look, as the app shows it: a dark studio with warm amber light, titles in a serif. */
+@theme {
+  --color-ink: #0e0d0c;
+  --color-panel: #181715;
+  --color-raised: #22201d;
+  --color-line: #2d2a26;
+  --color-text: #f3efe8;
+  --color-muted: #9b958b;
+  --color-amber: #e3be86;
+  --color-amber-ink: #1b1610;
+  --font-sans: 'Inter', 'PingFang SC', 'Hiragino Sans', 'Noto Sans CJK SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-serif: 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'Hiragino Mincho ProN', 'Yu Mincho', SimSun, Georgia, serif;
+}
+
+html {
+  background-color: var(--color-ink);
+  color: var(--color-text);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+}
+
+.display {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
