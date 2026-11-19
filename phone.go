@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/houko/nsgo-pose/locales"
+	"github.com/yldm-ai/nsgo-pose/locales"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
