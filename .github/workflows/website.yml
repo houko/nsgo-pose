@@ -67,7 +67,7 @@ jobs:
       - name: Put the web app under app/
         run: |
           mkdir -p apps/website/dist/client/app
-          cp -R apps/mirra/dist/mirra-*-web/. apps/website/dist/client/app/
+          cp -R apps/mirra/dist/Mirra-*-web/. apps/website/dist/client/app/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

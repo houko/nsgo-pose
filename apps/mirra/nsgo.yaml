@@ -1,4 +1,5 @@
-name: mirra
+# The name the app shows and its packages carry (Mirra.app, mirra-<version>-<target> in releases). The Release workflow bumps the version (.github/scripts/set-version.sh).
+name: Mirra
 id: ai.yldm.mirra
 version: 0.3.0
 # The app always shows its dark theme; the web page takes the same color while the app loads.
@@ -20,3 +21,6 @@ build:
   open: false
   # The web build keeps the key, works and clothes only as long as the page: a browser has no secure store or file system for them.
   targets: [macos_arm64, windows_x64, ios_simulator, android_arm64, web]
+
+# The GitHub repository whose releases the install scripts install from.
+release: { github: yldm-ai/mirra }
