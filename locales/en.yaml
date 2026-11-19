@@ -1,0 +1,69 @@
+appName:
+  message: Pose Studio
+  description: The app's name, which its packages list it under in each language.
+tabCreate: Create
+tabWorks: Works
+tabSettings: Settings
+tabsLabel: Sections
+baseLabel: Base
+basePose: Pose
+basePhoto: My photo
+slotPose: Pose
+slotPhoto: Photo
+slotCostume: Outfit
+slotFace: Face
+chooseSlot:
+  message: Choose {slot}
+  description: Accessibility label of an empty slot; slot is Pose, Photo, Outfit or Face.
+removeSlot:
+  message: Remove {slot}
+  description: Accessibility label of the button that clears a slot.
+notePlaceholder: Anything else, such as lighting or background
+noteLabel: Extra instructions
+generate: Generate
+needBase: Choose a pose or a photo first.
+needPhotoChange: Add an outfit or a face to change the photo.
+needKey: Add an API key in Settings first.
+generateFailed: Generation failed
+pickPose: Choose a pose
+pickCostume: Choose an outfit
+pickFace: Choose a face
+groupAll: All
+groupsLabel: Categories
+loadFailed: Couldn't load the gallery
+retry: Retry
+back: Back
+resultTitle: Result
+save: Save
+share: Share
+delete: Delete
+cancel: Cancel
+saved: Saved
+saveFailed: Couldn't save the picture
+deleteConfirm: Delete this picture?
+deleteConfirmBody: It is removed from Works on this device.
+noWorks: Pictures you generate appear here.
+workLabel:
+  message: Picture from {date, date, medium} {date, time, short}
+  description: Accessibility label of a generated picture in Works.
+apiSection: Image API
+apiFooter: Any OpenAI-compatible image editing endpoint (POST /images/edits). The key is kept in the system's keychain.
+baseURL: Base URL
+apiKey: API key
+apiKeyPlaceholder: sk-…
+model: Model
+size: Size
+keyUnavailable: This device has no secure store for the key.
+sourcesSection: Galleries
+sourcesFooter: Poses come from POSE-DB-01, outfits from COSTUME-DB-01 and faces from FACE REFERENCE (CC0). Each image is fetched only when you use it; the app neither bundles nor redistributes them.
+groupPoseStandard: Full body
+groupPoseGlamour: Full body, glamour
+groupPoseUpper: Upper body
+groupSpring: Spring
+groupSummer: Summer
+groupAutumn: Autumn
+groupWinter: Winter
+groupParty: Party
+groupSwimwear: Swimwear
+groupFace: Face
+groupStyling: Styling

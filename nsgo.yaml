@@ -1,5 +1,5 @@
 name: nsgo-pose
-id: dev.nsgo.nsgopose
+id: dev.nsgo.pose
 version: 0.1.0
 
 # macOS and iOS use assets/AppIcon.icon, or assets/AppIcon.icns on macOS; the
@@ -24,4 +24,5 @@ build:
   output: dist
   # true opens the output directory after building.
   open: false
-  targets: [macos_arm64, windows_x64, ios_simulator, android_arm64, web]
+  # No web target: the browser has no secure store for the API key, and the galleries and image APIs do not allow cross-origin requests.
+  targets: [macos_arm64, windows_x64, ios_simulator, android_arm64]

@@ -1,0 +1,61 @@
+appName: 换装换脸
+tabCreate: 创作
+tabWorks: 作品
+tabSettings: 设置
+tabsLabel: 分区
+baseLabel: 底图
+basePose: 姿势
+basePhoto: 我的照片
+slotPose: 姿势
+slotPhoto: 照片
+slotCostume: 服装
+slotFace: 人脸
+chooseSlot: 选择{slot}
+removeSlot: 移除{slot}
+notePlaceholder: 补充要求，例如光线、背景
+noteLabel: 补充要求
+generate: 生成
+needBase: 先选一个姿势或一张照片。
+needPhotoChange: 给照片加上服装或人脸才能生成。
+needKey: 先在设置里填写 API Key。
+generateFailed: 生成失败
+pickPose: 选择姿势
+pickCostume: 选择服装
+pickFace: 选择人脸
+groupAll: 全部
+groupsLabel: 分类
+loadFailed: 图库加载失败
+retry: 重试
+back: 返回
+resultTitle: 结果
+save: 保存
+share: 分享
+delete: 删除
+cancel: 取消
+saved: 已保存
+saveFailed: 保存失败
+deleteConfirm: 删除这张图片？
+deleteConfirmBody: 会从本机的作品里移除。
+noWorks: 生成的图片会出现在这里。
+workLabel: "{date, date, medium} {date, time, short} 的作品"
+apiSection: 生图接口
+apiFooter: 支持任何 OpenAI 兼容的图片编辑接口（POST /images/edits）。Key 存在系统钥匙串里。
+baseURL: 接口地址
+apiKey: API Key
+apiKeyPlaceholder: sk-…
+model: 模型
+size: 尺寸
+keyUnavailable: 这台设备没有可以保存 Key 的安全存储。
+sourcesSection: 素材来源
+sourcesFooter: 姿势来自 POSE-DB-01，服装来自 COSTUME-DB-01，人脸来自 FACE REFERENCE（CC0）。每张图只在你使用时单独获取，App 不内置、也不转发这些图片。
+groupPoseStandard: 全身
+groupPoseGlamour: 全身·魅力
+groupPoseUpper: 半身
+groupSpring: 春
+groupSummer: 夏
+groupAutumn: 秋
+groupWinter: 冬
+groupParty: 派对
+groupSwimwear: 泳装
+groupFace: 正脸
+groupStyling: 造型
