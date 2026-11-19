@@ -1,4 +1,4 @@
-module github.com/yldm-ai/mirra
+module github.com/yldm-ai/mirra/apps/mirra
 
 go 1.27.4
 
