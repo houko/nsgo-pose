@@ -115,7 +115,7 @@ func (s *studio) desktopStudio(cx *core.Scope) core.Node {
 	})
 	footnote := func() string {
 		if s.configured() {
-			return t.ViaService(serviceName(t, s.service.Get()))
+			return t.ViaService(s.serviceName(t))
 		}
 		return t.ConfigureOnce()
 	}

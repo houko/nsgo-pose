@@ -66,14 +66,7 @@ type route struct{ page page }
 
 // Storage keys and secret accounts.
 const (
-	keyService        = "service"
-	keyCloudURL       = "baseURL"
-	keyLocalURL       = "localURL"
-	keyModel          = "model"
-	keySize           = "size"
 	keyFavorites      = "favoriteOutfits"
-	apiKeyAccount     = "api-key"
-	localKeyAccount   = "local-api-key"
 	resultsFolderName = "results"
 )
 
@@ -109,10 +102,9 @@ type studio struct {
 	shot   *core.Signal[*shot]
 	zoom   *core.Signal[int]
 
-	service                *core.Signal[serviceKind]
-	cloudURL, localURL     *core.Signal[string]
-	cloudKey, localKey     *core.Signal[string]
-	model, size            *core.Signal[string]
+	// provider is the chosen AI service's ID, and settings what the user set for each one.
+	provider               *core.Signal[string]
+	settings               map[string]providerSettings
 	conn                   *core.Signal[connState]
 	connErr                *core.Signal[string]
 	showKey, settingsShown *core.Signal[bool]
@@ -182,9 +174,12 @@ func newStudio(cx *core.Scope, a App) *studio {
 		}
 		return core.NewSignal(cx, v)
 	}
-	service := serviceCloud
-	if v, _ := store.GetItem(keyService); serviceKind(v) == serviceLocal {
-		service = serviceLocal
+	migrated, legacyAccount := migrateSettings(store)
+	chosen, _ := store.GetItem(keyProvider)
+	settings := map[string]providerSettings{}
+	for _, p := range providers {
+		settings[p.ID] = providerSettings{url: stored(p.storageKey("url"), ""), key: core.NewSignal(cx, ""),
+			model: stored(p.storageKey("model"), ""), size: stored(p.storageKey("size"), "")}
 	}
 	var favorites []Item
 	if v, ok := store.GetItem(keyFavorites); ok {
@@ -204,13 +199,8 @@ func newStudio(cx *core.Scope, a App) *studio {
 		busy:          core.NewSignal(cx, false),
 		shot:          core.NewSignal[*shot](cx, nil),
 		zoom:          core.NewSignal(cx, 100),
-		service:       core.NewSignal(cx, service),
-		cloudURL:      stored(keyCloudURL, defaultBaseURL),
-		localURL:      stored(keyLocalURL, defaultLocalURL),
-		cloudKey:      core.NewSignal(cx, ""),
-		localKey:      core.NewSignal(cx, ""),
-		model:         stored(keyModel, defaultModel),
-		size:          stored(keySize, defaultSize),
+		provider:      core.NewSignal(cx, providerByID(chosen).ID),
+		settings:      settings,
 		conn:          core.NewSignal(cx, connUntested),
 		connErr:       core.NewSignal(cx, ""),
 		showKey:       core.NewSignal(cx, false),
@@ -241,18 +231,16 @@ func newStudio(cx *core.Scope, a App) *studio {
 	secrets := cx.Secrets()
 	worksDir, uploadsDir, st := s.dir("works"), s.dir("uploads"), s.pics
 	go func() {
-		cloudKey, cloudOK, cloudErr := secrets.Get(apiKeyAccount)
-		localKey, localOK, localErr := secrets.Get(localKeyAccount)
+		keys, keysErr := readKeys(secrets, migrated, legacyAccount)
 		list, listErr := listWorks(st, worksDir)
 		uploads, uploadsErr := listUploads(st, uploadsDir)
 		cx.Post(func() {
 			// A browser has no secure store: the key then lasts as long as the page.
-			s.keyKept.Set(!errors.Is(cloudErr, core.ErrSecretsUnavailable))
-			if cloudErr == nil && cloudOK && s.cloudKey.Get() == "" {
-				s.cloudKey.Set(cloudKey)
-			}
-			if localErr == nil && localOK && s.localKey.Get() == "" {
-				s.localKey.Set(localKey)
+			s.keyKept.Set(!errors.Is(keysErr, core.ErrSecretsUnavailable))
+			for id, key := range keys {
+				if sig := s.settings[id].key; sig.Get() == "" {
+					sig.Set(key)
+				}
 			}
 			if listErr == nil {
 				s.works.Set(list)
@@ -295,15 +283,17 @@ func (s *studio) toastError(title string, err error) {
 	s.toaster.Show(ui.ToastContent{Type: ui.ToastError, Title: title, Description: err.Error()})
 }
 
-// config is the image API as set up in settings.
+// current is the chosen provider and what the user set for it.
+func (s *studio) current() (provider, providerSettings) {
+	p := providerByID(s.provider.Get())
+	return p, s.settings[p.ID]
+}
+
+// config is the image API as set up in settings: the chosen provider's, with the user's address, model and size over its preset's.
 func (s *studio) config() Config {
-	cfg := Config{Model: s.model.Get(), Size: s.size.Get(), Local: s.service.Get() == serviceLocal, ReadLocal: s.pics.Read}
-	if cfg.Local {
-		cfg.BaseURL, cfg.APIKey = s.localURL.Get(), s.localKey.Get()
-	} else {
-		cfg.BaseURL, cfg.APIKey = s.cloudURL.Get(), s.cloudKey.Get()
-	}
-	return cfg
+	p, set := s.current()
+	return Config{Protocol: p.Protocol, BaseURL: or(set.url.Get(), p.BaseURL), APIKey: set.key.Get(), Model: or(set.model.Get(), p.Model),
+		Size: or(set.size.Get(), p.Size), Local: p.KeyOptional, ReadLocal: s.pics.Read}
 }
 
 // configured says whether a Generate can be sent: an address, and a key unless the server is the user's own.

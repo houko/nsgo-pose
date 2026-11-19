@@ -4,6 +4,7 @@ go 1.27.4
 
 require (
 	github.com/nsgo-dev/nsgo v0.2.1-0.20261119103143-0147bd095b7a
+	github.com/yldm-tech/ai-logo/nsgo v1.22.0
 	golang.org/x/image v0.48.0
 )
 

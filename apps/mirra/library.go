@@ -472,12 +472,10 @@ func (s *studio) heroImage(cx *core.Scope) core.Node {
 	}
 }
 
-// serviceName names the kind of AI service.
-func serviceName(t locales.Messages, k serviceKind) string {
-	if k == serviceLocal {
-		return t.ServiceLocal()
-	}
-	return t.ServiceCloud()
+// serviceName names the chosen AI service.
+func (s *studio) serviceName(t locales.Messages) string {
+	p, _ := s.current()
+	return p.name(t)
 }
 
 // statusText says whether the AI service is set up and answered its test.
@@ -485,7 +483,7 @@ func (s *studio) statusText(t locales.Messages) string {
 	if !s.configured() {
 		return t.StatusUnconfigured()
 	}
-	name := serviceName(t, s.service.Get())
+	name := s.serviceName(t)
 	switch s.conn.Get() {
 	case connOK:
 		return t.StatusConnected(name)

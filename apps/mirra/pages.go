@@ -298,42 +298,25 @@ func field(cx *core.Scope, label func() string, in core.Node) core.Node {
 	return core.View{Style: core.Style{Gap: 8}, Children: []core.Node{caption(cx, label), in}}
 }
 
-// serviceSettings sets up the AI service: cloud or local, its address and key, model and size, and a test of the connection.
+// serviceSettings sets up the AI service: the provider, its key and where to get one, its address, model and size, and a test of the connection. Each provider keeps its own settings, so switching back finds them again.
 func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	colors := ui.ColorsOf(cx)
 	store := cx.Storage()
 	secrets := cx.Secrets()
-	local := func() bool { return s.service.Get() == serviceLocal }
-	url := func() string {
-		if local() {
-			return s.localURL.Get()
+	setStored := func(field string, sig func(providerSettings) *core.Signal[string]) func(string) {
+		return func(v string) {
+			p, set := s.current()
+			sig(set).Set(v)
+			s.resetConnection()
+			if err := store.SetItem(p.storageKey(field), v); err != nil {
+				s.toastError(t.SaveFailed(), err)
+			}
 		}
-		return s.cloudURL.Get()
-	}
-	setURL := func(v string) {
-		sig, key := s.cloudURL, keyCloudURL
-		if local() {
-			sig, key = s.localURL, keyLocalURL
-		}
-		sig.Set(v)
-		s.resetConnection()
-		if err := store.SetItem(key, v); err != nil {
-			s.toastError(t.SaveFailed(), err)
-		}
-	}
-	apiKey := func() string {
-		if local() {
-			return s.localKey.Get()
-		}
-		return s.cloudKey.Get()
 	}
 	setKey := func(v string) {
-		if local() {
-			s.localKey.Set(v)
-		} else {
-			s.cloudKey.Set(v)
-		}
+		_, set := s.current()
+		set.key.Set(v)
 		s.resetConnection()
 	}
 	saveKey := func() {
@@ -341,10 +324,8 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		if !s.keyKept.Get() {
 			return
 		}
-		account, key := apiKeyAccount, strings.TrimSpace(s.cloudKey.Get())
-		if local() {
-			account, key = localKeyAccount, strings.TrimSpace(s.localKey.Get())
-		}
+		p, set := s.current()
+		account, key := p.keyAccount(), strings.TrimSpace(set.key.Get())
 		go func() {
 			var err error
 			if key == "" {
@@ -364,36 +345,65 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 			})
 		}()
 	}
-	setStored := func(sig *core.Signal[string], key string) func(string) {
-		return func(v string) {
-			sig.Set(v)
+	var options []ui.Option[string]
+	for _, p := range providers {
+		options = append(options, ui.Option[string]{Value: p.ID, Label: p.name(t), TestID: "provider-" + p.ID,
+			Leading: core.Icon{SVG: p.icon(), Label: p.name(t), Style: core.Style{FontSize: 18}}})
+	}
+	picker := ui.Select[string]{Label: t.Provider(), Options: options, Value: s.provider.Get, TestID: "provider", Style: core.Style{Width: core.Pct(100)},
+		OnChange: func(id string) {
+			s.provider.Set(id)
+			s.showKey.Set(false)
 			s.resetConnection()
-			if err := store.SetItem(key, v); err != nil {
+			if err := store.SetItem(keyProvider, id); err != nil {
 				s.toastError(t.SaveFailed(), err)
 			}
+		}}
+	// The fields are the chosen provider's, drawn again when another is chosen.
+	fields := core.Dynamic(func(cx *core.Scope) core.Node {
+		p, set := s.current()
+		keyLabel := t.ApiKey()
+		if p.KeyOptional {
+			keyLabel = t.ApiKeyOptional()
 		}
-	}
-	keyLabel := func() string {
-		if local() {
-			return t.ApiKeyOptional()
-		}
-		return t.ApiKey()
-	}
-	keyField := core.View{Style: core.Style{Direction: core.Row, Gap: 8}, Children: []core.Node{
-		core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{
+		keyRow := core.View{Style: core.Style{Direction: core.Row, Gap: 8}, Children: []core.Node{
+			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{
+				core.Dynamic(func(cx *core.Scope) core.Node {
+					return ui.Input{Value: set.key.Get, OnChange: setKey, OnBlur: saveKey, Masked: !s.showKey.Get(), Label: keyLabel, Placeholder: p.KeyHint, TestID: "api-key"}
+				}),
+			}},
 			core.Dynamic(func(cx *core.Scope) core.Node {
-				return ui.Input{Value: apiKey, OnChange: setKey, OnBlur: saveKey, Masked: !s.showKey.Get(), Label: keyLabel(), Placeholder: t.ApiKeyPlaceholder(), TestID: "api-key"}
+				text := t.ShowKey()
+				if s.showKey.Get() {
+					text = t.HideKey()
+				}
+				return ui.Button{Variant: ui.ButtonOutline, TestID: "show-key", Style: core.Style{CornerRadius: 12},
+					Text: text, OnPress: func() { s.showKey.Update(func(v bool) bool { return !v }) }}
 			}),
-		}},
-		core.Dynamic(func(cx *core.Scope) core.Node {
-			text := t.ShowKey()
-			if s.showKey.Get() {
-				text = t.HideKey()
-			}
-			return ui.Button{Variant: ui.ButtonOutline, TestID: "show-key", Style: core.Style{CornerRadius: 12},
-				Text: text, OnPress: func() { s.showKey.Update(func(v bool) bool { return !v }) }}
-		}),
-	}}
+		}}
+		key := []core.Node{caption(cx, func() string { return keyLabel }), keyRow}
+		if p.KeyURL != "" {
+			key = append(key, ui.Link{Text: t.GetApiKey(), Href: p.KeyURL, TestID: "get-key", Style: core.Style{FontSize: 13}})
+		}
+		urlHint := p.BaseURL
+		if urlHint == "" {
+			urlHint = p.URLHint
+		}
+		half := func(n core.Node) core.Node {
+			return core.View{Style: core.Style{FlexGrow: 1, FlexBasis: core.Pt(0)}, Children: []core.Node{n}}
+		}
+		return core.View{Style: core.Style{Gap: 16}, Children: []core.Node{
+			core.View{Style: core.Style{Gap: 8}, Children: key},
+			field(cx, t.BaseURL, ui.Input{Value: set.url.Get, OnChange: setStored("url", func(ps providerSettings) *core.Signal[string] { return ps.url }),
+				Label: t.BaseURL(), Placeholder: urlHint, KeyboardType: core.KeyboardURL, TestID: "base-url"}),
+			core.View{Style: core.Style{Direction: core.Row, Gap: 10}, Children: []core.Node{
+				half(field(cx, t.Model, ui.Input{Value: set.model.Get, OnChange: setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model }),
+					Label: t.Model(), Placeholder: p.Model, TestID: "model"})),
+				half(field(cx, t.Size, ui.Input{Value: set.size.Get, OnChange: setStored("size", func(ps providerSettings) *core.Signal[string] { return ps.size }),
+					Label: t.Size(), Placeholder: p.Size, TestID: "size"})),
+			}},
+		}}
+	})
 	result := core.Dynamic(func(cx *core.Scope) core.Node {
 		switch s.conn.Get() {
 		case connOK:
@@ -409,31 +419,8 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 				return core.Style{Padding: core.Symmetric(10, 14), CornerRadius: 12, BorderWidth: 1, BorderColor: colors.Accent().Faded(0.4), Background: colors.Accent().Faded(0.08)}
 			}, Children: []core.Node{core.Text{Content: t.ServiceIntro(), StyleFunc: func() core.Style { return core.Style{FontSize: 14, Color: colors.Accent()} }}}}
 		}},
-		ui.Tabs[serviceKind]{Label: t.ServiceKind(), Equal: true, Value: s.service.Get, TestID: "service-kind",
-			OnChange: func(k serviceKind) {
-				s.service.Set(k)
-				s.resetConnection()
-				if err := store.SetItem(keyService, string(k)); err != nil {
-					s.toastError(t.SaveFailed(), err)
-				}
-			},
-			Options: []ui.Option[serviceKind]{{Value: serviceCloud, Label: t.ServiceCloud(), TestID: "service-cloud"}, {Value: serviceLocal, Label: t.ServiceLocal(), TestID: "service-local"}}},
-		field(cx, t.BaseURL, core.Dynamic(func(cx *core.Scope) core.Node {
-			placeholder := defaultBaseURL
-			if local() {
-				placeholder = defaultLocalURL
-			}
-			return ui.Input{Value: url, OnChange: setURL, Label: t.BaseURL(), Placeholder: placeholder, KeyboardType: core.KeyboardURL, TestID: "base-url"}
-		})),
-		field(cx, keyLabel, keyField),
-		core.View{Style: core.Style{Direction: core.Row, Gap: 10}, Children: []core.Node{
-			core.View{Style: core.Style{FlexGrow: 1, FlexBasis: core.Pt(0)}, Children: []core.Node{
-				field(cx, t.Model, ui.Input{Value: s.model.Get, OnChange: setStored(s.model, keyModel), Label: t.Model(), Placeholder: defaultModel, TestID: "model"}),
-			}},
-			core.View{Style: core.Style{FlexGrow: 1, FlexBasis: core.Pt(0)}, Children: []core.Node{
-				field(cx, t.Size, ui.Input{Value: s.size.Get, OnChange: setStored(s.size, keySize), Label: t.Size(), Placeholder: defaultSize, TestID: "size"}),
-			}},
-		}},
+		field(cx, t.Provider, picker),
+		fields,
 		core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 12}, Children: []core.Node{
 			core.Dynamic(func(cx *core.Scope) core.Node {
 				text := t.TestConnection()
@@ -441,15 +428,16 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 					text = t.TestAgain()
 				}
 				return ui.Button{Text: text, TestID: "test-connection", Style: core.Style{CornerRadius: 999},
-					Busy: func() bool { return s.conn.Get() == connTesting }, Disabled: func() bool { return strings.TrimSpace(url()) == "" }, OnPress: s.testConnection}
+					Busy: func() bool { return s.conn.Get() == connTesting }, Disabled: func() bool { return strings.TrimSpace(s.config().BaseURL) == "" }, OnPress: s.testConnection}
 			}),
 		}},
 		result,
 		core.Text{ContentFunc: func() string {
+			p, _ := s.current()
 			switch {
 			case !s.keyKept.Get():
 				return t.PrivacyWeb()
-			case local():
+			case p.OwnServer:
 				return t.PrivacyLocal()
 			}
 			return t.PrivacyCloud()

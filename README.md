@@ -38,7 +38,7 @@
 - **A result you decide on.** A new picture waits until you save it to Works. Generate it again, or put another outfit on the same face and pose with one tap; star it, export it or delete it.
 - **Wardrobe.** Keep outfits you like with ♡, add photos of your own clothes laid flat or on a hanger, and see what the look is wearing.
 - **Lookbook.** Saved pictures are numbered, can be starred, and open again with the look they were made from.
-- **Cloud or local.** Any OpenAI-compatible image editing endpoint (`POST /images/edits`): a cloud API with a key, or a server you run, where the key may be left out. Test the connection before generating; the key is kept in the system keychain.
+- **The main image providers, or your own server.** OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, Alibaba Cloud Model Studio and Azure OpenAI are preset, each with its logo and a link to get a key; stable-diffusion.cpp or any OpenAI-compatible address works too, with the key optional. Each provider keeps its own key and settings. Test the connection before generating; keys are kept in the system keychain.
 - **Extra instructions.** Add a line such as lighting or background, sent along with the prompt.
 - **No photos of you.** The app takes no picture of a person: the pose and outfit galleries' terms forbid using their images to depict real people. Photos you add are of clothes only.
 - English and Simplified Chinese.
@@ -67,9 +67,9 @@ gallery index (HTML / JS)  ──►  catalog: id, group, title, thumbnail, full
                                    │
      full images (downloaded once) + prompt
                                    │
-                POST {base URL}/images/edits  (multipart, image[] in order)
+        the provider's image API  (images in order, inline)
                                    │
-          b64_json or url  ──►  shown; kept in Works when you save it
+          image or link  ──►  shown; kept in Works when you save it
 ```
 
 The images are sent pose first, then the outfit and the face, and the prompt numbers them in that order and says what each one is for: the mannequin's pose and camera angle, the outfit to put on, the face and hair to use.
@@ -98,16 +98,23 @@ go tool nsgo build                   # packages for every target in nsgo.yaml, i
 
 ### Set up the image API
 
-Open **Me** on a phone, or the settings button at the top right on the desktop, choose **Cloud API** or **Local server**, fill in the fields and press **Test connection**, which asks the service for its models (`GET /models`).
+Open **Me** on a phone, or the settings button at the top right on the desktop, choose a provider, enter its key and press **Test connection**. The address, model and size start on the provider's own; change them only to use another region, gateway or model.
 
-| Field | Default | Notes |
+| Provider | API | Model it starts with |
 | --- | --- | --- |
-| Address | `https://api.openai.com/v1` (cloud), `http://127.0.0.1:8080/v1` (local) | Any OpenAI-compatible API, gateway or local server; the app appends `/images/edits` |
-| API key | | Stored in the macOS / iOS keychain, Android Keystore or Windows Credential Manager; optional for a local server |
-| Model | `gpt-image-2` | A model that takes several reference images |
-| Size | `1024x1536` | Passed as `size` |
+| OpenAI | `POST /images/edits`, multipart | `gpt-image-2` |
+| Google Gemini | `POST /models/{model}:generateContent`, images inline | `gemini-nano-banana-2.1` |
+| Volcengine Ark | `POST /images/generations`, images as data URIs; one picture a call | `doubao-seedream-5-5-261028` |
+| xAI | `POST /images/edits`, JSON | `grok-imagine-image-2.0` |
+| OpenRouter | `POST /images`, input references | `bytedance-seed/seedream-4.5` |
+| Alibaba Cloud Model Studio | Qwen image editing's multimodal generation; up to 3 images | `qwen-image-2.0-pro` |
+| Azure OpenAI | OpenAI's edit on your resource's `/openai/v1`, `api-key` header | your deployment's name |
+| stable-diffusion.cpp | its server's OpenAI-compatible `/images/edits` | `sd-cpp-local` |
+| Custom | any OpenAI-compatible `/images/edits` | `gpt-image-2` |
 
-A local server has to speak the same OpenAI-compatible API; ComfyUI's own protocol, for one, is not supported. Each Generate is one call, paid on a cloud API. So far the request has been tested against the local fake in the tests, not against a real image API; reports of what a given model or gateway does with it are welcome.
+Keys are stored in the macOS / iOS keychain, Android Keystore or Windows Credential Manager. The size is written as `1024x1536`; providers that take an aspect ratio get the closest one, `2:3`.
+
+The connection test asks the provider for its models; Volcengine Ark and Model Studio have no such list, so the test sends them an empty request, which a valid key gets a 400 for. Each Generate is one call, or one per picture on Ark and Gemini, paid on a cloud provider. The requests follow each provider's API reference and are tested against fakes of them; they have not all been tried against the real services yet, and reports of what a provider does with them are welcome.
 
 ## Platforms
 

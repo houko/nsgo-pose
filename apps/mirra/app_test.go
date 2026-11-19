@@ -16,23 +16,29 @@ func TestMain(m *testing.M) { nsgotest.Main(m) }
 
 const wait = 5 * time.Second
 
-// start runs the app against local galleries and a local image API, keeping its data in a temporary directory; key "" leaves the cloud service without one.
+// start runs the app against local galleries and a local image API, set up as OpenAI's at the test's address, keeping its data in a temporary directory; key "" leaves OpenAI without one.
 func start(t *testing.T, api *fakeAPI, key string, opts ...nsgotest.Option) (*nsgotest.App, string) {
 	t.Helper()
 	srv, sites := newServer(t, api)
 	dir := t.TempDir()
 	secrets := map[string]string{}
 	if key != "" {
-		secrets[apiKeyAccount] = key
+		secrets[providerByID(providerOpenAI).keyAccount()] = key
 	}
 	// The tests read English words; a target otherwise shows the machine's language.
 	opts = append([]nsgotest.Option{
 		nsgotest.Environment(core.Environment{Locale: "en"}),
-		nsgotest.Storage(map[string]string{keyCloudURL: srv.URL + "/v1", keyLocalURL: srv.URL + "/v1", keyModel: "test-model"}),
+		nsgotest.Storage(testStorage(srv.URL)),
 		nsgotest.Secrets(secrets),
 	}, opts...)
 	app := nsgotest.Start(t, App{Client: srv.Client(), Sites: sites, DataDir: dir}.Root, opts...)
 	return app, dir
+}
+
+// testStorage points OpenAI and the OpenAI-compatible server at the test's image API.
+func testStorage(url string) map[string]string {
+	openai, custom := providerByID(providerOpenAI), providerByID(providerCustom)
+	return map[string]string{keyProvider: openai.ID, openai.storageKey("url"): url + "/v1", openai.storageKey("model"): "test-model", custom.storageKey("url"): url + "/v1"}
 }
 
 func works(t *testing.T, dir string) []work {
@@ -185,7 +191,8 @@ func TestLocalServiceNeedsNoKey(t *testing.T) {
 	api := &fakeAPI{}
 	app, _ := start(t, api, "")
 	app.Press("text:Me")
-	app.Press("id:service-local")
+	app.Press("id:provider")
+	app.Press("role:option Custom (OpenAI-compatible)")
 	app.Press("id:test-connection")
 	app.WaitFor("id:conn-ok", wait)
 	app.Press("text:Studio")
@@ -195,6 +202,48 @@ func TestLocalServiceNeedsNoKey(t *testing.T) {
 	app.WaitFor("id:shot-image", wait)
 	if got := api.last().Auth; got != "" {
 		t.Errorf("a keyless local request sent Authorization %q", got)
+	}
+}
+
+// TestProvidersKeepTheirSettings switches to another provider, which starts on its own preset, and back to OpenAI, whose key and address are still there.
+func TestProvidersKeepTheirSettings(t *testing.T) {
+	app, _ := start(t, &fakeAPI{}, "k")
+	app.Press("text:Me")
+	app.Find("id:get-key")
+	app.Press("id:provider")
+	app.Press("role:option Google Gemini")
+	app.WaitFor("text:No AI service", wait)
+	app.Type("id:api-key", "g-key")
+	app.WaitFor("text:Google Gemini · not tested", wait)
+	app.Press("id:provider")
+	app.Press("role:option /^OpenAI$/")
+	app.WaitFor("text:OpenAI · not tested", wait)
+	app.Press("id:provider")
+	app.Press("role:option stable-diffusion.cpp")
+	if app.Exists("id:get-key") {
+		t.Error("a server the user runs offers a link to get a key")
+	}
+	app.Press("id:provider")
+	app.Press("role:option /^OpenAI$/")
+	app.Press("id:test-connection")
+	app.WaitFor("id:conn-ok", wait)
+}
+
+// TestOldSettingsCarryOver starts on the settings an earlier version kept, a local server with its own key, and generates with them.
+func TestOldSettingsCarryOver(t *testing.T) {
+	api := &fakeAPI{}
+	srv, sites := newServer(t, api)
+	app := nsgotest.Start(t, App{Client: srv.Client(), Sites: sites, DataDir: t.TempDir()}.Root,
+		nsgotest.Environment(core.Environment{Locale: "en"}),
+		nsgotest.Storage(map[string]string{legacyService: "local", legacyLocalURL: srv.URL + "/v1", legacyModel: "old-model"}),
+		nsgotest.Secrets(map[string]string{legacyLocalKey: "local-key"}))
+	app.Press("id:row-pose")
+	choose(t, app, poseStand)
+	app.WaitUntil(wait, func() bool { return !strings.Contains(app.Find("id:generate").Props.Label, "AI service") })
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if req := api.last(); req.Auth != "Bearer local-key" || req.Model != "old-model" {
+		t.Errorf("request = %+v, want the old server's key and model", req)
 	}
 }
 
@@ -309,8 +358,8 @@ func TestPicturesInMemory(t *testing.T) {
 	mem := newMemPictures()
 	app := nsgotest.Start(t, App{Client: srv.Client(), Sites: sites, DataDir: "/web", Pictures: mem}.Root,
 		nsgotest.Environment(core.Environment{Locale: "en"}),
-		nsgotest.Storage(map[string]string{keyCloudURL: srv.URL + "/v1"}),
-		nsgotest.Secrets(map[string]string{apiKeyAccount: "k"}))
+		nsgotest.Storage(testStorage(srv.URL)),
+		nsgotest.Secrets(map[string]string{providerByID(providerOpenAI).keyAccount(): "k"}))
 	app.Press("id:row-pose")
 	choose(t, app, poseStand)
 	app.Press("id:generate")

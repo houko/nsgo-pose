@@ -125,13 +125,14 @@ openWork: "打开作品 No.{no}"
 aiService: AI 服务
 aiServiceSettings: AI 服务设置
 serviceIntro: 开源版无需账号——配置一次 AI 服务并测试连接，就可以开始生成造型。
-serviceKind: 服务类型
-serviceCloud: 云端 API
-serviceLocal: 本地部署
+provider: 服务商
+providerCustom: 自定义（OpenAI 兼容）
+providerVolcengine: 火山方舟
+providerDashScope: 阿里云百炼
+getApiKey: 获取 API Key
 baseURL: 接口地址
 apiKey: API Key
-apiKeyOptional: API Key（本地部署可留空）
-apiKeyPlaceholder: sk-…
+apiKeyOptional: API Key（可留空）
 showKey: 显示
 hideKey: 隐藏
 model: 模型
