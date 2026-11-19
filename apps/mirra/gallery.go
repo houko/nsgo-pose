@@ -76,13 +76,6 @@ func (c Catalog) InGroup(group string) []Item {
 	return out
 }
 
-// Content the app never offers. The pose gallery has a line of two-person sexual positions and explicit single poses, and the costume gallery has lingerie and "sexy" categories; none of these belong in an app that puts real-looking faces and users' own photos into the result.
-var (
-	excludedPoseLines      = map[string]bool{"2人絡み": true}
-	excludedPoseCategories = map[string]bool{"セクシー・露骨寄り系": true, "胸寄せ・谷間強調系": true}
-	excludedCostumeCats    = map[string]bool{"ランジェリー": true, "セクシー": true}
-)
-
 // maxIndexBytes bounds a gallery's index; the real ones are under 1 MB.
 const maxIndexBytes = 16 << 20
 
@@ -174,7 +167,7 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 	var groups groupOrder
 	lines := map[string]string{}
 	for _, r := range rows {
-		if excludedPoseLines[r.Line] || excludedPoseCategories[r.Category] || r.ID == "" || r.Full == "" {
+		if r.ID == "" || r.Full == "" {
 			continue
 		}
 		groups.add(r.Angle)
@@ -217,7 +210,7 @@ func parseCostumes(page []byte, origin string) (Catalog, error) {
 	var c Catalog
 	var groups groupOrder
 	for _, r := range rows {
-		if excludedCostumeCats[r.Category] || r.ID == "" || r.Full == "" {
+		if r.ID == "" || r.Full == "" {
 			continue
 		}
 		groups.add(r.Category)

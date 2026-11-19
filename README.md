@@ -55,7 +55,6 @@ The images belong to the galleries' authors. This repository contains none of th
 
 - It reads each gallery's index live. Thumbnails load from the gallery while you browse, as they would in a browser; the app keeps no copy of its own, beyond the platform's image cache.
 - A full-size image is downloaded only when you press Generate, and only the ones you chose, one each.
-- It leaves out the pose gallery's two-person and explicit lines and the outfit gallery's lingerie and "sexy" categories.
 
 The pose and outfit galleries ask that their images are not used to depict real people or minors, or for anything offensive, and the face gallery that its faces are not used to impersonate real people. Those terms bind what you make with this app; see [NOTICE.md](NOTICE.md).
 

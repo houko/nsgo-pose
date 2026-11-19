@@ -24,13 +24,13 @@ func TestFetchCatalogs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := ids(poses.Items), []string{"full_std_P001_front", "upper_P002_side", "full_sexy_P000_front"}; !slices.Equal(got, want) {
-		t.Errorf("pose ids = %v, want %v (everyday poses first; two-person and explicit poses left out)", got, want)
+	if got, want := ids(poses.Items), []string{"full_std_P001_front", "upper_P002_side", "full_sexy_P000_front", "full_sexy_P004_front", "pair_P003_front"}; !slices.Equal(got, want) {
+		t.Errorf("pose ids = %v, want %v", got, want)
 	}
 	if want := []string{"正面", "横"}; !slices.Equal(poses.Groups, want) {
 		t.Errorf("pose groups = %v, want the angles %v", poses.Groups, want)
 	}
-	if got := ids(poses.InGroup("正面")); !slices.Equal(got, []string{"full_std_P001_front", "full_sexy_P000_front"}) {
+	if got := ids(poses.InGroup("正面")); !slices.Equal(got, []string{"full_std_P001_front", "full_sexy_P000_front", "full_sexy_P004_front", "pair_P003_front"}) {
 		t.Errorf("front poses = %v", got)
 	}
 	first := poses.Items[0]
@@ -42,8 +42,8 @@ func TestFetchCatalogs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(costumes.Items) != 2 || slices.Contains(costumes.Groups, "ランジェリー") {
-		t.Errorf("costumes = %+v, want lingerie left out", costumes)
+	if got, want := ids(costumes.Items), []string{"SPR-0001", "LNG-0001", "WIN-0001"}; !slices.Equal(got, want) {
+		t.Errorf("costumes = %v, want %v", got, want)
 	}
 	if got := costumes.InGroup("冬"); len(got) != 1 || got[0].ID != "WIN-0001" || got[0].Full != sites.Costume+"/png/WIN-0001.png" {
 		t.Errorf("winter costumes = %+v", got)
@@ -69,7 +69,7 @@ func TestParseRejectsChangedFormat(t *testing.T) {
 			t.Errorf("%s: err = %v, want a format error", name, err)
 		}
 	}
-	if _, err := parsePoses([]byte(`const D=[{"id":"a","系統":"2人絡み","原寸":"a.png"}];`), "https://x"); err == nil {
-		t.Error("a page with only excluded poses parsed as a usable catalog")
+	if got, err := parsePoses([]byte(`const D=[{"id":"a","系統":"2人絡み","原寸":"a.png"}];`), "https://x"); err != nil || len(got.Items) != 1 {
+		t.Errorf("a page with a pose from any line should parse: catalog=%+v err=%v", got, err)
 	}
 }
