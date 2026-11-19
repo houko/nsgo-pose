@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The AI settings preset OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, Alibaba Cloud Model Studio, Azure OpenAI and stable-diffusion.cpp, with their logos and a link to get a key, besides any OpenAI-compatible address. Each provider keeps its own key and settings; the cloud or local service set up before carries over.
+
 ## 0.5.0 - 2026-11-20
 
 - Lingerie and sexy outfits, and revealing and two-person poses, show only behind each gallery's 18+ switch, which first asks whether you are 18 or older; the lingerie and sexy chips are translated.

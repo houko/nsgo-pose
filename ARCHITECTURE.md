@@ -1,6 +1,6 @@
 # Mirra architecture
 
-Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an outfit and a pose from three public reference galleries together and has an OpenAI-compatible image model, in the cloud or on the user's own server, draw the person they describe. It is a single Go module in `apps/mirra`; its website is in `apps/website`.
+Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an outfit and a pose from three public reference galleries together and has an image model, from one of the main providers or on the user's own server, draw the person they describe. It is a single Go module in `apps/mirra`; its website is in `apps/website`.
 
 ## Code map
 
@@ -9,8 +9,10 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/go.mod`, `apps/mirra/nsgo.yaml` | The only Go module and the packaging configuration; run Go and the `nsgo` tool in `apps/mirra`. |
 | `apps/mirra/app.go` | Entry point; the app's state, the choice of layout by window width, generating, saving, starring and deleting a picture. |
 | `apps/mirra/gallery.go` | Reading the three galleries' indexes live, which items are adults-only, and the chips each filters by. |
-| `apps/mirra/generate.go` | The request: the prompt, the reference images in order and the `/images/edits` call. |
-| `apps/mirra/service.go` | Cloud or local service and the connection test against `/models`. |
+| `apps/mirra/generate.go` | The request: the prompt, the reference images in order, and OpenAI's multipart `/images/edits`. |
+| `apps/mirra/apis.go` | The other providers' image APIs: Gemini, Volcengine Ark, xAI, OpenRouter, Model Studio and Azure OpenAI. |
+| `apps/mirra/providers.go` | The preset providers, with their logos from `ai-logo`, and the settings and keys each keeps, carried over from the cloud or local service of earlier versions. |
+| `apps/mirra/service.go` | The connection test in each provider's protocol. |
 | `apps/mirra/store.go` | Where pictures are kept: files natively, memory in a browser, where the WebAssembly build has no file system. |
 | `apps/mirra/works.go` | The lookbook: pictures named by when they were made, with a JSON sidecar for their number, star and look. |
 | `apps/mirra/wardrobe.go` | Favorite outfits, photos of the user's own clothes, and what the look is wearing. |
@@ -46,10 +48,10 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 
 **A look.** The galleries load as resources at start. Choosing a face, an outfit and a pose sets the studio's three signals; only the pose is required.
 
-**Generate.** Without a configured service, Generate opens the settings. Otherwise it downloads the chosen full images, sends them with the prompt to `/images/edits` and writes the picture to the results folder, where it waits. Generate again and the outfit swap make the same request again, the swap with another outfit. Cancel stops the request through its context.
+**Generate.** Without a configured service, Generate opens the settings. Otherwise it downloads the chosen full images, sends them with the prompt to the chosen provider's API and writes the picture to the results folder, where it waits. Generate again and the outfit swap make the same request again, the swap with another outfit. Cancel stops the request through its context.
 
 **Save.** Saving moves the picture into the works folder under the next number and writes its sidecar; starring an unsaved picture saves it first. Opening a work brings back its look.
 
-**Service.** The service is a cloud API, which needs a key, or a local server, which may not. The connection test asks `/models`; changing the address, key or kind marks the service untested again.
+**Service.** The service is one of the preset providers, each with its own key, address, model and size; a server the user runs may take no key. The connection test asks the provider's models, or sends Ark and Model Studio an empty request; changing the provider or any of its settings marks the service untested again.
 
 **Wardrobe.** Favorites are kept in storage as JSON. Added clothes are copied into the uploads folder and numbered by age; their full image is read from disk when generating.

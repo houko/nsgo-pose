@@ -64,7 +64,7 @@ needPose: Choose a pose first.
 needService: Set up an AI service first.
 viaService:
   message: "Made through {service}, with no third party"
-  description: Under Generate; service is Cloud API or Local server.
+  description: Under Generate; service is the AI provider's name, such as OpenAI.
 configureOnce: Free and open source; set it up once
 generating: Generating
 cancel: Cancel
@@ -157,13 +157,14 @@ openWork:
 aiService: AI service
 aiServiceSettings: AI service settings
 serviceIntro: Set up an AI service and test the connection, and you can start making looks.
-serviceKind: Service
-serviceCloud: Cloud API
-serviceLocal: Local server
+provider: Provider
+providerCustom: Custom (OpenAI-compatible)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: Get an API key
 baseURL: Address
 apiKey: API key
-apiKeyOptional: API key (optional for a local server)
-apiKeyPlaceholder: sk-…
+apiKeyOptional: API key (optional)
 showKey: Show
 hideKey: Hide
 model: Model
@@ -177,7 +178,7 @@ connectionFailed:
 statusUnconfigured: No AI service
 statusConnected:
   message: "{service} · connected"
-  description: The service's status; service is Cloud API or Local server.
+  description: The service's status; service is the AI provider's name.
 statusUntested:
   message: "{service} · not tested"
   description: The service's status before its connection was tested.

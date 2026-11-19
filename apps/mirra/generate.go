@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -17,12 +16,13 @@ import (
 	"strings"
 )
 
-// Config says which OpenAI-compatible image API generates the picture.
+// Config says which image API generates the picture, and in which of the shapes the app speaks.
 type Config struct {
-	BaseURL string
-	APIKey  string
-	Model   string
-	Size    string
+	Protocol protocol
+	BaseURL  string
+	APIKey   string
+	Model    string
+	Size     string
 	// Local marks a server the user runs, which may take no key.
 	Local bool
 	// ReadLocal reads a picture the app keeps, such as the user's clothes; os.ReadFile when nil.
@@ -115,9 +115,38 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 		parts = append(parts, p)
 	}
 
+	return generate(ctx, client, cfg, r.Prompt(), parts, r.count())
+}
+
+// generate sends the prompt and reference images to cfg's API in its protocol and returns n pictures.
+func generate(ctx context.Context, client *http.Client, cfg Config, prompt string, parts []part, n int) ([][]byte, error) {
+	switch cfg.Protocol {
+	case protoAzure:
+		return generateAzure(ctx, client, cfg, prompt, parts, n)
+	case protoGemini:
+		return generateGemini(ctx, client, cfg, prompt, parts, n)
+	case protoSeedream:
+		return generateSeedream(ctx, client, cfg, prompt, parts, n)
+	case protoXAI:
+		return generateXAI(ctx, client, cfg, prompt, parts, n)
+	case protoOpenRouter:
+		return generateOpenRouter(ctx, client, cfg, prompt, parts, n)
+	case protoDashScope:
+		return generateDashScope(ctx, client, cfg, prompt, parts, n)
+	}
+	return generateOpenAI(ctx, client, cfg, prompt, parts, n)
+}
+
+// generateOpenAI posts the prompt and the images to OpenAI's /images/edits, or an OpenAI-compatible server's.
+func generateOpenAI(ctx context.Context, client *http.Client, cfg Config, prompt string, parts []part, n int) ([][]byte, error) {
+	return postEdits(ctx, client, cfg, endpoint(cfg, "/images/edits"), bearer(cfg.APIKey), prompt, parts, n)
+}
+
+// postEdits posts OpenAI's multipart edit, each image an image[] part, to url with the headers.
+func postEdits(ctx context.Context, client *http.Client, cfg Config, url string, headers map[string]string, prompt string, parts []part, n int) ([][]byte, error) {
 	var body bytes.Buffer
 	w := multipart.NewWriter(&body)
-	fields := [][2]string{{"model", or(cfg.Model, defaultModel)}, {"prompt", r.Prompt()}, {"size", or(cfg.Size, defaultSize)}, {"n", strconv.Itoa(r.count())}}
+	fields := [][2]string{{"model", or(cfg.Model, defaultModel)}, {"prompt", prompt}, {"size", or(cfg.Size, defaultSize)}, {"n", strconv.Itoa(n)}}
 	for _, f := range fields {
 		if err := w.WriteField(f[0], f[1]); err != nil {
 			return nil, err
@@ -138,14 +167,12 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 	if err := w.Close(); err != nil {
 		return nil, err
 	}
-
-	endpoint := strings.TrimRight(or(cfg.BaseURL, defaultBaseURL), "/") + "/images/edits"
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, &body)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, &body)
 	if err != nil {
 		return nil, err
 	}
-	if key := strings.TrimSpace(cfg.APIKey); key != "" {
-		req.Header.Set("Authorization", "Bearer "+key)
+	for k, v := range headers {
+		req.Header.Set(k, v)
 	}
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	resp, err := client.Do(req)
@@ -153,46 +180,27 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 		return nil, err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, apiError(resp)
+	}
 	var out struct {
 		Data []struct {
 			B64JSON string `json:"b64_json"`
 			URL     string `json:"url"`
 		} `json:"data"`
-		Error *struct {
-			Message string `json:"message"`
-		} `json:"error"`
 	}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&out)
-	if resp.StatusCode != http.StatusOK {
-		if decodeErr == nil && out.Error != nil && out.Error.Message != "" {
-			return nil, fmt.Errorf("%s: %s", resp.Status, out.Error.Message)
-		}
-		return nil, fmt.Errorf("image API: %s", resp.Status)
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return nil, fmt.Errorf("image API: %w", err)
 	}
-	if decodeErr != nil {
-		return nil, fmt.Errorf("image API: %w", decodeErr)
-	}
-	var pictures [][]byte
+	var b64s, urls []string
 	for _, d := range out.Data {
-		switch {
-		case d.B64JSON != "":
-			pic, err := base64.StdEncoding.DecodeString(d.B64JSON)
-			if err != nil {
-				return nil, fmt.Errorf("image API: %w", err)
-			}
-			pictures = append(pictures, pic)
-		case d.URL != "":
-			pic, err := get(ctx, client, d.URL, maxImageBytes)
-			if err != nil {
-				return nil, err
-			}
-			pictures = append(pictures, pic)
+		if d.B64JSON != "" {
+			b64s = append(b64s, d.B64JSON)
+		} else if d.URL != "" {
+			urls = append(urls, d.URL)
 		}
 	}
-	if len(pictures) == 0 {
-		return nil, errors.New("image API returned no image")
-	}
-	return pictures, nil
+	return decodeImages(ctx, client, b64s, urls)
 }
 
 // download reads an item's full image: a gallery's over the network, or a photo the user added from the pictures the app keeps.

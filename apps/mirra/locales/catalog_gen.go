@@ -212,13 +212,14 @@ const (
 	textAiService
 	textAiServiceSettings
 	textServiceIntro
-	textServiceKind
-	textServiceCloud
-	textServiceLocal
+	textProvider
+	textProviderCustom
+	textProviderVolcengine
+	textProviderDashScope
+	textGetApiKey
 	textBaseURL
 	textApiKey
 	textApiKeyOptional
-	textApiKeyPlaceholder
 	textShowKey
 	textHideKey
 	textModel
@@ -354,13 +355,14 @@ var keyOfText = [numTexts]string{
 	"aiService",
 	"aiServiceSettings",
 	"serviceIntro",
-	"serviceKind",
-	"serviceCloud",
-	"serviceLocal",
+	"provider",
+	"providerCustom",
+	"providerVolcengine",
+	"providerDashScope",
+	"getApiKey",
 	"baseURL",
 	"apiKey",
 	"apiKeyOptional",
-	"apiKeyPlaceholder",
 	"showKey",
 	"hideKey",
 	"model",
@@ -494,13 +496,14 @@ var textsEn = i18n.NewTexts(""+
 	"AI service"+
 	"AI service settings"+
 	"Set up an AI service and test the connection, and you can start making looks."+
-	"Service"+
-	"Cloud API"+
-	"Local server"+
+	"Provider"+
+	"Custom (OpenAI-compatible)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"Get an API key"+
 	"Address"+
 	"API key"+
-	"API key (optional for a local server)"+
-	"sk-…"+
+	"API key (optional)"+
 	"Show"+
 	"Hide"+
 	"Model"+
@@ -631,13 +634,14 @@ var textsEn = i18n.NewTexts(""+
 		10,
 		19,
 		77,
+		8,
+		26,
+		14,
+		26,
+		14,
 		7,
-		9,
-		12,
 		7,
-		7,
-		37,
-		6,
+		18,
 		4,
 		4,
 		5,
@@ -771,13 +775,14 @@ var textsZhHans = i18n.NewTexts(""+
 	"AI 服务"+
 	"AI 服务设置"+
 	"开源版无需账号——配置一次 AI 服务并测试连接，就可以开始生成造型。"+
-	"服务类型"+
-	"云端 API"+
-	"本地部署"+
+	"服务商"+
+	"自定义（OpenAI 兼容）"+
+	"火山方舟"+
+	"阿里云百炼"+
+	"获取 API Key"+
 	"接口地址"+
 	"API Key"+
-	"API Key（本地部署可留空）"+
-	"sk-…"+
+	"API Key（可留空）"+
 	"显示"+
 	"隐藏"+
 	"模型"+
@@ -908,13 +913,14 @@ var textsZhHans = i18n.NewTexts(""+
 		9,
 		15,
 		97,
+		9,
+		28,
 		12,
-		10,
-		12,
+		15,
+		14,
 		12,
 		7,
-		34,
-		6,
+		22,
 		6,
 		6,
 		6,
@@ -1511,7 +1517,7 @@ func (msgs Messages) NeedService() string { return msgs.text(textNeedService) }
 // ViaService says "Made through {service}, with no third party"
 // in the language the app shows under cx.
 //
-// Under Generate; service is Cloud API or Local server.
+// Under Generate; service is the AI provider's name, such as OpenAI.
 func ViaService(cx *core.Scope, service string) string { return For(cx).ViaService(service) }
 
 // ViaService is the package's ViaService in the language of msgs.
@@ -2266,26 +2272,40 @@ func ServiceIntro(cx *core.Scope) string { return For(cx).ServiceIntro() }
 // ServiceIntro is the package's ServiceIntro in the language of msgs.
 func (msgs Messages) ServiceIntro() string { return msgs.text(textServiceIntro) }
 
-// ServiceKind says "Service"
+// Provider says "Provider"
 // in the language the app shows under cx.
-func ServiceKind(cx *core.Scope) string { return For(cx).ServiceKind() }
+func Provider(cx *core.Scope) string { return For(cx).Provider() }
 
-// ServiceKind is the package's ServiceKind in the language of msgs.
-func (msgs Messages) ServiceKind() string { return msgs.text(textServiceKind) }
+// Provider is the package's Provider in the language of msgs.
+func (msgs Messages) Provider() string { return msgs.text(textProvider) }
 
-// ServiceCloud says "Cloud API"
+// ProviderCustom says "Custom (OpenAI-compatible)"
 // in the language the app shows under cx.
-func ServiceCloud(cx *core.Scope) string { return For(cx).ServiceCloud() }
+func ProviderCustom(cx *core.Scope) string { return For(cx).ProviderCustom() }
 
-// ServiceCloud is the package's ServiceCloud in the language of msgs.
-func (msgs Messages) ServiceCloud() string { return msgs.text(textServiceCloud) }
+// ProviderCustom is the package's ProviderCustom in the language of msgs.
+func (msgs Messages) ProviderCustom() string { return msgs.text(textProviderCustom) }
 
-// ServiceLocal says "Local server"
+// ProviderVolcengine says "Volcengine Ark"
 // in the language the app shows under cx.
-func ServiceLocal(cx *core.Scope) string { return For(cx).ServiceLocal() }
+func ProviderVolcengine(cx *core.Scope) string { return For(cx).ProviderVolcengine() }
 
-// ServiceLocal is the package's ServiceLocal in the language of msgs.
-func (msgs Messages) ServiceLocal() string { return msgs.text(textServiceLocal) }
+// ProviderVolcengine is the package's ProviderVolcengine in the language of msgs.
+func (msgs Messages) ProviderVolcengine() string { return msgs.text(textProviderVolcengine) }
+
+// ProviderDashScope says "Alibaba Cloud Model Studio"
+// in the language the app shows under cx.
+func ProviderDashScope(cx *core.Scope) string { return For(cx).ProviderDashScope() }
+
+// ProviderDashScope is the package's ProviderDashScope in the language of msgs.
+func (msgs Messages) ProviderDashScope() string { return msgs.text(textProviderDashScope) }
+
+// GetApiKey says "Get an API key"
+// in the language the app shows under cx.
+func GetApiKey(cx *core.Scope) string { return For(cx).GetApiKey() }
+
+// GetApiKey is the package's GetApiKey in the language of msgs.
+func (msgs Messages) GetApiKey() string { return msgs.text(textGetApiKey) }
 
 // BaseURL says "Address"
 // in the language the app shows under cx.
@@ -2301,19 +2321,12 @@ func ApiKey(cx *core.Scope) string { return For(cx).ApiKey() }
 // ApiKey is the package's ApiKey in the language of msgs.
 func (msgs Messages) ApiKey() string { return msgs.text(textApiKey) }
 
-// ApiKeyOptional says "API key (optional for a local server)"
+// ApiKeyOptional says "API key (optional)"
 // in the language the app shows under cx.
 func ApiKeyOptional(cx *core.Scope) string { return For(cx).ApiKeyOptional() }
 
 // ApiKeyOptional is the package's ApiKeyOptional in the language of msgs.
 func (msgs Messages) ApiKeyOptional() string { return msgs.text(textApiKeyOptional) }
-
-// ApiKeyPlaceholder says "sk-…"
-// in the language the app shows under cx.
-func ApiKeyPlaceholder(cx *core.Scope) string { return For(cx).ApiKeyPlaceholder() }
-
-// ApiKeyPlaceholder is the package's ApiKeyPlaceholder in the language of msgs.
-func (msgs Messages) ApiKeyPlaceholder() string { return msgs.text(textApiKeyPlaceholder) }
 
 // ShowKey says "Show"
 // in the language the app shows under cx.
@@ -2398,7 +2411,7 @@ func (msgs Messages) StatusUnconfigured() string { return msgs.text(textStatusUn
 // StatusConnected says "{service} · connected"
 // in the language the app shows under cx.
 //
-// The service's status; service is Cloud API or Local server.
+// The service's status; service is the AI provider's name.
 func StatusConnected(cx *core.Scope, service string) string { return For(cx).StatusConnected(service) }
 
 // StatusConnected is the package's StatusConnected in the language of msgs.

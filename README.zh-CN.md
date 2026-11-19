@@ -38,7 +38,7 @@
 - **结果由你决定去留。** 新生成的图片要点「保存到作品」才会入库。可以再生成，也可以一键给同一张脸、同一个姿势换一套衣服；可以收藏、导出、删除。
 - **衣橱。** 用 ♡ 收藏喜欢的服装，上传自己的衣服照片（平铺或挂拍），随时看到当前正在穿的那套。
 - **造型册。** 保存的作品带编号，可以收藏，再次打开时会带回生成它的那套造型。
-- **云端或本地。** 支持任何 OpenAI 兼容的图片编辑接口（`POST /images/edits`）：带 Key 的云端 API，或你自己部署的服务（可以不填 Key）。生成前可以先测试连接；Key 存在系统钥匙串里。
+- **主流服务商，或你自己的服务。** 预置了 OpenAI、Google Gemini、火山方舟、xAI、OpenRouter、阿里云百炼和 Azure OpenAI，每家都带 logo 和获取 Key 的链接；也可以用 stable-diffusion.cpp 或任何 OpenAI 兼容的地址，Key 可以不填。每个服务商各自保存 Key 和设置。生成前可以先测试连接；Key 存在系统钥匙串里。
 - **补充要求。** 写一句光线、背景之类的要求，随 prompt 一起发送。
 - **不用人像照片。** App 不读取任何人的照片：姿势库和服装库的条款禁止用它们的图片表现真实的人。上传的只能是衣服照片。
 - 界面有英文和简体中文。
@@ -67,9 +67,9 @@
                                 │
      原图（各下载一次）+ prompt
                                 │
-            POST {接口地址}/images/edits（multipart，image[] 按顺序）
+            服务商的生图接口（图片按顺序内联发送）
                                 │
-       b64_json 或 url  ──►  先展示；点「保存到作品」才入库
+       图片或链接  ──►  先展示；点「保存到作品」才入库
 ```
 
 图片按姿势、服装、人脸的顺序发送，prompt 按这个顺序给它们编号，并说明每张的用途：人偶的姿势和机位、要穿上的服装、要用的脸和发型。
@@ -98,16 +98,23 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 
 ### 配置生图接口
 
-手机上打开「我的」，桌面上点右上角的设置按钮，选「云端 API」或「本地部署」，填好后点「测试连接」（会请求服务的 `GET /models`）。
+手机上打开「我的」，桌面上点右上角的设置按钮，选一个服务商，填好 Key 后点「测试连接」。接口地址、模型和尺寸默认用服务商自己的，只有要换地区、网关或模型时才需要改。
 
-| 字段 | 默认值 | 说明 |
+| 服务商 | 接口 | 默认模型 |
 | --- | --- | --- |
-| 接口地址 | `https://api.openai.com/v1`（云端）、`http://127.0.0.1:8080/v1`（本地） | 任何 OpenAI 兼容的接口、网关或本地服务；App 会在后面拼上 `/images/edits` |
-| API Key | | 存在 macOS / iOS 钥匙串、Android Keystore 或 Windows 凭据管理器里；本地部署可以留空 |
-| 模型 | `gpt-image-2` | 需要支持多张参考图的模型 |
-| 尺寸 | `1024x1536` | 作为 `size` 参数传入 |
+| OpenAI | `POST /images/edits`，multipart | `gpt-image-2` |
+| Google Gemini | `POST /models/{model}:generateContent`，图片内联 | `gemini-nano-banana-2.1` |
+| 火山方舟 | `POST /images/generations`，图片用 data URI；每次调用出一张 | `doubao-seedream-5-5-261028` |
+| xAI | `POST /images/edits`，JSON | `grok-imagine-image-2.0` |
+| OpenRouter | `POST /images`，input references | `bytedance-seed/seedream-4.5` |
+| 阿里云百炼 | 千问图像编辑的多模态生成接口；最多 3 张图 | `qwen-image-2.0-pro` |
+| Azure OpenAI | 在你资源的 `/openai/v1` 上调用 OpenAI 的编辑接口，`api-key` 请求头 | 你的部署名 |
+| stable-diffusion.cpp | 它的服务端提供的 OpenAI 兼容 `/images/edits` | `sd-cpp-local` |
+| 自定义 | 任何 OpenAI 兼容的 `/images/edits` | `gpt-image-2` |
 
-本地服务同样必须是 OpenAI 兼容的接口，比如 ComfyUI 自己的协议就不支持。每按一次「生成」就是一次调用，云端 API 会按次计费。目前这个请求只在测试里的本地模拟接口上验证过，还没有对真实的生图接口测试过；欢迎反馈各个模型或网关的实际表现。
+Key 存在 macOS / iOS 钥匙串、Android Keystore 或 Windows 凭据管理器里。尺寸写成 `1024x1536`；只接受宽高比的服务商会用最接近的比例 `2:3`。
+
+测试连接会请求服务商的模型列表；火山方舟和阿里云百炼没有这个接口，就发一个空请求，Key 有效时会返回 400。每按一次「生成」是一次调用（火山方舟和 Gemini 是每张图一次），云端服务商会按次计费。各家请求都按官方 API 文档实现，并在测试里的模拟接口上验证过；还没有逐一对真实服务测试，欢迎反馈各服务商的实际表现。
 
 ## 平台
 
