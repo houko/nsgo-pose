@@ -1,4 +1,4 @@
-module github.com/yldm-ai/nsgo-pose
+module github.com/yldm-ai/mirra
 
 go 1.27.4
 

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yldm-ai/nsgo-pose/locales"
+	"github.com/yldm-ai/mirra/locales"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
