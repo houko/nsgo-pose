@@ -140,6 +140,8 @@ statusTesting: "{service} · 测试中…"
 statusFailed: "{service} · 连接失败"
 privacyCloud: Key 只保存在本机系统钥匙串，不经过任何第三方服务器；请求从你的设备直接发往你配置的服务。
 privacyLocal: 请求从你的设备直接发往你自己部署的服务，不经过任何第三方服务器，也不产生费用。
+privacyWeb: 网页版不会保存 Key，刷新页面后需要重新填写；请求从你的浏览器直接发往你配置的服务。
+pageOnly: 网页版的作品和衣服照片只保存在当前页面，关闭前请导出想保留的。
 keyUnavailable: 这台设备没有可以保存 Key 的安全存储。
 aboutSection: 关于
 sourceCode: 源代码

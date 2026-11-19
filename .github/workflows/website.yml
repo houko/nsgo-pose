@@ -1,6 +1,6 @@
 name: Website
 
-# Builds apps/website/ and publishes it to GitHub Pages on pushes to main that touch it, the screenshots it shows or the app version it reads.
+# Builds apps/website/ and the web build of the app, and publishes them to GitHub Pages, the app under app/, on pushes to main that touch either or the screenshots the site shows.
 
 on:
   push:
@@ -8,9 +8,8 @@ on:
       - main
     paths:
       - "apps/website/**"
+      - "apps/mirra/**"
       - "screenshots/**"
-      - "apps/mirra/nsgo.yaml"
-      - "apps/mirra/assets/**"
       - ".github/workflows/website.yml"
   workflow_dispatch:
 
@@ -31,6 +30,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/mirra/go.mod
+          cache-dependency-path: apps/mirra/go.sum
+
+      - name: Build the web app
+        working-directory: apps/mirra
+        run: go tool nsgo build -target web
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
@@ -54,6 +63,11 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun run build
+
+      - name: Put the web app under app/
+        run: |
+          mkdir -p apps/website/dist/client/app
+          cp -R apps/mirra/dist/mirra-*-web/. apps/website/dist/client/app/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

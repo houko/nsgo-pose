@@ -1,6 +1,6 @@
 import { useCopy } from '../i18n/i18n'
 import { links, site } from '../site'
-import { LaptopIcon, PhoneIcon } from './icons'
+import { GlobeIcon, LaptopIcon, PhoneIcon } from './icons'
 import { Button, Card, Section } from './ui'
 
 export function Download() {
@@ -9,11 +9,11 @@ export function Download() {
     <Section id="download">
       <p className="eyebrow">{t.download.kicker}</p>
       <h2 className="display mt-3 text-4xl md:text-5xl">{t.download.title}</h2>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {t.download.platforms.map(([name, requirement, action], i) => {
-          const Icon = i < 2 ? PhoneIcon : LaptopIcon
-          // iOS is built from source; the others download from the latest release, once there is one.
-          const href = i === 0 ? links.development : site.release?.url
+          const Icon = i < 2 ? PhoneIcon : i < 4 ? LaptopIcon : GlobeIcon
+          // iOS is built from source, the web app is published with this site, and the others download from the latest release once there is one.
+          const href = i === 0 ? links.development : i === 4 ? links.webApp : site.release?.url
           return (
             <Card key={name} className="flex flex-col p-6">
               <Icon className="size-6 text-muted" />

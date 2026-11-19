@@ -222,6 +222,8 @@ const (
 	textStatusUnconfigured
 	textPrivacyCloud
 	textPrivacyLocal
+	textPrivacyWeb
+	textPageOnly
 	textKeyUnavailable
 	textAboutSection
 	textSourceCode
@@ -355,6 +357,8 @@ var keyOfText = [numTexts]string{
 	"statusUnconfigured",
 	"privacyCloud",
 	"privacyLocal",
+	"privacyWeb",
+	"pageOnly",
 	"keyUnavailable",
 	"aboutSection",
 	"sourceCode",
@@ -486,6 +490,8 @@ var textsEn = i18n.NewTexts(""+
 	"No AI service"+
 	"The key stays in this device's keychain. Requests go straight from your device to the service you set up, through no other server."+
 	"Requests go straight from your device to your own server, through no other server, at no cost."+
+	"This web version keeps no key once the page closes; enter it again after a reload. Requests go straight from your browser to the service you set up."+
+	"In the web version, pictures and clothes last as long as this page. Export the ones you want to keep."+
 	"This device has no secure store for the key."+
 	"About"+
 	"Source code"+
@@ -614,6 +620,8 @@ var textsEn = i18n.NewTexts(""+
 		13,
 		130,
 		94,
+		148,
+		101,
 		44,
 		5,
 		11,
@@ -745,6 +753,8 @@ var textsZhHans = i18n.NewTexts(""+
 	"未配置 AI 服务"+
 	"Key 只保存在本机系统钥匙串，不经过任何第三方服务器；请求从你的设备直接发往你配置的服务。"+
 	"请求从你的设备直接发往你自己部署的服务，不经过任何第三方服务器，也不产生费用。"+
+	"网页版不会保存 Key，刷新页面后需要重新填写；请求从你的浏览器直接发往你配置的服务。"+
+	"网页版的作品和衣服照片只保存在当前页面，关闭前请导出想保留的。"+
 	"这台设备没有可以保存 Key 的安全存储。"+
 	"关于"+
 	"源代码"+
@@ -873,6 +883,8 @@ var textsZhHans = i18n.NewTexts(""+
 		19,
 		130,
 		117,
+		121,
+		93,
 		53,
 		6,
 		9,
@@ -2401,6 +2413,20 @@ func PrivacyLocal(cx *core.Scope) string { return For(cx).PrivacyLocal() }
 
 // PrivacyLocal is the package's PrivacyLocal in the language of msgs.
 func (msgs Messages) PrivacyLocal() string { return msgs.text(textPrivacyLocal) }
+
+// PrivacyWeb says "This web version keeps no key once the page closes; enter it again after a reload. Requests go straight from your browser to the service you set up."
+// in the language the app shows under cx.
+func PrivacyWeb(cx *core.Scope) string { return For(cx).PrivacyWeb() }
+
+// PrivacyWeb is the package's PrivacyWeb in the language of msgs.
+func (msgs Messages) PrivacyWeb() string { return msgs.text(textPrivacyWeb) }
+
+// PageOnly says "In the web version, pictures and clothes last as long as this page. Export the ones you want to keep."
+// in the language the app shows under cx.
+func PageOnly(cx *core.Scope) string { return For(cx).PageOnly() }
+
+// PageOnly is the package's PageOnly in the language of msgs.
+func (msgs Messages) PageOnly() string { return msgs.text(textPageOnly) }
 
 // KeyUnavailable says "This device has no secure store for the key."
 // in the language the app shows under cx.

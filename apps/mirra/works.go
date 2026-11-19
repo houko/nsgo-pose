@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
@@ -31,26 +29,23 @@ func metaPath(picture string) string {
 	return strings.TrimSuffix(picture, filepath.Ext(picture)) + ".json"
 }
 
-func writeMeta(w work) error {
+func writeMeta(st pictures, w work) error {
 	data, err := json.Marshal(w.workMeta)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(metaPath(w.Path), data, 0o644)
+	return st.Write(metaPath(w.Path), data)
 }
 
 // writePicture puts data in dir under the time it was made.
-func writePicture(dir string, data []byte, at time.Time) (string, error) {
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return "", err
-	}
+func writePicture(st pictures, dir string, data []byte, at time.Time) (string, error) {
 	path := filepath.Join(dir, fmt.Sprintf("%d%s", at.UnixNano(), imageExt(data)))
-	return path, os.WriteFile(path, data, 0o644)
+	return path, st.Write(path, data)
 }
 
 // saveWork moves a generated picture into the lookbook in dir as its next number.
-func saveWork(dir, picture string, at time.Time, meta workMeta) (work, error) {
-	existing, err := listWorks(dir)
+func saveWork(st pictures, dir, picture string, at time.Time, meta workMeta) (work, error) {
+	existing, err := listWorks(st, dir)
 	if err != nil {
 		return work{}, err
 	}
@@ -58,58 +53,42 @@ func saveWork(dir, picture string, at time.Time, meta workMeta) (work, error) {
 		meta.No = max(meta.No, w.No)
 	}
 	meta.No++
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	path := filepath.Join(dir, fmt.Sprintf("%d%s", at.UnixNano(), filepath.Ext(picture)))
+	if err := st.Rename(picture, path); err != nil {
 		return work{}, err
 	}
-	path := filepath.Join(dir, fmt.Sprintf("%d%s", at.UnixNano(), filepath.Ext(picture)))
-	if err := os.Rename(picture, path); err != nil {
-		// A picture on another volume, such as a cache, is copied instead.
-		data, readErr := os.ReadFile(picture)
-		if readErr != nil {
-			return work{}, errors.Join(err, readErr)
-		}
-		if err := os.WriteFile(path, data, 0o644); err != nil {
-			return work{}, err
-		}
-		_ = os.Remove(picture)
-	}
 	w := work{Path: path, Created: at, workMeta: meta}
-	if err := writeMeta(w); err != nil {
+	if err := writeMeta(st, w); err != nil {
 		return work{}, err
 	}
 	return w, nil
 }
 
-// deleteWork removes a work's picture and sidecar; ones already gone are fine.
-func deleteWork(w work) error {
+// deleteWork removes a work's picture and sidecar.
+func deleteWork(st pictures, w work) error {
 	for _, p := range []string{w.Path, metaPath(w.Path)} {
-		if err := os.Remove(p); err != nil && !errors.Is(err, os.ErrNotExist) {
+		if err := st.Remove(p); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// listWorks returns the works in dir, newest first; a directory not made yet holds none.
-func listWorks(dir string) ([]work, error) {
-	entries, err := os.ReadDir(dir)
-	if os.IsNotExist(err) {
-		return nil, nil
-	}
+// listWorks returns the works in dir, newest first.
+func listWorks(st pictures, dir string) ([]work, error) {
+	names, err := st.List(dir)
 	if err != nil {
 		return nil, err
 	}
 	var out []work
-	for _, e := range entries {
-		name := e.Name()
+	for _, name := range names {
 		ext := filepath.Ext(name)
-		stem := strings.TrimSuffix(name, ext)
-		nanos, err := strconv.ParseInt(stem, 10, 64)
-		if e.IsDir() || err != nil || ext == ".json" {
+		nanos, err := strconv.ParseInt(strings.TrimSuffix(name, ext), 10, 64)
+		if err != nil || ext == ".json" {
 			continue
 		}
 		w := work{Path: filepath.Join(dir, name), Created: time.Unix(0, nanos)}
-		if data, err := os.ReadFile(metaPath(w.Path)); err == nil {
+		if data, err := st.Read(metaPath(w.Path)); err == nil {
 			_ = json.Unmarshal(data, &w.workMeta)
 		}
 		out = append(out, w)

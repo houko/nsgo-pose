@@ -37,7 +37,7 @@ func start(t *testing.T, api *fakeAPI, key string, opts ...nsgotest.Option) (*ns
 
 func works(t *testing.T, dir string) []work {
 	t.Helper()
-	ws, err := listWorks(filepath.Join(dir, "works"))
+	ws, err := listWorks(filePictures{}, filepath.Join(dir, "works"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -271,4 +271,31 @@ func TestDesktopStudio(t *testing.T) {
 	app.WaitFor("id:zoom", wait)
 	app.Press("id:open-settings")
 	app.WaitFor("id:settings", wait)
+}
+
+// TestPicturesInMemory runs the look as the web version does, with nothing written to disk: the picture is saved to Works in memory and the page says it lasts only as long as the page.
+func TestPicturesInMemory(t *testing.T) {
+	api := &fakeAPI{}
+	srv, sites := newServer(t, api)
+	mem := newMemPictures()
+	app := nsgotest.Start(t, App{Client: srv.Client(), Sites: sites, DataDir: "/web", Pictures: mem}.Root,
+		nsgotest.Environment(core.Environment{Locale: "en"}),
+		nsgotest.Storage(map[string]string{keyCloudURL: srv.URL + "/v1"}),
+		nsgotest.Secrets(map[string]string{apiKeyAccount: "k"}))
+	app.Press("id:row-pose")
+	choose(t, app, poseStand)
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := app.Find("id:shot-image").Image.Source; len(got.Data) == 0 {
+		t.Errorf("the result shows from %q, not the memory it is kept in", got.URI)
+	}
+	app.Press("id:save-to-works")
+	app.WaitFor("id:saved", wait)
+	ws, err := listWorks(mem, "/web/works")
+	if err != nil || len(ws) != 1 {
+		t.Fatalf("works in memory = %v, %v", ws, err)
+	}
+	app.Press("id:close-shot")
+	app.Press("text:Works")
+	app.WaitFor("id:page-only", wait)
 }

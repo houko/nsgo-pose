@@ -21,4 +21,6 @@ export const links = {
   issues: `${__SITE__.repo}/issues`,
   discussions: `${__SITE__.repo}/discussions`,
   releases: `${__SITE__.repo}/releases`,
+  // The web app is built with the site and published beside it.
+  webApp: `${import.meta.env.BASE_URL}app/`,
 }

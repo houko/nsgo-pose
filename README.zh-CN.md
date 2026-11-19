@@ -114,7 +114,7 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 | macOS | 可以运行；在真实窗口里测试过 |
 | iOS、Android、Windows | `nsgo build` 能打包（iOS 模拟器 App、用调试密钥签名的 APK、Windows 安装程序）；还没有在设备或模拟器上运行过 |
 | Linux | 还不在构建目标里；NSGo 支持，这里没测过 |
-| 网页 | 不支持：浏览器里没有安全存放 API Key 的地方（`cx.Secrets()` 在网页上不可用） |
+| 网页 | 在 [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/) 打开，和官网一起构建发布。浏览器里没有安全存储和文件系统，所以 Key、作品和上传的衣服只保存在当前页面，想保留的图片要导出 |
 
 ## 隐私
 
@@ -150,7 +150,7 @@ bun run build       # 输出到 dist/client；Pages 路径用 BASE_PATH=/mirra/
 bun run og          # 从 dev server 的 /og/<语言>/ 卡片重新截出 public/og-<语言>.png
 ```
 
-推送到 `main` 且改动了官网、截图或 App 版本号时，`.github/workflows/website.yml` 会把它发布到 GitHub Pages。
+推送到 `main` 且改动了官网、App 或截图时，`.github/workflows/website.yml` 会把它发布到 GitHub Pages，App 的网页版（在 `apps/mirra` 里 `go tool nsgo build -target web`）放在 `app/` 下。
 
 ## 许可
 

@@ -11,6 +11,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/gallery.go` | Reading the three galleries' indexes live, what is left out, and the chips each filters by. |
 | `apps/mirra/generate.go` | The request: the prompt, the reference images in order and the `/images/edits` call. |
 | `apps/mirra/service.go` | Cloud or local service and the connection test against `/models`. |
+| `apps/mirra/store.go` | Where pictures are kept: files natively, memory in a browser, where the WebAssembly build has no file system. |
 | `apps/mirra/works.go` | The lookbook: pictures named by when they were made, with a JSON sidecar for their number, star and look. |
 | `apps/mirra/wardrobe.go` | Favorite outfits, photos of the user's own clothes, and what the look is wearing. |
 | `apps/mirra/library.go` | What both layouts share: labels, a gallery's chips and grid, the look's rows, the service's status and Generate. |
@@ -33,9 +34,9 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 
 - Ship no gallery image. Read each gallery's index live, show thumbnails from the gallery while browsing, and download a full image only for the request that uses it.
 - Never put a person's photo in a request: the pose and outfit galleries' terms forbid depicting real people with their images. Faces come from the CC0 face gallery; photos the user adds are of clothes.
-- Leave out the pose gallery's two-person and explicit lines and the outfit gallery's lingerie and "sexy" categories (`gallery.go`).
 - Do network and file work on a goroutine and hand results back with `cx.Post`; never block a builder or a handler.
-- Keep API keys in `cx.Secrets()`, never in storage.
+- Keep API keys in `cx.Secrets()`, never in storage. A browser has none, so the web build keeps the key in memory for the page and says so.
+- Keep pictures through `pictures` (`store.go`), never with `os` directly: the web build has no file system.
 - Take colors from the theme. Choose the layout from the window's width (`wideWidth`), not the device.
 - Keep the website to what the app does, and show on it no pose or outfit gallery image: its pictures are CC0 faces and the app's own screenshots.
 
