@@ -15,8 +15,9 @@ removeSlot: 移除{slot}
 notePlaceholder: 补充要求，例如光线、背景
 noteLabel: 补充要求
 generate: 生成
-needBase: 先选一个姿势或一张照片。
-needPhotoChange: 给照片加上服装或人脸才能生成。
+needPose: 先选一个姿势。
+needPhoto: 先选一张照片。
+needPhotoChange: 给照片选一张人脸才能生成。
 needKey: 先在设置里填写 API Key。
 generateFailed: 生成失败
 pickPose: 选择姿势

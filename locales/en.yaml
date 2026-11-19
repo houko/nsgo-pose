@@ -21,8 +21,9 @@ removeSlot:
 notePlaceholder: Anything else, such as lighting or background
 noteLabel: Extra instructions
 generate: Generate
-needBase: Choose a pose or a photo first.
-needPhotoChange: Add an outfit or a face to change the photo.
+needPose: Choose a pose first.
+needPhoto: Choose a photo first.
+needPhotoChange: Choose a face to put on the photo.
 needKey: Add an API key in Settings first.
 generateFailed: Generation failed
 pickPose: Choose a pose

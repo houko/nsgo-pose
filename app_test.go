@@ -42,16 +42,16 @@ func TestPoseOutfitAndFaceMakeAPicture(t *testing.T) {
 	if app.Exists("label:x・正面") {
 		t.Error("the picker offers an excluded pose")
 	}
-	app.Press("label:片手を腰に当てて立つ・正面")
+	pick(t, app, "label:片手を腰に当てて立つ・正面")
 	app.WaitFor("id:slot-costume", wait)
 
 	app.Press("id:slot-costume")
 	app.WaitFor("label:camel wool coat", wait)
-	app.Press("label:camel wool coat")
+	pick(t, app, "label:camel wool coat")
 
 	app.Press("id:slot-face")
 	app.WaitFor("label:ショート", wait)
-	app.Press("label:ショート")
+	pick(t, app, "label:ショート")
 
 	app.WaitFor("id:slot-face-clear", wait)
 	if app.Exists("id:hint") {
@@ -77,18 +77,22 @@ func TestClearingAChoice(t *testing.T) {
 	app, _ := start(t, &fakeAPI{}, "k")
 	app.Press("id:slot-face")
 	app.WaitFor("label:ショート", wait)
-	app.Press("label:ショート")
+	pick(t, app, "label:ショート")
 	app.WaitFor("id:slot-face-clear", wait)
 	app.Press("id:slot-face-clear")
 	app.WaitForGone("id:slot-face-clear", wait)
 }
 
-func TestPhotoNeedsAnOutfitOrAFace(t *testing.T) {
+func TestPhotoTakesOnlyAFace(t *testing.T) {
 	app, _ := start(t, &fakeAPI{}, "k")
 	app.Press("id:mode-photo")
 	app.Find("id:slot-photo")
+	app.Find("id:slot-face")
 	if app.Exists("id:slot-pose") {
 		t.Error("the pose slot shows in photo mode")
+	}
+	if app.Exists("id:slot-costume") {
+		t.Error("the outfit slot shows in photo mode; the outfit gallery's terms forbid putting its outfits on real people")
 	}
 	if app.Enabled("id:generate") {
 		t.Error("Generate is enabled without a photo")
@@ -101,7 +105,7 @@ func TestGeneratingWithoutAKeyOpensSettings(t *testing.T) {
 	app, _ := start(t, api, "")
 	app.Press("id:slot-pose")
 	app.WaitFor("label:振り返る・横", wait)
-	app.Press("label:振り返る・横")
+	pick(t, app, "label:振り返る・横")
 	app.WaitFor("id:generate", wait)
 	app.Press("id:generate")
 	app.WaitFor("id:api-key", wait)
@@ -114,4 +118,26 @@ func TestGalleryErrorOffersRetry(t *testing.T) {
 	app := nsgotest.Start(t, App{Sites: Sites{Pose: "http://127.0.0.1:1", Costume: "http://127.0.0.1:1", Face: "http://127.0.0.1:1"}, WorksDir: t.TempDir()}.Root)
 	app.Press("id:slot-costume")
 	app.WaitFor("id:retry", wait)
+}
+
+func TestAnOutfitStaysWithThePose(t *testing.T) {
+	app, _ := start(t, &fakeAPI{}, "k")
+	app.Press("id:slot-costume")
+	app.WaitFor("label:camel wool coat", wait)
+	pick(t, app, "label:camel wool coat")
+	app.WaitFor("id:slot-costume-clear", wait)
+	app.Press("id:mode-photo")
+	app.WaitForGone("id:slot-costume", wait)
+	app.Press("id:mode-pose")
+	app.WaitFor("id:slot-costume-clear", wait)
+}
+
+// pick presses a picker's cell, which closes the picker. On the macOS target a press while a pushed page is still moving in is lost, and neither Settle nor the view tree says when the move ends, so on a target the press waits out the transition first: https://github.com/nsgo-dev/nsgo/issues/854
+func pick(t *testing.T, app *nsgotest.App, selector string) {
+	t.Helper()
+	if nsgotest.Target() != "" {
+		time.Sleep(time.Second)
+	}
+	app.Press(selector)
+	app.WaitForGone("id:groups", wait)
 }

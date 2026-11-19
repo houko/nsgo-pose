@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/houko/nsgo-pose/locales"
 	"github.com/nsgo-dev/nsgo"
-	"github.com/nsgo-dev/nsgo-pose/locales"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
@@ -179,9 +179,10 @@ func (s *studio) slot(k Kind) *core.Signal[*Item] {
 
 // request is what the user has put together; reading it inside a binding follows every choice.
 func (s *studio) request() Request {
-	r := Request{Costume: s.costume.Get(), Face: s.face.Get(), Note: s.note.Get()}
+	r := Request{Face: s.face.Get(), Note: s.note.Get()}
 	if s.mode.Get() == basePose {
 		r.Base.Item = s.pose.Get()
+		r.Costume = s.costume.Get()
 	} else if p := s.photo.Get(); p != nil {
 		r.Base = Source{Photo: p.Data, Name: p.Name, MIME: p.MIME}
 	}
@@ -283,7 +284,10 @@ func (s *studio) homePage(cx *core.Scope) base.NavPage {
 	hint := func() string {
 		switch s.request().Validate() {
 		case ErrNoBase:
-			return t.NeedBase()
+			if s.mode.Get() == basePhoto {
+				return t.NeedPhoto()
+			}
+			return t.NeedPose()
 		case ErrNothingToDo:
 			return t.NeedPhotoChange()
 		}
@@ -296,8 +300,11 @@ func (s *studio) homePage(cx *core.Scope) base.NavPage {
 					Options: []ui.Option[baseMode]{{Value: basePose, Label: t.BasePose(), TestID: "mode-pose"}, {Value: basePhoto, Label: t.BasePhoto(), TestID: "mode-photo"}}},
 				core.View{Style: core.Style{Direction: core.Row, Gap: 10}, Children: []core.Node{
 					base,
-					slotCard{Title: t.SlotCostume(), Image: itemSource(s.costume), Fit: core.Contain, TestID: "slot-costume",
-						OnPress: func() { s.openPicker(KindCostume) }, OnClear: func() { s.costume.Set(nil) }},
+					// Outfits go on poses only: the outfit gallery's terms forbid depicting real people with its images.
+					core.Show{When: func() bool { return s.mode.Get() == basePose }, Then: func(*core.Scope) core.Node {
+						return slotCard{Title: t.SlotCostume(), Image: itemSource(s.costume), Fit: core.Contain, TestID: "slot-costume",
+							OnPress: func() { s.openPicker(KindCostume) }, OnClear: func() { s.costume.Set(nil) }}
+					}},
 					slotCard{Title: t.SlotFace(), Image: itemSource(s.face), Fit: core.Cover, TestID: "slot-face",
 						OnPress: func() { s.openPicker(KindFace) }, OnClear: func() { s.face.Set(nil) }},
 				}},

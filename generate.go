@@ -36,7 +36,7 @@ type Source struct {
 	MIME  string
 }
 
-// Request is what the user put together: a base (a pose or their own photo) and an outfit or a face, or both.
+// Request is what the user put together: a pose with an outfit, a face or both, or the user's own photo with a face.
 type Request struct {
 	Base    Source
 	Costume *Item
@@ -47,7 +47,8 @@ type Request struct {
 // Errors the UI explains in the user's language.
 var (
 	ErrNoBase      = errors.New("no base image")
-	ErrNothingToDo = errors.New("a photo needs an outfit or a face")
+	ErrNothingToDo = errors.New("a photo needs a face")
+	ErrPhotoOutfit = errors.New("outfits go on poses, not photos")
 	ErrNoAPIKey    = errors.New("no API key")
 )
 
@@ -56,7 +57,10 @@ func (r Request) Validate() error {
 	switch {
 	case r.Base.Item == nil && len(r.Base.Photo) == 0:
 		return ErrNoBase
-	case r.Base.Item == nil && r.Costume == nil && r.Face == nil:
+	// The outfit gallery's terms forbid depicting real people with its images, so an outfit never goes on the user's photo.
+	case r.Base.Item == nil && r.Costume != nil:
+		return ErrPhotoOutfit
+	case r.Base.Item == nil && r.Face == nil:
 		return ErrNothingToDo
 	}
 	return nil
