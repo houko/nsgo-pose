@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0 - 2026-11-20
+
 - Lingerie and sexy outfits, and revealing and two-person poses, show only behind each gallery's 18+ switch, which first asks whether you are 18 or older; the lingerie and sexy chips are translated.
 
 ## 0.4.0 - 2026-11-19
