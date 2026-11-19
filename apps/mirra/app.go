@@ -98,7 +98,11 @@ type studio struct {
 	chosen [3]*core.Signal[*Item]
 	// filter is each gallery's chip, "" for all.
 	filter [3]*core.Signal[string]
-	note   *core.Signal[string]
+	// adult says whether each gallery shows its adults-only items instead of those for everyone.
+	adult [3]*core.Signal[bool]
+	// adultOK is the user's answer that they are 18 or older, asked once a launch.
+	adultOK *core.Signal[bool]
+	note    *core.Signal[string]
 
 	busy   *core.Signal[bool]
 	cancel context.CancelFunc
@@ -217,11 +221,13 @@ func newStudio(cx *core.Scope, a App) *studio {
 		favorites:     core.NewSignalFunc(cx, favorites, itemsEqual),
 		uploads:       core.NewSignalFunc[[]Item](cx, nil, itemsEqual),
 		closet:        core.NewSignal(cx, closetGallery),
+		adultOK:       core.NewSignal(cx, false),
 	}
 	for k := range s.chosen {
 		kind := Kind(k)
 		s.chosen[k] = core.NewSignal[*Item](cx, nil)
 		s.filter[k] = core.NewSignal(cx, "")
+		s.adult[k] = core.NewSignal(cx, false)
 		s.catalogs[k] = core.NewResource(cx, func() (Kind, bool) { return kind, true },
 			func(ctx context.Context, k Kind, _ core.ResourceInfo) (Catalog, error) {
 				return FetchCatalog(ctx, s.Client, s.Sites, k)

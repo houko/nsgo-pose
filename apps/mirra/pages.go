@@ -43,7 +43,7 @@ func (s *studio) swapOutfits() []Item {
 	}
 	add(s.favorites.Get())
 	add(s.uploads.Get())
-	add(loaded(s.catalogs[KindCostume]).InGroup(s.filter[KindCostume].Get()))
+	add(loaded(s.catalogs[KindCostume]).InGroup(s.filter[KindCostume].Get(), s.adult[KindCostume].Get()))
 	return out
 }
 

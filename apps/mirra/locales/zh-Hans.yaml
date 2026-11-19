@@ -70,6 +70,9 @@ groupAutumn: 秋
 groupWinter: 冬
 groupParty: 派对
 groupSwimwear: 泳装
+groupLingerie: 内衣
+groupSexy: 性感
+adultChip: 18+
 loadFailed: 图库加载失败
 retry: 重试
 noteLabel: 补充要求
@@ -107,6 +110,10 @@ deleted: 作品已删除
 delete: 删除
 deleteConfirm: 删除这张图片？
 deleteConfirmBody: 会从本机移除。
+adultConfirm: 你已年满 18 岁吗？
+adultConfirmBody: 这里是成人内容，仅限 18 岁及以上的用户浏览。
+adultYes: 已满 18 岁
+adultNo: 未满 18 岁
 saveFailed: 保存失败
 backToEdit: 返回编辑
 worksFilter: 作品筛选

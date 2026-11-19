@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lingerie and sexy outfits, and revealing and two-person poses, show only behind each gallery's 18+ switch, which first asks whether you are 18 or older; the lingerie and sexy chips are translated.
+
 ## 0.4.0 - 2026-11-19
 
 - Releases on GitHub with a signed and notarized macOS disk image, a signed Windows installer and the web build, made from `main` when its commits call for a version; the website's download cards link them.
