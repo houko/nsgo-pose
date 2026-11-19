@@ -14,6 +14,10 @@
 </p>
 
 <p align="center">
+  <a href="https://yldm-ai.github.io/mirra/">Website</a>
+</p>
+
+<p align="center">
   <img src="screenshots/phone-home-en.png" alt="Studio on a phone: today's look and its three elements" width="260">
   <img src="screenshots/phone-me-en.png" alt="Me: the app and its AI service" width="260">
 </p>
@@ -134,6 +138,19 @@ go run ./tools/appicon                                 # redraw the icon
 The tests never reach the network: `apps/mirra/fixtures_test.go` serves made-up gallery pages in the galleries' formats and a fake `/images/edits`.
 
 If a gallery changes its page format, the picker shows "Couldn't load the gallery" with the parser's error; the parsers are in `apps/mirra/gallery.go`.
+
+### Website
+
+The [website](https://yldm-ai.github.io/mirra/) is in `apps/website`: TanStack Start and Router on React, Tailwind and react-i18next, built with Vite+ and Bun and prerendered into static pages in Chinese (`/`), English (`/en/`) and Japanese (`/ja/`). Its words are in `src/i18n/copy.ts`; the version, stars, contributors and latest release come from `apps/mirra/nsgo.yaml` and GitHub's API at build time. From `apps/website`:
+
+```sh
+bun install
+bun run dev         # http://localhost:5175/
+bun run typecheck
+bun run build       # dist/client; BASE_PATH=/mirra/ for the Pages path
+```
+
+Pushes to `main` that touch it, the screenshots or the app's version publish it to GitHub Pages through `.github/workflows/website.yml`.
 
 ## License
 

@@ -14,6 +14,10 @@
 </p>
 
 <p align="center">
+  <a href="https://yldm-ai.github.io/mirra/">官网</a>
+</p>
+
+<p align="center">
   <img src="screenshots/phone-home-zh-Hans.png" alt="手机上的工作室：今日造型和三个要素" width="260">
   <img src="screenshots/phone-me-zh-Hans.png" alt="我的：App 信息和 AI 服务" width="260">
 </p>
@@ -134,6 +138,19 @@ go run ./tools/appicon                                 # 重新绘制图标
 测试不访问网络：`apps/mirra/fixtures_test.go` 按图库的格式提供虚构的页面数据，以及一个模拟的 `/images/edits`。
 
 如果哪个图库改了页面格式，选择页会显示「图库加载失败」和解析器的报错；解析代码在 `apps/mirra/gallery.go`。
+
+### 官网
+
+[官网](https://yldm-ai.github.io/mirra/)在 `apps/website`：React 上的 TanStack Start 和 Router，加 Tailwind 和 react-i18next，用 Vite+ 和 Bun 构建，预渲染成中文（`/`）、英文（`/en/`）和日文（`/ja/`）三个静态页面。文案在 `src/i18n/copy.ts`；版本号、Star 数、贡献者和最新发布在构建时从 `apps/mirra/nsgo.yaml` 和 GitHub API 读取。在 `apps/website` 目录下：
+
+```sh
+bun install
+bun run dev         # http://localhost:5175/
+bun run typecheck
+bun run build       # 输出到 dist/client；Pages 路径用 BASE_PATH=/mirra/
+```
+
+推送到 `main` 且改动了官网、截图或 App 版本号时，`.github/workflows/website.yml` 会把它发布到 GitHub Pages。
 
 ## 许可
 
