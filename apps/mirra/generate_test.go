@@ -38,7 +38,7 @@ func TestGenerateSendsReferencesInOrder(t *testing.T) {
 	poses, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindPose)
 	costumes, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindCostume)
 	faces, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindFace)
-	winter := costumes.InGroup("冬")[0]
+	winter := costumes.InGroup("冬", false)[0]
 
 	cfg := Config{BaseURL: srv.URL + "/v1/", APIKey: " sk-test ", Size: "1024x1024"}
 	got, err := Generate(ctx, http.DefaultClient, cfg, Request{Pose: &poses.Items[0], Costume: &winter, Face: &faces.Items[1], Count: 2})

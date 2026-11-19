@@ -62,6 +62,8 @@ const (
 	outfitKnit  = "label:ivory knit denim skirt"
 	poseStand   = "label:片手を腰に当てて立つ"
 	poseTurning = "label:振り返る"
+	// outfitLingerie is the adults-only outfit, labeled by its keywords.
+	outfitLingerie = "label:x"
 )
 
 // makeLook puts a face, an outfit and a pose together on a phone, and generates.
@@ -202,6 +204,33 @@ func TestConnectionTestReportsFailure(t *testing.T) {
 	app.Press("id:test-connection")
 	app.WaitFor("id:conn-failed", wait)
 	app.Find("text:/can't connect/")
+}
+
+// TestAdultChipAsksAge keeps the adults-only outfits out of sight until the user says they are 18 or older.
+func TestAdultChipAsksAge(t *testing.T) {
+	app, _ := start(t, &fakeAPI{}, "k", nsgotest.PendingAlerts())
+	app.Press("text:Wardrobe")
+	app.Press("id:closet-gallery")
+	app.WaitFor(outfitKnit, wait)
+	if app.Exists(outfitLingerie) {
+		t.Fatal("an adults-only outfit shows before the user was asked")
+	}
+	app.Press("id:chip-adult")
+	app.Answer(0)
+	if app.Exists(outfitLingerie) || app.Find("id:chip-adult").Props.Selected {
+		t.Fatal("answering under 18 showed the adults-only outfits")
+	}
+	app.Press("id:chip-adult")
+	app.Answer(1)
+	app.WaitFor(outfitLingerie, wait)
+	if app.Exists(outfitKnit) {
+		t.Error("the adults-only outfits show with those for everyone")
+	}
+	app.Find("id:chip-Lingerie")
+	app.Press("id:chip-adult")
+	app.WaitFor(outfitKnit, wait)
+	app.Press("id:chip-adult")
+	app.WaitFor(outfitLingerie, wait)
 }
 
 func TestWardrobeFavorites(t *testing.T) {

@@ -54,22 +54,22 @@ type Item struct {
 	Title string
 	Thumb string
 	Full  string
+	// Adult marks an item of an adults-only category, which shows only once the user says they are 18 or older.
+	Adult bool
 }
 
-// Catalog is a gallery's usable items and their groups in the gallery's order.
+// Catalog is a gallery's usable items and their groups in the gallery's order: Groups those of the items for everyone, AdultGroups those of the adults-only ones.
 type Catalog struct {
-	Items  []Item
-	Groups []string
+	Items       []Item
+	Groups      []string
+	AdultGroups []string
 }
 
-// InGroup returns the items of one group, all of them for "".
-func (c Catalog) InGroup(group string) []Item {
-	if group == "" {
-		return c.Items
-	}
+// InGroup returns the items for everyone, or the adults-only ones, of one group, all of them for "".
+func (c Catalog) InGroup(group string, adult bool) []Item {
 	var out []Item
 	for _, it := range c.Items {
-		if it.Group == group {
+		if it.Adult == adult && (group == "" || it.Group == group) {
 			out = append(out, it)
 		}
 	}
@@ -164,23 +164,44 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 		return Catalog{}, err
 	}
 	var c Catalog
-	var groups groupOrder
+	var groups, adultGroups groupOrder
 	lines := map[string]string{}
 	for _, r := range rows {
 		if r.ID == "" || r.Full == "" {
 			continue
 		}
-		groups.add(r.Angle)
+		adult := adultPose(r.Line, r.Category)
+		if adult {
+			adultGroups.add(r.Angle)
+		} else {
+			groups.add(r.Angle)
+		}
 		lines[r.ID] = r.Line
-		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name,
+		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name, Adult: adult,
 			Thumb: origin + "/" + r.Thumb, Full: origin + "/" + r.Full})
 	}
 	// The gallery lists its glamour line first; the app opens on the everyday poses.
 	slices.SortStableFunc(c.Items, func(a, b Item) int { return rank(poseLineOrder, lines[a.ID]) - rank(poseLineOrder, lines[b.ID]) })
-	slices.SortStableFunc(groups.list, func(a, b string) int { return rank(poseAngleOrder, a) - rank(poseAngleOrder, b) })
-	c.Groups = groups.list
+	byAngle := func(a, b string) int { return rank(poseAngleOrder, a) - rank(poseAngleOrder, b) }
+	slices.SortStableFunc(groups.list, byAngle)
+	slices.SortStableFunc(adultGroups.list, byAngle)
+	c.Groups, c.AdultGroups = groups.list, adultGroups.list
 	return nonEmpty(c)
 }
+
+// adultPose says whether a pose is adults-only: the glamour and two-person lines, and the upper-body poses that are revealing.
+func adultPose(line, category string) bool {
+	switch line {
+	case "全身1人・セクシー系", "2人絡み":
+		return true
+	case "上半身1人":
+		return category == "セクシー・露骨寄り系" || category == "胸寄せ・谷間強調系"
+	}
+	return false
+}
+
+// adultCostumes are the outfit categories that are adults-only.
+var adultCostumes = []string{"ランジェリー", "セクシー"}
 
 var (
 	poseLineOrder  = []string{"全身1人・標準系", "上半身1人", "全身1人・セクシー系"}
@@ -208,16 +229,21 @@ func parseCostumes(page []byte, origin string) (Catalog, error) {
 		return Catalog{}, err
 	}
 	var c Catalog
-	var groups groupOrder
+	var groups, adultGroups groupOrder
 	for _, r := range rows {
 		if r.ID == "" || r.Full == "" {
 			continue
 		}
-		groups.add(r.Category)
-		c.Items = append(c.Items, Item{Kind: KindCostume, ID: r.ID, Group: r.Category, Title: r.Keywords,
+		adult := slices.Contains(adultCostumes, r.Category)
+		if adult {
+			adultGroups.add(r.Category)
+		} else {
+			groups.add(r.Category)
+		}
+		c.Items = append(c.Items, Item{Kind: KindCostume, ID: r.ID, Group: r.Category, Title: r.Keywords, Adult: adult,
 			Thumb: origin + "/" + r.Thumb, Full: origin + "/" + r.Full})
 	}
-	c.Groups = groups.list
+	c.Groups, c.AdultGroups = groups.list, adultGroups.list
 	return nonEmpty(c)
 }
 

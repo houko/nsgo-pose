@@ -8,7 +8,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | --- | --- |
 | `apps/mirra/go.mod`, `apps/mirra/nsgo.yaml` | The only Go module and the packaging configuration; run Go and the `nsgo` tool in `apps/mirra`. |
 | `apps/mirra/app.go` | Entry point; the app's state, the choice of layout by window width, generating, saving, starring and deleting a picture. |
-| `apps/mirra/gallery.go` | Reading the three galleries' indexes live, what is left out, and the chips each filters by. |
+| `apps/mirra/gallery.go` | Reading the three galleries' indexes live, which items are adults-only, and the chips each filters by. |
 | `apps/mirra/generate.go` | The request: the prompt, the reference images in order and the `/images/edits` call. |
 | `apps/mirra/service.go` | Cloud or local service and the connection test against `/models`. |
 | `apps/mirra/store.go` | Where pictures are kept: files natively, memory in a browser, where the WebAssembly build has no file system. |

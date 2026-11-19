@@ -92,6 +92,9 @@ groupAutumn: Autumn
 groupWinter: Winter
 groupParty: Party
 groupSwimwear: Swimwear
+groupLingerie: Lingerie
+groupSexy: Sexy
+adultChip: 18+
 loadFailed: Couldn't load the gallery
 retry: Retry
 noteLabel: Extra instructions
@@ -137,6 +140,10 @@ deleted: Deleted
 delete: Delete
 deleteConfirm: Delete this picture?
 deleteConfirmBody: It is removed from this device.
+adultConfirm: Are you 18 or older?
+adultConfirmBody: This shows adult content, for people 18 and older only.
+adultYes: "I'm 18 or older"
+adultNo: "I'm under 18"
 saveFailed: Couldn't save
 backToEdit: Back to the look
 worksFilter: Show

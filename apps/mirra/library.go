@@ -1,8 +1,10 @@
 package main
 
 import (
+	"slices"
 	"strings"
 
+	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
@@ -115,6 +117,10 @@ func groupLabel(t locales.Messages, g string) string {
 		return t.GroupParty()
 	case "水着":
 		return t.GroupSwimwear()
+	case "ランジェリー":
+		return t.GroupLingerie()
+	case "セクシー":
+		return t.GroupSexy()
 	case uploadGroup:
 		return t.MyUploads()
 	}
@@ -191,24 +197,32 @@ func cellFit(k Kind) core.ResizeMode {
 
 type chipOption struct{ value, label string }
 
-// chips is a row of pill-shaped filters that scrolls sideways when it does not fit.
-func chips(cx *core.Scope, label, testID string, options []chipOption, value func() string, onChange func(string)) core.Node {
+// pill is one pill-shaped filter, filled while on, or outlined in the accent while on for a switch, which is on beside the chosen filter.
+func pill(cx *core.Scope, label, testID string, on func() bool, onPress func(), toggle bool) core.Node {
 	colors := ui.ColorsOf(cx)
+	return core.View{Role: core.RoleButton, Label: label, Selected: on, TestID: testID,
+		OnPress: func(core.PressEvent) { onPress() },
+		StyleFunc: func() core.Style {
+			st := core.Style{Padding: core.Symmetric(7, 16), CornerRadius: 999, BorderWidth: 1, BorderColor: colors.Border(), Color: colors.Text()}
+			switch {
+			case on() && toggle:
+				st.Background, st.BorderColor, st.Color = colors.Accent().Faded(0.12), colors.Accent(), colors.Accent()
+			case on():
+				st.Background, st.BorderColor, st.Color = colors.Text(), colors.Text(), colors.Background()
+			}
+			return st
+		},
+		Children: []core.Node{core.Text{Content: label, Style: core.Style{FontSize: 14}}},
+	}
+}
+
+// chips is a row of pill-shaped filters that scrolls sideways when it does not fit, with extra pills after them.
+func chips(cx *core.Scope, label, testID string, options []chipOption, value func() string, onChange func(string), extra ...core.Node) core.Node {
 	var pills []core.Node
 	for _, o := range options {
-		on := func() bool { return value() == o.value }
-		pills = append(pills, core.View{Role: core.RoleButton, Label: o.label, Selected: on, TestID: testID + "-" + o.label,
-			OnPress: func(core.PressEvent) { onChange(o.value) },
-			StyleFunc: func() core.Style {
-				st := core.Style{Padding: core.Symmetric(7, 16), CornerRadius: 999, BorderWidth: 1, BorderColor: colors.Border(), Color: colors.Text()}
-				if on() {
-					st.Background, st.BorderColor, st.Color = colors.Text(), colors.Text(), colors.Background()
-				}
-				return st
-			},
-			Children: []core.Node{core.Text{Content: o.label, Style: core.Style{FontSize: 14}}},
-		})
+		pills = append(pills, pill(cx, o.label, testID+"-"+o.label, func() bool { return value() == o.value }, func() { onChange(o.value) }, false))
 	}
+	pills = append(pills, extra...)
 	// A scroll container's minimum height is 0, so a long grid beside it would squeeze it away without one.
 	return core.Scroll{Horizontal: true, HideIndicator: true, Style: core.Style{Height: core.Pt(52), MinHeight: core.Pt(52), FlexShrink: 0}, Children: []core.Node{
 		core.View{Role: core.RoleGroup, Label: label, Style: core.Style{Direction: core.Row, Gap: 8, Padding: core.Symmetric(8, 0), AlignItems: core.AlignCenter}, Children: pills},
@@ -283,7 +297,8 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 	res := s.catalogs[k]
 	filter := s.filter[k]
 	chosen := s.chosen[k]
-	items := core.NewMemoFunc(cx, func() []Item { return loaded(res).InGroup(filter.Get()) }, nil)
+	adult := s.adult[k]
+	items := core.NewMemoFunc(cx, func() []Item { return loaded(res).InGroup(filter.Get(), adult.Get()) }, nil)
 	at := func(i int) (Item, bool) {
 		list := items.Get()
 		if i < 0 || i >= len(list) {
@@ -293,7 +308,11 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 	}
 	filters := core.Dynamic(func(cx *core.Scope) core.Node {
 		cat := loaded(res)
-		if len(cat.Groups) < 2 {
+		groups := cat.Groups
+		if adult.Get() {
+			groups = cat.AdultGroups
+		}
+		if len(groups) < 2 && len(cat.AdultGroups) == 0 {
 			return nil
 		}
 		var options []chipOption
@@ -301,10 +320,14 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 		if k != KindPose {
 			options = append(options, chipOption{"", t.All()})
 		}
-		for _, g := range cat.Groups {
+		for _, g := range groups {
 			options = append(options, chipOption{g, groupLabel(t, g)})
 		}
-		return chips(cx, t.FiltersLabel(), "chip", options, filter.Get, filter.Set)
+		var extra []core.Node
+		if len(cat.AdultGroups) > 0 {
+			extra = append(extra, pill(cx, t.AdultChip(), "chip-adult", adult.Get, func() { s.toggleAdult(k) }, true))
+		}
+		return chips(cx, t.FiltersLabel(), "chip", options, filter.Get, filter.Set, extra...)
 	})
 	grid := core.List{Style: fill, NumColumns: columns, Gap: 10, ColumnGap: 10, EstimatedSize: 200,
 		Count: func() int { return len(items.Get()) },
@@ -552,4 +575,42 @@ func (s *studio) generatingScreen(cx *core.Scope) core.Node {
 			ui.Button{Text: t.Cancel(), Variant: ui.ButtonOutline, OnPress: s.cancelGenerating, TestID: "cancel", Style: core.Style{CornerRadius: 999}},
 		},
 	}
+}
+
+// toggleAdult switches a gallery between its items for everyone and its adults-only ones, asking first whether the user is 18 or older.
+func (s *studio) toggleAdult(k Kind) {
+	show := func(adult bool) {
+		cat := loaded(s.catalogs[k])
+		groups := cat.Groups
+		if adult {
+			groups = cat.AdultGroups
+		}
+		s.adult[k].Set(adult)
+		// Poses keep their angle where the other side has it; the rest start on All.
+		if g := s.filter[k].Get(); g != "" && !slices.Contains(groups, g) {
+			g = ""
+			if k == KindPose && len(groups) > 0 {
+				g = groups[0]
+			}
+			s.filter[k].Set(g)
+		}
+	}
+	if s.adult[k].Get() {
+		show(false)
+		return
+	}
+	if s.adultOK.Get() {
+		show(true)
+		return
+	}
+	t := locales.For(s.cx)
+	base.ShowAlertDialog(s.cx, base.AlertDialog{Title: t.AdultConfirm(), Description: t.AdultConfirmBody(), Actions: []core.AlertAction{
+		{Label: t.AdultNo(), Role: core.AlertCancel}, {Label: t.AdultYes()},
+	}}, func(label string) {
+		if label != t.AdultYes() {
+			return
+		}
+		s.adultOK.Set(true)
+		show(true)
+	})
 }

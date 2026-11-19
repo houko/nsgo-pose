@@ -165,6 +165,9 @@ const (
 	textGroupWinter
 	textGroupParty
 	textGroupSwimwear
+	textGroupLingerie
+	textGroupSexy
+	textAdultChip
 	textLoadFailed
 	textRetry
 	textNoteLabel
@@ -195,6 +198,10 @@ const (
 	textDelete
 	textDeleteConfirm
 	textDeleteConfirmBody
+	textAdultConfirm
+	textAdultConfirmBody
+	textAdultYes
+	textAdultNo
 	textSaveFailed
 	textBackToEdit
 	textWorksFilter
@@ -300,6 +307,9 @@ var keyOfText = [numTexts]string{
 	"groupWinter",
 	"groupParty",
 	"groupSwimwear",
+	"groupLingerie",
+	"groupSexy",
+	"adultChip",
 	"loadFailed",
 	"retry",
 	"noteLabel",
@@ -330,6 +340,10 @@ var keyOfText = [numTexts]string{
 	"delete",
 	"deleteConfirm",
 	"deleteConfirmBody",
+	"adultConfirm",
+	"adultConfirmBody",
+	"adultYes",
+	"adultNo",
 	"saveFailed",
 	"backToEdit",
 	"worksFilter",
@@ -433,6 +447,9 @@ var textsEn = i18n.NewTexts(""+
 	"Winter"+
 	"Party"+
 	"Swimwear"+
+	"Lingerie"+
+	"Sexy"+
+	"18+"+
 	"Couldn't load the gallery"+
 	"Retry"+
 	"Extra instructions"+
@@ -463,6 +480,10 @@ var textsEn = i18n.NewTexts(""+
 	"Delete"+
 	"Delete this picture?"+
 	"It is removed from this device."+
+	"Are you 18 or older?"+
+	"This shows adult content, for people 18 and older only."+
+	"I'm 18 or older"+
+	"I'm under 18"+
 	"Couldn't save"+
 	"Back to the look"+
 	"Show"+
@@ -563,6 +584,9 @@ var textsEn = i18n.NewTexts(""+
 		6,
 		5,
 		8,
+		8,
+		4,
+		3,
 		25,
 		5,
 		18,
@@ -593,6 +617,10 @@ var textsEn = i18n.NewTexts(""+
 		6,
 		20,
 		31,
+		20,
+		55,
+		15,
+		12,
 		13,
 		16,
 		4,
@@ -696,6 +724,9 @@ var textsZhHans = i18n.NewTexts(""+
 	"冬"+
 	"派对"+
 	"泳装"+
+	"内衣"+
+	"性感"+
+	"18+"+
 	"图库加载失败"+
 	"重试"+
 	"补充要求"+
@@ -726,6 +757,10 @@ var textsZhHans = i18n.NewTexts(""+
 	"删除"+
 	"删除这张图片？"+
 	"会从本机移除。"+
+	"你已年满 18 岁吗？"+
+	"这里是成人内容，仅限 18 岁及以上的用户浏览。"+
+	"已满 18 岁"+
+	"未满 18 岁"+
 	"保存失败"+
 	"返回编辑"+
 	"作品筛选"+
@@ -826,6 +861,9 @@ var textsZhHans = i18n.NewTexts(""+
 		3,
 		6,
 		6,
+		6,
+		6,
+		3,
 		18,
 		6,
 		12,
@@ -856,6 +894,10 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		21,
 		21,
+		25,
+		64,
+		13,
+		13,
 		12,
 		12,
 		12,
@@ -1709,6 +1751,27 @@ func GroupSwimwear(cx *core.Scope) string { return For(cx).GroupSwimwear() }
 // GroupSwimwear is the package's GroupSwimwear in the language of msgs.
 func (msgs Messages) GroupSwimwear() string { return msgs.text(textGroupSwimwear) }
 
+// GroupLingerie says "Lingerie"
+// in the language the app shows under cx.
+func GroupLingerie(cx *core.Scope) string { return For(cx).GroupLingerie() }
+
+// GroupLingerie is the package's GroupLingerie in the language of msgs.
+func (msgs Messages) GroupLingerie() string { return msgs.text(textGroupLingerie) }
+
+// GroupSexy says "Sexy"
+// in the language the app shows under cx.
+func GroupSexy(cx *core.Scope) string { return For(cx).GroupSexy() }
+
+// GroupSexy is the package's GroupSexy in the language of msgs.
+func (msgs Messages) GroupSexy() string { return msgs.text(textGroupSexy) }
+
+// AdultChip says "18+"
+// in the language the app shows under cx.
+func AdultChip(cx *core.Scope) string { return For(cx).AdultChip() }
+
+// AdultChip is the package's AdultChip in the language of msgs.
+func (msgs Messages) AdultChip() string { return msgs.text(textAdultChip) }
+
 // LoadFailed says "Couldn't load the gallery"
 // in the language the app shows under cx.
 func LoadFailed(cx *core.Scope) string { return For(cx).LoadFailed() }
@@ -2080,6 +2143,34 @@ func DeleteConfirmBody(cx *core.Scope) string { return For(cx).DeleteConfirmBody
 
 // DeleteConfirmBody is the package's DeleteConfirmBody in the language of msgs.
 func (msgs Messages) DeleteConfirmBody() string { return msgs.text(textDeleteConfirmBody) }
+
+// AdultConfirm says "Are you 18 or older?"
+// in the language the app shows under cx.
+func AdultConfirm(cx *core.Scope) string { return For(cx).AdultConfirm() }
+
+// AdultConfirm is the package's AdultConfirm in the language of msgs.
+func (msgs Messages) AdultConfirm() string { return msgs.text(textAdultConfirm) }
+
+// AdultConfirmBody says "This shows adult content, for people 18 and older only."
+// in the language the app shows under cx.
+func AdultConfirmBody(cx *core.Scope) string { return For(cx).AdultConfirmBody() }
+
+// AdultConfirmBody is the package's AdultConfirmBody in the language of msgs.
+func (msgs Messages) AdultConfirmBody() string { return msgs.text(textAdultConfirmBody) }
+
+// AdultYes says "I'm 18 or older"
+// in the language the app shows under cx.
+func AdultYes(cx *core.Scope) string { return For(cx).AdultYes() }
+
+// AdultYes is the package's AdultYes in the language of msgs.
+func (msgs Messages) AdultYes() string { return msgs.text(textAdultYes) }
+
+// AdultNo says "I'm under 18"
+// in the language the app shows under cx.
+func AdultNo(cx *core.Scope) string { return For(cx).AdultNo() }
+
+// AdultNo is the package's AdultNo in the language of msgs.
+func (msgs Messages) AdultNo() string { return msgs.text(textAdultNo) }
 
 // SaveFailed says "Couldn't save"
 // in the language the app shows under cx.

@@ -30,8 +30,14 @@ func TestFetchCatalogs(t *testing.T) {
 	if want := []string{"正面", "横"}; !slices.Equal(poses.Groups, want) {
 		t.Errorf("pose groups = %v, want the angles %v", poses.Groups, want)
 	}
-	if got := ids(poses.InGroup("正面")); !slices.Equal(got, []string{"full_std_P001_front", "full_sexy_P000_front", "full_sexy_P004_front", "pair_P003_front"}) {
-		t.Errorf("front poses = %v", got)
+	if got := ids(poses.InGroup("正面", false)); !slices.Equal(got, []string{"full_std_P001_front"}) {
+		t.Errorf("front poses for everyone = %v", got)
+	}
+	if got := ids(poses.InGroup("正面", true)); !slices.Equal(got, []string{"full_sexy_P000_front", "full_sexy_P004_front", "pair_P003_front"}) {
+		t.Errorf("adults-only front poses = %v", got)
+	}
+	if want := []string{"正面"}; !slices.Equal(poses.AdultGroups, want) {
+		t.Errorf("adults-only pose groups = %v, want %v", poses.AdultGroups, want)
 	}
 	first := poses.Items[0]
 	if first.Full != sites.Pose+"/img/full_std_P001_front.png" || first.Thumb != sites.Pose+"/thumbs/full_std_P001_front.jpg" || first.Title != "片手を腰に当てて立つ" {
@@ -45,7 +51,16 @@ func TestFetchCatalogs(t *testing.T) {
 	if got, want := ids(costumes.Items), []string{"SPR-0001", "LNG-0001", "WIN-0001"}; !slices.Equal(got, want) {
 		t.Errorf("costumes = %v, want %v", got, want)
 	}
-	if got := costumes.InGroup("冬"); len(got) != 1 || got[0].ID != "WIN-0001" || got[0].Full != sites.Costume+"/png/WIN-0001.png" {
+	if want := []string{"春", "冬"}; !slices.Equal(costumes.Groups, want) {
+		t.Errorf("costume groups = %v, want %v", costumes.Groups, want)
+	}
+	if got := ids(costumes.InGroup("", false)); !slices.Equal(got, []string{"SPR-0001", "WIN-0001"}) {
+		t.Errorf("costumes for everyone = %v", got)
+	}
+	if got := ids(costumes.InGroup("ランジェリー", true)); !slices.Equal(got, []string{"LNG-0001"}) || !slices.Equal(costumes.AdultGroups, []string{"ランジェリー"}) {
+		t.Errorf("adults-only costumes = %v in %v", got, costumes.AdultGroups)
+	}
+	if got := costumes.InGroup("冬", false); len(got) != 1 || got[0].ID != "WIN-0001" || got[0].Full != sites.Costume+"/png/WIN-0001.png" {
 		t.Errorf("winter costumes = %+v", got)
 	}
 
@@ -71,5 +86,23 @@ func TestParseRejectsChangedFormat(t *testing.T) {
 	}
 	if got, err := parsePoses([]byte(`const D=[{"id":"a","系統":"2人絡み","原寸":"a.png"}];`), "https://x"); err != nil || len(got.Items) != 1 {
 		t.Errorf("a page with a pose from any line should parse: catalog=%+v err=%v", got, err)
+	}
+}
+
+func TestAdultPose(t *testing.T) {
+	for _, c := range []struct {
+		line, category string
+		adult          bool
+	}{
+		{"全身1人・標準系", "立ち", false},
+		{"上半身1人", "かわいい系", false},
+		{"上半身1人", "セクシー・露骨寄り系", true},
+		{"上半身1人", "胸寄せ・谷間強調系", true},
+		{"全身1人・セクシー系", "座り", true},
+		{"2人絡み", "密着", true},
+	} {
+		if got := adultPose(c.line, c.category); got != c.adult {
+			t.Errorf("adultPose(%q, %q) = %v, want %v", c.line, c.category, got, c.adult)
+		}
 	}
 }
