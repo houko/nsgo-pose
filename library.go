@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/houko/nsgo-pose/locales"
 	"github.com/nsgo-dev/nsgo/core"
@@ -9,10 +9,32 @@ import (
 	"github.com/nsgo-dev/nsgo/ui"
 )
 
+// displayFont sets titles in a serif, the platform's own where it has one for Chinese.
+const displayFont = `"Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", SimSun, Georgia, serif`
+
 // loaded is the catalog res holds, empty until its first load.
 func loaded(res *core.Resource[Catalog]) Catalog {
 	c, _ := res.Get()
 	return c
+}
+
+// eyebrow is the small spaced-out label above a title, such as THIS LOOK.
+func eyebrow(cx *core.Scope, text func() string) core.Node {
+	colors := ui.ColorsOf(cx)
+	return core.Text{ContentFunc: text, StyleFunc: func() core.Style {
+		return core.Style{FontSize: 11, FontWeight: core.FontWeightSemibold, LetterSpacing: 2, TextTransform: core.TextTransformUppercase, Color: colors.Accent()}
+	}}
+}
+
+// display is a title set in the serif.
+func display(text func() string, size core.Points) core.Node {
+	return core.Text{ContentFunc: text, Role: core.RoleHeader, MaxLines: 2,
+		Style: core.Style{FontFamily: displayFont, FontSize: size, FontWeight: core.FontWeightBold, LineHeight: size * 1.25}}
+}
+
+func caption(cx *core.Scope, text func() string) core.Node {
+	colors := ui.ColorsOf(cx)
+	return core.Text{ContentFunc: text, MaxLines: 1, StyleFunc: func() core.Style { return core.Style{FontSize: 13, Color: colors.Muted()} }}
 }
 
 func slotName(t locales.Messages, k Kind) string {
@@ -26,6 +48,18 @@ func slotName(t locales.Messages, k Kind) string {
 	}
 }
 
+// slotEyebrow numbers a gallery as the look's element, such as 01 FACE.
+func slotEyebrow(t locales.Messages, k Kind) string {
+	switch k {
+	case KindFace:
+		return t.EyebrowFace()
+	case KindCostume:
+		return t.EyebrowOutfit()
+	default:
+		return t.EyebrowPose()
+	}
+}
+
 func stepTitle(t locales.Messages, k Kind) string {
 	switch k {
 	case KindFace:
@@ -34,6 +68,17 @@ func stepTitle(t locales.Messages, k Kind) string {
 		return t.StepCostume()
 	default:
 		return t.StepPose()
+	}
+}
+
+func kindKey(k Kind) string {
+	switch k {
+	case KindFace:
+		return "face"
+	case KindCostume:
+		return "costume"
+	default:
+		return "pose"
 	}
 }
 
@@ -70,26 +115,66 @@ func groupLabel(t locales.Messages, g string) string {
 		return t.GroupParty()
 	case "水着":
 		return t.GroupSwimwear()
+	case uploadGroup:
+		return t.MyUploads()
 	}
 	return g
 }
 
-// itemDetail says what a chosen item is in one line: a face's hair length, an outfit's category and keywords, a pose's name and angle.
-func itemDetail(t locales.Messages, it *Item) string {
+// itemName is what a chosen item is called: an outfit's keywords or the user's upload, a pose's name, a face's hair length.
+func itemName(t locales.Messages, it *Item) string {
 	if it == nil {
 		return t.NotChosen()
 	}
-	switch it.Kind {
-	case KindFace:
-		return groupLabel(t, it.Group) + " · " + it.ID
-	case KindCostume:
-		return groupLabel(t, it.Group) + " · " + it.Title
-	default:
-		return it.Title + " · " + groupLabel(t, it.Group)
+	switch {
+	case it.Kind == KindFace:
+		return groupLabel(t, it.Group)
+	case it.Group == uploadGroup:
+		return t.UploadName(strings.TrimPrefix(it.ID, uploadPrefix))
 	}
+	return it.Title
 }
 
-// cellAspect is a gallery's thumbnail shape, width over height.
+// itemSub is the line under an item's name: an outfit's category and code, a pose's angle, a face's code.
+func itemSub(t locales.Messages, it *Item) string {
+	if it == nil {
+		return ""
+	}
+	switch it.Kind {
+	case KindFace:
+		return it.ID
+	case KindPose:
+		return groupLabel(t, it.Group)
+	}
+	if it.Group == uploadGroup {
+		return t.MyUploads()
+	}
+	return groupLabel(t, it.Group) + " · " + it.ID
+}
+
+// lookLine sums up the look in a line: face, pose and angle.
+func lookLine(t locales.Messages, r Request) string {
+	var parts []string
+	if r.Face != nil {
+		parts = append(parts, itemName(t, r.Face))
+	}
+	if r.Pose != nil {
+		parts = append(parts, r.Pose.Title, groupLabel(t, r.Pose.Group))
+	}
+	return strings.Join(parts, " · ")
+}
+
+// lookTitle names the look by its outfit, else by its pose.
+func lookTitle(t locales.Messages, r Request) string {
+	switch {
+	case r.Costume != nil:
+		return itemName(t, r.Costume)
+	case r.Pose != nil:
+		return r.Pose.Title
+	}
+	return t.LookTitle()
+}
+
 func cellAspect(k Kind) float32 {
 	if k == KindFace {
 		return 0.8
@@ -111,12 +196,11 @@ func chips(cx *core.Scope, label, testID string, options []chipOption, value fun
 	colors := ui.ColorsOf(cx)
 	var pills []core.Node
 	for _, o := range options {
-		o := o
 		on := func() bool { return value() == o.value }
 		pills = append(pills, core.View{Role: core.RoleButton, Label: o.label, Selected: on, TestID: testID + "-" + o.label,
 			OnPress: func(core.PressEvent) { onChange(o.value) },
 			StyleFunc: func() core.Style {
-				st := core.Style{Padding: core.Symmetric(7, 16), CornerRadius: 999, BorderWidth: 1, BorderColor: colors.Border(), Background: colors.Surface(), Color: colors.Text()}
+				st := core.Style{Padding: core.Symmetric(7, 16), CornerRadius: 999, BorderWidth: 1, BorderColor: colors.Border(), Color: colors.Text()}
 				if on() {
 					st.Background, st.BorderColor, st.Color = colors.Text(), colors.Text(), colors.Background()
 				}
@@ -131,8 +215,69 @@ func chips(cx *core.Scope, label, testID string, options []chipOption, value fun
 	}}
 }
 
-// library is one gallery to choose from: its chips and a grid of thumbnails, columns wide, with the item's name under each when captions is set.
-func (s *studio) library(cx *core.Scope, k Kind, columns int, captions bool) core.Node {
+// itemCard is one picture to choose in a grid: the image, then its name and a muted line, outlined in the accent while chosen. An outfit carries a heart to keep it in the wardrobe's favorites.
+func (s *studio) itemCard(cx *core.Scope, k Kind, item func() Item, on func() bool, sub func() string, onPress func()) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	name := func() string {
+		it := item()
+		return itemName(t, &it)
+	}
+	picture := core.View{StyleFunc: func() core.Style {
+		return core.Style{Width: core.Pct(100), AspectRatio: cellAspect(k), Background: colors.Inset()}
+	}, Children: []core.Node{core.Image{ResizeMode: cellFit(k), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
+		SourceFunc: func() core.ImageSource { return core.Src(item().Thumb) }}}}
+	children := []core.Node{picture}
+	if k != KindFace {
+		children = append(children, core.View{Style: core.Style{Padding: core.Symmetric(8, 10), Gap: 2}, Children: []core.Node{
+			core.Text{ContentFunc: name, MaxLines: 1, Style: core.Style{FontSize: 14, FontWeight: core.FontWeightMedium}},
+			caption(cx, sub),
+		}})
+	}
+	card := core.View{Role: core.RoleButton, LabelFunc: func() string {
+		it := item()
+		if it.Kind == KindFace {
+			return name() + " · " + it.ID
+		}
+		return name()
+	}, Selected: on,
+		OnPress: func(core.PressEvent) { onPress() },
+		StyleFunc: func() core.Style {
+			st := core.Style{CornerRadius: 16, Overflow: core.Hidden, BorderWidth: 1, BorderColor: colors.Border(), Background: colors.Surface()}
+			if on() {
+				st.BorderColor, st.BorderWidth = colors.Accent(), 2
+			}
+			return st
+		},
+		Children: children,
+	}
+	if k != KindCostume {
+		return card
+	}
+	fav := func() bool { return s.isFavorite(item()) }
+	return core.View{Children: []core.Node{
+		card,
+		core.View{Style: core.Style{Position: core.Absolute, Top: core.Pt(8), Right: core.Pt(8)}, Children: []core.Node{
+			ui.IconButton{Icon: lucide.Heart, Variant: ui.IconButtonRaised, Size: 30, IconSize: 15, Selected: fav,
+				LabelFunc: func() string {
+					if fav() {
+						return t.Unfavorite()
+					}
+					return t.Favorite()
+				},
+				Tint: func() core.Color {
+					if fav() {
+						return colors.Danger()
+					}
+					return colors.Text()
+				},
+				OnPress: func() { s.toggleFavoriteOutfit(item()) }},
+		}},
+	}}
+}
+
+// library is one gallery to choose from: its chips and a grid of cards, columns wide.
+func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 	t := locales.For(cx)
 	colors := ui.ColorsOf(cx)
 	res := s.catalogs[k]
@@ -161,7 +306,7 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int, captions bool) cor
 		}
 		return chips(cx, t.FiltersLabel(), "chip", options, filter.Get, filter.Set)
 	})
-	grid := core.List{Style: fill, NumColumns: columns, Gap: 10, ColumnGap: 10, EstimatedSize: 180,
+	grid := core.List{Style: fill, NumColumns: columns, Gap: 10, ColumnGap: 10, EstimatedSize: 200,
 		Count: func() int { return len(items.Get()) },
 		Key: func(i int) any {
 			it, _ := at(i)
@@ -176,35 +321,18 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int, captions bool) cor
 				c := chosen.Get()
 				return c != nil && c.ID == item().ID
 			}
-			label := func() string {
+			sub := func() string {
 				it := item()
-				if it.Title == "" {
-					return groupLabel(t, it.Group) + " · " + it.ID
+				if k == KindCostume {
+					return it.ID
 				}
-				return it.Title
+				return groupLabel(t, it.Group)
 			}
-			children := []core.Node{core.Image{ResizeMode: cellFit(k),
-				Style:      core.Style{Width: core.Pct(100), AspectRatio: cellAspect(k), CornerRadius: 10},
-				SourceFunc: func() core.ImageSource { return core.Src(item().Thumb) }}}
-			if captions {
-				children = append(children, core.Text{ContentFunc: label, MaxLines: 1,
-					Style: core.Style{FontSize: 13, Padding: core.Symmetric(6, 4)}})
-			}
-			return core.View{Role: core.RoleButton, LabelFunc: label, Selected: on,
-				OnPress: func(core.PressEvent) {
-					if it, ok := at(row.Index()); ok {
-						s.choose(k, it)
-					}
-				},
-				StyleFunc: func() core.Style {
-					st := core.Style{Padding: core.All(4), CornerRadius: 14, BorderWidth: 1, BorderColor: colors.Border(), Background: colors.Surface(), Overflow: core.Hidden}
-					if on() {
-						st.BorderColor, st.BorderWidth = colors.Accent(), 2.5
-					}
-					return st
-				},
-				Children: children,
-			}
+			return s.itemCard(cx, k, item, on, sub, func() {
+				if it, ok := at(row.Index()); ok {
+					s.choose(k, it)
+				}
+			})
 		},
 	}
 	state := core.Dynamic(func(cx *core.Scope) core.Node {
@@ -227,20 +355,16 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int, captions bool) cor
 	return core.View{Style: fill, TestID: "library", Children: []core.Node{state}}
 }
 
-// thumb is a chosen item's small picture, or an empty well, white where it sits on the inset color.
-func thumb(cx *core.Scope, k Kind, it func() *Item, w, h core.Points, round, onInset bool) core.Node {
+// thumb is a chosen item's small picture, or an empty well.
+func thumb(cx *core.Scope, k Kind, it func() *Item, w, h core.Points, round bool) core.Node {
 	colors := ui.ColorsOf(cx)
-	radius := core.Points(10)
+	radius := core.Points(12)
 	if round {
 		radius = w / 2
 	}
 	return core.View{
 		StyleFunc: func() core.Style {
-			bg := colors.Inset()
-			if onInset {
-				bg = colors.Surface()
-			}
-			return core.Style{Width: core.Pt(w), Height: core.Pt(h), CornerRadius: radius, Overflow: core.Hidden, Background: bg,
+			return core.Style{Width: core.Pt(w), Height: core.Pt(h), CornerRadius: radius, Overflow: core.Hidden, Background: colors.Inset(),
 				AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter, Color: colors.Muted(), FlexShrink: 0}
 		},
 		Children: []core.Node{core.Show{
@@ -259,139 +383,149 @@ func thumb(cx *core.Scope, k Kind, it func() *Item, w, h core.Points, round, onI
 	}
 }
 
-// lookRow is one line of the look: the item's picture, the gallery's name and what was chosen.
-func (s *studio) lookRow(cx *core.Scope, k Kind, chevron bool, onPress func()) core.Node {
+// lookRow is one element of the look: its picture, its number and gallery, and what was chosen, outlined while its gallery is open on the desktop.
+func (s *studio) lookRow(cx *core.Scope, k Kind, onPress func()) core.Node {
 	t := locales.For(cx)
 	colors := ui.ColorsOf(cx)
 	chosen := s.chosen[k]
-	children := []core.Node{
-		thumb(cx, k, chosen.Get, 52, 52, k == KindFace, s.wide()),
-		core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 3}, Children: []core.Node{
-			core.Text{Content: slotName(t, k), StyleFunc: func() core.Style {
-				return core.Style{FontSize: 13, Color: colors.Muted()}
-			}},
-			core.Text{ContentFunc: func() string { return itemDetail(t, chosen.Get()) }, MaxLines: 1,
-				Style: core.Style{FontSize: 16, FontWeight: core.FontWeightSemibold}},
-		}},
+	value := func() string {
+		if it := chosen.Get(); it != nil {
+			return itemName(t, it)
+		}
+		return slotName(t, k)
 	}
-	if chevron {
-		children = append(children, core.Icon{SVG: lucide.ChevronRight(), StyleFunc: func() core.Style {
-			return core.Style{FontSize: 18, Color: colors.Muted()}
-		}})
-	}
-	return core.View{Role: core.RoleButton, TestID: "row-" + kindKey(k),
-		LabelFunc: func() string { return slotName(t, k) + ", " + itemDetail(t, chosen.Get()) },
-		Selected:  func() bool { return s.wide() && s.step.Get() == k },
+	active := func() bool { return s.wide() && s.step.Get() == k }
+	return core.View{Role: core.RoleButton, TestID: "row-" + kindKey(k), Selected: active,
+		LabelFunc: func() string { return slotName(t, k) + ", " + itemName(t, chosen.Get()) },
 		OnPress:   func(core.PressEvent) { onPress() },
 		StyleFunc: func() core.Style {
-			st := core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 14, Padding: core.Symmetric(12, 14), CornerRadius: 16, Background: colors.Surface(), BorderWidth: 1, BorderColor: colors.Surface()}
-			if s.wide() {
-				st.Background, st.BorderColor = colors.Inset(), colors.Inset()
-				if s.step.Get() == k {
-					st.BorderColor = colors.Accent()
-				}
+			st := core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 14, Padding: core.Symmetric(10, 12), CornerRadius: 16,
+				Background: colors.Background(), BorderWidth: 1, BorderColor: colors.Border()}
+			if active() {
+				st.BorderColor, st.Background = colors.Accent(), colors.Inset()
 			}
 			return st
 		},
-		Children: children,
+		Children: []core.Node{
+			thumb(cx, k, chosen.Get, 48, 48, k == KindFace),
+			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 4}, Children: []core.Node{
+				core.Text{Content: slotEyebrow(t, k), StyleFunc: func() core.Style {
+					return core.Style{FontSize: 10, LetterSpacing: 1.5, Color: colors.Muted()}
+				}},
+				core.Text{ContentFunc: value, MaxLines: 1, Style: core.Style{FontSize: 15, FontWeight: core.FontWeightSemibold}},
+			}},
+		},
 	}
 }
 
-func kindKey(k Kind) string {
-	switch k {
-	case KindFace:
-		return "face"
-	case KindCostume:
-		return "costume"
-	default:
-		return "pose"
+// heroItem is the picture the look leads with: the outfit, else the pose, else the face.
+func (s *studio) heroItem() *Item {
+	for _, k := range []Kind{KindCostume, KindPose, KindFace} {
+		if it := s.chosen[k].Get(); it != nil {
+			return it
+		}
 	}
+	return nil
 }
 
-// preview shows the look's references together: the outfit large, or the pose, or the face when nothing else is chosen, with the others small at its corner.
-func (s *studio) preview(cx *core.Scope, small core.Points) core.Node {
+func (s *studio) heroImage(cx *core.Scope) core.Node {
 	colors := ui.ColorsOf(cx)
-	order := []Kind{KindCostume, KindPose, KindFace}
-	main := func() *Item {
-		for _, k := range order {
-			if it := s.chosen[k].Get(); it != nil {
-				return it
-			}
-		}
-		return nil
+	return core.Show{
+		When: func() bool { return s.heroItem() != nil },
+		Then: func(*core.Scope) core.Node {
+			return core.Image{ResizeMode: core.Contain, TestID: "hero", Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
+				SourceFunc: func() core.ImageSource {
+					if it := s.heroItem(); it != nil {
+						return core.Src(it.Thumb)
+					}
+					return core.ImageSource{}
+				}}
+		},
+		Else: func(*core.Scope) core.Node {
+			return core.View{StyleFunc: func() core.Style {
+				return core.Style{FlexGrow: 1, AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter, Color: colors.Muted()}
+			}, Children: []core.Node{core.Icon{SVG: lucide.Sparkles(), Style: core.Style{FontSize: 40}}}}
+		},
 	}
-	others := core.Dynamic(func(cx *core.Scope) core.Node {
-		m := main()
-		var nodes []core.Node
-		for _, k := range []Kind{KindFace, KindPose, KindCostume} {
-			it := s.chosen[k].Get()
-			if it == nil || it == m {
-				continue
-			}
-			h := small
-			if k != KindFace {
-				h = small * 4 / 3
-			}
-			nodes = append(nodes, core.View{StyleFunc: func() core.Style {
-				return core.Style{Padding: core.All(3), CornerRadius: small, Background: colors.Surface()}
-			}, Children: []core.Node{thumb(cx, k, s.chosen[k].Get, small, h, k == KindFace, false)}})
-		}
-		return core.View{Style: core.Style{Position: core.Absolute, Left: core.Pt(16), Bottom: core.Pt(16), Gap: 10}, Children: nodes}
-	})
-	return core.View{TestID: "preview",
+}
+
+// serviceName names the kind of AI service.
+func serviceName(t locales.Messages, k serviceKind) string {
+	if k == serviceLocal {
+		return t.ServiceLocal()
+	}
+	return t.ServiceCloud()
+}
+
+// statusText says whether the AI service is set up and answered its test.
+func (s *studio) statusText(t locales.Messages) string {
+	if !s.configured() {
+		return t.StatusUnconfigured()
+	}
+	name := serviceName(t, s.service.Get())
+	switch s.conn.Get() {
+	case connOK:
+		return t.StatusConnected(name)
+	case connFailed:
+		return t.StatusFailed(name)
+	case connTesting:
+		return t.StatusTesting(name)
+	}
+	return t.StatusUntested(name)
+}
+
+// statusBadge is the service's status as a pill with a colored dot, opening its settings.
+func (s *studio) statusBadge(cx *core.Scope) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	return core.View{Role: core.RoleButton, TestID: "status", LabelFunc: func() string { return s.statusText(t) },
+		OnPress: func(core.PressEvent) { s.openSettings() },
 		StyleFunc: func() core.Style {
-			return core.Style{FlexGrow: 1, CornerRadius: 24, Overflow: core.Hidden, Background: colors.Inset(), Color: colors.Muted(),
-				AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}
+			return core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 8, Padding: core.Symmetric(8, 14), CornerRadius: 999,
+				BorderWidth: 1, BorderColor: colors.Border(), Background: colors.Surface().Faded(0.85)}
 		},
 		Children: []core.Node{
-			core.Show{
-				When: func() bool { return main() != nil },
-				Then: func(*core.Scope) core.Node {
-					return core.Image{ResizeMode: core.Contain, Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
-						SourceFunc: func() core.ImageSource {
-							if it := main(); it != nil {
-								return core.Src(it.Thumb)
-							}
-							return core.ImageSource{}
-						}}
-				},
-				Else: func(*core.Scope) core.Node { return core.Icon{SVG: lucide.Sparkles(), Style: core.Style{FontSize: 40}} },
-			},
-			others,
+			core.View{StyleFunc: func() core.Style {
+				dot := colors.Accent()
+				switch {
+				case !s.configured():
+				case s.conn.Get() == connOK:
+					dot = ui.ColorsOf(cx).Up()
+				case s.conn.Get() == connFailed:
+					dot = colors.Danger()
+				default:
+					dot = colors.Muted()
+				}
+				return core.Style{Width: core.Pt(7), Height: core.Pt(7), CornerRadius: 4, Background: dot}
+			}},
+			core.Text{ContentFunc: func() string { return s.statusText(t) }, Style: core.Style{FontSize: 13}},
 		},
 	}
 }
 
-// generateButton starts the look, or says what it still lacks.
+// generateButton starts the look, or opens the service's settings while none is set up.
 func (s *studio) generateButton(cx *core.Scope) core.Node {
 	t := locales.For(cx)
-	return ui.Button{Text: t.Generate(), Icon: lucide.Sparkles, Size: ui.SizeLarge, TestID: "generate",
-		Style:    core.Style{Width: core.Pct(100), CornerRadius: 999},
-		Disabled: func() bool { return s.request().Validate() != nil },
-		Busy:     s.busy.Get, OnPress: s.generate}
+	return core.Dynamic(func(cx *core.Scope) core.Node {
+		text := t.Generate()
+		if !s.configured() {
+			text = t.GenerateNeedsService()
+		}
+		return ui.Button{Text: text, Icon: lucide.Sparkles, Size: ui.SizeLarge, TestID: "generate",
+			Style:    core.Style{Width: core.Pct(100), Height: core.Pt(56), CornerRadius: 999},
+			Disabled: func() bool { return s.configured() && s.look().Validate() != nil },
+			Busy:     s.busy.Get, OnPress: s.generate}
+	})
 }
 
-// needHint says why Generate is off, empty while it is on.
+// needHint says why Generate is off: no pose yet.
 func (s *studio) needHint(cx *core.Scope) core.Node {
 	t := locales.For(cx)
-	colors := ui.ColorsOf(cx)
-	return core.Show{When: func() bool { return s.request().Validate() != nil }, Then: func(*core.Scope) core.Node {
+	return core.Show{When: func() bool { return s.configured() && s.look().Validate() != nil }, Then: func(cx *core.Scope) core.Node {
+		colors := ui.ColorsOf(cx)
 		return core.Text{Content: t.NeedPose(), TestID: "hint", StyleFunc: func() core.Style {
 			return ui.TypeCaption.Merge(core.Style{Color: colors.Muted(), TextAlign: core.TextAlignCenter})
 		}}
-	}}
-}
-
-// countPicker chooses how many pictures one Generate asks for.
-func (s *studio) countPicker(cx *core.Scope) core.Node {
-	t := locales.For(cx)
-	var options []ui.Option[int]
-	for _, n := range []int{1, 2, maxCount} {
-		options = append(options, ui.Option[int]{Value: n, Label: t.CountOption(n), TestID: fmt.Sprintf("count-%d", n)})
-	}
-	return core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, JustifyContent: core.JustifySpaceBetween, Gap: 12}, Children: []core.Node{
-		core.Text{Content: t.CountLabel(), Style: core.Style{FontSize: 15}},
-		ui.Tabs[int]{Label: t.CountLabel(), Options: options, Value: s.count.Get, OnChange: s.count.Set, Size: ui.SizeSmall},
 	}}
 }
 
@@ -400,21 +534,21 @@ func (s *studio) noteInput(cx *core.Scope) core.Node {
 	return ui.Input{Value: s.note.Get, OnChange: s.note.Set, Multiline: true, Label: t.NoteLabel(), Placeholder: t.NotePlaceholder(), TestID: "note"}
 }
 
-// generatingScreen covers the app while a look is made, dark in either appearance, with a way to stop it.
+// generatingScreen covers the app while a look is made, with a way to stop it.
 func (s *studio) generatingScreen(cx *core.Scope) core.Node {
 	t := locales.For(cx)
-	cx.SetSubtreeAppearance(core.AppearanceDark)
 	colors := ui.ColorsOf(cx)
 	return core.View{TestID: "generating", Role: core.RoleAlert, Label: t.Generating(),
 		StyleFunc: func() core.Style {
 			return core.Style{Position: core.Absolute, Top: core.Pt(0), Right: core.Pt(0), Bottom: core.Pt(0), Left: core.Pt(0),
-				Background: colors.Background(), Color: colors.Text(), AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter, Gap: 28}
+				Background: colors.Background().Faded(0.96), Color: colors.Text(), AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter, Gap: 28}
 		},
 		Children: []core.Node{
 			core.View{StyleFunc: func() core.Style {
-				return core.Style{Width: core.Pt(200), Height: core.Pt(268), CornerRadius: 24, Background: colors.Surface(), AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}
+				return core.Style{Width: core.Pt(200), Height: core.Pt(268), CornerRadius: 24, Background: colors.Surface(), BorderWidth: 1, BorderColor: colors.Border(),
+					AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}
 			}, Children: []core.Node{ui.Spinner{Size: 44, Label: t.Generating()}}},
-			core.Text{Content: t.Generating(), Style: core.Style{FontSize: 17, FontWeight: core.FontWeightSemibold}},
+			eyebrow(cx, t.Generating),
 			ui.Button{Text: t.Cancel(), Variant: ui.ButtonOutline, OnPress: s.cancelGenerating, TestID: "cancel", Style: core.Style{CornerRadius: 999}},
 		},
 	}

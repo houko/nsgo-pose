@@ -1,20 +1,14 @@
-# Mirra's look: warm paper, white cards and one blue accent.
+# Mirra's look: a dark studio with warm amber light. The app always shows it dark, so both appearances carry the same colors.
 radius: 14
-light:
-  background: "#f3f2ee"
-  surface: "#ffffff"
-  text: "#1f1e1d"
-  textMuted: "#6b6a68"
-  border: "#e4e2dc"
-  accent: "#2e4be0"
-  accentText: "#ffffff"
-  inset: "#e8e5de"
-dark:
-  background: "#141413"
-  surface: "#1f1f1d"
-  text: "#f1f0ec"
-  textMuted: "#a19f99"
-  border: "#33322f"
-  accent: "#6f86ff"
-  accentText: "#ffffff"
-  inset: "#2a2926"
+light: &mirra
+  background: "#0e0d0c"
+  surface: "#191816"
+  text: "#f3efe8"
+  textMuted: "#9b958b"
+  border: "#2d2a26"
+  accent: "#e3be86"
+  accentText: "#1b1610"
+  inset: "#23211e"
+  success: "#7fd6a4"
+  danger: "#f08b80"
+dark: *mirra

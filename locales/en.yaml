@@ -7,13 +7,38 @@ brand:
 brandTagline:
   message: ""
   description: Words beside the brand, empty where the brand says enough.
+openSourceBadge: OPEN SOURCE
+openSourceTerms: Open source · free · no account
 tabStudio: Studio
 tabWardrobe: Wardrobe
 tabWorks: Works
+worksTabCount:
+  message: "Works {n, number}"
+  description: The Works tab with how many pictures it holds.
 tabMe: Me
-tabSettings: Settings
 tabsLabel: Sections
 lookTitle: This look
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup:
+  message: "TODAY'S LOOK · {group}"
+  description: Above the home page's title; group is the outfit's season or occasion.
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup:
+  message: "LIVE PREVIEW · {group}"
+  description: Above the desktop canvas's title; group is the outfit's season or occasion.
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo:
+  message: "LOOKBOOK · NO.{no}"
+  description: Above a saved picture's title; n is its number in Works.
+eyebrowNewLook:
+  message: "NEW LOOK · TRY {n, number}"
+  description: Above a picture not saved yet; n counts the tries of this look.
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
 slotFace: Face
 slotCostume: Outfit
 slotPose: Pose
@@ -25,28 +50,33 @@ stepTab:
   message: "{n} {name}"
   description: A step of the look's editor, such as "1 Face".
 stepsLabel: Steps
+selectedItem:
+  message: "Selected · {id}"
+  description: Above the chosen item's name; id is the gallery's code, such as WIN-0090.
 done: Done
 back: Back
+close: Close
 nextCostume: "Next: outfit"
 nextPose: "Next: pose"
 generate: Generate
-countLabel: Pictures
-countOption:
-  message: "{n, plural, one {# picture} other {# pictures}}"
-  description: How many pictures one Generate asks for.
+generateNeedsService: "Generate · set up an AI service"
 needPose: Choose a pose first.
-needKey: Add an API key in Settings first.
+needService: Set up an AI service first.
+viaService:
+  message: "Made through {service}, with no third party"
+  description: Under Generate; service is Cloud API or Local server.
+configureOnce: Free and open source; set it up once
 generating: Generating
 cancel: Cancel
 generateFailed: Generation failed
-generatedMany:
-  message: "{n, plural, one {# picture} other {# pictures}} generated; see Works."
-  description: A toast after one Generate made several pictures.
-selectedItem:
-  message: "Selected · {id}"
-  description: Above the chosen outfit's keywords; id is the gallery's code, such as WIN-0090.
-filtersLabel: Filters
+changeFace: Change face
+changePose: Change pose
+zoomIn: Zoom in
+zoomOut: Zoom out
+zoomPercent: "{n, number}%"
+filtersLabel: Galleries
 all: All
+allCount: "All {n, number}"
 angleFront: Front
 angleThreeQuarter: Three-quarter
 angleSide: Side
@@ -66,25 +96,97 @@ loadFailed: Couldn't load the gallery
 retry: Retry
 noteLabel: Extra instructions
 notePlaceholder: Anything else, such as lighting or background
-resultTitle: Result
-save: Save
-share: Share
+favorite: Add to favorites
+unfavorite: Remove from favorites
+favorites: Favorites
+favoritesCount: "Favorites {n, number}"
+myUploads: My clothes
+uploadsCount: "My clothes {n, number}"
+outfitGallery: Outfit gallery
+galleryCount: "Gallery {n, number}"
+uploadName:
+  message: "My clothes {n}"
+  description: The name of a photo of the user's own clothes; n is its number, such as 01.
+uploadClothes: Add clothes
+wearing: Wearing
+tapToTry:
+  message: "Tap to try on · {group}"
+  description: Under an outfit in the wardrobe; group is its season or occasion.
+wearAndGenerate: Wear it
+noFavoritesTitle: No favorites yet
+noFavoritesBody: Tap ♡ on an outfit in the gallery to keep it here.
+noUploadsTitle: No clothes added yet
+noUploadsBody: Add a photo of clothes laid flat or on a hanger.
+swapOutfit: Same face, another outfit
+swapTo:
+  message: "Wear {name}"
+  description: A button that makes the picture again in another outfit.
+usedFace: Face used
+usedPose: Pose used
+regenerate: Again
+regenerateOnce: Generate again
+saveToWorks: Save to Works
+inWorks: In Works
+savedToWorks:
+  message: "Saved as No.{no}"
+  description: A toast after a picture was saved to Works.
+seeWorks: See
+export: Export
+exported: Exported
+deleted: Deleted
 delete: Delete
-saved: Saved
-saveFailed: Couldn't save the picture
 deleteConfirm: Delete this picture?
-deleteConfirmBody: It is removed from Works on this device.
-noWorks: Pictures you generate appear here.
-workLabel:
-  message: Picture from {date, date, medium} {date, time, short}
-  description: Accessibility label of a generated picture in Works.
-apiSection: Image API
-apiFooter: Any OpenAI-compatible image editing endpoint (POST /images/edits). The key is kept in the system's keychain.
-baseURL: Base URL
+deleteConfirmBody: It is removed from this device.
+saveFailed: Couldn't save
+backToEdit: Back to the look
+worksFilter: Show
+noWorksTitle: Your lookbook is empty
+noWorksBody: Generate a look and save it to Works to keep it here.
+noFavoriteWorksTitle: No favorite pictures yet
+firstLook: Make your first look
+openWork:
+  message: "Open No.{no}"
+  description: Accessibility label of a saved picture in Works.
+aiService: AI service
+aiServiceSettings: AI service settings
+serviceIntro: Set up an AI service and test the connection, and you can start making looks.
+serviceKind: Service
+serviceCloud: Cloud API
+serviceLocal: Local server
+baseURL: Address
 apiKey: API key
+apiKeyOptional: API key (optional for a local server)
 apiKeyPlaceholder: sk-…
+showKey: Show
+hideKey: Hide
 model: Model
 size: Size
+testConnection: Test connection
+testAgain: Test again
+connectionOK: Connected; you can start making looks.
+connectionFailed:
+  message: "Couldn't connect: {error}"
+  description: Under Test connection; error is what the server or the network said.
+statusUnconfigured: No AI service
+statusConnected:
+  message: "{service} · connected"
+  description: The service's status; service is Cloud API or Local server.
+statusUntested:
+  message: "{service} · not tested"
+  description: The service's status before its connection was tested.
+statusTesting:
+  message: "{service} · testing…"
+  description: The service's status while its connection is tested.
+statusFailed:
+  message: "{service} · can't connect"
+  description: The service's status after its test failed.
+privacyCloud: The key stays in this device's keychain. Requests go straight from your device to the service you set up, through no other server.
+privacyLocal: Requests go straight from your device to your own server, through no other server, at no cost.
 keyUnavailable: This device has no secure store for the key.
-sourcesSection: Galleries
-sourcesFooter: Poses come from POSE-DB-01, outfits from COSTUME-DB-01 and faces from FACE REFERENCE (CC0). Each image is fetched only when you use it; the app neither bundles nor redistributes them.
+aboutSection: About
+sourceCode: Source code
+license: License
+sourcesPose: Poses
+sourcesOutfit: Outfits
+sourcesFace: Faces
+sourcesFooter: Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them.

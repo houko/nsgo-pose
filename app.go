@@ -1,9 +1,10 @@
-// Command nsgo-pose is Mirra (镜衣): it puts a pose, an outfit and a face from three public reference galleries together and has an OpenAI-compatible image model draw the result.
+// Command nsgo-pose is Mirra (镜衣): it puts a face, an outfit and a pose from three public reference galleries together and has an OpenAI-compatible image model, in the cloud or on the user's own machine, draw the result.
 package main
 
 import (
 	"context"
 	_ "embed"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"os"
@@ -20,24 +21,27 @@ import (
 
 func main() {
 	app := App{Client: &http.Client{Timeout: 5 * time.Minute}, Sites: DefaultSites}
-	nsgo.Run(app.Root, nsgo.WindowSize(1280, 820))
+	nsgo.Run(app.Root, nsgo.WindowSize(1280, 860))
 }
 
 //go:embed theme.yaml
 var themeYAML []byte
 
+// repoURL is where the app's source lives.
+const repoURL = "https://github.com/houko/nsgo-pose"
+
 // App is the app with what it reaches outside: tests give it local servers and a temporary directory.
 type App struct {
 	Client *http.Client
 	Sites  Sites
-	// WorksDir keeps generated pictures; the app's data directory when empty.
-	WorksDir string
+	// DataDir keeps works and uploads; the app's data directory when empty.
+	DataDir string
 }
 
-// wideWidth is the window width, in points, from which the app shows the desktop studio's three columns instead of the phone's tabs.
+// wideWidth is the window width, in points, from which the app shows the desktop studio instead of the phone's tabs.
 const wideWidth = 900
 
-// Sections of the app, in the tab bar's order.
+// Sections of the app, in the tab bar's order. The desktop shows settings in a dialog rather than as a section.
 const (
 	sectionStudio = iota
 	sectionWardrobe
@@ -53,15 +57,31 @@ type page int
 const (
 	pageHome page = iota
 	pageEditor
-	pageWork
+	pageShot
 )
 
-type route struct {
-	page page
-	work work
-}
+type route struct{ page page }
 
-const apiKeyAccount = "api-key"
+// Storage keys and secret accounts.
+const (
+	keyService        = "service"
+	keyCloudURL       = "baseURL"
+	keyLocalURL       = "localURL"
+	keyModel          = "model"
+	keySize           = "size"
+	keyFavorites      = "favoriteOutfits"
+	apiKeyAccount     = "api-key"
+	localKeyAccount   = "local-api-key"
+	resultsFolderName = "results"
+)
+
+// shot is a generated picture on show: just made, with the look that made it, or a saved work opened again.
+type shot struct {
+	Path    string
+	Req     Request
+	Attempt int
+	Saved   *work
+}
 
 // studio is the app's state, shared by the phone and desktop layouts.
 type studio struct {
@@ -76,22 +96,43 @@ type studio struct {
 	// filter is each gallery's chip, "" for all.
 	filter [3]*core.Signal[string]
 	note   *core.Signal[string]
-	count  *core.Signal[int]
 
 	busy   *core.Signal[bool]
 	cancel context.CancelFunc
-	// shown is the desktop canvas's last result, shown until the look changes.
-	shown *core.Signal[*work]
+	shot   *core.Signal[*shot]
+	zoom   *core.Signal[int]
 
-	baseURL, apiKey, model, size *core.Signal[string]
+	service                *core.Signal[serviceKind]
+	cloudURL, localURL     *core.Signal[string]
+	cloudKey, localKey     *core.Signal[string]
+	model, size            *core.Signal[string]
+	conn                   *core.Signal[connState]
+	connErr                *core.Signal[string]
+	showKey, settingsShown *core.Signal[bool]
 
-	works    *core.Signal[[]work]
-	catalogs [3]*core.Resource[Catalog]
+	works       *core.Signal[[]work]
+	favoritesOn *core.Signal[bool]
+	favorites   *core.Signal[[]Item]
+	uploads     *core.Signal[[]Item]
+	closet      *core.Signal[int]
+	catalogs    [3]*core.Resource[Catalog]
 
 	studioNav, worksNav *base.Nav[route]
 }
 
 var fill = core.Style{FlexGrow: 1, FlexShrink: 1, FlexBasis: core.Pt(0)}
+
+func itemsEqual(a, b []Item) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
 
 // Root is the app: the desktop studio in a wide window, the phone's tabs otherwise, with the generating screen and toasts over either.
 func (a App) Root(cx *core.Scope) core.Node {
@@ -100,6 +141,7 @@ func (a App) Root(cx *core.Scope) core.Node {
 		panic(err) // the embedded theme is part of the build
 	}
 	cx.SetTheme(theme)
+	cx.SetAppearance(core.AppearanceDark)
 	s := newStudio(cx, a)
 	colors := ui.ColorsOf(cx)
 	env := cx.Env()
@@ -131,21 +173,40 @@ func newStudio(cx *core.Scope, a App) *studio {
 		}
 		return core.NewSignal(cx, v)
 	}
+	service := serviceCloud
+	if v, _ := store.GetItem(keyService); serviceKind(v) == serviceLocal {
+		service = serviceLocal
+	}
+	var favorites []Item
+	if v, ok := store.GetItem(keyFavorites); ok {
+		_ = json.Unmarshal([]byte(v), &favorites)
+	}
 	s := &studio{
-		App:     a,
-		cx:      cx,
-		toaster: ui.NewToaster(cx),
-		section: core.NewSignal(cx, sectionStudio),
-		step:    core.NewSignal(cx, KindFace),
-		note:    core.NewSignal(cx, ""),
-		count:   core.NewSignal(cx, 1),
-		busy:    core.NewSignal(cx, false),
-		shown:   core.NewSignal[*work](cx, nil),
-		baseURL: stored("baseURL", defaultBaseURL),
-		apiKey:  core.NewSignal(cx, ""),
-		model:   stored("model", defaultModel),
-		size:    stored("size", defaultSize),
-		works:   core.NewSignalFunc[[]work](cx, nil, nil),
+		App:           a,
+		cx:            cx,
+		toaster:       ui.NewToaster(cx),
+		section:       core.NewSignal(cx, sectionStudio),
+		step:          core.NewSignal(cx, KindFace),
+		note:          core.NewSignal(cx, ""),
+		busy:          core.NewSignal(cx, false),
+		shot:          core.NewSignal[*shot](cx, nil),
+		zoom:          core.NewSignal(cx, 100),
+		service:       core.NewSignal(cx, service),
+		cloudURL:      stored(keyCloudURL, defaultBaseURL),
+		localURL:      stored(keyLocalURL, defaultLocalURL),
+		cloudKey:      core.NewSignal(cx, ""),
+		localKey:      core.NewSignal(cx, ""),
+		model:         stored(keyModel, defaultModel),
+		size:          stored(keySize, defaultSize),
+		conn:          core.NewSignal(cx, connUntested),
+		connErr:       core.NewSignal(cx, ""),
+		showKey:       core.NewSignal(cx, false),
+		settingsShown: core.NewSignal(cx, false),
+		works:         core.NewSignalFunc[[]work](cx, nil, nil),
+		favoritesOn:   core.NewSignal(cx, false),
+		favorites:     core.NewSignalFunc(cx, favorites, itemsEqual),
+		uploads:       core.NewSignalFunc[[]Item](cx, nil, itemsEqual),
+		closet:        core.NewSignal(cx, closetGallery),
 	}
 	for k := range s.chosen {
 		kind := Kind(k)
@@ -162,41 +223,52 @@ func newStudio(cx *core.Scope, a App) *studio {
 	s.worksNav = base.NewNav(cx, route{page: pageHome})
 
 	secrets := cx.Secrets()
-	dir := s.worksDir()
+	worksDir, uploadsDir := s.dir("works"), s.dir("uploads")
 	go func() {
-		key, ok, keyErr := secrets.Get(apiKeyAccount)
-		list, listErr := listWorks(dir)
+		cloudKey, cloudOK, cloudErr := secrets.Get(apiKeyAccount)
+		localKey, localOK, localErr := secrets.Get(localKeyAccount)
+		list, listErr := listWorks(worksDir)
+		uploads, uploadsErr := listUploads(uploadsDir)
 		cx.Post(func() {
-			if keyErr == nil && ok && s.apiKey.Get() == "" {
-				s.apiKey.Set(key)
+			if cloudErr == nil && cloudOK && s.cloudKey.Get() == "" {
+				s.cloudKey.Set(cloudKey)
+			}
+			if localErr == nil && localOK && s.localKey.Get() == "" {
+				s.localKey.Set(localKey)
 			}
 			if listErr == nil {
 				s.works.Set(list)
+			}
+			if uploadsErr == nil {
+				s.uploads.Set(uploads)
 			}
 		})
 	}()
 	return s
 }
 
-func (s *studio) worksDir() string {
-	if s.WorksDir != "" {
-		return s.WorksDir
+// dir is a folder of the app's data: works, uploads, or results not saved yet.
+func (s *studio) dir(name string) string {
+	root := s.DataDir
+	if root == "" {
+		root = s.cx.DataDir()
 	}
-	if d := s.cx.DataDir(); d != "" {
-		return filepath.Join(d, "works")
+	if root == "" {
+		root = filepath.Join(os.TempDir(), "nsgo-pose")
 	}
-	return filepath.Join(os.TempDir(), "nsgo-pose", "works")
+	return filepath.Join(root, name)
 }
 
 func (s *studio) choose(k Kind, it Item) {
 	s.chosen[k].Set(&it)
-	s.shown.Set(nil)
+	if sh := s.shot.Get(); sh != nil && sh.Saved == nil {
+		s.shot.Set(nil)
+	}
 }
 
-// request is the look as chosen; reading it inside a binding follows every choice.
-func (s *studio) request() Request {
-	return Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(),
-		Note: s.note.Get(), Count: s.count.Get()}
+// look is the look as chosen; reading it inside a binding follows every choice.
+func (s *studio) look() Request {
+	return Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Note: s.note.Get()}
 }
 
 func (s *studio) wide() bool { return s.cx.Env().Window().Width >= wideWidth }
@@ -205,37 +277,77 @@ func (s *studio) toastError(title string, err error) {
 	s.toaster.Show(ui.ToastContent{Type: ui.ToastError, Title: title, Description: err.Error()})
 }
 
-// generate asks the image API for the look, keeps the pictures in Works and shows the first: on the desktop canvas, or as a page on a phone.
-func (s *studio) generate() {
+// config is the image API as set up in settings.
+func (s *studio) config() Config {
+	cfg := Config{Model: s.model.Get(), Size: s.size.Get(), Local: s.service.Get() == serviceLocal}
+	if cfg.Local {
+		cfg.BaseURL, cfg.APIKey = s.localURL.Get(), s.localKey.Get()
+	} else {
+		cfg.BaseURL, cfg.APIKey = s.cloudURL.Get(), s.cloudKey.Get()
+	}
+	return cfg
+}
+
+// configured says whether a Generate can be sent: an address, and a key unless the server is the user's own.
+func (s *studio) configured() bool {
+	cfg := s.config()
+	return strings.TrimSpace(cfg.BaseURL) != "" && (cfg.Local || strings.TrimSpace(cfg.APIKey) != "")
+}
+
+// openSettings shows the AI service settings: a dialog on the desktop, the Me tab on a phone.
+func (s *studio) openSettings() {
+	if s.wide() {
+		s.settingsShown.Set(true)
+		return
+	}
+	s.section.Set(sectionSettings)
+}
+
+// generate makes the studio's look, as the first try.
+func (s *studio) generate() { s.generateLook(s.look(), 1) }
+
+// regenerate makes the shot on show again, or again with another outfit.
+func (s *studio) regenerate(costume *Item) {
+	sh := s.shot.Get()
+	if sh == nil {
+		return
+	}
+	req := sh.Req
+	if costume != nil {
+		req.Costume = costume
+		s.chosen[KindCostume].Set(costume)
+	}
+	s.generateLook(req, sh.Attempt+1)
+}
+
+// generateLook asks the image API for req and shows the picture, kept aside until the user saves it to Works.
+func (s *studio) generateLook(req Request, attempt int) {
 	t := locales.For(s.cx)
-	req := s.request()
-	if req.Validate() != nil || s.busy.Get() {
+	if s.busy.Get() {
 		return
 	}
-	cfg := Config{BaseURL: s.baseURL.Get(), APIKey: s.apiKey.Get(), Model: s.model.Get(), Size: s.size.Get()}
-	if strings.TrimSpace(cfg.APIKey) == "" {
-		s.toaster.Show(ui.ToastContent{Type: ui.ToastWarning, Title: t.NeedKey()})
-		s.section.Set(sectionSettings)
+	// Without a service the button says so, and pressing it opens the settings even before a pose is chosen.
+	if !s.configured() {
+		s.toaster.Show(ui.ToastContent{Type: ui.ToastWarning, Title: t.NeedService()})
+		s.openSettings()
 		return
 	}
+	if req.Validate() != nil {
+		return
+	}
+	cfg := s.config()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	s.cancel = cancel
 	s.busy.Set(true)
-	dir, now, client := s.worksDir(), s.cx.Now(), s.Client
+	dir, now, client := s.dir(resultsFolderName), s.cx.Now(), s.Client
 	go func() {
 		pictures, err := Generate(ctx, client, cfg, req)
 		// Whether the user cancelled is read before this goroutine's own cancel, which only releases the context.
 		cancelled := errors.Is(ctx.Err(), context.Canceled)
 		cancel()
-		var made []work
-		for i, pic := range pictures {
-			if err != nil {
-				break
-			}
-			var w work
-			// Pictures of one request keep their order by a nanosecond apart.
-			w, err = saveWork(dir, pic, now.Add(time.Duration(len(pictures)-i)))
-			made = append(made, w)
+		var path string
+		if err == nil {
+			path, err = writePicture(dir, pictures[0], now)
 		}
 		s.cx.Post(func() {
 			s.busy.Set(false)
@@ -247,18 +359,7 @@ func (s *studio) generate() {
 				s.toastError(t.GenerateFailed(), err)
 				return
 			}
-			s.works.Update(func(ws []work) []work { return append(append([]work(nil), made...), ws...) })
-			if len(made) > 1 {
-				s.toaster.Show(ui.ToastContent{Type: ui.ToastSuccess, Title: t.GeneratedMany(len(made))})
-			}
-			first := made[0]
-			if s.wide() {
-				s.section.Set(sectionStudio)
-				s.shown.Set(&first)
-				return
-			}
-			s.section.Set(sectionStudio)
-			s.studioNav.SetRoutes(route{page: pageHome}, route{page: pageWork, work: first})
+			s.showShot(&shot{Path: path, Req: req, Attempt: attempt})
 		})
 	}()
 }
@@ -267,4 +368,149 @@ func (s *studio) cancelGenerating() {
 	if s.cancel != nil {
 		s.cancel()
 	}
+}
+
+// showShot puts a picture on show: in the desktop's canvas, or as the phone studio's result page.
+func (s *studio) showShot(sh *shot) {
+	s.shot.Set(sh)
+	s.section.Set(sectionStudio)
+	if !s.wide() {
+		s.studioNav.SetRoutes(route{page: pageHome}, route{page: pageShot})
+	}
+}
+
+// closeShot leaves the picture on show and goes back to the look.
+func (s *studio) closeShot() {
+	s.shot.Set(nil)
+	if !s.wide() {
+		s.studioNav.SetRoutes(route{page: pageHome})
+	}
+}
+
+// openWork shows a saved work with the look it was made from, which Generate again starts from.
+func (s *studio) openWork(w work) {
+	for k, it := range map[Kind]*Item{KindFace: w.Face, KindCostume: w.Costume, KindPose: w.Pose} {
+		if it != nil {
+			s.chosen[k].Set(it)
+		}
+	}
+	saved := w
+	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose}, Saved: &saved})
+}
+
+// saveShot keeps the picture on show in Works, numbered after the others.
+func (s *studio) saveShot(favorite bool) {
+	sh := s.shot.Get()
+	if sh == nil || sh.Saved != nil {
+		return
+	}
+	t := locales.For(s.cx)
+	dir, now := s.dir("works"), s.cx.Now()
+	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose}
+	go func() {
+		w, err := saveWork(dir, sh.Path, now, meta)
+		s.cx.Post(func() {
+			if err != nil {
+				s.toastError(t.SaveFailed(), err)
+				return
+			}
+			s.works.Update(func(ws []work) []work { return append([]work{w}, ws...) })
+			next := *sh
+			next.Path, next.Saved = w.Path, &w
+			s.shot.Set(&next)
+			s.toaster.Show(ui.ToastContent{Type: ui.ToastSuccess, Title: t.SavedToWorks(workNo(w.No)), Action: t.SeeWorks(), OnAction: func() { s.section.Set(sectionWorks) }})
+		})
+	}()
+}
+
+// toggleFavorite stars or unstars the picture on show, saving it first when it is not in Works yet.
+func (s *studio) toggleFavorite() {
+	sh := s.shot.Get()
+	if sh == nil {
+		return
+	}
+	if sh.Saved == nil {
+		s.saveShot(true)
+		return
+	}
+	w := *sh.Saved
+	w.Favorite = !w.Favorite
+	s.updateWork(w)
+	next := *sh
+	next.Saved = &w
+	s.shot.Set(&next)
+}
+
+// updateWork writes a work's changed sidecar and shows it in Works.
+func (s *studio) updateWork(w work) {
+	t := locales.For(s.cx)
+	s.works.Update(func(ws []work) []work {
+		out := append([]work(nil), ws...)
+		for i := range out {
+			if out[i].Path == w.Path {
+				out[i] = w
+			}
+		}
+		return out
+	})
+	go func() {
+		if err := writeMeta(w); err != nil {
+			s.cx.Post(func() { s.toastError(t.SaveFailed(), err) })
+		}
+	}()
+}
+
+// discardShot deletes the picture on show, from Works too when it was saved, after asking.
+func (s *studio) discardShot() {
+	sh := s.shot.Get()
+	if sh == nil {
+		return
+	}
+	t := locales.For(s.cx)
+	base.ShowAlertDialog(s.cx, base.AlertDialog{Title: t.DeleteConfirm(), Description: t.DeleteConfirmBody(), Actions: []core.AlertAction{
+		{Label: t.Cancel(), Role: core.AlertCancel}, {Label: t.Delete(), Role: core.AlertDestructive},
+	}}, func(label string) {
+		if label != t.Delete() {
+			return
+		}
+		go func() {
+			var err error
+			if sh.Saved != nil {
+				err = deleteWork(*sh.Saved)
+			} else if rmErr := os.Remove(sh.Path); rmErr != nil && !errors.Is(rmErr, os.ErrNotExist) {
+				err = rmErr
+			}
+			s.cx.Post(func() {
+				if err != nil {
+					s.toastError(t.Delete(), err)
+					return
+				}
+				if sh.Saved != nil {
+					s.works.Update(func(ws []work) []work {
+						out := make([]work, 0, len(ws))
+						for _, x := range ws {
+							if x.Path != sh.Saved.Path {
+								out = append(out, x)
+							}
+						}
+						return out
+					})
+				}
+				s.toaster.Show(ui.ToastContent{Title: t.Deleted()})
+				s.closeShot()
+			})
+		}()
+	})
+}
+
+func (s *studio) saveFile(cx *core.Scope, path string) {
+	t := locales.For(cx)
+	cx.SaveFile(core.SaveOptions{Path: path, Name: "mirra" + filepath.Ext(path)}, func(saved bool, _ string, err error) {
+		switch {
+		case err != nil:
+			s.toastError(t.SaveFailed(), err)
+		case saved:
+			s.toaster.Show(ui.ToastContent{Type: ui.ToastSuccess, Title: t.Exported()})
+		}
+	})
 }

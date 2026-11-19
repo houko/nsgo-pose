@@ -10,7 +10,9 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -21,6 +23,8 @@ type Config struct {
 	APIKey  string
 	Model   string
 	Size    string
+	// Local marks a server the user runs, which may take no key.
+	Local bool
 }
 
 const (
@@ -94,7 +98,7 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 	if err := r.Validate(); err != nil {
 		return nil, err
 	}
-	if strings.TrimSpace(cfg.APIKey) == "" {
+	if !cfg.Local && strings.TrimSpace(cfg.APIKey) == "" {
 		return nil, ErrNoAPIKey
 	}
 	var parts []part
@@ -138,7 +142,9 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Authorization", "Bearer "+strings.TrimSpace(cfg.APIKey))
+	if key := strings.TrimSpace(cfg.APIKey); key != "" {
+		req.Header.Set("Authorization", "Bearer "+key)
+	}
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	resp, err := client.Do(req)
 	if err != nil {
@@ -187,8 +193,15 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 	return pictures, nil
 }
 
+// download reads an item's full image: a gallery's over the network, or a photo the user added from the app's own folder.
 func download(ctx context.Context, client *http.Client, it Item) (part, error) {
-	data, err := get(ctx, client, it.Full, maxImageBytes)
+	var data []byte
+	var err error
+	if filepath.IsAbs(it.Full) {
+		data, err = os.ReadFile(it.Full)
+	} else {
+		data, err = get(ctx, client, it.Full, maxImageBytes)
+	}
 	if err != nil {
 		return part{}, err
 	}
