@@ -14,7 +14,7 @@ Their terms, summarized from the sites (the sites' Japanese text is authoritativ
 - They must not be used to depict real people or minors, or for anything offensive.
 - They are provided without warranty. The outfit gallery notes that its outfits are generated from text and checked for similarity to existing brands, without a guarantee that they infringe no one's rights.
 
-How the app follows these terms: it downloads only the full images the user chose, when the user presses Generate, one each; it keeps no copy beyond the platform's image cache; it does not offer the pose gallery's two-person and explicit lines or the outfit gallery's lingerie and "sexy" categories; and it takes no photo of the user, so their images only ever go on a fictional person made from a pose, an outfit and a CC0 face (`Request` in `generate.go`).
+How the app follows these terms: it downloads only the full images the user chose, when the user presses Generate, one each; it keeps no copy beyond the platform's image cache; it does not offer the pose gallery's two-person and explicit lines or the outfit gallery's lingerie and "sexy" categories; and it takes no photo of a person, so their images only ever go on a fictional person made from a pose, an outfit or the user's own clothes, and a CC0 face (`Request` in `generate.go`). Photos the user adds in the wardrobe are of clothes, laid flat or on a hanger, and stay on the device.
 
 ## FACE REFERENCE
 
