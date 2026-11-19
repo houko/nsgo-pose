@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EnRouteImport } from './routes/en'
 import { Route as JaRouteImport } from './routes/ja'
+import { Route as OgLangRouteImport } from './routes/og.$lang'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const JaRoute = JaRouteImport.update({
   path: '/ja',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgLangRoute = OgLangRouteImport.update({
+  id: '/og/$lang',
+  path: '/og/$lang',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/en': typeof EnRoute
   '/ja': typeof JaRoute
+  '/og/$lang': typeof OgLangRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/en': typeof EnRoute
   '/ja': typeof JaRoute
+  '/og/$lang': typeof OgLangRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/en': typeof EnRoute
   '/ja': typeof JaRoute
+  '/og/$lang': typeof OgLangRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/en' | '/ja'
+  fullPaths: '/' | '/en' | '/ja' | '/og/$lang'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/en' | '/ja'
-  id: '__root__' | '/' | '/en' | '/ja'
+  to: '/' | '/en' | '/ja' | '/og/$lang'
+  id: '__root__' | '/' | '/en' | '/ja' | '/og/$lang'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EnRoute: typeof EnRoute
   JaRoute: typeof JaRoute
+  OgLangRoute: typeof OgLangRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/$lang': {
+      id: '/og/$lang'
+      path: '/og/$lang'
+      fullPath: '/og/$lang'
+      preLoaderRoute: typeof OgLangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EnRoute: EnRoute,
   JaRoute: JaRoute,
+  OgLangRoute: OgLangRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

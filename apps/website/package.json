@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev --port 5175",
+    "dev": "vite --port 5175",
     "build": "vp build",
-    "preview": "vp preview --port 5175",
-    "typecheck": "tsgo --noEmit"
+    "preview": "vite preview --outDir dist/client --port 5175",
+    "typecheck": "tsgo --noEmit",
+    "og": "scripts/og.sh"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.169.2",

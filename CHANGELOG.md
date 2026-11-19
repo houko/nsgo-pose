@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- A website at https://yldm-ai.github.io/mirra/ in Chinese, English and Japanese.
+- A website at https://yldm-ai.github.io/mirra/ in Chinese, English and Japanese, with share cards, language alternates and a sitemap for search engines.
 - The Chinese README's phone screenshot, which was blank, shows the studio again.
 
 ## 0.3.0

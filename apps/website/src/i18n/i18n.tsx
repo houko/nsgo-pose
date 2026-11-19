@@ -15,6 +15,7 @@ const instances = Object.fromEntries(
       defaultNS: 'site',
       initAsync: false,
       interpolation: { escapeValue: false },
+      showSupportNotice: false,
     })
     return [lng, i18n]
   }),
