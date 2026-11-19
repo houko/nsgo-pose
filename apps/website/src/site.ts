@@ -6,7 +6,8 @@ export type SiteData = {
   url: string
   stars?: number
   contributors: { login: string; avatar: string; url: string }[]
-  release?: { tag: string; url: string }
+  // files maps each file the release holds, such as mirra-0.4.0-macos-arm64.dmg, to its download address.
+  release?: { tag: string; url: string; files: Record<string, string> }
 }
 
 declare const __SITE__: SiteData

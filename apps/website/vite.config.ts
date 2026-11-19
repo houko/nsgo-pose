@@ -44,7 +44,15 @@ async function github(): Promise<Pick<SiteData, 'stars' | 'contributors' | 'rele
             .filter((c: { type?: string }) => c.type === 'User')
             .map((c: { login: string; avatar_url: string; html_url: string }) => ({ login: c.login, avatar: c.avatar_url, url: c.html_url }))
         : [],
-      release: release?.html_url ? { tag: String(release.tag_name), url: String(release.html_url) } : undefined,
+      release: release?.html_url
+        ? {
+            tag: String(release.tag_name),
+            url: String(release.html_url),
+            files: Object.fromEntries(
+              (Array.isArray(release.assets) ? release.assets : []).map((a: { name: string; browser_download_url: string }) => [a.name, a.browser_download_url]),
+            ),
+          }
+        : undefined,
     }
   } catch {
     return { stars: undefined, contributors: [], release: undefined }
