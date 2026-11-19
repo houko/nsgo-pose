@@ -14,7 +14,7 @@ Mirra (镜衣) is an NSGo app that puts a face, an outfit and a pose from three 
 
 ## Verification
 
-From `apps/mirra`, run `go tool nsgo test .`, `go tool nsgo test -target macos .` and `go tool nsgo check -target macos,ios,android,windows`. For the website, from `apps/website`, run `bun run typecheck` and `bun run build`, and look at the pages in a browser. A green headless run does not prove native behavior: review UI changes in a real window.
+From `apps/mirra`, run `go tool nsgo test .`, `go tool nsgo test -target macos .` and `go tool nsgo check -target macos,ios,android,windows,web`. For the website, from `apps/website`, run `bun run typecheck` and `bun run build`, and look at the pages in a browser. A green headless run does not prove native behavior: review UI changes in a real window.
 
 ## Documentation
 
