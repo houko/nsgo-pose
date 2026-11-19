@@ -1,4 +1,4 @@
-module github.com/nsgo-dev/nsgo-pose
+module github.com/houko/nsgo-pose
 
 go 1.27.4
 

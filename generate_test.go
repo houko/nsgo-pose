@@ -22,7 +22,9 @@ func TestValidate(t *testing.T) {
 		{"outfit without base", Request{Costume: outfit}, ErrNoBase},
 		{"pose alone", Request{Base: Source{Item: pose}}, nil},
 		{"photo alone", Request{Base: Source{Photo: []byte{1}}}, ErrNothingToDo},
-		{"photo with outfit", Request{Base: Source{Photo: []byte{1}}, Costume: outfit}, nil},
+		{"photo with face", Request{Base: Source{Photo: []byte{1}}, Face: &Item{ID: "f"}}, nil},
+		{"photo with outfit", Request{Base: Source{Photo: []byte{1}}, Costume: outfit}, ErrPhotoOutfit},
+		{"photo with outfit and face", Request{Base: Source{Photo: []byte{1}}, Costume: outfit, Face: &Item{ID: "f"}}, ErrPhotoOutfit},
 	} {
 		if got := tc.r.Validate(); got != tc.want {
 			t.Errorf("%s: Validate() = %v, want %v", tc.name, got, tc.want)
@@ -36,10 +38,10 @@ func TestPromptNumbersImagesInOrder(t *testing.T) {
 	if !hasAll(p, "Image 1 is a faceless gray mannequin", "Image 2 is a portrait", "plain everyday clothes", "Also: golden hour") {
 		t.Errorf("pose + face prompt = %q", p)
 	}
-	r = Request{Base: Source{Photo: []byte{1}}, Costume: &Item{}}
+	r = Request{Base: Source{Photo: []byte{1}}, Face: &Item{}}
 	p = r.Prompt()
-	if !hasAll(p, "Image 1 is a photo of a person", "Image 2 shows an outfit") || strings.Contains(p, "Image 3") || strings.Contains(p, "face") {
-		t.Errorf("photo + outfit prompt = %q", p)
+	if !hasAll(p, "Image 1 is a photo of a person", "Image 2 is a portrait: replace the person's face") || strings.Contains(p, "Image 3") || strings.Contains(p, "outfit") {
+		t.Errorf("photo + face prompt = %q", p)
 	}
 }
 

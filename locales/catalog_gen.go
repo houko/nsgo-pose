@@ -79,7 +79,8 @@ const (
 	textNotePlaceholder
 	textNoteLabel
 	textGenerate
-	textNeedBase
+	textNeedPose
+	textNeedPhoto
 	textNeedPhotoChange
 	textNeedKey
 	textGenerateFailed
@@ -143,7 +144,8 @@ var keyOfText = [numTexts]string{
 	"notePlaceholder",
 	"noteLabel",
 	"generate",
-	"needBase",
+	"needPose",
+	"needPhoto",
 	"needPhotoChange",
 	"needKey",
 	"generateFailed",
@@ -205,8 +207,9 @@ var textsEn = i18n.NewTexts(""+
 	"Anything else, such as lighting or background"+
 	"Extra instructions"+
 	"Generate"+
-	"Choose a pose or a photo first."+
-	"Add an outfit or a face to change the photo."+
+	"Choose a pose first."+
+	"Choose a photo first."+
+	"Choose a face to put on the photo."+
 	"Add an API key in Settings first."+
 	"Generation failed"+
 	"Choose a pose"+
@@ -264,8 +267,9 @@ var textsEn = i18n.NewTexts(""+
 		45,
 		18,
 		8,
-		31,
-		44,
+		20,
+		21,
+		34,
 		33,
 		17,
 		13,
@@ -326,8 +330,9 @@ var textsZhHans = i18n.NewTexts(""+
 	"补充要求，例如光线、背景"+
 	"补充要求"+
 	"生成"+
-	"先选一个姿势或一张照片。"+
-	"给照片加上服装或人脸才能生成。"+
+	"先选一个姿势。"+
+	"先选一张照片。"+
+	"给照片选一张人脸才能生成。"+
 	"先在设置里填写 API Key。"+
 	"生成失败"+
 	"选择姿势"+
@@ -385,8 +390,9 @@ var textsZhHans = i18n.NewTexts(""+
 		36,
 		12,
 		6,
-		36,
-		45,
+		21,
+		21,
+		39,
 		32,
 		12,
 		12,
@@ -661,14 +667,21 @@ func Generate(cx *core.Scope) string { return For(cx).Generate() }
 // Generate is the package's Generate in the language of msgs.
 func (msgs Messages) Generate() string { return msgs.text(textGenerate) }
 
-// NeedBase says "Choose a pose or a photo first."
+// NeedPose says "Choose a pose first."
 // in the language the app shows under cx.
-func NeedBase(cx *core.Scope) string { return For(cx).NeedBase() }
+func NeedPose(cx *core.Scope) string { return For(cx).NeedPose() }
 
-// NeedBase is the package's NeedBase in the language of msgs.
-func (msgs Messages) NeedBase() string { return msgs.text(textNeedBase) }
+// NeedPose is the package's NeedPose in the language of msgs.
+func (msgs Messages) NeedPose() string { return msgs.text(textNeedPose) }
 
-// NeedPhotoChange says "Add an outfit or a face to change the photo."
+// NeedPhoto says "Choose a photo first."
+// in the language the app shows under cx.
+func NeedPhoto(cx *core.Scope) string { return For(cx).NeedPhoto() }
+
+// NeedPhoto is the package's NeedPhoto in the language of msgs.
+func (msgs Messages) NeedPhoto() string { return msgs.text(textNeedPhoto) }
+
+// NeedPhotoChange says "Choose a face to put on the photo."
 // in the language the app shows under cx.
 func NeedPhotoChange(cx *core.Scope) string { return For(cx).NeedPhotoChange() }
 
