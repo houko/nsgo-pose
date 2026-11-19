@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 // desktop is the app in a wide window: a top bar over the studio's three columns, the wardrobe or the lookbook, with the AI service's settings in a dialog.
@@ -166,7 +166,7 @@ func (s *studio) previewCanvas(cx *core.Scope) core.Node {
 	}}
 	quick := func(k Kind, label string, w, h core.Points) core.Node {
 		return core.View{Role: core.RoleButton, Label: label, TestID: "quick-" + kindKey(k), OnPress: func(core.PressEvent) { s.step.Set(k) },
-			Children: []core.Node{thumb(cx, k, s.chosen[k].Get, w, h, k == KindFace)}}
+			Children: []core.Node{s.thumb(cx, k, s.chosen[k].Get, w, h, k == KindFace)}}
 	}
 	stage := core.View{Style: fill.Merge(core.Style{AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter, Overflow: core.Hidden}), Children: []core.Node{
 		core.View{StyleFunc: func() core.Style {
@@ -200,7 +200,7 @@ func (s *studio) resultCanvas(cx *core.Scope, sh *shot) core.Node {
 		core.View{Style: core.Style{Width: core.Pt(150)}, Children: []core.Node{s.saveButton(cx, sh)}},
 	}
 	stage := core.View{Style: fill.Merge(core.Style{AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}), Children: []core.Node{
-		core.Image{Source: core.Src(sh.Path), ResizeMode: core.Contain, TestID: "shot-image", Label: lookTitle(t, sh.Req), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}},
+		core.Image{Source: s.src(sh.Path), ResizeMode: core.Contain, TestID: "shot-image", Label: lookTitle(t, sh.Req), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}},
 		core.View{Style: core.Style{Position: core.Absolute, Right: core.Pt(0), Bottom: core.Pt(0)}, Children: []core.Node{s.usedRefs(cx, sh)}},
 	}}
 	return panel(cx, fill.Merge(core.Style{Gap: 16}),

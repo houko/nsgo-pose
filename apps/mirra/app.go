@@ -12,11 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 func main() {
@@ -36,6 +36,8 @@ type App struct {
 	Sites  Sites
 	// DataDir keeps works and uploads; the app's data directory when empty.
 	DataDir string
+	// Pictures keeps them; files, or memory in a browser, when nil.
+	Pictures pictures
 }
 
 // wideWidth is the window width, in points, from which the app shows the desktop studio instead of the phone's tabs.
@@ -86,6 +88,7 @@ type shot struct {
 // studio is the app's state, shared by the phone and desktop layouts.
 type studio struct {
 	App
+	pics    pictures
 	cx      *core.Scope
 	toaster *ui.Toaster
 	section *core.Signal[int]
@@ -109,6 +112,8 @@ type studio struct {
 	conn                   *core.Signal[connState]
 	connErr                *core.Signal[string]
 	showKey, settingsShown *core.Signal[bool]
+	// keyKept says whether the key outlives the page: false in a browser, which has no secure store.
+	keyKept *core.Signal[bool]
 
 	works       *core.Signal[[]work]
 	favoritesOn *core.Signal[bool]
@@ -181,8 +186,12 @@ func newStudio(cx *core.Scope, a App) *studio {
 	if v, ok := store.GetItem(keyFavorites); ok {
 		_ = json.Unmarshal([]byte(v), &favorites)
 	}
+	if a.Pictures == nil {
+		a.Pictures = defaultPictures()
+	}
 	s := &studio{
 		App:           a,
+		pics:          a.Pictures,
 		cx:            cx,
 		toaster:       ui.NewToaster(cx),
 		section:       core.NewSignal(cx, sectionStudio),
@@ -202,6 +211,7 @@ func newStudio(cx *core.Scope, a App) *studio {
 		connErr:       core.NewSignal(cx, ""),
 		showKey:       core.NewSignal(cx, false),
 		settingsShown: core.NewSignal(cx, false),
+		keyKept:       core.NewSignal(cx, true),
 		works:         core.NewSignalFunc[[]work](cx, nil, nil),
 		favoritesOn:   core.NewSignal(cx, false),
 		favorites:     core.NewSignalFunc(cx, favorites, itemsEqual),
@@ -223,13 +233,15 @@ func newStudio(cx *core.Scope, a App) *studio {
 	s.worksNav = base.NewNav(cx, route{page: pageHome})
 
 	secrets := cx.Secrets()
-	worksDir, uploadsDir := s.dir("works"), s.dir("uploads")
+	worksDir, uploadsDir, st := s.dir("works"), s.dir("uploads"), s.pics
 	go func() {
 		cloudKey, cloudOK, cloudErr := secrets.Get(apiKeyAccount)
 		localKey, localOK, localErr := secrets.Get(localKeyAccount)
-		list, listErr := listWorks(worksDir)
-		uploads, uploadsErr := listUploads(uploadsDir)
+		list, listErr := listWorks(st, worksDir)
+		uploads, uploadsErr := listUploads(st, uploadsDir)
 		cx.Post(func() {
+			// A browser has no secure store: the key then lasts as long as the page.
+			s.keyKept.Set(!errors.Is(cloudErr, core.ErrSecretsUnavailable))
 			if cloudErr == nil && cloudOK && s.cloudKey.Get() == "" {
 				s.cloudKey.Set(cloudKey)
 			}
@@ -279,7 +291,7 @@ func (s *studio) toastError(title string, err error) {
 
 // config is the image API as set up in settings.
 func (s *studio) config() Config {
-	cfg := Config{Model: s.model.Get(), Size: s.size.Get(), Local: s.service.Get() == serviceLocal}
+	cfg := Config{Model: s.model.Get(), Size: s.size.Get(), Local: s.service.Get() == serviceLocal, ReadLocal: s.pics.Read}
 	if cfg.Local {
 		cfg.BaseURL, cfg.APIKey = s.localURL.Get(), s.localKey.Get()
 	} else {
@@ -339,7 +351,7 @@ func (s *studio) generateLook(req Request, attempt int) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	s.cancel = cancel
 	s.busy.Set(true)
-	dir, now, client := s.dir(resultsFolderName), s.cx.Now(), s.Client
+	dir, now, client, st := s.dir(resultsFolderName), s.cx.Now(), s.Client, s.pics
 	go func() {
 		pictures, err := Generate(ctx, client, cfg, req)
 		// Whether the user cancelled is read before this goroutine's own cancel, which only releases the context.
@@ -347,7 +359,7 @@ func (s *studio) generateLook(req Request, attempt int) {
 		cancel()
 		var path string
 		if err == nil {
-			path, err = writePicture(dir, pictures[0], now)
+			path, err = writePicture(st, dir, pictures[0], now)
 		}
 		s.cx.Post(func() {
 			s.busy.Set(false)
@@ -405,10 +417,10 @@ func (s *studio) saveShot(favorite bool) {
 		return
 	}
 	t := locales.For(s.cx)
-	dir, now := s.dir("works"), s.cx.Now()
+	dir, now, st := s.dir("works"), s.cx.Now(), s.pics
 	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose}
 	go func() {
-		w, err := saveWork(dir, sh.Path, now, meta)
+		w, err := saveWork(st, dir, sh.Path, now, meta)
 		s.cx.Post(func() {
 			if err != nil {
 				s.toastError(t.SaveFailed(), err)
@@ -453,8 +465,9 @@ func (s *studio) updateWork(w work) {
 		}
 		return out
 	})
+	st := s.pics
 	go func() {
-		if err := writeMeta(w); err != nil {
+		if err := writeMeta(st, w); err != nil {
 			s.cx.Post(func() { s.toastError(t.SaveFailed(), err) })
 		}
 	}()
@@ -473,12 +486,13 @@ func (s *studio) discardShot() {
 		if label != t.Delete() {
 			return
 		}
+		st := s.pics
 		go func() {
 			var err error
 			if sh.Saved != nil {
-				err = deleteWork(*sh.Saved)
-			} else if rmErr := os.Remove(sh.Path); rmErr != nil && !errors.Is(rmErr, os.ErrNotExist) {
-				err = rmErr
+				err = deleteWork(st, *sh.Saved)
+			} else {
+				err = st.Remove(sh.Path)
 			}
 			s.cx.Post(func() {
 				if err != nil {
@@ -503,9 +517,19 @@ func (s *studio) discardShot() {
 	})
 }
 
+// saveFile exports a picture the app keeps through the system's save dialog, or a browser's download.
 func (s *studio) saveFile(cx *core.Scope, path string) {
 	t := locales.For(cx)
-	cx.SaveFile(core.SaveOptions{Path: path, Name: "mirra" + filepath.Ext(path)}, func(saved bool, _ string, err error) {
+	opts := core.SaveOptions{Path: path, Name: "mirra" + filepath.Ext(path)}
+	if !s.pics.Lasting() {
+		data, err := s.pics.Read(path)
+		if err != nil {
+			s.toastError(t.SaveFailed(), err)
+			return
+		}
+		opts = core.SaveOptions{Data: data, Name: opts.Name}
+	}
+	cx.SaveFile(opts, func(saved bool, _ string, err error) {
 		switch {
 		case err != nil:
 			s.toastError(t.SaveFailed(), err)
@@ -513,4 +537,12 @@ func (s *studio) saveFile(cx *core.Scope, path string) {
 			s.toaster.Show(ui.ToastContent{Type: ui.ToastSuccess, Title: t.Exported()})
 		}
 	})
+}
+
+// src shows an image: one the app keeps from its pictures, else from its URL.
+func (s *studio) src(uri string) core.ImageSource {
+	if filepath.IsAbs(uri) {
+		return s.pics.Source(uri)
+	}
+	return core.Src(uri)
 }

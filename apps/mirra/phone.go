@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 // phone is the app in a narrow window: Studio, Wardrobe, Works and Me over a tab bar.
@@ -86,7 +86,7 @@ func (s *studio) elementCard(cx *core.Scope, k Kind) core.Node {
 					return core.Image{ResizeMode: cellFit(k), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
 						SourceFunc: func() core.ImageSource {
 							if it := chosen.Get(); it != nil {
-								return core.Src(it.Thumb)
+								return s.src(it.Thumb)
 							}
 							return core.ImageSource{}
 						}}
@@ -215,7 +215,7 @@ func (s *studio) chosenCard(cx *core.Scope, k Kind) core.Node {
 			return core.Style{Direction: core.Row, Gap: 16, Padding: core.All(12), CornerRadius: 20, Background: colors.Surface(), BorderWidth: 1, BorderColor: colors.Border(), AlignItems: core.AlignCenter}
 		},
 		Children: []core.Node{
-			thumb(cx, k, chosen.Get, 72, 96, false),
+			s.thumb(cx, k, chosen.Get, 72, 96, false),
 			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 6}, Children: []core.Node{
 				eyebrow(cx, top),
 				display(func() string { return itemName(t, chosen.Get()) }, 20),

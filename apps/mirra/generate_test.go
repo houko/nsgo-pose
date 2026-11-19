@@ -109,7 +109,7 @@ func TestGenerateLocalWithoutKey(t *testing.T) {
 func TestGenerateReadsUploadedClothes(t *testing.T) {
 	api := &fakeAPI{}
 	srv, _ := newServer(t, api)
-	up, err := saveUpload(t.TempDir(), tinyPNG(t), time.Unix(0, 42))
+	up, err := saveUpload(filePictures{}, t.TempDir(), tinyPNG(t), time.Unix(0, 42))
 	if err != nil {
 		t.Fatal(err)
 	}

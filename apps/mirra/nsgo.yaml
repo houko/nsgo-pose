@@ -1,6 +1,8 @@
 name: mirra
 id: ai.yldm.mirra
 version: 0.3.0
+# The app always shows its dark theme; the web page takes the same color while the app loads.
+appearance: dark
 
 # Every target uses assets/Icon.png, drawn by tools/appicon.
 icon:
@@ -16,5 +18,5 @@ build:
   output: dist
   # true opens the output directory after building.
   open: false
-  # No web target: the browser has no secure store for the API key.
-  targets: [macos_arm64, windows_x64, ios_simulator, android_arm64]
+  # The web build keeps the key, works and clothes only as long as the page: a browser has no secure store or file system for them.
+  targets: [macos_arm64, windows_x64, ios_simulator, android_arm64, web]

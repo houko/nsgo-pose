@@ -3,10 +3,10 @@ package main
 import (
 	"strings"
 
-	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 // displayFont sets titles in a serif, the platform's own where it has one for Chinese.
@@ -226,7 +226,7 @@ func (s *studio) itemCard(cx *core.Scope, k Kind, item func() Item, on func() bo
 	picture := core.View{StyleFunc: func() core.Style {
 		return core.Style{Width: core.Pct(100), AspectRatio: cellAspect(k), Background: colors.Inset()}
 	}, Children: []core.Node{core.Image{ResizeMode: cellFit(k), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
-		SourceFunc: func() core.ImageSource { return core.Src(item().Thumb) }}}}
+		SourceFunc: func() core.ImageSource { return s.src(item().Thumb) }}}}
 	children := []core.Node{picture}
 	if k != KindFace {
 		children = append(children, core.View{Style: core.Style{Padding: core.Symmetric(8, 10), Gap: 2}, Children: []core.Node{
@@ -356,7 +356,7 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 }
 
 // thumb is a chosen item's small picture, or an empty well.
-func thumb(cx *core.Scope, k Kind, it func() *Item, w, h core.Points, round bool) core.Node {
+func (s *studio) thumb(cx *core.Scope, k Kind, it func() *Item, w, h core.Points, round bool) core.Node {
 	colors := ui.ColorsOf(cx)
 	radius := core.Points(12)
 	if round {
@@ -373,7 +373,7 @@ func thumb(cx *core.Scope, k Kind, it func() *Item, w, h core.Points, round bool
 				return core.Image{ResizeMode: cellFit(k), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
 					SourceFunc: func() core.ImageSource {
 						if v := it(); v != nil {
-							return core.Src(v.Thumb)
+							return s.src(v.Thumb)
 						}
 						return core.ImageSource{}
 					}}
@@ -407,7 +407,7 @@ func (s *studio) lookRow(cx *core.Scope, k Kind, onPress func()) core.Node {
 			return st
 		},
 		Children: []core.Node{
-			thumb(cx, k, chosen.Get, 48, 48, k == KindFace),
+			s.thumb(cx, k, chosen.Get, 48, 48, k == KindFace),
 			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 4}, Children: []core.Node{
 				core.Text{Content: slotEyebrow(t, k), StyleFunc: func() core.Style {
 					return core.Style{FontSize: 10, LetterSpacing: 1.5, Color: colors.Muted()}
@@ -436,7 +436,7 @@ func (s *studio) heroImage(cx *core.Scope) core.Node {
 			return core.Image{ResizeMode: core.Contain, TestID: "hero", Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
 				SourceFunc: func() core.ImageSource {
 					if it := s.heroItem(); it != nil {
-						return core.Src(it.Thumb)
+						return s.src(it.Thumb)
 					}
 					return core.ImageSource{}
 				}}

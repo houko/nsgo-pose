@@ -25,6 +25,8 @@ type Config struct {
 	Size    string
 	// Local marks a server the user runs, which may take no key.
 	Local bool
+	// ReadLocal reads a picture the app keeps, such as the user's clothes; os.ReadFile when nil.
+	ReadLocal func(path string) ([]byte, error)
 }
 
 const (
@@ -106,7 +108,7 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 		if it == nil {
 			continue
 		}
-		p, err := download(ctx, client, *it)
+		p, err := download(ctx, client, cfg.ReadLocal, *it)
 		if err != nil {
 			return nil, err
 		}
@@ -193,12 +195,15 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 	return pictures, nil
 }
 
-// download reads an item's full image: a gallery's over the network, or a photo the user added from the app's own folder.
-func download(ctx context.Context, client *http.Client, it Item) (part, error) {
+// download reads an item's full image: a gallery's over the network, or a photo the user added from the pictures the app keeps.
+func download(ctx context.Context, client *http.Client, readLocal func(string) ([]byte, error), it Item) (part, error) {
 	var data []byte
 	var err error
 	if filepath.IsAbs(it.Full) {
-		data, err = os.ReadFile(it.Full)
+		if readLocal == nil {
+			readLocal = os.ReadFile
+		}
+		data, err = readLocal(it.Full)
 	} else {
 		data, err = get(ctx, client, it.Full, maxImageBytes)
 	}

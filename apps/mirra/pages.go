@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 // ---- A shot ----
@@ -63,7 +63,7 @@ func (s *studio) swapRow(cx *core.Scope) core.Node {
 							return core.Style{Width: core.Pt(60), Height: core.Pt(80), CornerRadius: 12, Overflow: core.Hidden, Background: colors.Inset(),
 								BorderWidth: 1, BorderColor: colors.Border()}
 						},
-						Children: []core.Node{core.Image{Source: core.Src(it.Thumb), ResizeMode: core.Contain, Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}}},
+						Children: []core.Node{core.Image{Source: s.src(it.Thumb), ResizeMode: core.Contain, Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}}},
 					})
 				}
 				return core.View{Style: core.Style{Direction: core.Row, Gap: 8}, Children: nodes}
@@ -78,10 +78,10 @@ func (s *studio) usedRefs(cx *core.Scope, sh *shot) core.Node {
 	colors := ui.ColorsOf(cx)
 	var nodes []core.Node
 	if sh.Req.Face != nil {
-		nodes = append(nodes, core.View{Label: t.UsedFace(), Role: core.RoleImage, Children: []core.Node{thumb(cx, KindFace, func() *Item { return sh.Req.Face }, 48, 48, true)}})
+		nodes = append(nodes, core.View{Label: t.UsedFace(), Role: core.RoleImage, Children: []core.Node{s.thumb(cx, KindFace, func() *Item { return sh.Req.Face }, 48, 48, true)}})
 	}
 	if sh.Req.Pose != nil {
-		nodes = append(nodes, core.View{Label: t.UsedPose(), Role: core.RoleImage, Children: []core.Node{thumb(cx, KindPose, func() *Item { return sh.Req.Pose }, 48, 64, false)}})
+		nodes = append(nodes, core.View{Label: t.UsedPose(), Role: core.RoleImage, Children: []core.Node{s.thumb(cx, KindPose, func() *Item { return sh.Req.Pose }, 48, 64, false)}})
 	}
 	return core.View{StyleFunc: func() core.Style {
 		return core.Style{Direction: core.Row, Gap: 8, AlignItems: core.AlignEnd, Padding: core.All(4), CornerRadius: 16, Background: colors.Background().Faded(0.6)}
@@ -125,7 +125,7 @@ func (s *studio) shotPage(cx *core.Scope) core.Node {
 			return nil
 		}
 		picture := core.View{Style: fill, Children: []core.Node{
-			core.Image{Source: core.Src(sh.Path), ResizeMode: core.Contain, TestID: "shot-image", Label: lookTitle(t, sh.Req), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}},
+			core.Image{Source: s.src(sh.Path), ResizeMode: core.Contain, TestID: "shot-image", Label: lookTitle(t, sh.Req), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}},
 			core.View{Style: core.Style{Position: core.Absolute, Top: core.Pt(12), Left: core.Pt(16), Right: core.Pt(16), Direction: core.Row, Gap: 10}, Children: []core.Node{
 				ui.IconButton{Icon: lucide.X, Label: t.Close(), Variant: ui.IconButtonRaised, TestID: "close-shot", OnPress: s.closeShot},
 				core.View{Style: core.Style{FlexGrow: 1}},
@@ -228,7 +228,7 @@ func (s *studio) worksPage(cx *core.Scope, columns int) core.Node {
 				},
 				Children: []core.Node{
 					core.Image{ResizeMode: core.Cover, Style: core.Style{Width: core.Pct(100), AspectRatio: 2.0 / 3.0},
-						SourceFunc: func() core.ImageSource { return core.Src(current().Path) }},
+						SourceFunc: func() core.ImageSource { return s.src(current().Path) }},
 					core.View{Style: core.Style{Padding: core.Symmetric(8, 10), Gap: 2}, Children: []core.Node{
 						core.Text{ContentFunc: func() string { return t.EyebrowLookbookNo(workNo(current().No)) }, StyleFunc: func() core.Style {
 							return core.Style{FontSize: 10, LetterSpacing: 1.5, Color: colors.Accent()}
@@ -246,10 +246,24 @@ func (s *studio) worksPage(cx *core.Scope, columns int) core.Node {
 			}
 		},
 	}
-	return core.View{TestID: "works", Style: fill.Merge(core.Style{Gap: 14}), Children: []core.Node{
+	children := []core.Node{
 		core.View{Style: core.Style{Gap: 4}, Children: []core.Node{eyebrow(cx, t.EyebrowLookbook), display(t.TabWorks, 30)}},
 		filter,
+	}
+	if !s.pics.Lasting() {
+		children = append(children, s.pageOnlyNote(cx))
+	}
+	return core.View{TestID: "works", Style: fill.Merge(core.Style{Gap: 14}), Children: append(children,
 		core.Show{When: func() bool { return len(shown.Get()) == 0 }, Then: empty, Else: func(*core.Scope) core.Node { return grid }},
+	)}
+}
+
+// pageOnlyNote says that in a browser the pictures last as long as the page, so they are exported to be kept.
+func (s *studio) pageOnlyNote(cx *core.Scope) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	return core.Text{Content: t.PageOnly(), TestID: "page-only", StyleFunc: func() core.Style {
+		return core.Style{FontSize: 13, Color: colors.Accent()}
 	}}
 }
 
@@ -323,6 +337,10 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		s.resetConnection()
 	}
 	saveKey := func() {
+		// A browser has no secure store; the settings say the key lasts as long as the page.
+		if !s.keyKept.Get() {
+			return
+		}
 		account, key := apiKeyAccount, strings.TrimSpace(s.cloudKey.Get())
 		if local() {
 			account, key = localKeyAccount, strings.TrimSpace(s.localKey.Get())
@@ -428,11 +446,14 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		}},
 		result,
 		core.Text{ContentFunc: func() string {
-			if local() {
+			switch {
+			case !s.keyKept.Get():
+				return t.PrivacyWeb()
+			case local():
 				return t.PrivacyLocal()
 			}
 			return t.PrivacyCloud()
-		}, StyleFunc: func() core.Style { return core.Style{FontSize: 13, Color: colors.Muted()} }},
+		}, TestID: "privacy", StyleFunc: func() core.Style { return core.Style{FontSize: 13, Color: colors.Muted()} }},
 	}}
 }
 

@@ -1,19 +1,19 @@
 package main
 
 import (
+	"cmp"
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/yldm-ai/mirra/apps/mirra/locales"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 // An upload is a photo of the user's own clothes, laid flat or on a hanger, kept in the app's uploads folder and used as an outfit.
@@ -30,16 +30,13 @@ const (
 )
 
 // saveUpload keeps a picked photo in dir under the time it was added.
-func saveUpload(dir string, data []byte, at time.Time) (string, error) {
-	return writePicture(dir, data, at)
+func saveUpload(st pictures, dir string, data []byte, at time.Time) (string, error) {
+	return writePicture(st, dir, data, at)
 }
 
 // listUploads returns the user's clothes in dir, oldest first, numbered MY-01, MY-02 and on in that order.
-func listUploads(dir string) ([]Item, error) {
-	entries, err := os.ReadDir(dir)
-	if os.IsNotExist(err) {
-		return nil, nil
-	}
+func listUploads(st pictures, dir string) ([]Item, error) {
+	names, err := st.List(dir)
 	if err != nil {
 		return nil, err
 	}
@@ -48,15 +45,14 @@ func listUploads(dir string) ([]Item, error) {
 		nanos int64
 	}
 	var files []file
-	for _, e := range entries {
-		name := e.Name()
+	for _, name := range names {
 		nanos, err := strconv.ParseInt(strings.TrimSuffix(name, filepath.Ext(name)), 10, 64)
-		if e.IsDir() || err != nil {
+		if err != nil {
 			continue
 		}
 		files = append(files, file{filepath.Join(dir, name), nanos})
 	}
-	slices.SortFunc(files, func(a, b file) int { return int(a.nanos - b.nanos) })
+	slices.SortFunc(files, func(a, b file) int { return cmp.Compare(a.nanos, b.nanos) })
 	out := make([]Item, len(files))
 	for i, f := range files {
 		out[i] = Item{Kind: KindCostume, ID: fmt.Sprintf("%s%02d", uploadPrefix, i+1), Group: uploadGroup, Thumb: f.path, Full: f.path}
@@ -89,17 +85,17 @@ func (s *studio) toggleFavoriteOutfit(it Item) {
 // uploadClothes asks for a photo of the user's clothes and wears it.
 func (s *studio) uploadClothes() {
 	t := locales.For(s.cx)
-	dir, now := s.dir("uploads"), s.cx.Now()
+	dir, now, st := s.dir("uploads"), s.cx.Now(), s.pics
 	s.cx.PickImages(core.PickOptions{Limit: 1, MaxDimension: 2048}, func(files []core.PickedFile) {
 		if len(files) != 1 {
 			return
 		}
 		data := files[0].Data
 		go func() {
-			_, err := saveUpload(dir, data, now)
+			_, err := saveUpload(st, dir, data, now)
 			var list []Item
 			if err == nil {
-				list, err = listUploads(dir)
+				list, err = listUploads(st, dir)
 			}
 			s.cx.Post(func() {
 				if err != nil {
@@ -202,7 +198,7 @@ func (s *studio) wardrobe(cx *core.Scope, columns int) core.Node {
 			return core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 12, Padding: core.All(10), CornerRadius: 999,
 				Background: colors.Surface(), BorderWidth: 1, BorderColor: colors.Border()}
 		}, Children: []core.Node{
-			thumb(cx, KindCostume, wearing.Get, 44, 44, true),
+			s.thumb(cx, KindCostume, wearing.Get, 44, 44, true),
 			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 2}, Children: []core.Node{
 				caption(cx, t.Wearing),
 				core.Text{ContentFunc: func() string { return itemName(t, wearing.Get()) }, MaxLines: 1, Style: core.Style{FontSize: 15, FontWeight: core.FontWeightSemibold}},
@@ -215,7 +211,11 @@ func (s *studio) wardrobe(cx *core.Scope, columns int) core.Node {
 		case closetFavorites:
 			return s.itemGrid(cx, s.favorites.Get, columns, t.NoFavoritesTitle(), t.NoFavoritesBody())
 		case closetUploads:
-			return s.itemGrid(cx, s.uploads.Get, columns, t.NoUploadsTitle(), t.NoUploadsBody())
+			grid := s.itemGrid(cx, s.uploads.Get, columns, t.NoUploadsTitle(), t.NoUploadsBody())
+			if s.pics.Lasting() {
+				return grid
+			}
+			return core.View{Style: fill.Merge(core.Style{Gap: 10}), Children: []core.Node{s.pageOnlyNote(cx), grid}}
 		}
 		return s.library(cx, KindCostume, columns)
 	})
