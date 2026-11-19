@@ -1,4 +1,4 @@
-// Command nsgo-pose is Mirra (镜衣): it puts a face, an outfit and a pose from three public reference galleries together and has an OpenAI-compatible image model, in the cloud or on the user's own machine, draw the result.
+// Command mirra is Mirra (镜衣): it puts a face, an outfit and a pose from three public reference galleries together and has an OpenAI-compatible image model, in the cloud or on the user's own machine, draw the result.
 package main
 
 import (
@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yldm-ai/nsgo-pose/locales"
+	"github.com/yldm-ai/mirra/locales"
 	"github.com/nsgo-dev/nsgo"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
@@ -28,7 +28,7 @@ func main() {
 var themeYAML []byte
 
 // repoURL is where the app's source lives.
-const repoURL = "https://github.com/yldm-ai/nsgo-pose"
+const repoURL = "https://github.com/yldm-ai/mirra"
 
 // App is the app with what it reaches outside: tests give it local servers and a temporary directory.
 type App struct {
@@ -254,7 +254,7 @@ func (s *studio) dir(name string) string {
 		root = s.cx.DataDir()
 	}
 	if root == "" {
-		root = filepath.Join(os.TempDir(), "nsgo-pose")
+		root = filepath.Join(os.TempDir(), "mirra")
 	}
 	return filepath.Join(root, name)
 }

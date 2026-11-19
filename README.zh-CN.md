@@ -92,8 +92,8 @@
 需要 Go 1.27.4 或更高版本。在 Mac 上（也能构建 iOS 和 Android 版本）：
 
 ```sh
-git clone https://github.com/yldm-ai/nsgo-pose
-cd nsgo-pose
+git clone https://github.com/yldm-ai/mirra
+cd mirra
 go tool nsgo dev                     # 本机
 go tool nsgo dev -lang zh-Hans       # 中文界面
 go tool nsgo dev -target ios_simulator

@@ -92,8 +92,8 @@ The images are sent pose first, then the outfit and the face, and the prompt num
 Requires Go 1.27.4 or later. On a Mac, which also builds the iOS and Android apps:
 
 ```sh
-git clone https://github.com/yldm-ai/nsgo-pose
-cd nsgo-pose
+git clone https://github.com/yldm-ai/mirra
+cd mirra
 go tool nsgo dev                     # this machine
 go tool nsgo dev -lang zh-Hans       # in Chinese
 go tool nsgo dev -target ios_simulator

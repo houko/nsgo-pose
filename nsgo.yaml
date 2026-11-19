@@ -1,5 +1,5 @@
-name: nsgo-pose
-id: dev.nsgo.pose
+name: mirra
+id: ai.yldm.mirra
 version: 0.3.0
 
 # Every target uses assets/Icon.png, drawn by tools/appicon.
