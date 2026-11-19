@@ -1,4 +1,4 @@
-module github.com/houko/nsgo-pose
+module github.com/yldm-ai/nsgo-pose
 
 go 1.27.4
 
