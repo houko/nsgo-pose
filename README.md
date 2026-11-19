@@ -114,7 +114,7 @@ A local server has to speak the same OpenAI-compatible API; ComfyUI's own protoc
 | macOS | Runs; tested in a real window |
 | iOS, Android, Windows | `nsgo build` packages them (an iOS Simulator app, an APK signed with the debug key, a Windows installer); not yet run on a device or simulator |
 | Linux | Not in the build targets yet; NSGo supports it, untested here |
-| Web | Not supported: the browser has no secure store for the API key (`cx.Secrets()` is unavailable there) |
+| Web | Runs at [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/), built with the website. A browser has no secure store or file system for the app, so the key, works and added clothes last as long as the page; export pictures to keep them |
 
 ## Privacy
 
@@ -150,7 +150,7 @@ bun run build       # dist/client; BASE_PATH=/mirra/ for the Pages path
 bun run og          # retake public/og-<lang>.png from the dev server's /og/<lang>/ cards
 ```
 
-Pushes to `main` that touch it, the screenshots or the app's version publish it to GitHub Pages through `.github/workflows/website.yml`.
+Pushes to `main` that touch it, the app or the screenshots publish it to GitHub Pages through `.github/workflows/website.yml`, with the app's web build (`go tool nsgo build -target web` in `apps/mirra`) under `app/`.
 
 ## License
 
