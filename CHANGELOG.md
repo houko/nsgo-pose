@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.15.0 - 2026-11-20
+
 - EveryAPI is preset among the AI services, with its logo and a link to get a key; it starts on `gpt-image-2` through its OpenAI-compatible API, and its China address can be set under Advanced.
 
 ## 0.14.0 - 2026-11-20
