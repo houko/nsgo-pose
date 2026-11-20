@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Two-person poses ask the image model for two adults, with the chosen face and outfit on the main one, where the prompt asked for one person.
 ## 0.8.0 - 2026-11-20
 
 - The app updates itself from the latest release: Sparkle on macOS and WinSparkle on Windows check daily, Android as it starts, and About has Check for updates. Releases carry the signed appcasts the installed copies read; copies of 0.7.0 and older are reinstalled once.

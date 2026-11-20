@@ -65,6 +65,9 @@ func (r Request) count() int { return min(max(r.Count, 1), maxCount) }
 
 // Prompt says what each attached image is for, in the order the images are sent.
 func (r Request) Prompt() string {
+	if r.Pose != nil && r.Pose.People == 2 {
+		return r.pairPrompt()
+	}
 	var b strings.Builder
 	b.WriteString("Image 1 is a faceless gray mannequin showing a pose and a camera angle. Create one photorealistic photo of a single adult person in exactly that pose, framing and camera angle, on a plain light studio background.")
 	n := 2
@@ -79,12 +82,38 @@ func (r Request) Prompt() string {
 	} else {
 		b.WriteString(" Give them a natural adult face.")
 	}
+	r.writeNote(&b)
+	b.WriteString(" Output a single image of one adult person; no text, no watermark.")
+	return b.String()
+}
+
+// pairPrompt is the prompt of a two-person pose: the look's outfit and face go to the person the pose centers on, and the other person is an adult of their own.
+func (r Request) pairPrompt() string {
+	var b strings.Builder
+	b.WriteString("Image 1 shows two faceless gray mannequins in a pose and a camera angle. Create one photorealistic photo of two adult people in exactly that pose, framing and camera angle, on a plain light studio background. Call the more prominent figure the main person and the other the partner.")
+	n := 2
+	if r.Costume != nil {
+		fmt.Fprintf(&b, " Image %d shows an outfit with no one wearing it: dress the main person in exactly that outfit, with the same garments, colors, materials, patterns and details, fitted naturally to their body and pose. Dress the partner in simple clothes that suit it.", n)
+		n++
+	} else {
+		b.WriteString(" Dress both in simple, plain everyday clothes.")
+	}
+	if r.Face != nil {
+		fmt.Fprintf(&b, " Image %d is a portrait: give the main person that face, with the same facial features, skin tone, hairstyle and hair color, and give the partner a different natural adult face.", n)
+	} else {
+		b.WriteString(" Give both natural, different adult faces.")
+	}
+	r.writeNote(&b)
+	b.WriteString(" Output a single image of these two adults; no text, no watermark.")
+	return b.String()
+}
+
+// writeNote adds the user's own words, if any.
+func (r Request) writeNote(b *strings.Builder) {
 	if note := strings.TrimSpace(r.Note); note != "" {
 		b.WriteString(" Also: ")
 		b.WriteString(note)
 	}
-	b.WriteString(" Output a single image of one adult person; no text, no watermark.")
-	return b.String()
 }
 
 // maxImageBytes bounds a downloaded reference or generated image.

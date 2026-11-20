@@ -56,6 +56,8 @@ type Item struct {
 	Full  string
 	// Adult marks an item of an adults-only category, which shows only once the user says they are 18 or older.
 	Adult bool
+	// People is how many people a pose shows, 2 for the two-person line; 0 means one, as items saved before it was set have.
+	People int `json:",omitempty"`
 }
 
 // Catalog is a gallery's usable items and their groups in the gallery's order: Groups those of the items for everyone, AdultGroups those of the adults-only ones.
@@ -177,7 +179,11 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 			groups.add(r.Angle)
 		}
 		lines[r.ID] = r.Line
-		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name, Adult: adult,
+		people := 1
+		if strings.HasPrefix(r.Line, "2人") {
+			people = 2
+		}
+		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name, Adult: adult, People: people,
 			Thumb: origin + "/" + r.Thumb, Full: origin + "/" + r.Full})
 	}
 	// The gallery lists its glamour line first; the app opens on the everyday poses.
