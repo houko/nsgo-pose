@@ -207,7 +207,7 @@ noModelMatches: Kein passendes Modell
 refreshModels: Modelle neu laden
 modelsFailed: "Modelle konnten nicht geladen werden: {error}"
 eyebrowBackground: 04 SCENE
-slotBackground: Hintergrund
+slotBackground: Szene
 stepBackground: Hintergrund wählen
 noBackground: Kein Hintergrund
 removeBackground: Hintergrund entfernen

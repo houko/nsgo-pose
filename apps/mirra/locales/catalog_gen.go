@@ -2220,7 +2220,7 @@ var textsEn = i18n.NewTexts(""+
 	"Face"+
 	"Outfit"+
 	"Pose"+
-	"Background"+
+	"Scene"+
 	"Not chosen"+
 	"No background"+
 	"Remove the background"+
@@ -2413,7 +2413,7 @@ var textsEn = i18n.NewTexts(""+
 		4,
 		6,
 		4,
-		10,
+		5,
 		10,
 		13,
 		21,
@@ -2609,7 +2609,7 @@ var textsDe = i18n.NewTexts(""+
 	"Gesicht"+
 	"Outfit"+
 	"Pose"+
-	"Hintergrund"+
+	"Szene"+
 	"Nicht gewählt"+
 	"Kein Hintergrund"+
 	"Hintergrund entfernen"+
@@ -2802,7 +2802,7 @@ var textsDe = i18n.NewTexts(""+
 		7,
 		6,
 		4,
-		11,
+		5,
 		14,
 		16,
 		21,
@@ -7016,7 +7016,7 @@ func SlotPose(cx *core.Scope) string { return For(cx).SlotPose() }
 // SlotPose is the package's SlotPose in the language of msgs.
 func (msgs Messages) SlotPose() string { return msgs.text(textSlotPose) }
 
-// SlotBackground says "Background"
+// SlotBackground says "Scene"
 // in the language the app shows under cx.
 func SlotBackground(cx *core.Scope) string { return For(cx).SlotBackground() }
 

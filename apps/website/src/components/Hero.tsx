@@ -1,15 +1,15 @@
 import { useState } from 'react'
 
-import phoneEn from '../../../../screenshots/phone-home-en.png'
-import phoneZh from '../../../../screenshots/phone-home-zh-Hans.png'
 import { useCopy } from '../i18n/i18n'
+import type { Lang } from '../i18n/langs'
+import { screenshots } from '../screenshots'
 import { links, site } from '../site'
 import { CheckIcon } from './icons'
 import { Button, face } from './ui'
 
 const FACES = [1, 2, 3, 4, 5]
 
-export function Hero({ zh }: { zh: boolean }) {
+export function Hero({ lang }: { lang: Lang }) {
   const t = useCopy()
   const [current, setCurrent] = useState(1)
   return (
@@ -47,7 +47,7 @@ export function Hero({ zh }: { zh: boolean }) {
           </ul>
         </div>
         <div className="relative mx-auto w-full max-w-sm">
-          <img src={zh ? phoneZh : phoneEn} alt="" width={390} height={844} className="w-full rounded-[2.5rem] border border-line shadow-2xl" />
+          <img src={screenshots[lang].phone} alt="" width={390} height={844} className="w-full rounded-[2.5rem] border border-line shadow-2xl" />
           <figure className="absolute -left-10 top-16 w-36 -rotate-6 rounded-2xl border border-line bg-panel p-2 shadow-2xl">
             <img src={face(current)} alt="" width={400} height={500} className="aspect-[4/5] w-full rounded-xl object-cover" />
             <figcaption className="px-1 pt-2 text-[10px] tracking-[0.2em] text-muted">01 FACE</figcaption>

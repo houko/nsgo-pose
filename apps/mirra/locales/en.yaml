@@ -43,7 +43,7 @@ eyebrowBackground: 04 SCENE
 slotFace: Face
 slotCostume: Outfit
 slotPose: Pose
-slotBackground: Background
+slotBackground: Scene
 notChosen: Not chosen
 noBackground: No background
 removeBackground: Remove the background

@@ -3,14 +3,14 @@
 const zh = {
   meta: {
     title: 'Mirra 镜衣 · 开源的全平台 AI 换装工具',
-    description: '镜衣是开源的全平台 AI 换装工具：选人脸、挑服装、定姿势，接上你自己的 AI 服务，一键生成造型。MIT 协议，免费，无需账号。',
+    description: '镜衣是开源的全平台 AI 换装工具：选人脸、挑服装、定姿势，再配一个背景，接上你自己的 AI 服务，一键生成造型。MIT 协议，免费，无需账号。',
   },
   nav: { label: '站点导航', how: '怎么用', why: '为什么是镜衣', start: '快速开始', faq: '常见问题', download: '免费下载', language: '语言' },
   hero: {
     badge: '查看更新日志',
     kicker: 'OPEN SOURCE · AI 换装',
     title: ['换一张脸，', '换一身衣，', '换一个姿势。'],
-    sub: '镜衣是开源的全平台 AI 换装工具。选一张模特脸、挑一套服装、定一个姿势，一键生成你的造型。请求只在你的设备和你自己配置的 AI 服务之间流转。',
+    sub: '镜衣是开源的全平台 AI 换装工具。选一张模特脸、挑一套服装、定一个姿势，需要的话再配一个背景，一键生成你的造型。请求只在你的设备和你自己配置的 AI 服务之间流转。',
     cta: '免费下载',
     source: '查看源码',
     checks: ['免费，无需账号', '支持本地部署', 'Key 只存本机'],
@@ -19,11 +19,12 @@ const zh = {
   },
   how: {
     kicker: 'HOW IT WORKS',
-    title: '三步，得到一张造型照',
+    title: '四步，得到一张造型照',
     steps: [
       ['选人脸', '从 CC0 授权的 AI 模特脸库里挑一张，可以按短发、中发、中长发、长发筛选。'],
       ['挑服装', '按春夏秋冬、派对、泳装浏览整套搭配，喜欢的点 ♡ 收进衣橱；也可以上传自己衣服的平铺照或挂拍照。'],
-      ['定姿势', '从人偶线稿姿势库里选一个，再选正面、斜侧、侧面、俯视或仰视，然后一键生成。'],
+      ['定姿势', '从人偶线稿姿势库里选一个，再选正面、斜侧、侧面、俯视或仰视；也可以把这个姿势的全部角度生成在一张合图里。'],
+      ['选背景', '可选。默认由风格决定场景：影棚、街拍、白底、胶片或动漫；也可以从自带的室内、城市、自然背景里挑一张。然后一键生成，或者点「随机一套」让镜衣替你搭。'],
     ],
     outfitTags: ['春', '夏', '秋', '冬', '派对', '我的衣服'],
     angleTags: ['正面', '斜侧', '侧面', '俯视', '仰视'],
@@ -36,7 +37,7 @@ const zh = {
       ['开源免费', '代码全部公开，以 MIT 协议发布。不收费，不需要注册账号。'],
       ['用你自己的 AI', '预置 OpenAI、Google Gemini、火山方舟、xAI、OpenRouter、EveryAPI、阿里云百炼和 Azure OpenAI，选好服务商、填入 Key 就能用；也能接任意 OpenAI 兼容服务，或在本机运行 stable-diffusion.cpp，没有调用费。'],
       ['只在本机', 'API Key 存在系统钥匙串里，衣服照片和作品只存在你的设备上。生成请求直接从你的设备发往你配置的服务。'],
-      ['一套体验，全平台', '手机、桌面和浏览器用的是同一套流程：衣橱、作品、AI 服务设置都一样。网页版的 Key 和作品只保存在当前页面。'],
+      ['一套体验，全平台', '手机、桌面和浏览器用的是同一套流程：衣橱、作品、AI 服务设置都一样，界面支持 11 种语言。网页版的 Key 和作品只保存在当前页面。'],
     ],
   },
   start: {
@@ -47,8 +48,8 @@ const zh = {
     steps: [
       [
         ['下载安装', '在下方选择你的平台，下载并安装镜衣。', ''],
-        ['打开 AI 服务设置', '手机上进入「我的」，桌面上点右上角的设置按钮，选择服务商。', ''],
-        ['填入 Key 并测试连接', '填入 API Key（点「获取 API Key」会打开服务商的页面），点「测试连接」，通过后就能生成。地址、模型和尺寸都已预置，需要时在「高级设置」里改。', ''],
+        ['打开 AI 服务设置', '手机上进入「我的」，桌面上点右上角的设置按钮并打开「AI 服务」，选择服务商。', ''],
+        ['填入 Key 并测试连接', '填入 API Key（点「获取 API Key」会打开服务商的页面），从服务商的模型列表里选一个模型，点「测试连接」，通过后就能生成。地址和尺寸已预置，需要时在「高级设置」里改。', ''],
       ],
       [
         ['准备一个兼容服务', '在你的电脑上运行 stable-diffusion.cpp 的服务，或其他提供 /v1/images/edits 和 /v1/models 的 OpenAI 兼容图片编辑服务。', ''],
@@ -102,8 +103,9 @@ const zh = {
       ['镜衣真的免费吗？', '是的。镜衣以 MIT 协议开源，不收费，也不需要账号。如果你用云端 API，费用由你选的服务商收取；用自己部署的服务则没有调用费。'],
       ['我的数据会被上传吗？', '镜衣没有自己的服务器。API Key 存在你设备的系统钥匙串里，衣服照片和作品只存在本机；生成时，你选的图片和提示词直接发往你自己配置的 AI 服务。'],
       ['没有显卡能用吗？', '可以。选一家云端服务商，填入它的 Key 就行。只有自己部署模型时才需要能跑模型的显卡。'],
-      ['内置的人脸、服装和姿势素材从哪来？', '模特脸来自 CC0 授权的 AI 人像库。服装和姿势来自第三方参考图库，镜衣只在你使用时单独获取，不内置也不转发，具体来源和授权见「素材来源与授权」。'],
+      ['内置的人脸、服装、姿势和背景素材从哪来？', '模特脸来自 CC0 授权的 AI 人像库，背景是镜衣自带的公有领域（CC0）照片，画面里没有人。服装和姿势来自第三方参考图库，镜衣只在你使用时单独获取，不内置也不转发，具体来源和授权见「素材来源与授权」。'],
       ['能用自己或别人的照片换脸吗？', '不能。镜衣不读取任何人的照片：姿势库和服装库的条款禁止用它们的图片表现真实的人。人脸只来自 CC0 的 AI 模特脸库，上传的只能是衣服照片。'],
+      ['支持哪些语言？', '界面支持简体中文、繁体中文、英语、日语、韩语、西班牙语、法语、德语、巴西葡萄牙语、俄语和意大利语。默认跟随系统，也可以在设置的「通用」里切换。'],
       ['怎么参与贡献？', '先读一读 README 里的开发说明和 ARCHITECTURE.md，然后在 GitHub 上提 Issue 或 Pull Request。代码、翻译和文档都很欢迎。'],
     ],
   },
@@ -112,7 +114,7 @@ const zh = {
     made: '由社区共同维护',
     groups: ['产品', '开源', '说明'],
     links: { how: '怎么用', download: '下载', github: 'GitHub', guide: '开发说明', privacy: '隐私说明', sources: '素材来源与授权' },
-    credit: '页面上的模特脸来自 FACE REFERENCE（CC0）。',
+    credit: '页面上的模特脸来自 FACE REFERENCE（CC0），背景来自 StockSnap 和 rawpixel（CC0）。',
   },
 }
 
@@ -121,14 +123,14 @@ export type Copy = typeof zh
 const en: Copy = {
   meta: {
     title: 'Mirra · Open-source AI try-on for every platform',
-    description: 'Mirra is an open-source AI try-on app: pick a face, choose an outfit, set a pose, connect your own AI service and generate your look. MIT, free, no account.',
+    description: 'Mirra is an open-source AI try-on app: pick a face, choose an outfit, set a pose and, if you like, a background, connect your own AI service and generate your look. MIT, free, no account.',
   },
   nav: { label: 'Site navigation', how: 'How it works', why: 'Why Mirra', start: 'Quick start', faq: 'FAQ', download: 'Download free', language: 'Language' },
   hero: {
     badge: 'See the changelog',
     kicker: 'OPEN SOURCE · AI TRY-ON',
     title: ['New face.', 'New outfit.', 'New pose.'],
-    sub: 'Mirra is an open-source AI try-on app. Pick a model face, choose an outfit, set a pose, and generate your look in one tap. Requests only travel between your device and the AI service you set up.',
+    sub: 'Mirra is an open-source AI try-on app. Pick a model face, choose an outfit, set a pose, add a background if you like, and generate your look in one tap. Requests only travel between your device and the AI service you set up.',
     cta: 'Download free',
     source: 'View source',
     checks: ['Free, no account', 'Runs with your own server', 'Keys stay on your device'],
@@ -137,11 +139,12 @@ const en: Copy = {
   },
   how: {
     kicker: 'HOW IT WORKS',
-    title: 'Three steps to your look',
+    title: 'Four steps to your look',
     steps: [
       ['Pick a face', 'Choose one from the CC0-licensed AI model library, filtered by short, medium, shoulder-length or long hair.'],
       ['Choose an outfit', 'Browse complete looks by season, party and swimwear, keep the ones you like with ♡, or add photos of your own clothes laid flat or on a hanger.'],
-      ['Set a pose', 'Pick a pose from the mannequin line-art library, choose front, three-quarter, side, high or low angle, then generate.'],
+      ['Set a pose', 'Pick a pose from the mannequin line-art library and choose front, three-quarter, side, high or low angle, or make one sheet of the pose from every angle.'],
+      ['Choose a background', 'Optional. By default the style sets the scene: studio, street, white backdrop, film or anime. Or pick one of the built-in indoor, city and nature backgrounds. Then generate, or let Surprise me put a look together for you.'],
     ],
     outfitTags: ['Spring', 'Summer', 'Autumn', 'Winter', 'Party', 'My clothes'],
     angleTags: ['Front', 'Three-quarter', 'Side', 'From above', 'From below'],
@@ -154,7 +157,7 @@ const en: Copy = {
       ['Open source & free', 'All code is public under MIT. No fees, no sign-up.'],
       ['Bring your own AI', 'OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, EveryAPI, Alibaba Cloud Model Studio and Azure OpenAI are preset: choose one and enter its key. Or connect any OpenAI-compatible service, or run stable-diffusion.cpp on your own machine at no per-call cost.'],
       ['On your device only', 'API keys stay in the system keychain; photos of your clothes and your looks stay on your device. Requests go straight to the service you set up.'],
-      ['One experience, everywhere', 'Phone, desktop and browser share the same flow, including wardrobe, lookbook and AI settings. The web version keeps its key and looks only as long as the page.'],
+      ['One experience, everywhere', 'Phone, desktop and browser share the same flow, including wardrobe, lookbook and AI settings, in eleven languages. The web version keeps its key and looks only as long as the page.'],
     ],
   },
   start: {
@@ -165,8 +168,8 @@ const en: Copy = {
     steps: [
       [
         ['Download & install', 'Pick your platform below, then download and install Mirra.', ''],
-        ['Open AI service', 'Open Me on a phone, or the settings button at the top right on a desktop, and choose a provider.', ''],
-        ['Enter a key & test', 'Enter your API key (Get an API key opens the provider’s page), press Test connection, and you are ready to generate. The address, model and size are preset; change them under Advanced if you need to.', ''],
+        ['Open AI service', 'Open Me on a phone, or the settings button at the top right on a desktop and then AI service, and choose a provider.', ''],
+        ['Enter a key & test', 'Enter your API key (Get an API key opens the provider’s page), choose a model from the provider’s list, press Test connection, and you are ready to generate. The address and size are preset; change them under Advanced if you need to.', ''],
       ],
       [
         ['Run a compatible service', 'Run stable-diffusion.cpp’s server on your computer, or another OpenAI-compatible image editing service with /v1/images/edits and /v1/models.', ''],
@@ -220,8 +223,9 @@ const en: Copy = {
       ['Is Mirra really free?', 'Yes. Mirra is open source under MIT, with no fees and no account. If you use a cloud API, your provider bills you; a service you run yourself has no per-call cost.'],
       ['Is my data uploaded?', 'Mirra has no servers of its own. API keys stay in your device’s keychain, and photos of your clothes and your looks stay on your device; when you generate, the images you chose and the prompt go straight to the AI service you set up.'],
       ['Can I use it without a GPU?', 'Yes. Choose a cloud provider and enter its key. Only running a model yourself needs a GPU that can run it.'],
-      ['Where do the built-in faces, outfits and poses come from?', 'Model faces come from a CC0-licensed AI portrait library. Outfits and poses come from third-party reference galleries, which Mirra fetches only when you use them and never bundles or redistributes; see Asset sources & licenses.'],
+      ['Where do the built-in faces, outfits, poses and backgrounds come from?', 'Model faces come from a CC0-licensed AI portrait library, and the backgrounds are public domain (CC0) photographs that ship with Mirra, with no one in them. Outfits and poses come from third-party reference galleries, which Mirra fetches only when you use them and never bundles or redistributes; see Asset sources & licenses.'],
       ['Can I use my own or someone else’s photo as the face?', 'No. Mirra takes no one’s photo: the pose and outfit galleries’ terms forbid using their images to depict real people. Faces come only from the CC0 model library, and the photos you add are of clothes.'],
+      ['Which languages does it speak?', 'Simplified and Traditional Chinese, English, Japanese, Korean, Spanish, French, German, Brazilian Portuguese, Russian and Italian. It follows your system, or choose one under General in the settings.'],
       ['How can I contribute?', 'Read the development notes in the README and ARCHITECTURE.md, then open an issue or a pull request on GitHub. Code, translations and docs are all welcome.'],
     ],
   },
@@ -230,21 +234,21 @@ const en: Copy = {
     made: 'Maintained by the community',
     groups: ['Product', 'Open source', 'About'],
     links: { how: 'How it works', download: 'Download', github: 'GitHub', guide: 'Development notes', privacy: 'Privacy', sources: 'Asset sources & licenses' },
-    credit: 'The model faces on this page are from FACE REFERENCE (CC0).',
+    credit: 'The model faces on this page are from FACE REFERENCE (CC0); the backgrounds are from StockSnap and rawpixel (CC0).',
   },
 }
 
 const ja: Copy = {
   meta: {
     title: 'Mirra 鏡衣 · オープンソースのマルチプラットフォーム AI 着せ替え',
-    description: 'Mirra はオープンソースの AI 着せ替えアプリです。顔を選び、服を選び、ポーズを決め、自分の AI サービスにつないでワンタップで生成します。MIT ライセンス、無料、アカウント不要。',
+    description: 'Mirra はオープンソースの AI 着せ替えアプリです。顔を選び、服を選び、ポーズを決め、好みで背景も選んで、自分の AI サービスにつないでワンタップで生成します。MIT ライセンス、無料、アカウント不要。',
   },
   nav: { label: 'サイトナビゲーション', how: '使い方', why: 'Mirra の特長', start: 'クイックスタート', faq: 'よくある質問', download: '無料ダウンロード', language: '言語' },
   hero: {
     badge: '更新履歴を見る',
     kicker: 'OPEN SOURCE · AI 着せ替え',
     title: ['顔を変える。', '服を変える。', 'ポーズを変える。'],
-    sub: 'Mirra はオープンソースの AI 着せ替えアプリです。モデルの顔を選び、服を選び、ポーズを決めて、ワンタップでスタイルを生成します。リクエストはあなたのデバイスと、あなたが設定した AI サービスの間だけでやり取りされます。',
+    sub: 'Mirra はオープンソースの AI 着せ替えアプリです。モデルの顔を選び、服を選び、ポーズを決め、必要なら背景も選んで、ワンタップでスタイルを生成します。リクエストはあなたのデバイスと、あなたが設定した AI サービスの間だけでやり取りされます。',
     cta: '無料ダウンロード',
     source: 'ソースを見る',
     checks: ['無料・アカウント不要', 'セルフホスト対応', 'キーは端末内だけ'],
@@ -253,11 +257,12 @@ const ja: Copy = {
   },
   how: {
     kicker: 'HOW IT WORKS',
-    title: '3 ステップでスタイル写真に',
+    title: '4 ステップでスタイル写真に',
     steps: [
       ['顔を選ぶ', 'CC0 ライセンスの AI モデル顔ライブラリから 1 枚選びます。ショート、ミディアム、セミロング、ロングで絞り込めます。'],
       ['服を選ぶ', '春夏秋冬・パーティ・水着のコーディネートを眺め、気に入ったものは ♡ でクローゼットへ。自分の服の平置き写真やハンガー写真も追加できます。'],
-      ['ポーズを決める', 'マネキン線画のポーズライブラリから選び、正面・斜め・横・俯瞰・あおりを選んで生成します。'],
+      ['ポーズを決める', 'マネキン線画のポーズライブラリから選び、正面・斜め・横・俯瞰・あおりを選びます。ポーズのすべての角度を 1 枚にまとめることもできます。'],
+      ['背景を選ぶ', '任意です。標準ではスタイルがシーンを決めます（スタジオ、ストリート、白背景、フィルム、アニメ）。内蔵の屋内・街・自然の背景から選ぶこともできます。あとはワンタップで生成するか、「おまかせ」で組み合わせを任せましょう。'],
     ],
     outfitTags: ['春', '夏', '秋', '冬', 'パーティ', '自分の服'],
     angleTags: ['正面', '斜め', '横', '俯瞰', 'あおり'],
@@ -270,7 +275,7 @@ const ja: Copy = {
       ['オープンソースで無料', 'コードはすべて MIT ライセンスで公開。料金も登録も不要です。'],
       ['自分の AI を使う', 'OpenAI、Google Gemini、Volcengine Ark、xAI、OpenRouter、EveryAPI、Alibaba Cloud Model Studio、Azure OpenAI をあらかじめ用意。選んでキーを入れるだけです。OpenAI 互換サービスや、自分のマシンで動かす stable-diffusion.cpp にもつなげ、ローカルなら呼び出し料金はかかりません。'],
       ['端末の中だけ', 'API キーはシステムのキーチェーンに、服の写真と作品は端末内だけに保存されます。リクエストは設定したサービスへ直接送られます。'],
-      ['ひとつの体験を、どこでも', 'スマホ、デスクトップ、ブラウザで同じ流れ。クローゼット、作品、AI サービス設定も共通です。Web 版のキーと作品はページを開いている間だけ保存されます。'],
+      ['ひとつの体験を、どこでも', 'スマホ、デスクトップ、ブラウザで同じ流れ。クローゼット、作品、AI サービス設定も共通で、11 の言語に対応しています。Web 版のキーと作品はページを開いている間だけ保存されます。'],
     ],
   },
   start: {
@@ -281,13 +286,13 @@ const ja: Copy = {
     steps: [
       [
         ['ダウンロードしてインストール', '下からプラットフォームを選び、Mirra をダウンロードしてインストールします。', ''],
-        ['AI サービス設定を開く', 'スマホでは「マイ」、デスクトップでは右上の設定ボタンから、プロバイダーを選びます。', ''],
-        ['キーを入力して接続テスト', 'API キーを入力し（「API キーを取得」でプロバイダーのページが開きます）、「接続テスト」が通れば生成できます。アドレス・モデル・サイズは設定済みで、必要なら「詳細設定」で変えられます。', ''],
+        ['AI サービス設定を開く', 'スマホでは「マイページ」、デスクトップでは右上の設定ボタンから「AI サービス」を開き、プロバイダーを選びます。', ''],
+        ['キーを入力して接続テスト', 'API キーを入力し（「API Key を取得」でプロバイダーのページが開きます）、プロバイダーのモデル一覧からモデルを選んで「接続をテスト」が通れば生成できます。アドレスとサイズは設定済みで、必要なら「詳細設定」で変えられます。', ''],
       ],
       [
         ['互換サービスを用意する', 'stable-diffusion.cpp のサーバー、または /v1/images/edits と /v1/models を備えた OpenAI 互換の画像編集サービスを自分のコンピューターで動かします。', ''],
         ['Mirra でプロバイダーを選ぶ', 'AI サービス設定で「stable-diffusion.cpp」を選べばアドレスは入力済みです。ほかのサービスは「カスタム（OpenAI 互換）」を選んでアドレスを入力します。キーは空欄でもかまいません。', 'http://127.0.0.1:8080/v1'],
-        ['接続をテストする', '「接続テスト」を押すと、Mirra がモデル一覧を問い合わせます。応答があれば生成できます。', ''],
+        ['接続をテストする', '「接続をテスト」を押すと、Mirra がモデル一覧を問い合わせます。応答があれば生成できます。', ''],
       ],
       [
         ['リポジトリをクローン', 'Go 1.27.4 以降が必要です。Mac では iOS と Android 版もビルドできます。', 'git clone https://github.com/yldm-ai/mirra.git'],
@@ -336,8 +341,9 @@ const ja: Copy = {
       ['本当に無料ですか？', 'はい。Mirra は MIT ライセンスのオープンソースで、料金もアカウントも不要です。クラウド API を使う場合はその提供元から請求され、自分で動かすサービスなら呼び出し料金はかかりません。'],
       ['データはアップロードされますか？', 'Mirra は自前のサーバーを持ちません。API キーは端末のキーチェーンに、服の写真と作品は端末内に保存されます。生成時には、選んだ画像とプロンプトがあなたの設定した AI サービスへ直接送られます。'],
       ['GPU がなくても使えますか？', 'はい。クラウドのプロバイダーを選び、そのキーを入力するだけです。モデルを自分で動かす場合にのみ、それを動かせる GPU が必要です。'],
-      ['内蔵の顔・服・ポーズの素材はどこから？', 'モデルの顔は CC0 ライセンスの AI ポートレートライブラリから。服とポーズは第三者の参考ギャラリーのもので、使うときにだけ個別に取得し、同梱も再配布もしません。詳しくは「素材の出典とライセンス」をご覧ください。'],
+      ['内蔵の顔・服・ポーズ・背景の素材はどこから？', 'モデルの顔は CC0 ライセンスの AI ポートレートライブラリから、背景は Mirra に同梱したパブリックドメイン（CC0）の写真で、人は写っていません。服とポーズは第三者の参考ギャラリーのもので、使うときにだけ個別に取得し、同梱も再配布もしません。詳しくは「素材の出典とライセンス」をご覧ください。'],
       ['自分や他人の写真で顔を入れ替えられますか？', 'できません。Mirra は誰の写真も読み込みません。ポーズと服のギャラリーの規約は、その画像で実在の人物を表すことを禁じています。顔は CC0 の AI モデル顔ライブラリからのみ選べ、追加できる写真は服だけです。'],
+      ['どの言語に対応していますか？', '簡体字中国語、繁体字中国語、英語、日本語、韓国語、スペイン語、フランス語、ドイツ語、ブラジルポルトガル語、ロシア語、イタリア語です。システムの言語に合わせるほか、設定の「一般」で切り替えられます。'],
       ['どうやって貢献できますか？', 'README の開発メモと ARCHITECTURE.md を読んでから、GitHub で Issue や Pull Request を作ってください。コード、翻訳、ドキュメント、どれも歓迎です。'],
     ],
   },
@@ -346,7 +352,7 @@ const ja: Copy = {
     made: 'コミュニティでメンテナンスしています',
     groups: ['プロダクト', 'オープンソース', 'このサイトについて'],
     links: { how: '使い方', download: 'ダウンロード', github: 'GitHub', guide: '開発メモ', privacy: 'プライバシー', sources: '素材の出典とライセンス' },
-    credit: 'このページのモデルの顔は FACE REFERENCE（CC0）のものです。',
+    credit: 'このページのモデルの顔は FACE REFERENCE（CC0）、背景は StockSnap と rawpixel（CC0）のものです。',
   },
 }
 
