@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.18.0 - 2026-11-20
+
+### Features
+
+- Set the look in a background
+
 ## 0.17.0 - 2026-11-20
 
 - The app speaks Traditional Chinese, Japanese, Korean, Spanish, French, German, Brazilian Portuguese, Russian and Italian as well as English and Simplified Chinese, chosen in the language setting or following the system.
