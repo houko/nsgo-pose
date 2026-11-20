@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.19.0 - 2026-11-20
+
 - The settings are laid out as cards of rows, each setting's name on the left and its control on the right, on the desktop and the phone alike. The AI service page opens on the chosen provider with its logo, the connection's state and the test, and a failed test says why across the card; the advanced settings and Reset to defaults follow the same cards.
 - General adds a switch for the galleries' 18+ categories: on asks your age once, off forgets the answer, so turning it back on asks again. Before, the answer could not be taken back.
 - About opens on the app's icon and name, and Sources lists where the backgrounds come from.
