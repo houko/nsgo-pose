@@ -8,9 +8,7 @@
 
 ## 0.7.0 - 2026-11-20
 
-### Features
-
-- Put the address, model and size under Advanced
+- The AI settings show the provider and key first, with the address, model and size under Advanced and a reset to the provider's defaults; the size is chosen as portrait, square or landscape, the key is shown with an eye button, the About section gives the version, and the desktop settings scroll when they are taller than the window.
 
 ## 0.6.0 - 2026-11-20
 
