@@ -147,9 +147,15 @@ jobs:
         if: matrix.name == 'Android' && env.SIGN
         env:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          RELEASE: ${{ inputs.tag != '' && 'true' || '' }}
         run: |
           if [ -z "$ANDROID_KEYSTORE" ]; then
-            echo "::warning::The ANDROID_KEYSTORE secret is not set, so this release ships no Android APK."
+            # Installed Android copies update from the latest release's appcast, which a release without the APK would lack.
+            if [ -n "$RELEASE" ]; then
+              echo "::error::The ANDROID_KEYSTORE secret is not set, so this release would ship no Android APK and installed Android copies could not update."
+              exit 1
+            fi
+            echo "::warning::The ANDROID_KEYSTORE secret is not set, so this build makes no Android APK."
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
