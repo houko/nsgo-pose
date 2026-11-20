@@ -190,3 +190,125 @@ errServer: Le service a rencontré un problème. Réessayez plus tard.
 errTimeout: Le service a mis trop de temps à répondre. Réessayez.
 errNetwork: Impossible de joindre le service. Vérifiez le réseau et l’adresse.
 errNoImage: Le service a répondu sans image. Réessayez ou modifiez le look.
+
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: Édition
+  window: Fenêtre
+  about: À propos
+  aboutApp: À propos de {app}
+  hide: Masquer
+  hideApp: Masquer {app}
+  hideOthers: Masquer les autres
+  showAll: Tout afficher
+  quit: Quitter
+  quitApp: Quitter {app}
+  undo: Annuler
+  redo: Rétablir
+  cut: Couper
+  copy: Copier
+  paste: Coller
+  delete: Supprimer
+  selectAll: Tout sélectionner
+  minimize: Réduire
+  zoom: Réduire/agrandir
+  toggleFullScreen: Activer/désactiver le mode plein écran
+  enterFullScreen: Passer en mode plein écran
+  exitFullScreen: Quitter le mode plein écran
+  close: Fermer
+  guideDrag: Faites glisser {app} dans la liste ci-dessus pour autoriser « {permission} ».
+  guideDragHint: Glisser
+  permissionAccessibility: Accessibilité
+  permissionDeviceControl: Contrôle de l’appareil et accès aux données
+  permissionScreenRecording: Enregistrement de l’écran
+  permissionScreenAudioRecording: Enregistrement de l’écran et de l’audio du système
+  permissionInputMonitoring: Surveillance de l’entrée
+  permissionFullDiskAccess: Accès complet au disque
+  permissionAppManagement: Gestion des apps
+  permissionDeveloperTools: Outils de développement
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: Médias et Apple Music
+  authSessionDone: Vous pouvez fermer cette page et revenir à l’app.
+  pasteAndMatchStyle: Coller et adapter le style
+  startSpeaking: Commencer la lecture
+  stopSpeaking: Arrêter la lecture
+  bringAllToFront: Tout ramener au premier plan
+  checkForUpdates: Rechercher des mises à jour…
+  services: Services
+  help: Aide
+  roleLink: lien
+  roleTab: onglet
+  roleSearchBox: zone de recherche
+  roleStatus: état
+  roleMenu: menu
+  roleMenuItem: élément de menu
+  roleDialog: boîte de dialogue
+  roleAlert: alerte
+  roleTable: tableau
+  roleGrid: grille
+  roleRow: ligne
+  roleColumnHeader: en-tête de colonne
+  roleCell: cellule
+  statePartiallyChecked: partiellement coché
+  stateExpanded: développé
+  stateCollapsed: réduit
+  spokenSeparator: ", "
+
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: Une nouvelle version de {app} est disponible
+  updateAvailableMessage: "{app} {version} est disponible. Vous avez la version {current}."
+  update: Mettre à jour
+  later: Plus tard
+  upToDate: Vous êtes à jour
+  upToDateMessage: "{app} {version} est la dernière version disponible."
+  updateError: Impossible de rechercher des mises à jour
+  updateErrorMessage: Un problème est survenu lors de la recherche de mises à jour. Réessayez plus tard.
+  installError: Impossible d’installer la mise à jour
+  installErrorMessage: "{app} {version} n’a pas pu être téléchargée ni installée. Vous pouvez l’obtenir depuis sa page."
+  openPage: Ouvrir la page
+  ok: OK
+
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: Trier par {column}
+  diffUnchangedLines: "{n, plural, one {# ligne inchangée} other {# lignes inchangées}}"
+  diffExpandAll: Tout développer
+  diffStage: Indexer
+  diffDiscardChanges: Annuler les modifications…
+  collapseMerge: Réduire la fusion
+  expandMerge: Développer la fusion
+  colorHue: Teinte
+  colorAlpha: Opacité
+  colorSaturationBrightness: Saturation et luminosité
+  colorHex: Couleur hexadécimale
+  colorEyeDropper: Prélever une couleur à l’écran
+  colorFormat: Format de couleur
+  colorCopy: Copier la couleur
+  colorRed: Rouge
+  colorGreen: Vert
+  colorBlue: Bleu
+  colorHueDegrees: Teinte en degrés
+  colorSaturationPercent: Saturation en pourcentage
+  colorBrightnessPercent: Luminosité en pourcentage
+  colorLightnessPercent: Clarté en pourcentage
+  colorOpacityPercent: Opacité en pourcentage
+  calendarPrevious: Mois précédent
+  calendarNext: Mois suivant
+  listClear: Effacer
+  listNothingFound: Aucun résultat
+  listSearch: Rechercher
+  commandSearch: Rechercher des commandes
+  commandSearchPlaceholder: Rechercher des commandes…
+  commandNoMatches: Aucune commande correspondante
+  commandLoading: Chargement…
+  commandList: Commandes
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: Plus
+  flowLabel: "{nodes, plural, one {# nœud} other {# nœuds}}, {edges, plural, one {# arête} other {# arêtes}}"
+
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: Remarque
+  alertTip: Conseil
+  alertImportant: Important
+  alertWarning: Avertissement
+  alertCaution: Attention

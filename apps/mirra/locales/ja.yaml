@@ -190,3 +190,121 @@ errServer: サービスで問題が発生しました。しばらくしてから
 errTimeout: サービスの応答がタイムアウトしました。再試行してください。
 errNetwork: サービスに接続できません。ネットワークとアドレスを確認してください。
 errNoImage: サービスから画像が返されませんでした。再試行するか、コーデを変更してください。
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: 編集
+  window: ウインドウ
+  about: 情報
+  aboutApp: "{app}について"
+  hide: 隠す
+  hideApp: "{app}を隠す"
+  hideOthers: ほかを隠す
+  showAll: すべてを表示
+  quit: 終了
+  quitApp: "{app}を終了"
+  undo: 取り消す
+  redo: やり直す
+  cut: カット
+  copy: コピー
+  paste: ペースト
+  delete: 削除
+  selectAll: すべてを選択
+  minimize: しまう
+  zoom: 拡大/縮小
+  toggleFullScreen: フルスクリーン表示を切り替え
+  enterFullScreen: フルスクリーンにする
+  exitFullScreen: フルスクリーンを解除
+  close: 閉じる
+  guideDrag: "{app}を上のリストにドラッグして「{permission}」を許可してください。"
+  guideDragHint: ドラッグ
+  permissionAccessibility: アクセシビリティ
+  permissionDeviceControl: デバイスの制御とデータへのアクセス
+  permissionScreenRecording: 画面収録
+  permissionScreenAudioRecording: 画面収録とシステムオーディオ録音
+  permissionInputMonitoring: 入力監視
+  permissionFullDiskAccess: フルディスクアクセス
+  permissionAppManagement: App管理
+  permissionDeveloperTools: デベロッパツール
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: メディアとApple Music
+  authSessionDone: このページを閉じてアプリに戻ってください。
+  pasteAndMatchStyle: ペーストしてスタイルを合わせる
+  startSpeaking: 読み上げを開始
+  stopSpeaking: 読み上げを停止
+  bringAllToFront: すべてを手前に移動
+  checkForUpdates: アップデートを確認…
+  services: サービス
+  help: ヘルプ
+  roleLink: リンク
+  roleTab: タブ
+  roleSearchBox: 検索ボックス
+  roleStatus: ステータス
+  roleMenu: メニュー
+  roleMenuItem: メニュー項目
+  roleDialog: ダイアログ
+  roleAlert: 警告
+  roleTable: 表
+  roleGrid: グリッド
+  roleRow: 行
+  roleColumnHeader: 列見出し
+  roleCell: セル
+  statePartiallyChecked: 一部チェック済み
+  stateExpanded: 展開
+  stateCollapsed: 折りたたみ
+  spokenSeparator: 、
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: "{app}の新しいバージョンがあります"
+  updateAvailableMessage: "{app} {version}が利用可能です。現在のバージョンは{current}です。"
+  update: アップデート
+  later: あとで
+  upToDate: 最新の状態です
+  upToDateMessage: "{app} {version}は利用可能な最新バージョンです。"
+  updateError: アップデートを確認できません
+  updateErrorMessage: アップデートの確認中に問題が発生しました。しばらくしてからもう一度お試しください。
+  installError: アップデートをインストールできません
+  installErrorMessage: "{app} {version}をダウンロードまたはインストールできませんでした。代わりに配布ページから入手できます。"
+  openPage: ページを開く
+  ok: OK
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: "{column}で並べ替え"
+  diffUnchangedLines: "{n, plural, other {変更のない#行}}"
+  diffExpandAll: すべて展開
+  diffStage: ステージ
+  diffDiscardChanges: 変更を破棄…
+  collapseMerge: マージを折りたたむ
+  expandMerge: マージを展開
+  colorHue: 色相
+  colorAlpha: 不透明度
+  colorSaturationBrightness: 彩度と明度
+  colorHex: 16進カラー
+  colorEyeDropper: 画面から色を取得
+  colorFormat: カラー形式
+  colorCopy: カラーをコピー
+  colorRed: 赤
+  colorGreen: 緑
+  colorBlue: 青
+  colorHueDegrees: 色相（度）
+  colorSaturationPercent: 彩度（%）
+  colorBrightnessPercent: 明度（%）
+  colorLightnessPercent: 輝度（%）
+  colorOpacityPercent: 不透明度（%）
+  calendarPrevious: 前の月
+  calendarNext: 次の月
+  listClear: 消去
+  listNothingFound: 見つかりません
+  listSearch: 検索
+  commandSearch: コマンドを検索
+  commandSearchPlaceholder: コマンドを検索…
+  commandNoMatches: 一致するコマンドはありません
+  commandLoading: 読み込み中…
+  commandList: コマンド
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: その他
+  flowLabel: "{nodes, plural, other {#個のノード}}、{edges, plural, other {#本のエッジ}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: メモ
+  alertTip: ヒント
+  alertImportant: 重要
+  alertWarning: 警告
+  alertCaution: 注意

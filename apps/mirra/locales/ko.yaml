@@ -190,3 +190,121 @@ errServer: 서비스에 문제가 생겼어요. 잠시 후 다시 시도하세�
 errTimeout: 서비스 응답이 너무 늦어요. 다시 시도하세요.
 errNetwork: 서비스에 연결할 수 없어요. 네트워크와 주소를 확인하세요.
 errNoImage: 서비스가 이미지 없이 응답했어요. 다시 시도하거나 룩을 바꿔 보세요.
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: 편집
+  window: 윈도우
+  about: 정보
+  aboutApp: "{app}에 관하여"
+  hide: 가리기
+  hideApp: "{app} 가리기"
+  hideOthers: 기타 가리기
+  showAll: 모두 보기
+  quit: 종료
+  quitApp: "{app} 종료"
+  undo: 실행 취소
+  redo: 실행 복귀
+  cut: 오려두기
+  copy: 복사하기
+  paste: 붙여넣기
+  delete: 삭제
+  selectAll: 모두 선택
+  minimize: 최소화
+  zoom: 확대/축소
+  toggleFullScreen: 전체 화면 전환
+  enterFullScreen: 전체 화면 시작
+  exitFullScreen: 전체 화면 종료
+  close: 닫기
+  guideDrag: 위 목록으로 {app}을(를) 드래그하여 ‘{permission}’을(를) 허용하세요.
+  guideDragHint: 드래그
+  permissionAccessibility: 손쉬운 사용
+  permissionDeviceControl: 기기 제어 및 데이터 접근
+  permissionScreenRecording: 화면 기록
+  permissionScreenAudioRecording: 화면 및 시스템 오디오 녹음
+  permissionInputMonitoring: 입력 모니터링
+  permissionFullDiskAccess: 전체 디스크 접근 권한
+  permissionAppManagement: 앱 관리
+  permissionDeveloperTools: 개발자 도구
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: 미디어 및 Apple Music
+  authSessionDone: 이 페이지를 닫고 앱으로 돌아가도 돼요.
+  pasteAndMatchStyle: 붙여넣고 스타일 일치시키기
+  startSpeaking: 말하기 시작
+  stopSpeaking: 말하기 정지
+  bringAllToFront: 모두 앞으로 가져오기
+  checkForUpdates: 업데이트 확인…
+  services: 서비스
+  help: 도움말
+  roleLink: 링크
+  roleTab: 탭
+  roleSearchBox: 검색창
+  roleStatus: 상태
+  roleMenu: 메뉴
+  roleMenuItem: 메뉴 항목
+  roleDialog: 대화상자
+  roleAlert: 알림
+  roleTable: 표
+  roleGrid: 그리드
+  roleRow: 행
+  roleColumnHeader: 열 머리글
+  roleCell: 셀
+  statePartiallyChecked: 부분 선택됨
+  stateExpanded: 펼쳐짐
+  stateCollapsed: 접힘
+  spokenSeparator: ", "
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: "{app}의 새 버전이 있어요"
+  updateAvailableMessage: "{app} {version}을(를) 사용할 수 있어요. (현재 버전 {current})"
+  update: 업데이트
+  later: 나중에
+  upToDate: 최신 버전이에요
+  upToDateMessage: "{app} {version}은(는) 최신 버전이에요."
+  updateError: 업데이트를 확인할 수 없어요
+  updateErrorMessage: 업데이트를 확인하는 중 문제가 생겼어요. 나중에 다시 시도하세요.
+  installError: 업데이트를 설치할 수 없어요
+  installErrorMessage: "{app} {version}을(를) 다운로드하거나 설치하지 못했어요. 대신 해당 페이지에서 받을 수 있어요."
+  openPage: 페이지 열기
+  ok: 확인
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: "{column} 기준 정렬"
+  diffUnchangedLines: "{n, plural, other {변경되지 않은 줄 #개}}"
+  diffExpandAll: 모두 펼치기
+  diffStage: 스테이징
+  diffDiscardChanges: 변경 사항 폐기…
+  collapseMerge: 병합 접기
+  expandMerge: 병합 펼치기
+  colorHue: 색조
+  colorAlpha: 불투명도
+  colorSaturationBrightness: 채도 및 밝기
+  colorHex: 16진수 색상
+  colorEyeDropper: 화면에서 색상 선택
+  colorFormat: 색상 형식
+  colorCopy: 색상 복사
+  colorRed: 빨강
+  colorGreen: 초록
+  colorBlue: 파랑
+  colorHueDegrees: 색조 각도
+  colorSaturationPercent: 채도 백분율
+  colorBrightnessPercent: 밝기 백분율
+  colorLightnessPercent: 명도 백분율
+  colorOpacityPercent: 불투명도 백분율
+  calendarPrevious: 이전 달
+  calendarNext: 다음 달
+  listClear: 지우기
+  listNothingFound: 결과 없음
+  listSearch: 검색
+  commandSearch: 명령 검색
+  commandSearchPlaceholder: 명령 검색…
+  commandNoMatches: 일치하는 명령 없음
+  commandLoading: 불러오는 중…
+  commandList: 명령
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: 더 보기
+  flowLabel: "{nodes, plural, other {노드 #개}}, {edges, plural, other {연결선 #개}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: 참고
+  alertTip: 팁
+  alertImportant: 중요
+  alertWarning: 경고
+  alertCaution: 주의

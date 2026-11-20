@@ -3,8 +3,14 @@
 package locales
 
 import (
+	baselocales "github.com/nsgo-dev/nsgo/base/locales"
+	textviewlocales "github.com/nsgo-dev/nsgo/base/textview/locales"
 	"github.com/nsgo-dev/nsgo/core"
+	desktoplocales "github.com/nsgo-dev/nsgo/desktop/locales"
 	"github.com/nsgo-dev/nsgo/i18n"
+	updaterlocales "github.com/nsgo-dev/nsgo/updater/locales"
+	"strings"
+	"time"
 )
 
 // Source is the language the messages are written in.
@@ -16,6 +22,1697 @@ var Catalog = i18n.NewCatalog("en", "de", "es", "fr", "it", "ja", "ko", "pt-BR",
 // The catalog's languages are the app's: those it shows.
 func init() {
 	i18n.SetApp(Catalog)
+}
+
+// The messages this package supplies to others.
+func init() {
+	baselocales.Supply("de", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "Alle einblenden",
+			"diffStage":                 "Vormerken",
+			"diffDiscardChanges":        "Änderungen verwerfen …",
+			"collapseMerge":             "Merge einklappen",
+			"expandMerge":               "Merge ausklappen",
+			"colorHue":                  "Farbton",
+			"colorAlpha":                "Deckkraft",
+			"colorSaturationBrightness": "Sättigung und Helligkeit",
+			"colorHex":                  "Hex-Farbe",
+			"colorEyeDropper":           "Farbe vom Bildschirm aufnehmen",
+			"colorFormat":               "Farbformat",
+			"colorCopy":                 "Farbe kopieren",
+			"colorRed":                  "Rot",
+			"colorGreen":                "Grün",
+			"colorBlue":                 "Blau",
+			"colorHueDegrees":           "Farbton in Grad",
+			"colorSaturationPercent":    "Sättigung in Prozent",
+			"colorBrightnessPercent":    "Helligkeit in Prozent",
+			"colorLightnessPercent":     "Luminanz in Prozent",
+			"colorOpacityPercent":       "Deckkraft in Prozent",
+			"calendarPrevious":          "Vorheriger Monat",
+			"calendarNext":              "Nächster Monat",
+			"listClear":                 "Leeren",
+			"listNothingFound":          "Nichts gefunden",
+			"listSearch":                "Suchen",
+			"commandSearch":             "Befehle suchen",
+			"commandSearchPlaceholder":  "Befehle suchen …",
+			"commandNoMatches":          "Keine passenden Befehle",
+			"commandLoading":            "Laden …",
+			"commandList":               "Befehle",
+			"breadcrumbsMore":           "Mehr",
+		},
+		SortBy: func(column string) string {
+			return "Nach " + column + " sortieren"
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("de", float64(n)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("de", float64(n)))
+				b.WriteString(" unveränderte Zeile")
+			default:
+				b.WriteString(i18n.FormatNumber("de", float64(n)))
+				b.WriteString(" unveränderte Zeilen")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("de"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("de"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("de"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("de", float64(nodes)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("de", float64(nodes)))
+				b.WriteString(" Knoten")
+			default:
+				b.WriteString(i18n.FormatNumber("de", float64(nodes)))
+				b.WriteString(" Knoten")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("de", float64(edges)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("de", float64(edges)))
+				b.WriteString(" Kante")
+			default:
+				b.WriteString(i18n.FormatNumber("de", float64(edges)))
+				b.WriteString(" Kanten")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("es", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "Expandir todo",
+			"diffStage":                 "Preparar",
+			"diffDiscardChanges":        "Descartar cambios…",
+			"collapseMerge":             "Contraer fusión",
+			"expandMerge":               "Expandir fusión",
+			"colorHue":                  "Tono",
+			"colorAlpha":                "Opacidad",
+			"colorSaturationBrightness": "Saturación y brillo",
+			"colorHex":                  "Color hexadecimal",
+			"colorEyeDropper":           "Tomar un color de la pantalla",
+			"colorFormat":               "Formato de color",
+			"colorCopy":                 "Copiar color",
+			"colorRed":                  "Rojo",
+			"colorGreen":                "Verde",
+			"colorBlue":                 "Azul",
+			"colorHueDegrees":           "Grados de tono",
+			"colorSaturationPercent":    "Porcentaje de saturación",
+			"colorBrightnessPercent":    "Porcentaje de brillo",
+			"colorLightnessPercent":     "Porcentaje de luminosidad",
+			"colorOpacityPercent":       "Porcentaje de opacidad",
+			"calendarPrevious":          "Mes anterior",
+			"calendarNext":              "Mes siguiente",
+			"listClear":                 "Borrar",
+			"listNothingFound":          "No se encontró nada",
+			"listSearch":                "Buscar",
+			"commandSearch":             "Buscar comandos",
+			"commandSearchPlaceholder":  "Buscar comandos…",
+			"commandNoMatches":          "No hay comandos que coincidan",
+			"commandLoading":            "Cargando…",
+			"commandList":               "Comandos",
+			"breadcrumbsMore":           "Más",
+		},
+		SortBy: func(column string) string {
+			return "Ordenar por " + column
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("es", float64(n)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("es", float64(n)))
+				b.WriteString(" línea sin cambios")
+			default:
+				b.WriteString(i18n.FormatNumber("es", float64(n)))
+				b.WriteString(" líneas sin cambios")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("es"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("es"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("es"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("es", float64(nodes)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("es", float64(nodes)))
+				b.WriteString(" nodo")
+			default:
+				b.WriteString(i18n.FormatNumber("es", float64(nodes)))
+				b.WriteString(" nodos")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("es", float64(edges)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("es", float64(edges)))
+				b.WriteString(" arista")
+			default:
+				b.WriteString(i18n.FormatNumber("es", float64(edges)))
+				b.WriteString(" aristas")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("fr", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "Tout développer",
+			"diffStage":                 "Indexer",
+			"diffDiscardChanges":        "Annuler les modifications…",
+			"collapseMerge":             "Réduire la fusion",
+			"expandMerge":               "Développer la fusion",
+			"colorHue":                  "Teinte",
+			"colorAlpha":                "Opacité",
+			"colorSaturationBrightness": "Saturation et luminosité",
+			"colorHex":                  "Couleur hexadécimale",
+			"colorEyeDropper":           "Prélever une couleur à l’écran",
+			"colorFormat":               "Format de couleur",
+			"colorCopy":                 "Copier la couleur",
+			"colorRed":                  "Rouge",
+			"colorGreen":                "Vert",
+			"colorBlue":                 "Bleu",
+			"colorHueDegrees":           "Teinte en degrés",
+			"colorSaturationPercent":    "Saturation en pourcentage",
+			"colorBrightnessPercent":    "Luminosité en pourcentage",
+			"colorLightnessPercent":     "Clarté en pourcentage",
+			"colorOpacityPercent":       "Opacité en pourcentage",
+			"calendarPrevious":          "Mois précédent",
+			"calendarNext":              "Mois suivant",
+			"listClear":                 "Effacer",
+			"listNothingFound":          "Aucun résultat",
+			"listSearch":                "Rechercher",
+			"commandSearch":             "Rechercher des commandes",
+			"commandSearchPlaceholder":  "Rechercher des commandes…",
+			"commandNoMatches":          "Aucune commande correspondante",
+			"commandLoading":            "Chargement…",
+			"commandList":               "Commandes",
+			"breadcrumbsMore":           "Plus",
+		},
+		SortBy: func(column string) string {
+			return "Trier par " + column
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("fr", float64(n)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("fr", float64(n)))
+				b.WriteString(" ligne inchangée")
+			default:
+				b.WriteString(i18n.FormatNumber("fr", float64(n)))
+				b.WriteString(" lignes inchangées")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("fr"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("fr"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("fr"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("fr", float64(nodes)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("fr", float64(nodes)))
+				b.WriteString(" nœud")
+			default:
+				b.WriteString(i18n.FormatNumber("fr", float64(nodes)))
+				b.WriteString(" nœuds")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("fr", float64(edges)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("fr", float64(edges)))
+				b.WriteString(" arête")
+			default:
+				b.WriteString(i18n.FormatNumber("fr", float64(edges)))
+				b.WriteString(" arêtes")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("it", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "Espandi tutto",
+			"diffStage":                 "Prepara",
+			"diffDiscardChanges":        "Annulla modifiche…",
+			"collapseMerge":             "Comprimi merge",
+			"expandMerge":               "Espandi merge",
+			"colorHue":                  "Tonalità",
+			"colorAlpha":                "Opacità",
+			"colorSaturationBrightness": "Saturazione e luminosità",
+			"colorHex":                  "Colore esadecimale",
+			"colorEyeDropper":           "Preleva un colore dallo schermo",
+			"colorFormat":               "Formato colore",
+			"colorCopy":                 "Copia colore",
+			"colorRed":                  "Rosso",
+			"colorGreen":                "Verde",
+			"colorBlue":                 "Blu",
+			"colorHueDegrees":           "Gradi di tonalità",
+			"colorSaturationPercent":    "Percentuale di saturazione",
+			"colorBrightnessPercent":    "Percentuale di luminosità",
+			"colorLightnessPercent":     "Percentuale di chiarezza",
+			"colorOpacityPercent":       "Percentuale di opacità",
+			"calendarPrevious":          "Mese precedente",
+			"calendarNext":              "Mese successivo",
+			"listClear":                 "Cancella",
+			"listNothingFound":          "Nessun risultato",
+			"listSearch":                "Cerca",
+			"commandSearch":             "Cerca comandi",
+			"commandSearchPlaceholder":  "Cerca comandi…",
+			"commandNoMatches":          "Nessun comando corrispondente",
+			"commandLoading":            "Caricamento…",
+			"commandList":               "Comandi",
+			"breadcrumbsMore":           "Altro",
+		},
+		SortBy: func(column string) string {
+			return "Ordina per " + column
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("it", float64(n)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("it", float64(n)))
+				b.WriteString(" riga invariata")
+			default:
+				b.WriteString(i18n.FormatNumber("it", float64(n)))
+				b.WriteString(" righe invariate")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("it"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("it"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("it"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("it", float64(nodes)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("it", float64(nodes)))
+				b.WriteString(" nodo")
+			default:
+				b.WriteString(i18n.FormatNumber("it", float64(nodes)))
+				b.WriteString(" nodi")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("it", float64(edges)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("it", float64(edges)))
+				b.WriteString(" arco")
+			default:
+				b.WriteString(i18n.FormatNumber("it", float64(edges)))
+				b.WriteString(" archi")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("ja", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "すべて展開",
+			"diffStage":                 "ステージ",
+			"diffDiscardChanges":        "変更を破棄…",
+			"collapseMerge":             "マージを折りたたむ",
+			"expandMerge":               "マージを展開",
+			"colorHue":                  "色相",
+			"colorAlpha":                "不透明度",
+			"colorSaturationBrightness": "彩度と明度",
+			"colorHex":                  "16進カラー",
+			"colorEyeDropper":           "画面から色を取得",
+			"colorFormat":               "カラー形式",
+			"colorCopy":                 "カラーをコピー",
+			"colorRed":                  "赤",
+			"colorGreen":                "緑",
+			"colorBlue":                 "青",
+			"colorHueDegrees":           "色相（度）",
+			"colorSaturationPercent":    "彩度（%）",
+			"colorBrightnessPercent":    "明度（%）",
+			"colorLightnessPercent":     "輝度（%）",
+			"colorOpacityPercent":       "不透明度（%）",
+			"calendarPrevious":          "前の月",
+			"calendarNext":              "次の月",
+			"listClear":                 "消去",
+			"listNothingFound":          "見つかりません",
+			"listSearch":                "検索",
+			"commandSearch":             "コマンドを検索",
+			"commandSearchPlaceholder":  "コマンドを検索…",
+			"commandNoMatches":          "一致するコマンドはありません",
+			"commandLoading":            "読み込み中…",
+			"commandList":               "コマンド",
+			"breadcrumbsMore":           "その他",
+		},
+		SortBy: func(column string) string {
+			return column + "で並べ替え"
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("ja", float64(n)) {
+			default:
+				b.WriteString("変更のない")
+				b.WriteString(i18n.FormatNumber("ja", float64(n)))
+				b.WriteString("行")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ja"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ja"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ja"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("ja", float64(nodes)) {
+			default:
+				b.WriteString(i18n.FormatNumber("ja", float64(nodes)))
+				b.WriteString("個のノード")
+			}
+			b.WriteString("、")
+			switch i18n.Cardinal("ja", float64(edges)) {
+			default:
+				b.WriteString(i18n.FormatNumber("ja", float64(edges)))
+				b.WriteString("本のエッジ")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("ko", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "모두 펼치기",
+			"diffStage":                 "스테이징",
+			"diffDiscardChanges":        "변경 사항 폐기…",
+			"collapseMerge":             "병합 접기",
+			"expandMerge":               "병합 펼치기",
+			"colorHue":                  "색조",
+			"colorAlpha":                "불투명도",
+			"colorSaturationBrightness": "채도 및 밝기",
+			"colorHex":                  "16진수 색상",
+			"colorEyeDropper":           "화면에서 색상 선택",
+			"colorFormat":               "색상 형식",
+			"colorCopy":                 "색상 복사",
+			"colorRed":                  "빨강",
+			"colorGreen":                "초록",
+			"colorBlue":                 "파랑",
+			"colorHueDegrees":           "색조 각도",
+			"colorSaturationPercent":    "채도 백분율",
+			"colorBrightnessPercent":    "밝기 백분율",
+			"colorLightnessPercent":     "명도 백분율",
+			"colorOpacityPercent":       "불투명도 백분율",
+			"calendarPrevious":          "이전 달",
+			"calendarNext":              "다음 달",
+			"listClear":                 "지우기",
+			"listNothingFound":          "결과 없음",
+			"listSearch":                "검색",
+			"commandSearch":             "명령 검색",
+			"commandSearchPlaceholder":  "명령 검색…",
+			"commandNoMatches":          "일치하는 명령 없음",
+			"commandLoading":            "불러오는 중…",
+			"commandList":               "명령",
+			"breadcrumbsMore":           "더 보기",
+		},
+		SortBy: func(column string) string {
+			return column + " 기준 정렬"
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("ko", float64(n)) {
+			default:
+				b.WriteString("변경되지 않은 줄 ")
+				b.WriteString(i18n.FormatNumber("ko", float64(n)))
+				b.WriteString("개")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ko"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ko"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ko"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("ko", float64(nodes)) {
+			default:
+				b.WriteString("노드 ")
+				b.WriteString(i18n.FormatNumber("ko", float64(nodes)))
+				b.WriteString("개")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("ko", float64(edges)) {
+			default:
+				b.WriteString("연결선 ")
+				b.WriteString(i18n.FormatNumber("ko", float64(edges)))
+				b.WriteString("개")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("pt-BR", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "Expandir tudo",
+			"diffStage":                 "Preparar",
+			"diffDiscardChanges":        "Descartar Alterações…",
+			"collapseMerge":             "Recolher Mesclagem",
+			"expandMerge":               "Expandir Mesclagem",
+			"colorHue":                  "Matiz",
+			"colorAlpha":                "Opacidade",
+			"colorSaturationBrightness": "Saturação e brilho",
+			"colorHex":                  "Cor hexadecimal",
+			"colorEyeDropper":           "Escolher uma cor da tela",
+			"colorFormat":               "Formato de cor",
+			"colorCopy":                 "Copiar cor",
+			"colorRed":                  "Vermelho",
+			"colorGreen":                "Verde",
+			"colorBlue":                 "Azul",
+			"colorHueDegrees":           "Graus de matiz",
+			"colorSaturationPercent":    "Porcentagem de saturação",
+			"colorBrightnessPercent":    "Porcentagem de brilho",
+			"colorLightnessPercent":     "Porcentagem de luminosidade",
+			"colorOpacityPercent":       "Porcentagem de opacidade",
+			"calendarPrevious":          "Mês anterior",
+			"calendarNext":              "Próximo mês",
+			"listClear":                 "Limpar",
+			"listNothingFound":          "Nada encontrado",
+			"listSearch":                "Pesquisar",
+			"commandSearch":             "Pesquisar comandos",
+			"commandSearchPlaceholder":  "Pesquisar comandos…",
+			"commandNoMatches":          "Nenhum comando correspondente",
+			"commandLoading":            "Carregando…",
+			"commandList":               "Comandos",
+			"breadcrumbsMore":           "Mais",
+		},
+		SortBy: func(column string) string {
+			return "Ordenar por " + column
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("pt-BR", float64(n)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("pt-BR", float64(n)))
+				b.WriteString(" linha inalterada")
+			default:
+				b.WriteString(i18n.FormatNumber("pt-BR", float64(n)))
+				b.WriteString(" linhas inalteradas")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("pt-BR"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("pt-BR"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("pt-BR"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("pt-BR", float64(nodes)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("pt-BR", float64(nodes)))
+				b.WriteString(" nó")
+			default:
+				b.WriteString(i18n.FormatNumber("pt-BR", float64(nodes)))
+				b.WriteString(" nós")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("pt-BR", float64(edges)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("pt-BR", float64(edges)))
+				b.WriteString(" aresta")
+			default:
+				b.WriteString(i18n.FormatNumber("pt-BR", float64(edges)))
+				b.WriteString(" arestas")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("ru", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "Развернуть все",
+			"diffStage":                 "Индексировать",
+			"diffDiscardChanges":        "Отменить изменения…",
+			"collapseMerge":             "Свернуть слияние",
+			"expandMerge":               "Развернуть слияние",
+			"colorHue":                  "Оттенок",
+			"colorAlpha":                "Непрозрачность",
+			"colorSaturationBrightness": "Насыщенность и яркость",
+			"colorHex":                  "Шестнадцатеричный цвет",
+			"colorEyeDropper":           "Выбрать цвет на экране",
+			"colorFormat":               "Формат цвета",
+			"colorCopy":                 "Скопировать цвет",
+			"colorRed":                  "Красный",
+			"colorGreen":                "Зелёный",
+			"colorBlue":                 "Синий",
+			"colorHueDegrees":           "Оттенок в градусах",
+			"colorSaturationPercent":    "Насыщенность в процентах",
+			"colorBrightnessPercent":    "Яркость в процентах",
+			"colorLightnessPercent":     "Светлота в процентах",
+			"colorOpacityPercent":       "Непрозрачность в процентах",
+			"calendarPrevious":          "Предыдущий месяц",
+			"calendarNext":              "Следующий месяц",
+			"listClear":                 "Очистить",
+			"listNothingFound":          "Ничего не найдено",
+			"listSearch":                "Поиск",
+			"commandSearch":             "Поиск команд",
+			"commandSearchPlaceholder":  "Поиск команд…",
+			"commandNoMatches":          "Нет подходящих команд",
+			"commandLoading":            "Загрузка…",
+			"commandList":               "Команды",
+			"breadcrumbsMore":           "Ещё",
+		},
+		SortBy: func(column string) string {
+			return "Сортировка по столбцу " + column
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("ru", float64(n)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("ru", float64(n)))
+				b.WriteString(" неизменённая строка")
+			case i18n.Few:
+				b.WriteString(i18n.FormatNumber("ru", float64(n)))
+				b.WriteString(" неизменённые строки")
+			case i18n.Many:
+				b.WriteString(i18n.FormatNumber("ru", float64(n)))
+				b.WriteString(" неизменённых строк")
+			default:
+				b.WriteString(i18n.FormatNumber("ru", float64(n)))
+				b.WriteString(" неизменённой строки")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ru"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ru"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("ru"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("ru", float64(nodes)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("ru", float64(nodes)))
+				b.WriteString(" узел")
+			case i18n.Few:
+				b.WriteString(i18n.FormatNumber("ru", float64(nodes)))
+				b.WriteString(" узла")
+			case i18n.Many:
+				b.WriteString(i18n.FormatNumber("ru", float64(nodes)))
+				b.WriteString(" узлов")
+			default:
+				b.WriteString(i18n.FormatNumber("ru", float64(nodes)))
+				b.WriteString(" узла")
+			}
+			b.WriteString(", ")
+			switch i18n.Cardinal("ru", float64(edges)) {
+			case i18n.One:
+				b.WriteString(i18n.FormatNumber("ru", float64(edges)))
+				b.WriteString(" ребро")
+			case i18n.Few:
+				b.WriteString(i18n.FormatNumber("ru", float64(edges)))
+				b.WriteString(" ребра")
+			case i18n.Many:
+				b.WriteString(i18n.FormatNumber("ru", float64(edges)))
+				b.WriteString(" рёбер")
+			default:
+				b.WriteString(i18n.FormatNumber("ru", float64(edges)))
+				b.WriteString(" ребра")
+			}
+			return b.String()
+		},
+	})
+	baselocales.Supply("zh-Hant", baselocales.Translation{
+		Texts: map[string]string{
+			"diffExpandAll":             "全部展開",
+			"diffStage":                 "暫存",
+			"diffDiscardChanges":        "捨棄變更…",
+			"collapseMerge":             "收合合併",
+			"expandMerge":               "展開合併",
+			"colorHue":                  "色相",
+			"colorAlpha":                "不透明度",
+			"colorSaturationBrightness": "飽和度和亮度",
+			"colorHex":                  "十六進位色碼",
+			"colorEyeDropper":           "從螢幕選取顏色",
+			"colorFormat":               "顏色格式",
+			"colorCopy":                 "拷貝顏色",
+			"colorRed":                  "紅色",
+			"colorGreen":                "綠色",
+			"colorBlue":                 "藍色",
+			"colorHueDegrees":           "色相角度",
+			"colorSaturationPercent":    "飽和度百分比",
+			"colorBrightnessPercent":    "亮度百分比",
+			"colorLightnessPercent":     "明度百分比",
+			"colorOpacityPercent":       "不透明度百分比",
+			"calendarPrevious":          "上個月",
+			"calendarNext":              "下個月",
+			"listClear":                 "清除",
+			"listNothingFound":          "找不到結果",
+			"listSearch":                "搜尋",
+			"commandSearch":             "搜尋指令",
+			"commandSearchPlaceholder":  "搜尋指令…",
+			"commandNoMatches":          "沒有符合的指令",
+			"commandLoading":            "正在載入…",
+			"commandList":               "指令",
+			"breadcrumbsMore":           "更多",
+		},
+		SortBy: func(column string) string {
+			return "依" + column + "排序"
+		},
+		DiffUnchangedLines: func(n int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("zh-Hant", float64(n)) {
+			default:
+				b.WriteString(i18n.FormatNumber("zh-Hant", float64(n)))
+				b.WriteString(" 行未修改")
+			}
+			return b.String()
+		},
+		CalendarMonth: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("zh-Hant"), d, i18n.DateOptions{Skeleton: "yMMMM"})
+		},
+		CalendarMonthName: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("zh-Hant"), d, i18n.DateOptions{Skeleton: "MMM"})
+		},
+		CalendarWeekday: func(hc string, d time.Time) string {
+			msgs := Messages{hc: hc}
+			return i18n.FormatDate(msgs.dated("zh-Hant"), d, i18n.DateOptions{Skeleton: "EEEEE"})
+		},
+		FlowLabel: func(nodes int, edges int) string {
+			var b strings.Builder
+			switch i18n.Cardinal("zh-Hant", float64(nodes)) {
+			default:
+				b.WriteString(i18n.FormatNumber("zh-Hant", float64(nodes)))
+				b.WriteString(" 個節點")
+			}
+			b.WriteString("，")
+			switch i18n.Cardinal("zh-Hant", float64(edges)) {
+			default:
+				b.WriteString(i18n.FormatNumber("zh-Hant", float64(edges)))
+				b.WriteString(" 條邊")
+			}
+			return b.String()
+		},
+	})
+	textviewlocales.Supply("de", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "Hinweis",
+			"alertTip":       "Tipp",
+			"alertImportant": "Wichtig",
+			"alertWarning":   "Warnung",
+			"alertCaution":   "Vorsicht",
+		},
+	})
+	textviewlocales.Supply("es", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "Nota",
+			"alertTip":       "Consejo",
+			"alertImportant": "Importante",
+			"alertWarning":   "Advertencia",
+			"alertCaution":   "Precaución",
+		},
+	})
+	textviewlocales.Supply("fr", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "Remarque",
+			"alertTip":       "Conseil",
+			"alertImportant": "Important",
+			"alertWarning":   "Avertissement",
+			"alertCaution":   "Attention",
+		},
+	})
+	textviewlocales.Supply("it", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "Nota",
+			"alertTip":       "Suggerimento",
+			"alertImportant": "Importante",
+			"alertWarning":   "Avviso",
+			"alertCaution":   "Attenzione",
+		},
+	})
+	textviewlocales.Supply("ja", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "メモ",
+			"alertTip":       "ヒント",
+			"alertImportant": "重要",
+			"alertWarning":   "警告",
+			"alertCaution":   "注意",
+		},
+	})
+	textviewlocales.Supply("ko", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "참고",
+			"alertTip":       "팁",
+			"alertImportant": "중요",
+			"alertWarning":   "경고",
+			"alertCaution":   "주의",
+		},
+	})
+	textviewlocales.Supply("pt-BR", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "Nota",
+			"alertTip":       "Dica",
+			"alertImportant": "Importante",
+			"alertWarning":   "Aviso",
+			"alertCaution":   "Cuidado",
+		},
+	})
+	textviewlocales.Supply("ru", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "Примечание",
+			"alertTip":       "Совет",
+			"alertImportant": "Важно",
+			"alertWarning":   "Предупреждение",
+			"alertCaution":   "Осторожно",
+		},
+	})
+	textviewlocales.Supply("zh-Hant", textviewlocales.Translation{
+		Texts: map[string]string{
+			"alertNote":      "附註",
+			"alertTip":       "提示",
+			"alertImportant": "重要",
+			"alertWarning":   "警告",
+			"alertCaution":   "注意",
+		},
+	})
+	desktoplocales.Supply("de", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "Bearbeiten",
+			"window":                         "Fenster",
+			"about":                          "Über",
+			"hide":                           "Ausblenden",
+			"hideOthers":                     "Andere ausblenden",
+			"showAll":                        "Alle einblenden",
+			"quit":                           "Beenden",
+			"undo":                           "Widerrufen",
+			"redo":                           "Wiederholen",
+			"cut":                            "Ausschneiden",
+			"copy":                           "Kopieren",
+			"paste":                          "Einsetzen",
+			"delete":                         "Löschen",
+			"selectAll":                      "Alles auswählen",
+			"minimize":                       "Im Dock ablegen",
+			"zoom":                           "Zoomen",
+			"toggleFullScreen":               "Vollbildmodus ein/aus",
+			"enterFullScreen":                "Vollbildmodus aktivieren",
+			"exitFullScreen":                 "Vollbildmodus beenden",
+			"close":                          "Schließen",
+			"guideDragHint":                  "Ziehen",
+			"permissionAccessibility":        "Bedienungshilfen",
+			"permissionDeviceControl":        "Gerätesteuerung und Datenzugriff",
+			"permissionScreenRecording":      "Bildschirmaufnahme",
+			"permissionScreenAudioRecording": "Bildschirm- & Systemaudioaufnahme",
+			"permissionInputMonitoring":      "Eingabeüberwachung",
+			"permissionFullDiskAccess":       "Festplattenvollzugriff",
+			"permissionAppManagement":        "App-Verwaltung",
+			"permissionDeveloperTools":       "Entwicklertools",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "Medien & Apple Music",
+			"authSessionDone":                "Du kannst diese Seite schließen und zur App zurückkehren.",
+			"pasteAndMatchStyle":             "Einsetzen und Stil anpassen",
+			"startSpeaking":                  "Sprachausgabe starten",
+			"stopSpeaking":                   "Sprachausgabe stoppen",
+			"bringAllToFront":                "Alle nach vorne bringen",
+			"checkForUpdates":                "Nach Updates suchen …",
+			"services":                       "Dienste",
+			"help":                           "Hilfe",
+			"roleLink":                       "Link",
+			"roleTab":                        "Tab",
+			"roleSearchBox":                  "Suchfeld",
+			"roleStatus":                     "Status",
+			"roleMenu":                       "Menü",
+			"roleMenuItem":                   "Menüelement",
+			"roleDialog":                     "Dialog",
+			"roleAlert":                      "Warnung",
+			"roleTable":                      "Tabelle",
+			"roleGrid":                       "Raster",
+			"roleRow":                        "Zeile",
+			"roleColumnHeader":               "Spaltenüberschrift",
+			"roleCell":                       "Zelle",
+			"statePartiallyChecked":          "teilweise ausgewählt",
+			"stateExpanded":                  "erweitert",
+			"stateCollapsed":                 "minimiert",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return "Über " + app
+		},
+		HideApp: func(app string) string {
+			return app + " ausblenden"
+		},
+		QuitApp: func(app string) string {
+			return app + " beenden"
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "Zieh " + app + " in die Liste oben, um " + permission + " zu erlauben."
+		},
+	})
+	desktoplocales.Supply("es", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "Edición",
+			"window":                         "Ventana",
+			"about":                          "Acerca de",
+			"hide":                           "Ocultar",
+			"hideOthers":                     "Ocultar otros",
+			"showAll":                        "Mostrar todo",
+			"quit":                           "Salir",
+			"undo":                           "Deshacer",
+			"redo":                           "Rehacer",
+			"cut":                            "Cortar",
+			"copy":                           "Copiar",
+			"paste":                          "Pegar",
+			"delete":                         "Eliminar",
+			"selectAll":                      "Seleccionar todo",
+			"minimize":                       "Minimizar",
+			"zoom":                           "Zoom",
+			"toggleFullScreen":               "Alternar pantalla completa",
+			"enterFullScreen":                "Activar pantalla completa",
+			"exitFullScreen":                 "Salir de pantalla completa",
+			"close":                          "Cerrar",
+			"guideDragHint":                  "Arrastrar",
+			"permissionAccessibility":        "Accesibilidad",
+			"permissionDeviceControl":        "Control del dispositivo y acceso a datos",
+			"permissionScreenRecording":      "Grabación de pantalla",
+			"permissionScreenAudioRecording": "Grabación de pantalla y audio del sistema",
+			"permissionInputMonitoring":      "Monitorización de entrada",
+			"permissionFullDiskAccess":       "Acceso total al disco",
+			"permissionAppManagement":        "Gestión de apps",
+			"permissionDeveloperTools":       "Herramientas de desarrollo",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "Multimedia y Apple Music",
+			"authSessionDone":                "Ya puedes cerrar esta página y volver a la app.",
+			"pasteAndMatchStyle":             "Pegar con el mismo estilo",
+			"startSpeaking":                  "Iniciar locución",
+			"stopSpeaking":                   "Detener locución",
+			"bringAllToFront":                "Traer todo al frente",
+			"checkForUpdates":                "Buscar actualizaciones…",
+			"services":                       "Servicios",
+			"help":                           "Ayuda",
+			"roleLink":                       "enlace",
+			"roleTab":                        "pestaña",
+			"roleSearchBox":                  "cuadro de búsqueda",
+			"roleStatus":                     "estado",
+			"roleMenu":                       "menú",
+			"roleMenuItem":                   "elemento de menú",
+			"roleDialog":                     "cuadro de diálogo",
+			"roleAlert":                      "alerta",
+			"roleTable":                      "tabla",
+			"roleGrid":                       "cuadrícula",
+			"roleRow":                        "fila",
+			"roleColumnHeader":               "encabezado de columna",
+			"roleCell":                       "celda",
+			"statePartiallyChecked":          "parcialmente marcado",
+			"stateExpanded":                  "expandido",
+			"stateCollapsed":                 "contraído",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return "Acerca de " + app
+		},
+		HideApp: func(app string) string {
+			return "Ocultar " + app
+		},
+		QuitApp: func(app string) string {
+			return "Salir de " + app
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "Arrastra " + app + " a la lista de arriba para permitir “" + permission + "”."
+		},
+	})
+	desktoplocales.Supply("fr", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "Édition",
+			"window":                         "Fenêtre",
+			"about":                          "À propos",
+			"hide":                           "Masquer",
+			"hideOthers":                     "Masquer les autres",
+			"showAll":                        "Tout afficher",
+			"quit":                           "Quitter",
+			"undo":                           "Annuler",
+			"redo":                           "Rétablir",
+			"cut":                            "Couper",
+			"copy":                           "Copier",
+			"paste":                          "Coller",
+			"delete":                         "Supprimer",
+			"selectAll":                      "Tout sélectionner",
+			"minimize":                       "Réduire",
+			"zoom":                           "Réduire/agrandir",
+			"toggleFullScreen":               "Activer/désactiver le mode plein écran",
+			"enterFullScreen":                "Passer en mode plein écran",
+			"exitFullScreen":                 "Quitter le mode plein écran",
+			"close":                          "Fermer",
+			"guideDragHint":                  "Glisser",
+			"permissionAccessibility":        "Accessibilité",
+			"permissionDeviceControl":        "Contrôle de l’appareil et accès aux données",
+			"permissionScreenRecording":      "Enregistrement de l’écran",
+			"permissionScreenAudioRecording": "Enregistrement de l’écran et de l’audio du système",
+			"permissionInputMonitoring":      "Surveillance de l’entrée",
+			"permissionFullDiskAccess":       "Accès complet au disque",
+			"permissionAppManagement":        "Gestion des apps",
+			"permissionDeveloperTools":       "Outils de développement",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "Médias et Apple Music",
+			"authSessionDone":                "Vous pouvez fermer cette page et revenir à l’app.",
+			"pasteAndMatchStyle":             "Coller et adapter le style",
+			"startSpeaking":                  "Commencer la lecture",
+			"stopSpeaking":                   "Arrêter la lecture",
+			"bringAllToFront":                "Tout ramener au premier plan",
+			"checkForUpdates":                "Rechercher des mises à jour…",
+			"services":                       "Services",
+			"help":                           "Aide",
+			"roleLink":                       "lien",
+			"roleTab":                        "onglet",
+			"roleSearchBox":                  "zone de recherche",
+			"roleStatus":                     "état",
+			"roleMenu":                       "menu",
+			"roleMenuItem":                   "élément de menu",
+			"roleDialog":                     "boîte de dialogue",
+			"roleAlert":                      "alerte",
+			"roleTable":                      "tableau",
+			"roleGrid":                       "grille",
+			"roleRow":                        "ligne",
+			"roleColumnHeader":               "en-tête de colonne",
+			"roleCell":                       "cellule",
+			"statePartiallyChecked":          "partiellement coché",
+			"stateExpanded":                  "développé",
+			"stateCollapsed":                 "réduit",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return "À propos de " + app
+		},
+		HideApp: func(app string) string {
+			return "Masquer " + app
+		},
+		QuitApp: func(app string) string {
+			return "Quitter " + app
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "Faites glisser " + app + " dans la liste ci-dessus pour autoriser «\u00a0" + permission + "\u00a0»."
+		},
+	})
+	desktoplocales.Supply("it", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "Composizione",
+			"window":                         "Finestra",
+			"about":                          "Informazioni",
+			"hide":                           "Nascondi",
+			"hideOthers":                     "Nascondi altre",
+			"showAll":                        "Mostra tutte",
+			"quit":                           "Esci",
+			"undo":                           "Annulla",
+			"redo":                           "Ripristina",
+			"cut":                            "Taglia",
+			"copy":                           "Copia",
+			"paste":                          "Incolla",
+			"delete":                         "Elimina",
+			"selectAll":                      "Seleziona tutto",
+			"minimize":                       "Contrai",
+			"zoom":                           "Ridimensiona",
+			"toggleFullScreen":               "Attiva/disattiva modalità a tutto schermo",
+			"enterFullScreen":                "Attiva modalità a tutto schermo",
+			"exitFullScreen":                 "Esci da modalità a tutto schermo",
+			"close":                          "Chiudi",
+			"guideDragHint":                  "Trascina",
+			"permissionAccessibility":        "Accessibilità",
+			"permissionDeviceControl":        "Controllo del dispositivo e accesso ai dati",
+			"permissionScreenRecording":      "Registrazione schermo",
+			"permissionScreenAudioRecording": "Registrazione schermo e audio di sistema",
+			"permissionInputMonitoring":      "Monitoraggio input",
+			"permissionFullDiskAccess":       "Accesso completo al disco",
+			"permissionAppManagement":        "Gestione app",
+			"permissionDeveloperTools":       "Strumenti sviluppatore",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "Contenuti multimediali e Apple Music",
+			"authSessionDone":                "Puoi chiudere questa pagina e tornare all’app.",
+			"pasteAndMatchStyle":             "Incolla e adatta stile",
+			"startSpeaking":                  "Avvia lettura",
+			"stopSpeaking":                   "Interrompi lettura",
+			"bringAllToFront":                "Porta tutto in primo piano",
+			"checkForUpdates":                "Verifica aggiornamenti…",
+			"services":                       "Servizi",
+			"help":                           "Aiuto",
+			"roleLink":                       "link",
+			"roleTab":                        "scheda",
+			"roleSearchBox":                  "campo di ricerca",
+			"roleStatus":                     "stato",
+			"roleMenu":                       "menu",
+			"roleMenuItem":                   "voce di menu",
+			"roleDialog":                     "finestra di dialogo",
+			"roleAlert":                      "avviso",
+			"roleTable":                      "tabella",
+			"roleGrid":                       "griglia",
+			"roleRow":                        "riga",
+			"roleColumnHeader":               "intestazione di colonna",
+			"roleCell":                       "cella",
+			"statePartiallyChecked":          "parzialmente selezionato",
+			"stateExpanded":                  "espanso",
+			"stateCollapsed":                 "compresso",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return "Informazioni su " + app
+		},
+		HideApp: func(app string) string {
+			return "Nascondi " + app
+		},
+		QuitApp: func(app string) string {
+			return "Esci da " + app
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "Trascina " + app + " nell’elenco qui sopra per consentire «" + permission + "»."
+		},
+	})
+	desktoplocales.Supply("ja", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "編集",
+			"window":                         "ウインドウ",
+			"about":                          "情報",
+			"hide":                           "隠す",
+			"hideOthers":                     "ほかを隠す",
+			"showAll":                        "すべてを表示",
+			"quit":                           "終了",
+			"undo":                           "取り消す",
+			"redo":                           "やり直す",
+			"cut":                            "カット",
+			"copy":                           "コピー",
+			"paste":                          "ペースト",
+			"delete":                         "削除",
+			"selectAll":                      "すべてを選択",
+			"minimize":                       "しまう",
+			"zoom":                           "拡大/縮小",
+			"toggleFullScreen":               "フルスクリーン表示を切り替え",
+			"enterFullScreen":                "フルスクリーンにする",
+			"exitFullScreen":                 "フルスクリーンを解除",
+			"close":                          "閉じる",
+			"guideDragHint":                  "ドラッグ",
+			"permissionAccessibility":        "アクセシビリティ",
+			"permissionDeviceControl":        "デバイスの制御とデータへのアクセス",
+			"permissionScreenRecording":      "画面収録",
+			"permissionScreenAudioRecording": "画面収録とシステムオーディオ録音",
+			"permissionInputMonitoring":      "入力監視",
+			"permissionFullDiskAccess":       "フルディスクアクセス",
+			"permissionAppManagement":        "App管理",
+			"permissionDeveloperTools":       "デベロッパツール",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "メディアとApple Music",
+			"authSessionDone":                "このページを閉じてアプリに戻ってください。",
+			"pasteAndMatchStyle":             "ペーストしてスタイルを合わせる",
+			"startSpeaking":                  "読み上げを開始",
+			"stopSpeaking":                   "読み上げを停止",
+			"bringAllToFront":                "すべてを手前に移動",
+			"checkForUpdates":                "アップデートを確認…",
+			"services":                       "サービス",
+			"help":                           "ヘルプ",
+			"roleLink":                       "リンク",
+			"roleTab":                        "タブ",
+			"roleSearchBox":                  "検索ボックス",
+			"roleStatus":                     "ステータス",
+			"roleMenu":                       "メニュー",
+			"roleMenuItem":                   "メニュー項目",
+			"roleDialog":                     "ダイアログ",
+			"roleAlert":                      "警告",
+			"roleTable":                      "表",
+			"roleGrid":                       "グリッド",
+			"roleRow":                        "行",
+			"roleColumnHeader":               "列見出し",
+			"roleCell":                       "セル",
+			"statePartiallyChecked":          "一部チェック済み",
+			"stateExpanded":                  "展開",
+			"stateCollapsed":                 "折りたたみ",
+			"spokenSeparator":                "、",
+		},
+		AboutApp: func(app string) string {
+			return app + "について"
+		},
+		HideApp: func(app string) string {
+			return app + "を隠す"
+		},
+		QuitApp: func(app string) string {
+			return app + "を終了"
+		},
+		GuideDrag: func(app string, permission string) string {
+			return app + "を上のリストにドラッグして「" + permission + "」を許可してください。"
+		},
+	})
+	desktoplocales.Supply("ko", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "편집",
+			"window":                         "윈도우",
+			"about":                          "정보",
+			"hide":                           "가리기",
+			"hideOthers":                     "기타 가리기",
+			"showAll":                        "모두 보기",
+			"quit":                           "종료",
+			"undo":                           "실행 취소",
+			"redo":                           "실행 복귀",
+			"cut":                            "오려두기",
+			"copy":                           "복사하기",
+			"paste":                          "붙여넣기",
+			"delete":                         "삭제",
+			"selectAll":                      "모두 선택",
+			"minimize":                       "최소화",
+			"zoom":                           "확대/축소",
+			"toggleFullScreen":               "전체 화면 전환",
+			"enterFullScreen":                "전체 화면 시작",
+			"exitFullScreen":                 "전체 화면 종료",
+			"close":                          "닫기",
+			"guideDragHint":                  "드래그",
+			"permissionAccessibility":        "손쉬운 사용",
+			"permissionDeviceControl":        "기기 제어 및 데이터 접근",
+			"permissionScreenRecording":      "화면 기록",
+			"permissionScreenAudioRecording": "화면 및 시스템 오디오 녹음",
+			"permissionInputMonitoring":      "입력 모니터링",
+			"permissionFullDiskAccess":       "전체 디스크 접근 권한",
+			"permissionAppManagement":        "앱 관리",
+			"permissionDeveloperTools":       "개발자 도구",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "미디어 및 Apple Music",
+			"authSessionDone":                "이 페이지를 닫고 앱으로 돌아가도 돼요.",
+			"pasteAndMatchStyle":             "붙여넣고 스타일 일치시키기",
+			"startSpeaking":                  "말하기 시작",
+			"stopSpeaking":                   "말하기 정지",
+			"bringAllToFront":                "모두 앞으로 가져오기",
+			"checkForUpdates":                "업데이트 확인…",
+			"services":                       "서비스",
+			"help":                           "도움말",
+			"roleLink":                       "링크",
+			"roleTab":                        "탭",
+			"roleSearchBox":                  "검색창",
+			"roleStatus":                     "상태",
+			"roleMenu":                       "메뉴",
+			"roleMenuItem":                   "메뉴 항목",
+			"roleDialog":                     "대화상자",
+			"roleAlert":                      "알림",
+			"roleTable":                      "표",
+			"roleGrid":                       "그리드",
+			"roleRow":                        "행",
+			"roleColumnHeader":               "열 머리글",
+			"roleCell":                       "셀",
+			"statePartiallyChecked":          "부분 선택됨",
+			"stateExpanded":                  "펼쳐짐",
+			"stateCollapsed":                 "접힘",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return app + "에 관하여"
+		},
+		HideApp: func(app string) string {
+			return app + " 가리기"
+		},
+		QuitApp: func(app string) string {
+			return app + " 종료"
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "위 목록으로 " + app + "을(를) 드래그하여 ‘" + permission + "’을(를) 허용하세요."
+		},
+	})
+	desktoplocales.Supply("pt-BR", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "Editar",
+			"window":                         "Janela",
+			"about":                          "Sobre",
+			"hide":                           "Ocultar",
+			"hideOthers":                     "Ocultar Outros",
+			"showAll":                        "Mostrar Tudo",
+			"quit":                           "Encerrar",
+			"undo":                           "Desfazer",
+			"redo":                           "Refazer",
+			"cut":                            "Recortar",
+			"copy":                           "Copiar",
+			"paste":                          "Colar",
+			"delete":                         "Apagar",
+			"selectAll":                      "Selecionar Tudo",
+			"minimize":                       "Minimizar",
+			"zoom":                           "Zoom",
+			"toggleFullScreen":               "Ativar/Desativar Tela Cheia",
+			"enterFullScreen":                "Entrar em Tela Cheia",
+			"exitFullScreen":                 "Sair da Tela Cheia",
+			"close":                          "Fechar",
+			"guideDragHint":                  "Arrastar",
+			"permissionAccessibility":        "Acessibilidade",
+			"permissionDeviceControl":        "Controle de Dispositivos e Acesso a Dados",
+			"permissionScreenRecording":      "Gravação de Tela",
+			"permissionScreenAudioRecording": "Gravação de Tela e Áudio do Sistema",
+			"permissionInputMonitoring":      "Monitoramento de Entrada",
+			"permissionFullDiskAccess":       "Acesso Total ao Disco",
+			"permissionAppManagement":        "Gerenciamento de Apps",
+			"permissionDeveloperTools":       "Ferramentas de Desenvolvedor",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "Mídia e Apple Music",
+			"authSessionDone":                "Você já pode fechar esta página e voltar ao app.",
+			"pasteAndMatchStyle":             "Colar e Manter Estilo",
+			"startSpeaking":                  "Iniciar Fala",
+			"stopSpeaking":                   "Parar Fala",
+			"bringAllToFront":                "Trazer Todas para a Frente",
+			"checkForUpdates":                "Verificar Atualizações…",
+			"services":                       "Serviços",
+			"help":                           "Ajuda",
+			"roleLink":                       "link",
+			"roleTab":                        "aba",
+			"roleSearchBox":                  "caixa de pesquisa",
+			"roleStatus":                     "status",
+			"roleMenu":                       "menu",
+			"roleMenuItem":                   "item de menu",
+			"roleDialog":                     "caixa de diálogo",
+			"roleAlert":                      "alerta",
+			"roleTable":                      "tabela",
+			"roleGrid":                       "grade",
+			"roleRow":                        "linha",
+			"roleColumnHeader":               "cabeçalho de coluna",
+			"roleCell":                       "célula",
+			"statePartiallyChecked":          "parcialmente marcado",
+			"stateExpanded":                  "expandido",
+			"stateCollapsed":                 "recolhido",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return "Sobre o " + app
+		},
+		HideApp: func(app string) string {
+			return "Ocultar " + app
+		},
+		QuitApp: func(app string) string {
+			return "Encerrar " + app
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "Arraste " + app + " para a lista acima para permitir “" + permission + "”."
+		},
+	})
+	desktoplocales.Supply("ru", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "Правка",
+			"window":                         "Окно",
+			"about":                          "О программе",
+			"hide":                           "Скрыть",
+			"hideOthers":                     "Скрыть остальные",
+			"showAll":                        "Показать все",
+			"quit":                           "Завершить",
+			"undo":                           "Отменить",
+			"redo":                           "Повторить",
+			"cut":                            "Вырезать",
+			"copy":                           "Скопировать",
+			"paste":                          "Вставить",
+			"delete":                         "Удалить",
+			"selectAll":                      "Выбрать все",
+			"minimize":                       "Свернуть",
+			"zoom":                           "Изменить масштаб",
+			"toggleFullScreen":               "Переключить полноэкранный режим",
+			"enterFullScreen":                "Войти в полноэкранный режим",
+			"exitFullScreen":                 "Выйти из полноэкранного режима",
+			"close":                          "Закрыть",
+			"guideDragHint":                  "Перетащите",
+			"permissionAccessibility":        "Универсальный доступ",
+			"permissionDeviceControl":        "Управление устройством и доступ к данным",
+			"permissionScreenRecording":      "Запись экрана",
+			"permissionScreenAudioRecording": "Запись экрана и системного аудио",
+			"permissionInputMonitoring":      "Мониторинг ввода",
+			"permissionFullDiskAccess":       "Доступ к диску",
+			"permissionAppManagement":        "Управление приложениями",
+			"permissionDeveloperTools":       "Инструменты разработчика",
+			"permissionBluetooth":            "Bluetooth",
+			"permissionMediaLibrary":         "Медиа и Apple Music",
+			"authSessionDone":                "Можно закрыть эту страницу и вернуться в приложение.",
+			"pasteAndMatchStyle":             "Вставить и сохранить стиль",
+			"startSpeaking":                  "Начать речь",
+			"stopSpeaking":                   "Остановить речь",
+			"bringAllToFront":                "Все окна — на передний план",
+			"checkForUpdates":                "Проверить обновления…",
+			"services":                       "Службы",
+			"help":                           "Справка",
+			"roleLink":                       "ссылка",
+			"roleTab":                        "вкладка",
+			"roleSearchBox":                  "поле поиска",
+			"roleStatus":                     "статус",
+			"roleMenu":                       "меню",
+			"roleMenuItem":                   "пункт меню",
+			"roleDialog":                     "диалоговое окно",
+			"roleAlert":                      "оповещение",
+			"roleTable":                      "таблица",
+			"roleGrid":                       "сетка",
+			"roleRow":                        "строка",
+			"roleColumnHeader":               "заголовок столбца",
+			"roleCell":                       "ячейка",
+			"statePartiallyChecked":          "частично отмечено",
+			"stateExpanded":                  "развёрнуто",
+			"stateCollapsed":                 "свёрнуто",
+			"spokenSeparator":                ", ",
+		},
+		AboutApp: func(app string) string {
+			return "О программе " + app
+		},
+		HideApp: func(app string) string {
+			return "Скрыть " + app
+		},
+		QuitApp: func(app string) string {
+			return "Завершить " + app
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "Перетащите " + app + " в список выше, чтобы разрешить «" + permission + "»."
+		},
+	})
+	desktoplocales.Supply("zh-Hant", desktoplocales.Translation{
+		Texts: map[string]string{
+			"edit":                           "編輯",
+			"window":                         "視窗",
+			"about":                          "關於",
+			"hide":                           "隱藏",
+			"hideOthers":                     "隱藏其他",
+			"showAll":                        "顯示全部",
+			"quit":                           "結束",
+			"undo":                           "還原",
+			"redo":                           "重做",
+			"cut":                            "剪下",
+			"copy":                           "拷貝",
+			"paste":                          "貼上",
+			"delete":                         "刪除",
+			"selectAll":                      "全選",
+			"minimize":                       "縮到最小",
+			"zoom":                           "縮放",
+			"toggleFullScreen":               "切換全螢幕",
+			"enterFullScreen":                "進入全螢幕",
+			"exitFullScreen":                 "結束全螢幕",
+			"close":                          "關閉",
+			"guideDragHint":                  "拖移",
+			"permissionAccessibility":        "輔助使用",
+			"permissionDeviceControl":        "裝置控制與資料取用",
+			"permissionScreenRecording":      "螢幕錄製",
+			"permissionScreenAudioRecording": "螢幕與系統錄音",
+			"permissionInputMonitoring":      "輸入監控",
+			"permissionFullDiskAccess":       "完整磁碟取用權限",
+			"permissionAppManagement":        "App 管理",
+			"permissionDeveloperTools":       "開發者工具",
+			"permissionBluetooth":            "藍牙",
+			"permissionMediaLibrary":         "媒體與 Apple Music",
+			"authSessionDone":                "現在可以關閉此頁面並返回 App。",
+			"pasteAndMatchStyle":             "貼上並符合樣式",
+			"startSpeaking":                  "開始朗讀",
+			"stopSpeaking":                   "停止朗讀",
+			"bringAllToFront":                "將全部視窗移至最前",
+			"checkForUpdates":                "檢查更新項目…",
+			"services":                       "服務",
+			"help":                           "說明",
+			"roleLink":                       "連結",
+			"roleTab":                        "標籤頁",
+			"roleSearchBox":                  "搜尋框",
+			"roleStatus":                     "狀態",
+			"roleMenu":                       "選單",
+			"roleMenuItem":                   "選單項目",
+			"roleDialog":                     "對話框",
+			"roleAlert":                      "警示",
+			"roleTable":                      "表格",
+			"roleGrid":                       "網格",
+			"roleRow":                        "列",
+			"roleColumnHeader":               "欄標題",
+			"roleCell":                       "儲存格",
+			"statePartiallyChecked":          "部分勾選",
+			"stateExpanded":                  "已展開",
+			"stateCollapsed":                 "已收合",
+			"spokenSeparator":                "，",
+		},
+		AboutApp: func(app string) string {
+			return "關於 " + app
+		},
+		HideApp: func(app string) string {
+			return "隱藏 " + app
+		},
+		QuitApp: func(app string) string {
+			return "結束 " + app
+		},
+		GuideDrag: func(app string, permission string) string {
+			return "將 " + app + " 拖移到上方列表以允許「" + permission + "」。"
+		},
+	})
+	updaterlocales.Supply("de", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "Aktualisieren",
+			"later":              "Später",
+			"upToDate":           "Du bist auf dem neuesten Stand",
+			"updateError":        "Suche nach Updates nicht möglich",
+			"updateErrorMessage": "Bei der Suche nach Updates ist ein Fehler aufgetreten. Versuch es später erneut.",
+			"installError":       "Update kann nicht installiert werden",
+			"openPage":           "Seite öffnen",
+			"ok":                 "OK",
+		},
+		UpdateAvailable: func(app string) string {
+			return "Eine neue Version von " + app + " ist verfügbar"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + " ist verfügbar. Du hast " + current + "."
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " ist die neueste verfügbare Version."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return app + " " + version + " konnte nicht geladen oder installiert werden. Du kannst die Version stattdessen auf ihrer Seite laden."
+		},
+	})
+	updaterlocales.Supply("es", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "Actualizar",
+			"later":              "Más tarde",
+			"upToDate":           "Tienes la última versión",
+			"updateError":        "No se pueden buscar actualizaciones",
+			"updateErrorMessage": "Se produjo un error al buscar actualizaciones. Inténtalo de nuevo más tarde.",
+			"installError":       "No se puede instalar la actualización",
+			"openPage":           "Abrir página",
+			"ok":                 "Aceptar",
+		},
+		UpdateAvailable: func(app string) string {
+			return "Hay una nueva versión de " + app + " disponible"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + " ya está disponible. Tienes la " + current + "."
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " es la versión más reciente disponible."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return "No se pudo descargar ni instalar " + app + " " + version + ". Puedes obtenerla desde su página."
+		},
+	})
+	updaterlocales.Supply("fr", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "Mettre à jour",
+			"later":              "Plus tard",
+			"upToDate":           "Vous êtes à jour",
+			"updateError":        "Impossible de rechercher des mises à jour",
+			"updateErrorMessage": "Un problème est survenu lors de la recherche de mises à jour. Réessayez plus tard.",
+			"installError":       "Impossible d’installer la mise à jour",
+			"openPage":           "Ouvrir la page",
+			"ok":                 "OK",
+		},
+		UpdateAvailable: func(app string) string {
+			return "Une nouvelle version de " + app + " est disponible"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + " est disponible. Vous avez la version " + current + "."
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " est la dernière version disponible."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return app + " " + version + " n’a pas pu être téléchargée ni installée. Vous pouvez l’obtenir depuis sa page."
+		},
+	})
+	updaterlocales.Supply("it", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "Aggiorna",
+			"later":              "Più tardi",
+			"upToDate":           "Hai già la versione più recente",
+			"updateError":        "Impossibile verificare gli aggiornamenti",
+			"updateErrorMessage": "Si è verificato un problema durante la verifica degli aggiornamenti. Riprova più tardi.",
+			"installError":       "Impossibile installare l’aggiornamento",
+			"openPage":           "Apri pagina",
+			"ok":                 "OK",
+		},
+		UpdateAvailable: func(app string) string {
+			return "È disponibile una nuova versione di " + app
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + " è disponibile. Tu hai la versione " + current + "."
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " è la versione più recente disponibile."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return app + " " + version + " non è stato scaricato o installato. Puoi ottenerlo dalla sua pagina."
+		},
+	})
+	updaterlocales.Supply("ja", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "アップデート",
+			"later":              "あとで",
+			"upToDate":           "最新の状態です",
+			"updateError":        "アップデートを確認できません",
+			"updateErrorMessage": "アップデートの確認中に問題が発生しました。しばらくしてからもう一度お試しください。",
+			"installError":       "アップデートをインストールできません",
+			"openPage":           "ページを開く",
+			"ok":                 "OK",
+		},
+		UpdateAvailable: func(app string) string {
+			return app + "の新しいバージョンがあります"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + "が利用可能です。現在のバージョンは" + current + "です。"
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + "は利用可能な最新バージョンです。"
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return app + " " + version + "をダウンロードまたはインストールできませんでした。代わりに配布ページから入手できます。"
+		},
+	})
+	updaterlocales.Supply("ko", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "업데이트",
+			"later":              "나중에",
+			"upToDate":           "최신 버전이에요",
+			"updateError":        "업데이트를 확인할 수 없어요",
+			"updateErrorMessage": "업데이트를 확인하는 중 문제가 생겼어요. 나중에 다시 시도하세요.",
+			"installError":       "업데이트를 설치할 수 없어요",
+			"openPage":           "페이지 열기",
+			"ok":                 "확인",
+		},
+		UpdateAvailable: func(app string) string {
+			return app + "의 새 버전이 있어요"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + "을(를) 사용할 수 있어요. (현재 버전 " + current + ")"
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + "은(는) 최신 버전이에요."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return app + " " + version + "을(를) 다운로드하거나 설치하지 못했어요. 대신 해당 페이지에서 받을 수 있어요."
+		},
+	})
+	updaterlocales.Supply("pt-BR", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "Atualizar",
+			"later":              "Depois",
+			"upToDate":           "Tudo atualizado",
+			"updateError":        "Não é possível verificar atualizações",
+			"updateErrorMessage": "Algo deu errado ao verificar atualizações. Tente novamente mais tarde.",
+			"installError":       "Não é possível instalar a atualização",
+			"openPage":           "Abrir Página",
+			"ok":                 "OK",
+		},
+		UpdateAvailable: func(app string) string {
+			return "Há uma nova versão de " + app + " disponível"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + " está disponível. Você tem a " + current + "."
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " é a versão mais recente disponível."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return "Não foi possível baixar ou instalar " + app + " " + version + ". Você pode obtê-la na página da versão."
+		},
+	})
+	updaterlocales.Supply("ru", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "Обновить",
+			"later":              "Позже",
+			"upToDate":           "У вас последняя версия",
+			"updateError":        "Не удаётся проверить обновления",
+			"updateErrorMessage": "При проверке обновлений произошла ошибка. Повторите попытку позже.",
+			"installError":       "Не удаётся установить обновление",
+			"openPage":           "Открыть страницу",
+			"ok":                 "ОК",
+		},
+		UpdateAvailable: func(app string) string {
+			return "Доступна новая версия " + app
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return "Доступна версия " + app + " " + version + ". У вас установлена " + current + "."
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " — новейшая доступная версия."
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return "Не удалось загрузить или установить " + app + " " + version + ". Вместо этого скачайте обновление с его страницы."
+		},
+	})
+	updaterlocales.Supply("zh-Hant", updaterlocales.Translation{
+		Texts: map[string]string{
+			"update":             "更新",
+			"later":              "稍後",
+			"upToDate":           "已是最新版本",
+			"updateError":        "無法檢查更新",
+			"updateErrorMessage": "檢查更新時發生錯誤，請稍後再試。",
+			"installError":       "無法安裝更新",
+			"openPage":           "打開頁面",
+			"ok":                 "好",
+		},
+		UpdateAvailable: func(app string) string {
+			return app + " 有新版本可用"
+		},
+		UpdateAvailableMessage: func(app string, version string, current string) string {
+			return app + " " + version + " 現已推出，你目前的版本是 " + current + "。"
+		},
+		UpToDateMessage: func(app string, version string) string {
+			return app + " " + version + " 是目前最新的版本。"
+		},
+		InstallErrorMessage: func(app string, version string) string {
+			return app + " " + version + " 無法下載或安裝，你可以從它的頁面取得。"
+		},
+	})
 }
 
 // Messages say the messages in one language, their times in the hour
@@ -6670,3 +8367,11 @@ func ErrNoImage(cx *core.Scope) string { return For(cx).ErrNoImage() }
 
 // ErrNoImage is the package's ErrNoImage in the language of msgs.
 func (msgs Messages) ErrNoImage() string { return msgs.text(textErrNoImage) }
+
+// dated is lang with the hour cycle the user set, which times take.
+func (msgs Messages) dated(lang string) string {
+	if msgs.hc == "" {
+		return lang
+	}
+	return lang + "-u-hc-" + msgs.hc
+}

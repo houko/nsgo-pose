@@ -190,3 +190,121 @@ errServer: O serviço teve um problema. Tente mais tarde.
 errTimeout: O serviço demorou demais para responder. Tente de novo.
 errNetwork: Não foi possível acessar o serviço. Verifique a rede e o endereço.
 errNoImage: O serviço respondeu sem uma imagem. Tente de novo ou mude o look.
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: Editar
+  window: Janela
+  about: Sobre
+  aboutApp: Sobre o {app}
+  hide: Ocultar
+  hideApp: Ocultar {app}
+  hideOthers: Ocultar Outros
+  showAll: Mostrar Tudo
+  quit: Encerrar
+  quitApp: Encerrar {app}
+  undo: Desfazer
+  redo: Refazer
+  cut: Recortar
+  copy: Copiar
+  paste: Colar
+  delete: Apagar
+  selectAll: Selecionar Tudo
+  minimize: Minimizar
+  zoom: Zoom
+  toggleFullScreen: Ativar/Desativar Tela Cheia
+  enterFullScreen: Entrar em Tela Cheia
+  exitFullScreen: Sair da Tela Cheia
+  close: Fechar
+  guideDrag: Arraste {app} para a lista acima para permitir “{permission}”.
+  guideDragHint: Arrastar
+  permissionAccessibility: Acessibilidade
+  permissionDeviceControl: Controle de Dispositivos e Acesso a Dados
+  permissionScreenRecording: Gravação de Tela
+  permissionScreenAudioRecording: Gravação de Tela e Áudio do Sistema
+  permissionInputMonitoring: Monitoramento de Entrada
+  permissionFullDiskAccess: Acesso Total ao Disco
+  permissionAppManagement: Gerenciamento de Apps
+  permissionDeveloperTools: Ferramentas de Desenvolvedor
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: Mídia e Apple Music
+  authSessionDone: Você já pode fechar esta página e voltar ao app.
+  pasteAndMatchStyle: Colar e Manter Estilo
+  startSpeaking: Iniciar Fala
+  stopSpeaking: Parar Fala
+  bringAllToFront: Trazer Todas para a Frente
+  checkForUpdates: Verificar Atualizações…
+  services: Serviços
+  help: Ajuda
+  roleLink: link
+  roleTab: aba
+  roleSearchBox: caixa de pesquisa
+  roleStatus: status
+  roleMenu: menu
+  roleMenuItem: item de menu
+  roleDialog: caixa de diálogo
+  roleAlert: alerta
+  roleTable: tabela
+  roleGrid: grade
+  roleRow: linha
+  roleColumnHeader: cabeçalho de coluna
+  roleCell: célula
+  statePartiallyChecked: parcialmente marcado
+  stateExpanded: expandido
+  stateCollapsed: recolhido
+  spokenSeparator: ", "
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: Há uma nova versão de {app} disponível
+  updateAvailableMessage: "{app} {version} está disponível. Você tem a {current}."
+  update: Atualizar
+  later: Depois
+  upToDate: Tudo atualizado
+  upToDateMessage: "{app} {version} é a versão mais recente disponível."
+  updateError: Não é possível verificar atualizações
+  updateErrorMessage: Algo deu errado ao verificar atualizações. Tente novamente mais tarde.
+  installError: Não é possível instalar a atualização
+  installErrorMessage: Não foi possível baixar ou instalar {app} {version}. Você pode obtê-la na página da versão.
+  openPage: Abrir Página
+  ok: OK
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: Ordenar por {column}
+  diffUnchangedLines: "{n, plural, one {# linha inalterada} other {# linhas inalteradas}}"
+  diffExpandAll: Expandir tudo
+  diffStage: Preparar
+  diffDiscardChanges: Descartar Alterações…
+  collapseMerge: Recolher Mesclagem
+  expandMerge: Expandir Mesclagem
+  colorHue: Matiz
+  colorAlpha: Opacidade
+  colorSaturationBrightness: Saturação e brilho
+  colorHex: Cor hexadecimal
+  colorEyeDropper: Escolher uma cor da tela
+  colorFormat: Formato de cor
+  colorCopy: Copiar cor
+  colorRed: Vermelho
+  colorGreen: Verde
+  colorBlue: Azul
+  colorHueDegrees: Graus de matiz
+  colorSaturationPercent: Porcentagem de saturação
+  colorBrightnessPercent: Porcentagem de brilho
+  colorLightnessPercent: Porcentagem de luminosidade
+  colorOpacityPercent: Porcentagem de opacidade
+  calendarPrevious: Mês anterior
+  calendarNext: Próximo mês
+  listClear: Limpar
+  listNothingFound: Nada encontrado
+  listSearch: Pesquisar
+  commandSearch: Pesquisar comandos
+  commandSearchPlaceholder: Pesquisar comandos…
+  commandNoMatches: Nenhum comando correspondente
+  commandLoading: Carregando…
+  commandList: Comandos
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: Mais
+  flowLabel: "{nodes, plural, one {# nó} other {# nós}}, {edges, plural, one {# aresta} other {# arestas}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: Nota
+  alertTip: Dica
+  alertImportant: Importante
+  alertWarning: Aviso
+  alertCaution: Cuidado

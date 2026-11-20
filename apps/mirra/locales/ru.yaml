@@ -190,3 +190,121 @@ errServer: Ошибка на стороне сервиса. Повторите �
 errTimeout: Сервис слишком долго не отвечал. Повторите попытку.
 errNetwork: Не удалось связаться с сервисом. Проверьте сеть и адрес.
 errNoImage: Сервис ответил без изображения. Повторите попытку или измените образ.
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: Правка
+  window: Окно
+  about: О программе
+  aboutApp: О программе {app}
+  hide: Скрыть
+  hideApp: Скрыть {app}
+  hideOthers: Скрыть остальные
+  showAll: Показать все
+  quit: Завершить
+  quitApp: Завершить {app}
+  undo: Отменить
+  redo: Повторить
+  cut: Вырезать
+  copy: Скопировать
+  paste: Вставить
+  delete: Удалить
+  selectAll: Выбрать все
+  minimize: Свернуть
+  zoom: Изменить масштаб
+  toggleFullScreen: Переключить полноэкранный режим
+  enterFullScreen: Войти в полноэкранный режим
+  exitFullScreen: Выйти из полноэкранного режима
+  close: Закрыть
+  guideDrag: Перетащите {app} в список выше, чтобы разрешить «{permission}».
+  guideDragHint: Перетащите
+  permissionAccessibility: Универсальный доступ
+  permissionDeviceControl: Управление устройством и доступ к данным
+  permissionScreenRecording: Запись экрана
+  permissionScreenAudioRecording: Запись экрана и системного аудио
+  permissionInputMonitoring: Мониторинг ввода
+  permissionFullDiskAccess: Доступ к диску
+  permissionAppManagement: Управление приложениями
+  permissionDeveloperTools: Инструменты разработчика
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: Медиа и Apple Music
+  authSessionDone: Можно закрыть эту страницу и вернуться в приложение.
+  pasteAndMatchStyle: Вставить и сохранить стиль
+  startSpeaking: Начать речь
+  stopSpeaking: Остановить речь
+  bringAllToFront: Все окна — на передний план
+  checkForUpdates: Проверить обновления…
+  services: Службы
+  help: Справка
+  roleLink: ссылка
+  roleTab: вкладка
+  roleSearchBox: поле поиска
+  roleStatus: статус
+  roleMenu: меню
+  roleMenuItem: пункт меню
+  roleDialog: диалоговое окно
+  roleAlert: оповещение
+  roleTable: таблица
+  roleGrid: сетка
+  roleRow: строка
+  roleColumnHeader: заголовок столбца
+  roleCell: ячейка
+  statePartiallyChecked: частично отмечено
+  stateExpanded: развёрнуто
+  stateCollapsed: свёрнуто
+  spokenSeparator: ", "
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: Доступна новая версия {app}
+  updateAvailableMessage: Доступна версия {app} {version}. У вас установлена {current}.
+  update: Обновить
+  later: Позже
+  upToDate: У вас последняя версия
+  upToDateMessage: "{app} {version} — новейшая доступная версия."
+  updateError: Не удаётся проверить обновления
+  updateErrorMessage: При проверке обновлений произошла ошибка. Повторите попытку позже.
+  installError: Не удаётся установить обновление
+  installErrorMessage: Не удалось загрузить или установить {app} {version}. Вместо этого скачайте обновление с его страницы.
+  openPage: Открыть страницу
+  ok: ОК
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: Сортировка по столбцу {column}
+  diffUnchangedLines: "{n, plural, one {# неизменённая строка} few {# неизменённые строки} many {# неизменённых строк} other {# неизменённой строки}}"
+  diffExpandAll: Развернуть все
+  diffStage: Индексировать
+  diffDiscardChanges: Отменить изменения…
+  collapseMerge: Свернуть слияние
+  expandMerge: Развернуть слияние
+  colorHue: Оттенок
+  colorAlpha: Непрозрачность
+  colorSaturationBrightness: Насыщенность и яркость
+  colorHex: Шестнадцатеричный цвет
+  colorEyeDropper: Выбрать цвет на экране
+  colorFormat: Формат цвета
+  colorCopy: Скопировать цвет
+  colorRed: Красный
+  colorGreen: Зелёный
+  colorBlue: Синий
+  colorHueDegrees: Оттенок в градусах
+  colorSaturationPercent: Насыщенность в процентах
+  colorBrightnessPercent: Яркость в процентах
+  colorLightnessPercent: Светлота в процентах
+  colorOpacityPercent: Непрозрачность в процентах
+  calendarPrevious: Предыдущий месяц
+  calendarNext: Следующий месяц
+  listClear: Очистить
+  listNothingFound: Ничего не найдено
+  listSearch: Поиск
+  commandSearch: Поиск команд
+  commandSearchPlaceholder: Поиск команд…
+  commandNoMatches: Нет подходящих команд
+  commandLoading: Загрузка…
+  commandList: Команды
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: Ещё
+  flowLabel: "{nodes, plural, one {# узел} few {# узла} many {# узлов} other {# узла}}, {edges, plural, one {# ребро} few {# ребра} many {# рёбер} other {# ребра}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: Примечание
+  alertTip: Совет
+  alertImportant: Важно
+  alertWarning: Предупреждение
+  alertCaution: Осторожно
