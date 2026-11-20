@@ -1,0 +1,321 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: Código aberto · grátis · sem conta
+tabStudio: Estúdio
+tabWardrobe: Guarda-roupa
+tabWorks: Criações
+worksTabCount: "Criações {n, number}"
+tabMe: Eu
+tabsLabel: Seções
+lookTitle: Este look
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: "TODAY'S LOOK · {group}"
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: "LIVE PREVIEW · {group}"
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: "NEW LOOK · TENTATIVA {n, number}"
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: Rosto
+slotCostume: Roupa
+slotPose: Pose
+notChosen: Não escolhido
+stepFace: Escolha um rosto
+stepCostume: Escolha uma roupa
+stepPose: Defina a pose
+stepTab: "{n} {name}"
+stepsLabel: Etapas
+selectedItem: "Selecionado · {id}"
+done: Concluído
+back: Voltar
+close: Fechar
+nextCostume: "Próximo: roupa"
+nextPose: "Próximo: pose"
+surprise: Me surpreenda
+generate: Gerar
+generateNeedsService: Gerar · configure um serviço de IA
+needPose: Escolha uma pose primeiro.
+needService: Configure um serviço de IA primeiro.
+viaService: Gerado via {service}, sem intermediários
+configureOnce: Grátis e de código aberto; configure uma vez só
+generating: Gerando
+cancel: Cancelar
+generateFailed: Falha ao gerar
+changeFace: Trocar rosto
+changePose: Trocar pose
+zoomIn: Ampliar
+resizeColumn: Redimensionar a coluna
+zoomOut: Reduzir
+zoomPercent: "{n, number}%"
+filtersLabel: Galerias
+all: Todos
+allCount: "Todos {n, number}"
+allAngles: Todos os ângulos
+angleFront: Frente
+angleThreeQuarter: Três quartos
+angleSide: Perfil
+angleHigh: De cima
+angleLow: De baixo
+hairShort: Curto
+hairMedium: Médio
+hairSemiLong: Na altura dos ombros
+hairLong: Longo
+groupSpring: Primavera
+groupSummer: Verão
+groupAutumn: Outono
+groupWinter: Inverno
+groupParty: Festa
+groupSwimwear: Moda praia
+groupLingerie: Lingerie
+groupSexy: Sexy
+adultChip: 18+
+loadFailed: Não foi possível carregar a galeria
+retry: Tentar de novo
+noteLabel: Instruções extras
+notePlaceholder: Algo mais, como iluminação ou fundo
+favorite: Adicionar aos favoritos
+unfavorite: Remover dos favoritos
+favorites: Favoritos
+favoritesCount: "Favoritos {n, number}"
+myUploads: Minhas roupas
+uploadsCount: "Minhas roupas {n, number}"
+outfitGallery: Galeria de roupas
+galleryCount: "Galeria {n, number}"
+uploadName: "Minha roupa {n}"
+uploadClothes: Adicionar roupas
+wearing: Vestindo
+tapToTry: "Toque para provar · {group}"
+wearAndGenerate: Vestir
+noFavoritesTitle: Nenhum favorito ainda
+noFavoritesBody: Toque em ♡ numa roupa da galeria para guardá-la aqui.
+noUploadsTitle: Nenhuma roupa adicionada ainda
+noUploadsBody: Adicione uma foto de roupas estendidas ou num cabide.
+swapOutfit: Mesmo rosto, outra roupa
+swapTo: Vestir {name}
+usedFace: Rosto usado
+usedPose: Pose usada
+regenerate: De novo
+regenerateOnce: Gerar de novo
+saveToWorks: Salvar em Criações
+inWorks: Em Criações
+savedToWorks: Salvo como No.{no}
+seeWorks: Ver
+export: Exportar
+exported: Exportado
+deleted: Excluído
+delete: Excluir
+deleteConfirm: Excluir esta imagem?
+deleteConfirmBody: Ela será removida deste dispositivo.
+adultConfirm: Você tem 18 anos ou mais?
+adultConfirmBody: Isto mostra conteúdo adulto, apenas para maiores de 18 anos.
+adultYes: Tenho 18 anos ou mais
+adultNo: Tenho menos de 18 anos
+saveFailed: Não foi possível salvar
+backToEdit: Voltar ao look
+worksFilter: Mostrar
+noWorksTitle: Seu lookbook está vazio
+noWorksBody: Gere um look e salve em Criações para guardá-lo aqui.
+noFavoriteWorksTitle: Nenhuma imagem favorita ainda
+firstLook: Crie seu primeiro look
+openWork: Abrir No.{no}
+aiService: Serviço de IA
+aiServiceSettings: Configurações do serviço de IA
+serviceIntro: Configure um serviço de IA e teste a conexão para começar a criar looks.
+provider: Provedor
+providerCustom: Personalizado (compatível com OpenAI)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: Obter uma chave de API
+advancedSettings: Avançado
+sizePortrait: Retrato
+sizeSquare: Quadrado
+sizeLandscape: Paisagem
+resetDefaults: Restaurar padrões
+version: Versão
+versionDevelopment: Versão de desenvolvimento
+checkForUpdates: Verificar atualizações
+menuSettings: Configurações…
+menuCheckForUpdates: Verificar Atualizações…
+menuEdit: Editar
+menuWindow: Janela
+baseURL: Endereço
+apiKey: Chave de API
+apiKeyOptional: Chave de API (opcional)
+showKey: Mostrar
+hideKey: Ocultar
+model: Modelo
+deployment: Nome da implantação
+size: Tamanho
+testConnection: Testar conexão
+testAgain: Testar de novo
+connectionOK: Conectado; você já pode criar looks.
+connectionFailed: "Falha na conexão: {error}"
+statusUnconfigured: Nenhum serviço de IA
+statusConnected: "{service} · conectado"
+statusUntested: "{service} · não testado"
+statusTesting: "{service} · testando…"
+statusFailed: "{service} · sem conexão"
+privacyCloud: A chave fica nas chaves seguras deste dispositivo. As solicitações vão direto do seu dispositivo para o serviço que você configurou, sem passar por nenhum outro servidor.
+privacyLocal: As solicitações vão direto do seu dispositivo para o seu próprio servidor, sem passar por nenhum outro servidor e sem custo.
+privacyWeb: Esta versão web não guarda a chave depois que a página é fechada; digite-a de novo após recarregar. As solicitações vão direto do seu navegador para o serviço que você configurou.
+pageOnly: Na versão web, as imagens e roupas duram enquanto esta página estiver aberta. Exporte as que quiser guardar.
+keyUnavailable: Este dispositivo não tem um armazenamento seguro para a chave.
+aboutSection: Sobre
+sourcesSection: Fontes
+settings: Configurações
+settingsGeneral: Geral
+language: Idioma
+languageSystem: Sistema
+languageName: Português (Brasil)
+sourceCode: Código-fonte
+license: Licença
+sourcesPose: Poses
+sourcesOutfit: Roupas
+sourcesFace: Rostos
+sourcesFooter: Cada imagem das galerias só é baixada quando você a usa; o app não as inclui nem as redistribui.
+errNoKey: Digite a chave de API primeiro.
+errKeyRefused: O serviço recusou a chave. Verifique se ela está correta e se pode usar este modelo.
+errNotFound: O endereço ou o modelo não foi encontrado. Verifique-os nas configurações de IA.
+errRateLimited: Solicitações demais, ou a conta está sem créditos. Tente mais tarde ou verifique o saldo.
+errBlocked: A verificação de segurança do serviço bloqueou esta imagem. Tente outra roupa, outra pose ou outro serviço.
+errRejected: O serviço recusou a solicitação.
+errServer: O serviço teve um problema. Tente mais tarde.
+errTimeout: O serviço demorou demais para responder. Tente de novo.
+errNetwork: Não foi possível acessar o serviço. Verifique a rede e o endereço.
+errNoImage: O serviço respondeu sem uma imagem. Tente de novo ou mude o look.
+styleLabel: Estilo
+styleStudio: Estúdio
+styleStreet: Rua
+styleWhite: Fundo branco
+styleFilm: Filme
+styleAnime: Anime
+searchModels: Buscar modelos
+noModelMatches: Nenhum modelo encontrado
+refreshModels: Listar os modelos de novo
+modelsFailed: "Não foi possível listar os modelos: {error}"
+
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: Editar
+  window: Janela
+  about: Sobre
+  aboutApp: Sobre o {app}
+  hide: Ocultar
+  hideApp: Ocultar {app}
+  hideOthers: Ocultar Outros
+  showAll: Mostrar Tudo
+  quit: Encerrar
+  quitApp: Encerrar {app}
+  undo: Desfazer
+  redo: Refazer
+  cut: Recortar
+  copy: Copiar
+  paste: Colar
+  delete: Apagar
+  selectAll: Selecionar Tudo
+  minimize: Minimizar
+  zoom: Zoom
+  toggleFullScreen: Ativar/Desativar Tela Cheia
+  enterFullScreen: Entrar em Tela Cheia
+  exitFullScreen: Sair da Tela Cheia
+  close: Fechar
+  guideDrag: Arraste {app} para a lista acima para permitir “{permission}”.
+  guideDragHint: Arrastar
+  permissionAccessibility: Acessibilidade
+  permissionDeviceControl: Controle de Dispositivos e Acesso a Dados
+  permissionScreenRecording: Gravação de Tela
+  permissionScreenAudioRecording: Gravação de Tela e Áudio do Sistema
+  permissionInputMonitoring: Monitoramento de Entrada
+  permissionFullDiskAccess: Acesso Total ao Disco
+  permissionAppManagement: Gerenciamento de Apps
+  permissionDeveloperTools: Ferramentas de Desenvolvedor
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: Mídia e Apple Music
+  authSessionDone: Você já pode fechar esta página e voltar ao app.
+  pasteAndMatchStyle: Colar e Manter Estilo
+  startSpeaking: Iniciar Fala
+  stopSpeaking: Parar Fala
+  bringAllToFront: Trazer Todas para a Frente
+  checkForUpdates: Verificar Atualizações…
+  services: Serviços
+  help: Ajuda
+  roleLink: link
+  roleTab: aba
+  roleSearchBox: caixa de pesquisa
+  roleStatus: status
+  roleMenu: menu
+  roleMenuItem: item de menu
+  roleDialog: caixa de diálogo
+  roleAlert: alerta
+  roleTable: tabela
+  roleGrid: grade
+  roleRow: linha
+  roleColumnHeader: cabeçalho de coluna
+  roleCell: célula
+  statePartiallyChecked: parcialmente marcado
+  stateExpanded: expandido
+  stateCollapsed: recolhido
+  spokenSeparator: ", "
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: Há uma nova versão de {app} disponível
+  updateAvailableMessage: "{app} {version} está disponível. Você tem a {current}."
+  update: Atualizar
+  later: Depois
+  upToDate: Tudo atualizado
+  upToDateMessage: "{app} {version} é a versão mais recente disponível."
+  updateError: Não é possível verificar atualizações
+  updateErrorMessage: Algo deu errado ao verificar atualizações. Tente novamente mais tarde.
+  installError: Não é possível instalar a atualização
+  installErrorMessage: Não foi possível baixar ou instalar {app} {version}. Você pode obtê-la na página da versão.
+  openPage: Abrir Página
+  ok: OK
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: Ordenar por {column}
+  diffUnchangedLines: "{n, plural, one {# linha inalterada} other {# linhas inalteradas}}"
+  diffExpandAll: Expandir tudo
+  diffStage: Preparar
+  diffDiscardChanges: Descartar Alterações…
+  collapseMerge: Recolher Mesclagem
+  expandMerge: Expandir Mesclagem
+  colorHue: Matiz
+  colorAlpha: Opacidade
+  colorSaturationBrightness: Saturação e brilho
+  colorHex: Cor hexadecimal
+  colorEyeDropper: Escolher uma cor da tela
+  colorFormat: Formato de cor
+  colorCopy: Copiar cor
+  colorRed: Vermelho
+  colorGreen: Verde
+  colorBlue: Azul
+  colorHueDegrees: Graus de matiz
+  colorSaturationPercent: Porcentagem de saturação
+  colorBrightnessPercent: Porcentagem de brilho
+  colorLightnessPercent: Porcentagem de luminosidade
+  colorOpacityPercent: Porcentagem de opacidade
+  calendarPrevious: Mês anterior
+  calendarNext: Próximo mês
+  listClear: Limpar
+  listNothingFound: Nada encontrado
+  listSearch: Pesquisar
+  commandSearch: Pesquisar comandos
+  commandSearchPlaceholder: Pesquisar comandos…
+  commandNoMatches: Nenhum comando correspondente
+  commandLoading: Carregando…
+  commandList: Comandos
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: Mais
+  flowLabel: "{nodes, plural, one {# nó} other {# nós}}, {edges, plural, one {# aresta} other {# arestas}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: Nota
+  alertTip: Dica
+  alertImportant: Importante
+  alertWarning: Aviso
+  alertCaution: Cuidado

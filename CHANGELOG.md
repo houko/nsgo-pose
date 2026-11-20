@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The app speaks Traditional Chinese, Japanese, Korean, Spanish, French, German, Brazilian Portuguese, Russian and Italian as well as English and Simplified Chinese, chosen in the language setting or following the system.
+
 ## 0.16.0 - 2026-11-20
 
 - The model is chosen from a searchable list of the image models the key can use, fetched from the provider once the key is entered or the connection test passes, with a button to fetch it again, on the same page as the provider and the key; it was typed under Advanced. Alibaba Cloud Model Studio and Azure OpenAI, whose models a key can't list, still take it typed.

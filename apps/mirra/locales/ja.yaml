@@ -1,0 +1,321 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: オープンソース · 無料 · アカウント不要
+tabStudio: スタジオ
+tabWardrobe: ワードローブ
+tabWorks: 作品
+worksTabCount: 作品 {n, number}
+tabMe: マイページ
+tabsLabel: セクション
+lookTitle: 今回のコーデ
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: TODAY'S LOOK · {group}
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: LIVE PREVIEW · {group}
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: NEW LOOK · {n, number} 回目の生成
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: 顔
+slotCostume: 服装
+slotPose: ポーズ
+notChosen: 未選択
+stepFace: 顔を選ぶ
+stepCostume: 服装を選ぶ
+stepPose: ポーズを決める
+stepTab: "{n} {name}"
+stepsLabel: ステップ
+selectedItem: 選択中 · {id}
+done: 完了
+back: 戻る
+close: 閉じる
+nextCostume: 次へ · 服装を選ぶ
+nextPose: 次へ · ポーズを選ぶ
+surprise: おまかせ
+generate: 生成する
+generateNeedsService: 生成する · AI サービスを設定
+needPose: 先にポーズを選んでください。
+needService: 先に AI サービスを設定してください。
+viaService: 「{service}」で生成 · 第三者を経由しません
+configureOnce: オープンソースで無料、設定は一度だけ
+generating: 生成中
+cancel: キャンセル
+generateFailed: 生成に失敗しました
+changeFace: 顔を変更
+changePose: ポーズを変更
+zoomIn: 拡大
+resizeColumn: 列の幅を調整
+zoomOut: 縮小
+zoomPercent: "{n, number}%"
+filtersLabel: ギャラリー
+all: すべて
+allCount: すべて {n, number}
+allAngles: すべての角度
+angleFront: 正面
+angleThreeQuarter: 斜め
+angleSide: 横向き
+angleHigh: 俯瞰
+angleLow: あおり
+hairShort: ショート
+hairMedium: ミディアム
+hairSemiLong: セミロング
+hairLong: ロング
+groupSpring: 春
+groupSummer: 夏
+groupAutumn: 秋
+groupWinter: 冬
+groupParty: パーティー
+groupSwimwear: 水着
+groupLingerie: ランジェリー
+groupSexy: セクシー
+adultChip: 18+
+loadFailed: ギャラリーを読み込めませんでした
+retry: 再試行
+noteLabel: 追加の指示
+notePlaceholder: 照明や背景など、そのほかの要望
+favorite: お気に入りに追加
+unfavorite: お気に入りから削除
+favorites: お気に入り
+favoritesCount: お気に入り {n, number}
+myUploads: マイ服
+uploadsCount: マイ服 {n, number}
+outfitGallery: 服装ギャラリー
+galleryCount: ギャラリー {n, number}
+uploadName: マイ服 {n}
+uploadClothes: 服を追加
+wearing: 着用中
+tapToTry: タップして試着 · {group}
+wearAndGenerate: 着て生成
+noFavoritesTitle: お気に入りはまだありません
+noFavoritesBody: ギャラリーの服装で ♡ をタップすると、ここに保存されます。
+noUploadsTitle: 追加した服はまだありません
+noUploadsBody: 平置きかハンガーに掛けた服の写真を追加してください。
+swapOutfit: 同じ顔で、別の服装に
+swapTo: 「{name}」に着替える
+usedFace: 使用した顔
+usedPose: 使用したポーズ
+regenerate: もう一度
+regenerateOnce: もう一度生成
+saveToWorks: 作品に保存
+inWorks: 作品に保存済み
+savedToWorks: "No.{no} として保存しました"
+seeWorks: 見る
+export: 書き出す
+exported: 書き出しました
+deleted: 削除しました
+delete: 削除
+deleteConfirm: この画像を削除しますか？
+deleteConfirmBody: このデバイスから削除されます。
+adultConfirm: 18 歳以上ですか？
+adultConfirmBody: 成人向けのコンテンツです。18 歳以上の方のみご覧いただけます。
+adultYes: 18 歳以上です
+adultNo: 18 歳未満です
+saveFailed: 保存できませんでした
+backToEdit: コーデに戻る
+worksFilter: 表示
+noWorksTitle: ルックブックはまだ空です
+noWorksBody: コーデを生成して「作品に保存」すると、ここに残ります。
+noFavoriteWorksTitle: お気に入りの作品はまだありません
+firstLook: 最初のコーデを作る
+openWork: "No.{no} を開く"
+aiService: AI サービス
+aiServiceSettings: AI サービスの設定
+serviceIntro: AI サービスを設定して接続をテストすれば、コーデの生成を始められます。
+provider: プロバイダ
+providerCustom: カスタム（OpenAI 互換）
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: API Key を取得
+advancedSettings: 詳細設定
+sizePortrait: 縦長
+sizeSquare: 正方形
+sizeLandscape: 横長
+resetDefaults: デフォルトに戻す
+version: バージョン
+versionDevelopment: 開発版
+checkForUpdates: アップデートを確認
+menuSettings: 設定…
+menuCheckForUpdates: アップデートを確認…
+menuEdit: 編集
+menuWindow: ウインドウ
+baseURL: アドレス
+apiKey: API Key
+apiKeyOptional: API Key（省略可）
+showKey: 表示
+hideKey: 隠す
+model: モデル
+deployment: デプロイ名
+size: サイズ
+testConnection: 接続をテスト
+testAgain: 再テスト
+connectionOK: 接続しました。コーデの生成を始められます。
+connectionFailed: "接続できませんでした: {error}"
+statusUnconfigured: AI サービス未設定
+statusConnected: "{service} · 接続済み"
+statusUntested: "{service} · 未テスト"
+statusTesting: "{service} · テスト中…"
+statusFailed: "{service} · 接続できません"
+privacyCloud: キーはこのデバイスのキーチェーンにのみ保存されます。リクエストは他のサーバーを経由せず、デバイスから設定したサービスへ直接送信されます。
+privacyLocal: リクエストは他のサーバーを経由せず、デバイスからご自身のサーバーへ直接送信されます。費用はかかりません。
+privacyWeb: Web 版はページを閉じるとキーを保持しません。再読み込み後はもう一度入力してください。リクエストはブラウザから設定したサービスへ直接送信されます。
+pageOnly: Web 版では、作品や服の写真はこのページを開いている間だけ保持されます。残したいものは書き出してください。
+keyUnavailable: このデバイスにはキーを保存できる安全な保管場所がありません。
+aboutSection: このアプリについて
+sourcesSection: 素材の出典
+settings: 設定
+settingsGeneral: 一般
+language: 言語
+languageSystem: システムに従う
+languageName: 日本語
+sourceCode: ソースコード
+license: ライセンス
+sourcesPose: ポーズ
+sourcesOutfit: 服装
+sourcesFace: 顔
+sourcesFooter: ギャラリーの画像は使うときにだけ個別に取得します。アプリに同梱したり再配布したりすることはありません。
+errNoKey: 先に API Key を入力してください。
+errKeyRefused: サービスがキーを拒否しました。キーが正しいか、このモデルを使えるかを確認してください。
+errNotFound: アドレスまたはモデルが見つかりません。AI の設定を確認してください。
+errRateLimited: リクエストが多すぎるか、アカウントのクレジットが不足しています。しばらくしてから再試行するか、残高を確認してください。
+errBlocked: サービスの安全審査によりこの画像は生成されませんでした。別の服装やポーズ、または別のサービスでお試しください。
+errRejected: サービスがリクエストを拒否しました。
+errServer: サービスで問題が発生しました。しばらくしてから再試行してください。
+errTimeout: サービスの応答がタイムアウトしました。再試行してください。
+errNetwork: サービスに接続できません。ネットワークとアドレスを確認してください。
+errNoImage: サービスから画像が返されませんでした。再試行するか、コーデを変更してください。
+styleLabel: スタイル
+styleStudio: スタジオ
+styleStreet: ストリート
+styleWhite: 白背景
+styleFilm: フィルム
+styleAnime: アニメ
+searchModels: モデルを検索
+noModelMatches: 一致するモデルがありません
+refreshModels: モデル一覧を再取得
+modelsFailed: "モデル一覧を取得できませんでした：{error}"
+
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: 編集
+  window: ウインドウ
+  about: 情報
+  aboutApp: "{app}について"
+  hide: 隠す
+  hideApp: "{app}を隠す"
+  hideOthers: ほかを隠す
+  showAll: すべてを表示
+  quit: 終了
+  quitApp: "{app}を終了"
+  undo: 取り消す
+  redo: やり直す
+  cut: カット
+  copy: コピー
+  paste: ペースト
+  delete: 削除
+  selectAll: すべてを選択
+  minimize: しまう
+  zoom: 拡大/縮小
+  toggleFullScreen: フルスクリーン表示を切り替え
+  enterFullScreen: フルスクリーンにする
+  exitFullScreen: フルスクリーンを解除
+  close: 閉じる
+  guideDrag: "{app}を上のリストにドラッグして「{permission}」を許可してください。"
+  guideDragHint: ドラッグ
+  permissionAccessibility: アクセシビリティ
+  permissionDeviceControl: デバイスの制御とデータへのアクセス
+  permissionScreenRecording: 画面収録
+  permissionScreenAudioRecording: 画面収録とシステムオーディオ録音
+  permissionInputMonitoring: 入力監視
+  permissionFullDiskAccess: フルディスクアクセス
+  permissionAppManagement: App管理
+  permissionDeveloperTools: デベロッパツール
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: メディアとApple Music
+  authSessionDone: このページを閉じてアプリに戻ってください。
+  pasteAndMatchStyle: ペーストしてスタイルを合わせる
+  startSpeaking: 読み上げを開始
+  stopSpeaking: 読み上げを停止
+  bringAllToFront: すべてを手前に移動
+  checkForUpdates: アップデートを確認…
+  services: サービス
+  help: ヘルプ
+  roleLink: リンク
+  roleTab: タブ
+  roleSearchBox: 検索ボックス
+  roleStatus: ステータス
+  roleMenu: メニュー
+  roleMenuItem: メニュー項目
+  roleDialog: ダイアログ
+  roleAlert: 警告
+  roleTable: 表
+  roleGrid: グリッド
+  roleRow: 行
+  roleColumnHeader: 列見出し
+  roleCell: セル
+  statePartiallyChecked: 一部チェック済み
+  stateExpanded: 展開
+  stateCollapsed: 折りたたみ
+  spokenSeparator: 、
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: "{app}の新しいバージョンがあります"
+  updateAvailableMessage: "{app} {version}が利用可能です。現在のバージョンは{current}です。"
+  update: アップデート
+  later: あとで
+  upToDate: 最新の状態です
+  upToDateMessage: "{app} {version}は利用可能な最新バージョンです。"
+  updateError: アップデートを確認できません
+  updateErrorMessage: アップデートの確認中に問題が発生しました。しばらくしてからもう一度お試しください。
+  installError: アップデートをインストールできません
+  installErrorMessage: "{app} {version}をダウンロードまたはインストールできませんでした。代わりに配布ページから入手できます。"
+  openPage: ページを開く
+  ok: OK
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: "{column}で並べ替え"
+  diffUnchangedLines: "{n, plural, other {変更のない#行}}"
+  diffExpandAll: すべて展開
+  diffStage: ステージ
+  diffDiscardChanges: 変更を破棄…
+  collapseMerge: マージを折りたたむ
+  expandMerge: マージを展開
+  colorHue: 色相
+  colorAlpha: 不透明度
+  colorSaturationBrightness: 彩度と明度
+  colorHex: 16進カラー
+  colorEyeDropper: 画面から色を取得
+  colorFormat: カラー形式
+  colorCopy: カラーをコピー
+  colorRed: 赤
+  colorGreen: 緑
+  colorBlue: 青
+  colorHueDegrees: 色相（度）
+  colorSaturationPercent: 彩度（%）
+  colorBrightnessPercent: 明度（%）
+  colorLightnessPercent: 輝度（%）
+  colorOpacityPercent: 不透明度（%）
+  calendarPrevious: 前の月
+  calendarNext: 次の月
+  listClear: 消去
+  listNothingFound: 見つかりません
+  listSearch: 検索
+  commandSearch: コマンドを検索
+  commandSearchPlaceholder: コマンドを検索…
+  commandNoMatches: 一致するコマンドはありません
+  commandLoading: 読み込み中…
+  commandList: コマンド
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: その他
+  flowLabel: "{nodes, plural, other {#個のノード}}、{edges, plural, other {#本のエッジ}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: メモ
+  alertTip: ヒント
+  alertImportant: 重要
+  alertWarning: 警告
+  alertCaution: 注意

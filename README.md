@@ -41,7 +41,7 @@
 - **The main image providers, or your own server.** OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, EveryAPI, Alibaba Cloud Model Studio and Azure OpenAI are preset, each with its logo and a link to get a key; stable-diffusion.cpp or any OpenAI-compatible address works too, with the key optional. Each provider keeps its own key and settings. Test the connection before generating; keys are kept in the system keychain.
 - **Extra instructions.** Add a line such as lighting or background, sent along with the prompt.
 - **No photos of you.** The app takes no picture of a person: the pose and outfit galleries' terms forbid using their images to depict real people. Photos you add are of clothes only.
-- English and Simplified Chinese.
+- English, Simplified and Traditional Chinese, Japanese, Korean, Spanish, French, German, Brazilian Portuguese, Russian and Italian, chosen in the settings or following the system.
 
 ## Where the references come from
 

@@ -9,6 +9,7 @@ import (
 
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/nsgotest"
+	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
 // TestMain gives the platform the main thread under nsgo test -target.
@@ -679,5 +680,20 @@ func TestModelIsChosenFromTheListedOnes(t *testing.T) {
 	app.WaitFor("id:shot-image", wait)
 	if got := api.last().Model; got != "gpt-image-2" {
 		t.Errorf("model = %q", got)
+	}
+}
+
+// TestEveryLanguageNamesItself lists each catalog in the language menu under its own name, so a catalog that lacks one does not show as English.
+func TestEveryLanguageNamesItself(t *testing.T) {
+	seen := map[string]string{}
+	for _, lang := range locales.Catalog.Languages() {
+		name := locales.In(lang).LanguageName()
+		if other, ok := seen[name]; ok {
+			t.Errorf("%s and %s are both named %q", other, lang, name)
+		}
+		seen[name] = lang
+	}
+	if len(seen) < 11 {
+		t.Errorf("the menu offers %d languages, want 11", len(seen))
 	}
 }

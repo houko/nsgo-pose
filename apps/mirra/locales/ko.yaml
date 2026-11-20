@@ -1,0 +1,321 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: 오픈 소스 · 무료 · 계정 불필요
+tabStudio: 스튜디오
+tabWardrobe: 옷장
+tabWorks: 작품
+worksTabCount: "작품 {n, number}"
+tabMe: 나
+tabsLabel: 섹션
+lookTitle: 이번 룩
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: "TODAY'S LOOK · {group}"
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: "LIVE PREVIEW · {group}"
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: "NEW LOOK · {n, number}번째 생성"
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: 얼굴
+slotCostume: 의상
+slotPose: 포즈
+notChosen: 선택 안 함
+stepFace: 얼굴 선택
+stepCostume: 의상 고르기
+stepPose: 포즈 설정
+stepTab: "{n} {name}"
+stepsLabel: 단계
+selectedItem: "선택됨 · {id}"
+done: 완료
+back: 뒤로
+close: 닫기
+nextCostume: "다음: 의상"
+nextPose: "다음: 포즈"
+surprise: 랜덤 코디
+generate: 생성하기
+generateNeedsService: "생성하기 · AI 서비스를 먼저 설정하세요"
+needPose: 먼저 포즈를 선택하세요.
+needService: 먼저 AI 서비스를 설정하세요.
+viaService: "{service}(으)로 생성 · 제3자를 거치지 않아요"
+configureOnce: 무료 오픈 소스, 한 번만 설정하면 돼요
+generating: 생성 중
+cancel: 취소
+generateFailed: 생성 실패
+changeFace: 얼굴 바꾸기
+changePose: 포즈 바꾸기
+zoomIn: 확대
+resizeColumn: 열 너비 조절
+zoomOut: 축소
+zoomPercent: "{n, number}%"
+filtersLabel: 갤러리
+all: 전체
+allCount: "전체 {n, number}"
+allAngles: 모든 각도
+angleFront: 정면
+angleThreeQuarter: 3/4 측면
+angleSide: 측면
+angleHigh: 하이 앵글
+angleLow: 로우 앵글
+hairShort: 단발
+hairMedium: 중단발
+hairSemiLong: 어깨 기장
+hairLong: 장발
+groupSpring: 봄
+groupSummer: 여름
+groupAutumn: 가을
+groupWinter: 겨울
+groupParty: 파티
+groupSwimwear: 수영복
+groupLingerie: 란제리
+groupSexy: 섹시
+adultChip: 18+
+loadFailed: 갤러리를 불러오지 못했어요
+retry: 다시 시도
+noteLabel: 추가 요청
+notePlaceholder: 조명, 배경 등 추가 요청
+favorite: 즐겨찾기에 추가
+unfavorite: 즐겨찾기에서 삭제
+favorites: 즐겨찾기
+favoritesCount: "즐겨찾기 {n, number}"
+myUploads: 내 옷
+uploadsCount: "내 옷 {n, number}"
+outfitGallery: 의상 갤러리
+galleryCount: "갤러리 {n, number}"
+uploadName: "내 옷 {n}"
+uploadClothes: 옷 추가
+wearing: 착용 중
+tapToTry: "탭해서 입어 보기 · {group}"
+wearAndGenerate: 입어 보기
+noFavoritesTitle: 아직 즐겨찾기가 없어요
+noFavoritesBody: 갤러리에서 의상의 ♡를 탭하면 여기에 모여요.
+noUploadsTitle: 아직 추가한 옷이 없어요
+noUploadsBody: 옷을 바닥에 펼치거나 옷걸이에 걸어 찍은 사진을 추가하세요.
+swapOutfit: 같은 얼굴, 다른 의상
+swapTo: "{name} 입기"
+usedFace: 사용한 얼굴
+usedPose: 사용한 포즈
+regenerate: 다시
+regenerateOnce: 다시 생성
+saveToWorks: 작품에 저장
+inWorks: 작품에 있음
+savedToWorks: "No.{no}(으)로 저장했어요"
+seeWorks: 보기
+export: 내보내기
+exported: 내보냈어요
+deleted: 삭제했어요
+delete: 삭제
+deleteConfirm: 이 이미지를 삭제할까요?
+deleteConfirmBody: 이 기기에서 삭제돼요.
+adultConfirm: 만 18세 이상인가요?
+adultConfirmBody: 성인 콘텐츠예요. 만 18세 이상만 볼 수 있어요.
+adultYes: 만 18세 이상이에요
+adultNo: 만 18세 미만이에요
+saveFailed: 저장하지 못했어요
+backToEdit: 룩으로 돌아가기
+worksFilter: 보기
+noWorksTitle: 룩북이 비어 있어요
+noWorksBody: 룩을 생성하고 작품에 저장하면 여기에 모여요.
+noFavoriteWorksTitle: 아직 즐겨찾기한 작품이 없어요
+firstLook: 첫 룩 만들기
+openWork: "No.{no} 열기"
+aiService: AI 서비스
+aiServiceSettings: AI 서비스 설정
+serviceIntro: AI 서비스를 설정하고 연결을 테스트하면 바로 룩을 만들 수 있어요.
+provider: 제공업체
+providerCustom: 사용자 지정(OpenAI 호환)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: API Key 발급받기
+advancedSettings: 고급 설정
+sizePortrait: 세로
+sizeSquare: 정사각형
+sizeLandscape: 가로
+resetDefaults: 기본값으로 재설정
+version: 버전
+versionDevelopment: 개발 빌드
+checkForUpdates: 업데이트 확인
+menuSettings: 설정…
+menuCheckForUpdates: 업데이트 확인…
+menuEdit: 편집
+menuWindow: 윈도우
+baseURL: 주소
+apiKey: API Key
+apiKeyOptional: API Key(선택 사항)
+showKey: 보기
+hideKey: 숨기기
+model: 모델
+deployment: 배포 이름
+size: 크기
+testConnection: 연결 테스트
+testAgain: 다시 테스트
+connectionOK: 연결됐어요. 이제 룩을 만들 수 있어요.
+connectionFailed: "연결하지 못했어요: {error}"
+statusUnconfigured: AI 서비스 없음
+statusConnected: "{service} · 연결됨"
+statusUntested: "{service} · 테스트 안 함"
+statusTesting: "{service} · 테스트 중…"
+statusFailed: "{service} · 연결 실패"
+privacyCloud: Key는 이 기기의 키체인에만 저장돼요. 요청은 다른 서버를 거치지 않고 기기에서 설정한 서비스로 바로 전송돼요.
+privacyLocal: 요청은 다른 서버를 거치지 않고 기기에서 내가 운영하는 서버로 바로 전송되며, 비용이 들지 않아요.
+privacyWeb: 웹 버전은 페이지를 닫으면 Key를 보관하지 않아요. 새로고침한 뒤에는 다시 입력하세요. 요청은 브라우저에서 설정한 서비스로 바로 전송돼요.
+pageOnly: 웹 버전에서는 이미지와 옷 사진이 이 페이지에만 남아요. 보관하고 싶은 것은 내보내세요.
+keyUnavailable: 이 기기에는 Key를 저장할 보안 저장소가 없어요.
+aboutSection: 정보
+sourcesSection: 출처
+settings: 설정
+settingsGeneral: 일반
+language: 언어
+languageSystem: 시스템 설정
+languageName: 한국어
+sourceCode: 소스 코드
+license: 라이선스
+sourcesPose: 포즈
+sourcesOutfit: 의상
+sourcesFace: 얼굴
+sourcesFooter: 갤러리 이미지는 사용할 때만 하나씩 가져와요. 앱에 포함하거나 재배포하지 않아요.
+errNoKey: 먼저 API Key를 입력하세요.
+errKeyRefused: 서비스가 Key를 거부했어요. Key가 올바른지, 이 모델을 사용할 수 있는지 확인하세요.
+errNotFound: 주소나 모델을 찾지 못했어요. AI 설정에서 확인하세요.
+errRateLimited: 요청이 너무 많거나 계정 크레딧이 부족해요. 잠시 후 다시 시도하거나 잔액을 확인하세요.
+errBlocked: 서비스의 안전 검사로 이 이미지가 차단됐어요. 다른 의상이나 포즈, 또는 다른 서비스로 시도해 보세요.
+errRejected: 서비스가 요청을 거부했어요.
+errServer: 서비스에 문제가 생겼어요. 잠시 후 다시 시도하세요.
+errTimeout: 서비스 응답이 너무 늦어요. 다시 시도하세요.
+errNetwork: 서비스에 연결할 수 없어요. 네트워크와 주소를 확인하세요.
+errNoImage: 서비스가 이미지 없이 응답했어요. 다시 시도하거나 룩을 바꿔 보세요.
+styleLabel: 스타일
+styleStudio: 스튜디오
+styleStreet: 스트리트
+styleWhite: 흰 배경
+styleFilm: 필름
+styleAnime: 애니
+searchModels: 모델 검색
+noModelMatches: 일치하는 모델이 없어요
+refreshModels: 모델 목록 다시 불러오기
+modelsFailed: "모델 목록을 불러오지 못했어요: {error}"
+
+github.com/nsgo-dev/nsgo/desktop/locales:
+  edit: 편집
+  window: 윈도우
+  about: 정보
+  aboutApp: "{app}에 관하여"
+  hide: 가리기
+  hideApp: "{app} 가리기"
+  hideOthers: 기타 가리기
+  showAll: 모두 보기
+  quit: 종료
+  quitApp: "{app} 종료"
+  undo: 실행 취소
+  redo: 실행 복귀
+  cut: 오려두기
+  copy: 복사하기
+  paste: 붙여넣기
+  delete: 삭제
+  selectAll: 모두 선택
+  minimize: 최소화
+  zoom: 확대/축소
+  toggleFullScreen: 전체 화면 전환
+  enterFullScreen: 전체 화면 시작
+  exitFullScreen: 전체 화면 종료
+  close: 닫기
+  guideDrag: 위 목록으로 {app}을(를) 드래그하여 ‘{permission}’을(를) 허용하세요.
+  guideDragHint: 드래그
+  permissionAccessibility: 손쉬운 사용
+  permissionDeviceControl: 기기 제어 및 데이터 접근
+  permissionScreenRecording: 화면 기록
+  permissionScreenAudioRecording: 화면 및 시스템 오디오 녹음
+  permissionInputMonitoring: 입력 모니터링
+  permissionFullDiskAccess: 전체 디스크 접근 권한
+  permissionAppManagement: 앱 관리
+  permissionDeveloperTools: 개발자 도구
+  permissionBluetooth: Bluetooth
+  permissionMediaLibrary: 미디어 및 Apple Music
+  authSessionDone: 이 페이지를 닫고 앱으로 돌아가도 돼요.
+  pasteAndMatchStyle: 붙여넣고 스타일 일치시키기
+  startSpeaking: 말하기 시작
+  stopSpeaking: 말하기 정지
+  bringAllToFront: 모두 앞으로 가져오기
+  checkForUpdates: 업데이트 확인…
+  services: 서비스
+  help: 도움말
+  roleLink: 링크
+  roleTab: 탭
+  roleSearchBox: 검색창
+  roleStatus: 상태
+  roleMenu: 메뉴
+  roleMenuItem: 메뉴 항목
+  roleDialog: 대화상자
+  roleAlert: 알림
+  roleTable: 표
+  roleGrid: 그리드
+  roleRow: 행
+  roleColumnHeader: 열 머리글
+  roleCell: 셀
+  statePartiallyChecked: 부분 선택됨
+  stateExpanded: 펼쳐짐
+  stateCollapsed: 접힘
+  spokenSeparator: ", "
+github.com/nsgo-dev/nsgo/updater/locales:
+  updateAvailable: "{app}의 새 버전이 있어요"
+  updateAvailableMessage: "{app} {version}을(를) 사용할 수 있어요. (현재 버전 {current})"
+  update: 업데이트
+  later: 나중에
+  upToDate: 최신 버전이에요
+  upToDateMessage: "{app} {version}은(는) 최신 버전이에요."
+  updateError: 업데이트를 확인할 수 없어요
+  updateErrorMessage: 업데이트를 확인하는 중 문제가 생겼어요. 나중에 다시 시도하세요.
+  installError: 업데이트를 설치할 수 없어요
+  installErrorMessage: "{app} {version}을(를) 다운로드하거나 설치하지 못했어요. 대신 해당 페이지에서 받을 수 있어요."
+  openPage: 페이지 열기
+  ok: 확인
+github.com/nsgo-dev/nsgo/base/locales:
+  sortBy: "{column} 기준 정렬"
+  diffUnchangedLines: "{n, plural, other {변경되지 않은 줄 #개}}"
+  diffExpandAll: 모두 펼치기
+  diffStage: 스테이징
+  diffDiscardChanges: 변경 사항 폐기…
+  collapseMerge: 병합 접기
+  expandMerge: 병합 펼치기
+  colorHue: 색조
+  colorAlpha: 불투명도
+  colorSaturationBrightness: 채도 및 밝기
+  colorHex: 16진수 색상
+  colorEyeDropper: 화면에서 색상 선택
+  colorFormat: 색상 형식
+  colorCopy: 색상 복사
+  colorRed: 빨강
+  colorGreen: 초록
+  colorBlue: 파랑
+  colorHueDegrees: 색조 각도
+  colorSaturationPercent: 채도 백분율
+  colorBrightnessPercent: 밝기 백분율
+  colorLightnessPercent: 명도 백분율
+  colorOpacityPercent: 불투명도 백분율
+  calendarPrevious: 이전 달
+  calendarNext: 다음 달
+  listClear: 지우기
+  listNothingFound: 결과 없음
+  listSearch: 검색
+  commandSearch: 명령 검색
+  commandSearchPlaceholder: 명령 검색…
+  commandNoMatches: 일치하는 명령 없음
+  commandLoading: 불러오는 중…
+  commandList: 명령
+  calendarMonth: "{d, date, ::yMMMM}"
+  calendarMonthName: "{d, date, ::MMM}"
+  calendarWeekday: "{d, date, ::EEEEE}"
+  breadcrumbsMore: 더 보기
+  flowLabel: "{nodes, plural, other {노드 #개}}, {edges, plural, other {연결선 #개}}"
+github.com/nsgo-dev/nsgo/base/textview/locales:
+  alertNote: 참고
+  alertTip: 팁
+  alertImportant: 중요
+  alertWarning: 경고
+  alertCaution: 주의
