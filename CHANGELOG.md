@@ -8,13 +8,13 @@
 
 ## 0.12.0 - 2026-11-20
 
+- When a service's safety check refuses a picture, the error says so and suggests another outfit, pose or service, with the service's reason below; it read as a refused request. OpenAI, Azure OpenAI, Volcengine Ark, Alibaba Cloud Model Studio and Gemini refusals are recognized.
 - The desktop studio's three columns are resized by dragging the gutters between them. The library and the look open at a share of the window, wider on a larger screen, and keep the width they were dragged to as a share of the window; the library shows more columns of pictures as it widens.
 
 ## 0.11.0 - 2026-11-20
 
 - Surprise me, the dice beside the studio's title on the phone and the canvas's zoom on the desktop, chooses a face, an outfit and a pose at random from what each gallery shows, adults-only items only where they are turned on.
 - The desktop settings put their parts on tabs down the side: AI service, Advanced, About and Sources, where they were one long column with the advanced settings folded away.
-- When a service's safety check refuses a picture, the error says so and suggests another outfit, pose or service, with the service's reason below; it read as a refused request. OpenAI, Azure OpenAI, Volcengine Ark, Alibaba Cloud Model Studio and Gemini refusals are recognized.
 
 ## 0.10.0 - 2026-11-20
 
