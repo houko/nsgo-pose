@@ -7,7 +7,7 @@ import (
 	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
-// menu is the macOS menu bar: the app menu with About, Settings… and, where the app updates itself, Check for Updates…, then Edit and Window. NSGo's default macOS menu holds only Quit and Edit (https://github.com/nsgo-dev/nsgo/issues/947), so Mac users found neither the settings nor the update check where they look for them.
+// menu is the macOS menu bar: the app menu with About, Settings… and, where the app updates itself, Check for Updates…, then Edit and Window. NSGo's default menu has About and Check for Updates… but no Settings…, an app's own, and none of AppKit's keys for Hide and Minimize (https://github.com/nsgo-dev/nsgo/issues/947), so the app sets the whole bar with the roles, which carry those keys.
 func (s *studio) menu(cx *core.Scope, t locales.Messages) []desktop.MenuItem {
 	app := []desktop.MenuItem{
 		{Role: desktop.MenuAbout}, {Separator: true},
