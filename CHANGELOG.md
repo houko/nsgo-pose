@@ -3,6 +3,7 @@
 ## Unreleased
 
 - The app speaks Traditional Chinese, Japanese, Korean, Spanish, French, German, Brazilian Portuguese, Russian and Italian as well as English and Simplified Chinese, chosen in the language setting or following the system.
+- A fourth element, the background: indoor, city and nature scenes the app ships, public domain photographs with no one in them. None is chosen by default and the style sets the scene; a chosen one is sent with the look and the person is set there. A work keeps its background, and pressing the chosen one again or its × goes back to none.
 
 ## 0.16.0 - 2026-11-20
 

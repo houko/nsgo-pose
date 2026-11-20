@@ -8,6 +8,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | --- | --- |
 | `apps/mirra/go.mod`, `apps/mirra/nsgo.yaml` | The only Go module and the packaging configuration; run Go and the `nsgo` tool in `apps/mirra`. |
 | `apps/mirra/app.go` | Entry point; the app's state, the choice of layout by window width, generating, saving, starring and deleting a picture. |
+| `apps/mirra/backgrounds.go`, `apps/mirra/backgrounds/` | The backgrounds the app ships, embedded: public domain scenes with no one in them, by group. |
 | `apps/mirra/gallery.go` | Reading the three galleries' indexes live, which items are adults-only, and the chips each filters by. |
 | `apps/mirra/generate.go` | The request: the prompt, the reference images in order, and OpenAI's multipart `/images/edits`. |
 | `apps/mirra/sheet.go` | A sheet of all angles: the pose's angles joined side by side into one reference, and its landscape size. |
@@ -39,6 +40,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 ## Boundaries
 
 - Ship no gallery image. Read each gallery's index live, show thumbnails from the gallery while browsing, and download a full image only for the request that uses it.
+- Ship only public domain backgrounds with no one in them, listed in NOTICE.md, besides the icon.
 - Never put a person's photo in a request: the pose and outfit galleries' terms forbid depicting real people with their images. Faces come from the CC0 face gallery; photos the user adds are of clothes.
 - Do network and file work on a goroutine and hand results back with `cx.Post`; never block a builder or a handler.
 - Keep API keys in `cx.Secrets()`, never in storage. A browser has none, so the web build keeps the key in memory for the page and says so.
@@ -48,7 +50,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 
 ## Core flows
 
-**A look.** The galleries load as resources at start. Choosing a face, an outfit and a pose sets the studio's three signals; only the pose is required.
+**A look.** The galleries load as resources at start. Choosing a face, an outfit, a pose and a background sets the studio's signals; only the pose is required, and without a background the style sets the scene. The background goes last among the request's images, so the others keep their numbers.
 
 **Generate.** Without a configured service, Generate opens the settings. Otherwise it downloads the chosen full images, for a sheet of all angles every angle of the pose joined side by side into one, sends them with the prompt to the chosen provider's API and writes the picture to the results folder, where it waits. Generate again and the outfit swap make the same request again, the swap with another outfit. Cancel stops the request through its context.
 

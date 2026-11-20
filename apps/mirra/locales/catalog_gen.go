@@ -1822,13 +1822,18 @@ const (
 	textEyebrowFace
 	textEyebrowOutfit
 	textEyebrowPose
+	textEyebrowBackground
 	textSlotFace
 	textSlotCostume
 	textSlotPose
+	textSlotBackground
 	textNotChosen
+	textNoBackground
+	textRemoveBackground
 	textStepFace
 	textStepCostume
 	textStepPose
+	textStepBackground
 	textStepsLabel
 	textDone
 	textBack
@@ -1865,6 +1870,9 @@ const (
 	textGroupSummer
 	textGroupAutumn
 	textGroupWinter
+	textGroupIndoor
+	textGroupCity
+	textGroupNature
 	textGroupParty
 	textGroupSwimwear
 	textGroupLingerie
@@ -2006,13 +2014,18 @@ var keyOfText = [numTexts]string{
 	"eyebrowFace",
 	"eyebrowOutfit",
 	"eyebrowPose",
+	"eyebrowBackground",
 	"slotFace",
 	"slotCostume",
 	"slotPose",
+	"slotBackground",
 	"notChosen",
+	"noBackground",
+	"removeBackground",
 	"stepFace",
 	"stepCostume",
 	"stepPose",
+	"stepBackground",
 	"stepsLabel",
 	"done",
 	"back",
@@ -2049,6 +2062,9 @@ var keyOfText = [numTexts]string{
 	"groupSummer",
 	"groupAutumn",
 	"groupWinter",
+	"groupIndoor",
+	"groupCity",
+	"groupNature",
 	"groupParty",
 	"groupSwimwear",
 	"groupLingerie",
@@ -2188,13 +2204,18 @@ var textsEn = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Face"+
 	"Outfit"+
 	"Pose"+
+	"Background"+
 	"Not chosen"+
+	"No background"+
+	"Remove the background"+
 	"Choose a face"+
 	"Choose an outfit"+
 	"Set the pose"+
+	"Choose a background"+
 	"Steps"+
 	"Done"+
 	"Back"+
@@ -2231,6 +2252,9 @@ var textsEn = i18n.NewTexts(""+
 	"Summer"+
 	"Autumn"+
 	"Winter"+
+	"Indoor"+
+	"City"+
+	"Nature"+
 	"Party"+
 	"Swimwear"+
 	"Lingerie"+
@@ -2367,13 +2391,18 @@ var textsEn = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		4,
 		6,
 		4,
 		10,
+		10,
+		13,
+		21,
 		13,
 		16,
 		12,
+		19,
 		5,
 		4,
 		4,
@@ -2409,6 +2438,9 @@ var textsEn = i18n.NewTexts(""+
 		6,
 		6,
 		6,
+		6,
+		6,
+		4,
 		6,
 		5,
 		8,
@@ -5437,13 +5469,18 @@ var textsZhHans = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"人脸"+
 	"服装"+
 	"姿势"+
+	"背景"+
 	"未选择"+
+	"无背景"+
+	"去掉背景"+
 	"选择人脸"+
 	"挑选服装"+
 	"设定姿势"+
+	"选择背景"+
 	"步骤"+
 	"完成"+
 	"返回"+
@@ -5480,6 +5517,9 @@ var textsZhHans = i18n.NewTexts(""+
 	"夏"+
 	"秋"+
 	"冬"+
+	"室内"+
+	"城市"+
+	"自然"+
 	"派对"+
 	"泳装"+
 	"内衣"+
@@ -5616,10 +5656,15 @@ var textsZhHans = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
+		6,
 		6,
 		6,
 		6,
 		9,
+		9,
+		12,
+		12,
 		12,
 		12,
 		12,
@@ -5659,6 +5704,9 @@ var textsZhHans = i18n.NewTexts(""+
 		3,
 		3,
 		3,
+		6,
+		6,
+		6,
 		6,
 		6,
 		6,
@@ -6652,6 +6700,13 @@ func EyebrowPose(cx *core.Scope) string { return For(cx).EyebrowPose() }
 // EyebrowPose is the package's EyebrowPose in the language of msgs.
 func (msgs Messages) EyebrowPose() string { return msgs.text(textEyebrowPose) }
 
+// EyebrowBackground says "04 SCENE"
+// in the language the app shows under cx.
+func EyebrowBackground(cx *core.Scope) string { return For(cx).EyebrowBackground() }
+
+// EyebrowBackground is the package's EyebrowBackground in the language of msgs.
+func (msgs Messages) EyebrowBackground() string { return msgs.text(textEyebrowBackground) }
+
 // SlotFace says "Face"
 // in the language the app shows under cx.
 func SlotFace(cx *core.Scope) string { return For(cx).SlotFace() }
@@ -6673,12 +6728,33 @@ func SlotPose(cx *core.Scope) string { return For(cx).SlotPose() }
 // SlotPose is the package's SlotPose in the language of msgs.
 func (msgs Messages) SlotPose() string { return msgs.text(textSlotPose) }
 
+// SlotBackground says "Background"
+// in the language the app shows under cx.
+func SlotBackground(cx *core.Scope) string { return For(cx).SlotBackground() }
+
+// SlotBackground is the package's SlotBackground in the language of msgs.
+func (msgs Messages) SlotBackground() string { return msgs.text(textSlotBackground) }
+
 // NotChosen says "Not chosen"
 // in the language the app shows under cx.
 func NotChosen(cx *core.Scope) string { return For(cx).NotChosen() }
 
 // NotChosen is the package's NotChosen in the language of msgs.
 func (msgs Messages) NotChosen() string { return msgs.text(textNotChosen) }
+
+// NoBackground says "No background"
+// in the language the app shows under cx.
+func NoBackground(cx *core.Scope) string { return For(cx).NoBackground() }
+
+// NoBackground is the package's NoBackground in the language of msgs.
+func (msgs Messages) NoBackground() string { return msgs.text(textNoBackground) }
+
+// RemoveBackground says "Remove the background"
+// in the language the app shows under cx.
+func RemoveBackground(cx *core.Scope) string { return For(cx).RemoveBackground() }
+
+// RemoveBackground is the package's RemoveBackground in the language of msgs.
+func (msgs Messages) RemoveBackground() string { return msgs.text(textRemoveBackground) }
 
 // StepFace says "Choose a face"
 // in the language the app shows under cx.
@@ -6700,6 +6776,13 @@ func StepPose(cx *core.Scope) string { return For(cx).StepPose() }
 
 // StepPose is the package's StepPose in the language of msgs.
 func (msgs Messages) StepPose() string { return msgs.text(textStepPose) }
+
+// StepBackground says "Choose a background"
+// in the language the app shows under cx.
+func StepBackground(cx *core.Scope) string { return For(cx).StepBackground() }
+
+// StepBackground is the package's StepBackground in the language of msgs.
+func (msgs Messages) StepBackground() string { return msgs.text(textStepBackground) }
 
 // StepTab says "{n} {name}"
 // in the language the app shows under cx.
@@ -7158,6 +7241,27 @@ func GroupWinter(cx *core.Scope) string { return For(cx).GroupWinter() }
 
 // GroupWinter is the package's GroupWinter in the language of msgs.
 func (msgs Messages) GroupWinter() string { return msgs.text(textGroupWinter) }
+
+// GroupIndoor says "Indoor"
+// in the language the app shows under cx.
+func GroupIndoor(cx *core.Scope) string { return For(cx).GroupIndoor() }
+
+// GroupIndoor is the package's GroupIndoor in the language of msgs.
+func (msgs Messages) GroupIndoor() string { return msgs.text(textGroupIndoor) }
+
+// GroupCity says "City"
+// in the language the app shows under cx.
+func GroupCity(cx *core.Scope) string { return For(cx).GroupCity() }
+
+// GroupCity is the package's GroupCity in the language of msgs.
+func (msgs Messages) GroupCity() string { return msgs.text(textGroupCity) }
+
+// GroupNature says "Nature"
+// in the language the app shows under cx.
+func GroupNature(cx *core.Scope) string { return For(cx).GroupNature() }
+
+// GroupNature is the package's GroupNature in the language of msgs.
+func (msgs Messages) GroupNature() string { return msgs.text(textGroupNature) }
 
 // GroupParty says "Party"
 // in the language the app shows under cx.

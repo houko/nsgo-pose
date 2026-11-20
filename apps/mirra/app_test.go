@@ -697,3 +697,41 @@ func TestEveryLanguageNamesItself(t *testing.T) {
 		t.Errorf("the menu offers %d languages, want 11", len(seen))
 	}
 }
+
+// TestBackgroundTab starts without a background, sends the one chosen on the background tab with the look, keeps it with the work, and goes back to none.
+func TestBackgroundTab(t *testing.T) {
+	api := &fakeAPI{}
+	app, dir := start(t, api, "k", nsgotest.Size(1440, 1000))
+	app.Find("text:No background")
+	app.Press("id:library-pose")
+	choose(t, app, poseStand)
+	app.Press("id:library-background")
+	bg := backgroundCatalog().Items[0]
+	choose(t, app, "label:Indoor · "+bg.ID)
+	app.WaitFor("id:clear-background", wait)
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := api.last().Images; len(got) == 0 || got[len(got)-1] != bg.ID+".jpg" {
+		t.Errorf("images = %v, want the background last", got)
+	}
+	app.Press("id:save-to-works")
+	app.WaitFor("id:saved", wait)
+	if ws := works(t, dir); len(ws) != 1 || ws[0].Background == nil || ws[0].Background.ID != bg.ID {
+		t.Errorf("works = %+v, want one keeping the background", ws)
+	}
+	app.Press("id:close-shot")
+	app.Press("id:clear-background")
+	app.WaitFor("text:No background", wait)
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := api.last().Images; slices.Contains(got, bg.ID+".jpg") {
+		t.Errorf("images = %v after removing the background", got)
+	}
+	// Pressing the chosen background again also goes back to none.
+	app.Press("id:close-shot")
+	app.Press("id:library-background")
+	choose(t, app, "label:Indoor · "+bg.ID)
+	app.WaitFor("id:clear-background", wait)
+	app.Press("label:Indoor · " + bg.ID)
+	app.WaitFor("text:No background", wait)
+}

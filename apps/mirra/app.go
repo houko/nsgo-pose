@@ -55,8 +55,11 @@ const (
 	sectionSettings
 )
 
-// steps is the order the look is put together in.
-var steps = []Kind{KindFace, KindCostume, KindPose}
+// steps is the order the look is put together in; the background is optional and comes last.
+var steps = []Kind{KindFace, KindCostume, KindPose, KindBackground}
+
+// lookKinds are the elements a look is made of, without the optional background: what Surprise me picks and the editor opens on while one is empty.
+var lookKinds = []Kind{KindFace, KindCostume, KindPose}
 
 type page int
 
@@ -91,12 +94,12 @@ type studio struct {
 	section *core.Signal[int]
 	// step is the gallery being chosen from: the phone editor's step and the desktop library's tab.
 	step *core.Signal[Kind]
-	// chosen holds the look's face, outfit and pose, by Kind.
-	chosen [3]*core.Signal[*Item]
+	// chosen holds the look's face, outfit, pose and background, by Kind.
+	chosen [kindCount]*core.Signal[*Item]
 	// filter is each gallery's chip, "" for all.
-	filter [3]*core.Signal[string]
+	filter [kindCount]*core.Signal[string]
 	// adult says whether each gallery shows its adults-only items instead of those for everyone.
-	adult [3]*core.Signal[bool]
+	adult [kindCount]*core.Signal[bool]
 	// adultOK is the user's answer that they are 18 or older, asked once and kept, since works and favorites from the adults-only categories show without asking.
 	adultOK *core.Signal[bool]
 	note    *core.Signal[string]
@@ -126,7 +129,7 @@ type studio struct {
 	favorites   *core.Signal[[]Item]
 	uploads     *core.Signal[[]Item]
 	closet      *core.Signal[int]
-	catalogs    [3]*core.Resource[Catalog]
+	catalogs    [kindCount]*core.Resource[Catalog]
 
 	studioNav, worksNav *base.Nav[route]
 }
@@ -300,9 +303,17 @@ func (s *studio) choose(k Kind, it Item) {
 	}
 }
 
-// surprise chooses a face, an outfit and a pose at random, each from what its gallery shows: its chip and, only where the user turned it on, its adults-only items.
+// clearBackground goes back to no background, which leaves the scene to the style.
+func (s *studio) clearBackground() {
+	s.chosen[KindBackground].Set(nil)
+	if sh := s.shot.Get(); sh != nil && sh.Saved == nil {
+		s.shot.Set(nil)
+	}
+}
+
+// surprise chooses a face, an outfit and a pose at random, each from what its gallery shows: its chip and, only where the user turned it on, its adults-only items. The background stays as the user left it.
 func (s *studio) surprise() {
-	for _, k := range steps {
+	for _, k := range lookKinds {
 		items := loaded(s.catalogs[k]).InGroup(s.filter[k].Get(), s.adult[k].Get())
 		if len(items) > 0 {
 			s.choose(k, items[rand.IntN(len(items))])
@@ -312,7 +323,8 @@ func (s *studio) surprise() {
 
 // look is the look as chosen; reading it inside a binding follows every choice.
 func (s *studio) look() Request {
-	r := Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Note: s.note.Get(), Style: s.style.Get()}
+	r := Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Background: s.chosen[KindBackground].Get(),
+		Note: s.note.Get(), Style: s.style.Get()}
 	if s.sheet.Get() {
 		r.Views = s.angles(r.Pose)
 	}
@@ -461,10 +473,12 @@ func (s *studio) openWork(w work) {
 			s.chosen[k].Set(it)
 		}
 	}
+	// A work without a background was made without one, so none is chosen for Generate again.
+	s.chosen[KindBackground].Set(w.Background)
 	s.sheet.Set(len(w.Views) > 1)
 	s.setStyle(w.Style)
 	saved := w
-	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Views: w.Views, Style: w.Style}, Saved: &saved})
+	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Background: w.Background, Views: w.Views, Style: w.Style}, Saved: &saved})
 }
 
 // saveShot keeps the picture on show in Works, numbered after the others.
@@ -475,7 +489,7 @@ func (s *studio) saveShot(favorite bool) {
 	}
 	t := locales.For(s.cx)
 	dir, now, st := s.dir("works"), s.cx.Now(), s.pics
-	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose, Views: sh.Req.Views, Style: sh.Req.Style}
+	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose, Background: sh.Req.Background, Views: sh.Req.Views, Style: sh.Req.Style}
 	go func() {
 		w, err := saveWork(st, dir, sh.Path, now, meta)
 		s.cx.Post(func() {
@@ -596,8 +610,11 @@ func (s *studio) saveFile(cx *core.Scope, path string) {
 	})
 }
 
-// src shows an image: one the app keeps from its pictures, else from its URL.
+// src shows an image: a background the app ships, one it keeps from its pictures, else from its URL.
 func (s *studio) src(uri string) core.ImageSource {
+	if data, ok := backgroundData(uri); ok {
+		return core.ImageSource{URI: uri, Data: data}
+	}
 	if filepath.IsAbs(uri) {
 		return s.pics.Source(uri)
 	}

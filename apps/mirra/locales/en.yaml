@@ -39,13 +39,18 @@ eyebrowNewLook:
 eyebrowFace: 01 FACE
 eyebrowOutfit: 02 OUTFIT
 eyebrowPose: 03 POSE
+eyebrowBackground: 04 SCENE
 slotFace: Face
 slotCostume: Outfit
 slotPose: Pose
+slotBackground: Background
 notChosen: Not chosen
+noBackground: No background
+removeBackground: Remove the background
 stepFace: Choose a face
 stepCostume: Choose an outfit
 stepPose: Set the pose
+stepBackground: Choose a background
 stepTab:
   message: "{n} {name}"
   description: A step of the look's editor, such as "1 Face".
@@ -93,6 +98,9 @@ groupSpring: Spring
 groupSummer: Summer
 groupAutumn: Autumn
 groupWinter: Winter
+groupIndoor: Indoor
+groupCity: City
+groupNature: Nature
 groupParty: Party
 groupSwimwear: Swimwear
 groupLingerie: Lingerie

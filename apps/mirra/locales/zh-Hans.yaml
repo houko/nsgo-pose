@@ -23,13 +23,18 @@ eyebrowNewLook: NEW LOOK · 第 {n, number} 次生成
 eyebrowFace: 01 FACE
 eyebrowOutfit: 02 OUTFIT
 eyebrowPose: 03 POSE
+eyebrowBackground: 04 SCENE
 slotFace: 人脸
 slotCostume: 服装
 slotPose: 姿势
+slotBackground: 背景
 notChosen: 未选择
+noBackground: 无背景
+removeBackground: 去掉背景
 stepFace: 选择人脸
 stepCostume: 挑选服装
 stepPose: 设定姿势
+stepBackground: 选择背景
 stepTab: "{n} {name}"
 stepsLabel: 步骤
 selectedItem: 已选 · {id}
@@ -71,6 +76,9 @@ groupSpring: 春
 groupSummer: 夏
 groupAutumn: 秋
 groupWinter: 冬
+groupIndoor: 室内
+groupCity: 城市
+groupNature: 自然
 groupParty: 派对
 groupSwimwear: 泳装
 groupLingerie: 内衣

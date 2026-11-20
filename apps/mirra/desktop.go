@@ -79,19 +79,19 @@ func (s *studio) elementTabs(cx *core.Scope) core.Node {
 		tabs = append(tabs, core.View{Role: core.RoleTab, Label: slotName(t, k), Selected: on, TestID: "library-" + kindKey(k),
 			OnPress: func(core.PressEvent) { s.step.Set(k) },
 			StyleFunc: func() core.Style {
-				st := core.Style{FlexGrow: 1, FlexBasis: core.Pt(0), Gap: 4, Padding: core.Symmetric(10, 12), CornerRadius: 14, BorderWidth: 1, BorderColor: colors.Border()}
+				st := core.Style{FlexGrow: 1, FlexBasis: core.Pt(0), Gap: 4, Padding: core.Symmetric(10, 8), CornerRadius: 14, BorderWidth: 1, BorderColor: colors.Border()}
 				if on() {
 					st.BorderColor, st.Background = colors.Accent(), colors.Inset()
 				}
 				return st
 			},
 			Children: []core.Node{
-				core.Text{Content: slotEyebrow(t, k), StyleFunc: func() core.Style {
+				core.Text{Content: slotEyebrow(t, k), MaxLines: 1, StyleFunc: func() core.Style {
 					c := colors.Muted()
 					if on() {
 						c = colors.Accent()
 					}
-					return core.Style{FontSize: 9, LetterSpacing: 1.5, Color: c}
+					return core.Style{FontSize: 9, LetterSpacing: 1, Color: c}
 				}},
 				core.Text{Content: slotName(t, k), Style: core.Style{FontSize: 15, FontWeight: core.FontWeightSemibold}},
 			}})
