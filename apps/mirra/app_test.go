@@ -259,6 +259,12 @@ func TestAdvancedSettings(t *testing.T) {
 	fresh.Press("id:advanced >> role:button")
 	fresh.WaitFor("id:base-url", wait)
 	fresh.Find("id:size-portrait")
+	// Azure's model is the deployment the user named, so it shows with the key and the address.
+	fresh.Press("id:provider")
+	fresh.Press("role:option Azure OpenAI")
+	fresh.WaitFor("text:Deployment name", wait)
+	fresh.Find("id:model")
+	fresh.Find("id:base-url")
 
 	api := &fakeAPI{}
 	app, _ := start(t, api, "k")

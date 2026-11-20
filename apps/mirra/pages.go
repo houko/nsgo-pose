@@ -430,9 +430,16 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		if p.BaseURL != "" {
 			advanced = append(advanced, address)
 		}
+		modelLabel := t.Model
+		if p.Deployment {
+			modelLabel = t.Deployment
+		}
+		model := field(cx, modelLabel, ui.Input{Value: set.model.Get, OnChange: setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model }),
+			Label: modelLabel(), Placeholder: p.Model, TestID: "model"})
+		if !p.Deployment {
+			advanced = append(advanced, model)
+		}
 		advanced = append(advanced,
-			field(cx, t.Model, ui.Input{Value: set.model.Get, OnChange: setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model }),
-				Label: t.Model(), Placeholder: p.Model, TestID: "model"}),
 			field(cx, t.Size, sizes),
 			core.View{Style: core.Style{Direction: core.Row}, Children: []core.Node{reset}})
 		// The advanced settings open on their own when the user changed one; read untracked, so changing a field does not draw the fields again.
@@ -440,6 +447,9 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		children := []core.Node{core.View{Style: core.Style{Gap: 8}, Children: key}}
 		if p.BaseURL == "" {
 			children = append(children, address)
+		}
+		if p.Deployment {
+			children = append(children, model)
 		}
 		children = append(children, ui.Collapsible{Text: t.AdvancedSettings(), Open: open.Get, OnOpenChange: open.Set, TestID: "advanced",
 			Content: core.View{Style: core.Style{Gap: 16, Padding: core.Edges{Top: 12}}, Children: advanced}})

@@ -16,7 +16,7 @@ const (
 	connFailed
 )
 
-// CheckConnection checks the address and the key before generating, with a request the provider answers cheaply: its list of models where it has one, and otherwise an empty generation, which a valid key gets a 400 for and an invalid one a 401 or 403.
+// CheckConnection checks the address and the key before generating, with a request the provider answers cheaply: its list of models where it has one, OpenRouter's key, whose models anyone may list, and otherwise an empty generation, which a valid key gets a 400 for and an invalid one a 401 or 403.
 func CheckConnection(ctx context.Context, client *http.Client, cfg Config) error {
 	var req *http.Request
 	var err error
@@ -28,6 +28,8 @@ func CheckConnection(ctx context.Context, client *http.Client, cfg Config) error
 	case protoDashScope:
 		req, err = http.NewRequestWithContext(ctx, http.MethodPost, endpoint(cfg, dashScopePath), strings.NewReader("{}"))
 		emptyPost = true
+	case protoOpenRouter:
+		req, err = http.NewRequestWithContext(ctx, http.MethodGet, endpoint(cfg, "/key"), nil)
 	default:
 		req, err = http.NewRequestWithContext(ctx, http.MethodGet, endpoint(cfg, "/models"), nil)
 	}
