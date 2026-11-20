@@ -17,6 +17,11 @@ const zh = {
     faces: '模特脸库 · CC0',
     tryFace: '换一张脸',
   },
+  demo: {
+    kicker: 'SEE IT WORK',
+    title: '27 秒看镜衣怎么搭',
+    label: '27 秒介绍视频：同一个造型从街道换到薰衣草田，在 App 里选脸、选场景，再换场景、风格和服装',
+  },
   how: {
     kicker: 'HOW IT WORKS',
     title: '四步，得到一张造型照',
@@ -137,6 +142,11 @@ const en: Copy = {
     faces: 'Model faces · CC0',
     tryFace: 'Try another face',
   },
+  demo: {
+    kicker: 'SEE IT WORK',
+    title: 'Mirra in 27 seconds',
+    label: 'A 27-second tour: one look moves from a street to a lavender field, a face and a scene are picked in the app, and the same look changes place, style and outfit',
+  },
   how: {
     kicker: 'HOW IT WORKS',
     title: 'Four steps to your look',
@@ -254,6 +264,11 @@ const ja: Copy = {
     checks: ['無料・アカウント不要', 'セルフホスト対応', 'キーは端末内だけ'],
     faces: 'モデル顔ライブラリ · CC0',
     tryFace: '別の顔を試す',
+  },
+  demo: {
+    kicker: 'SEE IT WORK',
+    title: '27 秒でわかる Mirra',
+    label: '27 秒の紹介動画：同じコーデが街から一面のラベンダー畑へ移り、アプリで顔とシーンを選び、場所・スタイル・服を変えていきます',
   },
   how: {
     kicker: 'HOW IT WORKS',
