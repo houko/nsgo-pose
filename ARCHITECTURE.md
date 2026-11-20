@@ -19,7 +19,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/wardrobe.go` | Favorite outfits, photos of the user's own clothes, and what the look is wearing. |
 | `apps/mirra/library.go` | What both layouts share: labels, a gallery's chips and grid, the look's rows, the service's status and Generate. |
 | `apps/mirra/phone.go` | The phone layout: Studio, its three-step editor and the tab bar. |
-| `apps/mirra/desktop.go` | The desktop studio: top bar, library, zoomable canvas or result, and the look's summary. |
+| `apps/mirra/desktop.go` | The desktop studio: top bar, library, zoomable canvas or result, and the look's summary, in columns sized by the window and resized by dragging. |
 | `apps/mirra/pages.go` | A result, Works and the AI service settings. |
 | `apps/mirra/theme.yaml` | The dark amber theme the app always shows. |
 | `apps/mirra/locales/` | NSGo message catalogs in English and Simplified Chinese, and the accessors the `nsgo` tool writes from them. |

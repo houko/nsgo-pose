@@ -1,6 +1,9 @@
 package main
 
 import (
+	"strconv"
+
+	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
@@ -103,10 +106,16 @@ func (s *studio) desktopStudio(cx *core.Scope) core.Node {
 	for _, k := range steps {
 		rows = append(rows, s.lookRow(cx, k, func() { s.step.Set(k) }))
 	}
-	left := panel(cx, core.Style{Width: core.Pt(380), FlexShrink: 0, Gap: 10},
+	// The library has as many columns as its width holds, about 160 points each.
+	libraryColumns := core.NewSignal(cx, 2)
+	left := core.View{Style: fill, OnLayout: func(b core.Bounds) {
+		if n := max(2, int((b.Size.Width-40)/160)); n != core.Untracked(cx, libraryColumns.Get) {
+			libraryColumns.Set(n)
+		}
+	}, Children: []core.Node{panel(cx, fill.Merge(core.Style{Gap: 10}),
 		s.elementTabs(cx),
-		core.Dynamic(func(cx *core.Scope) core.Node { return s.library(cx, s.step.Get(), 2) }),
-	)
+		core.Dynamic(func(cx *core.Scope) core.Node { return s.library(cx, s.step.Get(), libraryColumns.Get()) }),
+	)}}
 	center := core.Dynamic(func(cx *core.Scope) core.Node {
 		if sh := s.shot.Get(); sh != nil {
 			return s.resultCanvas(cx, sh)
@@ -119,7 +128,7 @@ func (s *studio) desktopStudio(cx *core.Scope) core.Node {
 		}
 		return t.ConfigureOnce()
 	}
-	right := panel(cx, core.Style{Width: core.Pt(340), FlexShrink: 0, Gap: 12},
+	right := panel(cx, fill.Merge(core.Style{Gap: 12}),
 		core.View{Style: core.Style{Gap: 4}, Children: []core.Node{eyebrow(cx, t.EyebrowThisLook), display(t.LookTitle, 22)}},
 		core.View{Style: core.Style{Gap: 10}, Children: rows},
 		s.noteInput(cx),
@@ -130,7 +139,83 @@ func (s *studio) desktopStudio(cx *core.Scope) core.Node {
 			return core.Style{FontSize: 12, TextAlign: core.TextAlignCenter, Color: ui.ColorsOf(cx).Muted()}
 		}},
 	)
-	return core.View{Style: fill.Merge(core.Style{Direction: core.Row, Gap: 20, Padding: core.All(28)}), Children: []core.Node{left, center, right}}
+	return s.columns(cx, left, center, right)
+}
+
+// The desktop studio's side columns: their widths as shares of the studio's, where the user left them, kept under these keys.
+const (
+	keyLibraryShare = "column-library"
+	keyLookShare    = "column-look"
+)
+
+// column is a side column's width: a share of the studio's width, bounded.
+type column struct {
+	share, min, max float64
+	key             string
+}
+
+// width is the column's width in a studio w wide, a stored share replacing the default one.
+func (c column) width(store core.Storage, w core.Points) core.Points {
+	share := c.share
+	if v, ok := store.GetItem(c.key); ok {
+		if f, err := strconv.ParseFloat(v, 64); err == nil && f > 0 && f < 1 {
+			share = f
+		}
+	}
+	return core.Points(min(max(float64(w)*share, c.min), c.max))
+}
+
+// columns lays out the library, the canvas and the look side by side. The side columns open at a share of the window, wider on a larger screen, and the user drags the gutters between them to resize them; what they drag to is kept as a share, so it follows the window as it changes.
+func (s *studio) columns(cx *core.Scope, left, center, right core.Node) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	store := cx.Storage()
+	env := cx.Env()
+	const pad, gutter core.Points = 28, 10
+	library := column{share: 0.27, min: 300, max: 560, key: keyLibraryShare}
+	look := column{share: 0.23, min: 300, max: 460, key: keyLookShare}
+	// width is the studio's width, the window's until it is laid out.
+	width := core.NewSignal(cx, env.Window().Width)
+	// version makes the columns read the stored shares again after a drag.
+	version := core.NewSignal(cx, 0)
+	size := func(c column) func() core.Points {
+		return func() core.Points {
+			version.Get()
+			return c.width(store, width.Get()) + 2*gutter
+		}
+	}
+	keep := func(c column, size, w core.Points) {
+		if w <= 0 {
+			return
+		}
+		if err := store.SetItem(c.key, strconv.FormatFloat(float64(size-2*gutter)/float64(w), 'f', 4, 64)); err != nil {
+			s.toastError(t.SaveFailed(), err)
+		}
+	}
+	return ui.ResizablePanelGroup{TestID: "columns", HandleLabel: t.ResizeColumn(),
+		Style:    fill.Merge(core.Style{Padding: core.All(pad - gutter)}),
+		OnLayout: func(b core.Bounds) { width.Set(b.Size.Width) },
+		// The handle sits in the gutter, unseen until the pointer finds it.
+		HandleStyleFunc: func() core.Style {
+			return core.Style{Background: colors.Accent().Faded(0), Group: "resize-handle",
+				GroupStyle: &core.GroupStyle{Name: "resize-handle", Hover: &core.Style{Background: colors.Accent().Faded(0.5)}, Active: &core.Style{Background: colors.Accent()}}}
+		},
+		OnResize: func(sizes []core.Points) {
+			if len(sizes) != 3 {
+				return
+			}
+			w := core.Untracked(cx, width.Get)
+			keep(library, sizes[0], w)
+			keep(look, sizes[2], w)
+			version.Update(func(v int) int { return v + 1 })
+		},
+		Panels: []base.ResizablePanel{
+			{Size: size(library), MinSize: core.Points(library.min) + 2*gutter, MaxSize: core.Points(library.max) + 2*gutter, TestID: "column-library",
+				Style: core.Style{Padding: core.Edges{Right: gutter, Left: gutter}}, Children: []core.Node{left}},
+			{MinSize: 360, TestID: "column-canvas", Style: core.Style{Padding: core.Edges{Right: gutter, Left: gutter}}, Children: []core.Node{center}},
+			{Size: size(look), MinSize: core.Points(look.min) + 2*gutter, MaxSize: core.Points(look.max) + 2*gutter, TestID: "column-look",
+				Style: core.Style{Padding: core.Edges{Right: gutter, Left: gutter}}, Children: []core.Node{right}},
+		}}
 }
 
 // canvasHeader is the canvas's eyebrow and title on the left and its controls on the right.
