@@ -107,22 +107,98 @@ func (s *studio) fullScreenButton(cx *core.Scope) core.Node {
 	return ui.IconButton{Icon: lucide.Maximize2, Label: locales.For(cx).ViewFullScreen(), Variant: ui.IconButtonRaised, TestID: "full-screen", OnPress: func() { s.fullScreen.Set(true) }}
 }
 
-// viewer is the picture on show over the whole window, on black, with the arrows to the other works: Escape, back or × closes it.
+// maxZoom is how far a picture full screen zooms in, and doubleZoom how far a double click or tap zooms it.
+const (
+	maxZoom    = 4
+	doubleZoom = 2.5
+)
+
+// zoomState is how a picture full screen is zoomed: its scale, 1 for the whole picture, and how far it is moved from the middle, in points on screen.
+type zoomState struct {
+	Scale  float32
+	Offset core.Point
+}
+
+// clamped keeps the scale between 1 and maxZoom and the picture over the screen of size: back to the middle at 1, and at most as far as the zoom lets it go each way.
+func (z zoomState) clamped(size core.Size) zoomState {
+	z.Scale = min(max(z.Scale, 1), maxZoom)
+	limit := func(v, extent core.Points) core.Points {
+		most := extent * core.Points(z.Scale-1) / 2
+		return min(max(v, -most), most)
+	}
+	z.Offset = core.Point{X: limit(z.Offset.X, size.Width), Y: limit(z.Offset.Y, size.Height)}
+	return z
+}
+
+// toggled is a double click or tap at at on a screen of size: zoomed in, back to the whole picture; else zoomed in to doubleZoom with that point brought toward the middle.
+func (z zoomState) toggled(at core.Point, size core.Size) zoomState {
+	if z.Scale > 1 {
+		return zoomState{Scale: 1}
+	}
+	k := core.Points(doubleZoom - 1)
+	return zoomState{Scale: doubleZoom, Offset: core.Point{X: (size.Width/2 - at.X) * k, Y: (size.Height/2 - at.Y) * k}}.clamped(size)
+}
+
+// viewer is the picture on show over the whole window, on black, with the arrows to the other works: a pinch or a double click or tap zooms it, a drag moves it while zoomed and steps to the next work while not, and Escape, back or × closes it.
 func (s *studio) viewer(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	s.stepKeys(cx)
 	closeViewer := func() { s.fullScreen.Set(false) }
 	white := core.RGB(0xffffff)
+	size := core.NewSignal(cx, core.Size{})
+	zoom := core.NewSignal(cx, zoomState{Scale: 1})
+	// Another picture starts whole.
+	cx.Effect(func() {
+		s.shot.Get()
+		zoom.Set(zoomState{Scale: 1})
+	})
+	var start zoomState
 	picture := core.Dynamic(func(cx *core.Scope) core.Node {
 		sh := s.shot.Get()
 		if sh == nil {
 			return nil
 		}
 		return core.Image{Source: s.src(sh.Path), ResizeMode: core.Contain, TestID: "full-screen-image", Label: lookTitle(t, sh.Req),
-			Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}}
+			StyleFunc: func() core.Style {
+				z := zoom.Get()
+				return core.Style{Width: core.Pct(100), Height: core.Pct(100), Transform: core.Transform{Scale: z.Scale, TranslateX: z.Offset.X, TranslateY: z.Offset.Y}}
+			}}
 	})
+	stage := core.View{Style: fill, TestID: "full-screen-stage",
+		OnLayout: func(b core.Bounds) { size.Set(b.Size) },
+		OnPress: func(e core.PressEvent) {
+			if e.Clicks == 2 {
+				zoom.Set(zoom.Get().toggled(e.Position, size.Get()))
+			}
+		},
+		OnPinch: func(e core.GestureEvent) {
+			switch e.Phase {
+			case core.GestureBegan:
+				start = zoom.Get()
+			case core.GestureChanged:
+				zoom.Set(zoomState{Scale: start.Scale * e.Value, Offset: start.Offset}.clamped(size.Get()))
+			case core.GestureEnded:
+				if zoom.Get().Scale < 1.05 {
+					zoom.Set(zoomState{Scale: 1})
+				}
+			}
+		},
+		OnPan: func(e core.PanEvent) {
+			if e.Phase == core.GestureBegan {
+				start = zoom.Get()
+			}
+			if start.Scale <= 1 {
+				s.swipeToStep(e)
+				return
+			}
+			if e.Phase == core.GestureChanged || e.Phase == core.GestureEnded {
+				zoom.Set(zoomState{Scale: start.Scale, Offset: core.Point{X: start.Offset.X + e.Translation.X, Y: start.Offset.Y + e.Translation.Y}}.clamped(size.Get()))
+			}
+		},
+		Children: []core.Node{picture},
+	}
 	children := []core.Node{
-		core.View{Style: fill, OnPan: s.swipeToStep, PanActivation: swipeActivation, Children: []core.Node{picture}},
+		stage,
 		core.View{Style: core.Style{Position: core.Absolute, Top: core.Pt(16), Left: core.Pt(16), Right: core.Pt(16), Direction: core.Row, AlignItems: core.AlignCenter},
 			Children: []core.Node{
 				core.Text{ContentFunc: s.workPosition, TestID: "work-position", Style: core.Style{FontSize: 14, Color: white, FlexGrow: 1}},

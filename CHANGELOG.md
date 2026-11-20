@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- A picture opens full screen: press it or its full-screen button, and Escape, back or × closes it.
+- A picture opens full screen: press it or its full-screen button, and Escape, back or × closes it. A pinch zooms it up to 4 times, a double click or tap zooms it in and back out, and a drag moves it while zoomed.
 - A saved picture steps to the next or previous one in Works, as the Works page lists them, all or the favorites: by the arrows beside it, the arrow keys or a sideways swipe, on the result and full screen, which shows where it is, as 2 / 3.
 
 ## 0.20.0 - 2026-11-20
