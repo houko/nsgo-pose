@@ -18,6 +18,10 @@
 </p>
 
 <p align="center">
+  <a href="screenshots/promo.mp4"><img src="screenshots/promo.webp" alt="A 27-second tour: one look moves from a street to a lavender field, a face and a scene are picked in the app, and the same look changes place, style and outfit" width="800"></a>
+</p>
+
+<p align="center">
   <img src="screenshots/phone-home-en.png" alt="Studio on a phone: today's look and its three elements" width="260">
   <img src="screenshots/phone-me-en.png" alt="Me: the app and its AI service" width="260">
 </p>
