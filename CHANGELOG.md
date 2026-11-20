@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.0 - 2026-11-20
+
 - The update prompts show what the new version changes: its section of this changelog, in Sparkle's and WinSparkle's dialogs on macOS and Windows and below the version on Android.
 
 ## 0.8.2 - 2026-11-20
