@@ -8,6 +8,8 @@ name: Package
 # - Windows: the executable, its libraries and the installer with the Certum SimplySign certificate of CERTUM_EMAIL, through ssign (github.com/Le-Syl21/ssign, built from a pinned commit) with the authenticator's TOTP URI in CERTUM_OTP.
 # - Android: the APK with the release keystore in ANDROID_KEYSTORE (a base64 PKCS#12 or JKS), NSGO_KEYSTORE_PASSWORD and NSGO_KEY_PASSWORD. Installed copies update only to an APK of the same key, so a release without the keystore ships no APK rather than one signed with a key made for the run.
 #
+# A release build also signs the installers for the app's updates with the secret key in NSGO_UPDATES_KEY, whose public key is apps/mirra/nsgo.yaml's updates.key, and keeps each desktop and Android target's appcast-<target>.xml, the feed installed copies read from the latest release. A release fails without the key, as installed copies could not update to it.
+#
 # Builds without signing, such as CI's, need no secrets: macOS signs ad hoc, Windows leaves the files unsigned and Android uses a debug key.
 on:
   workflow_dispatch:
@@ -43,6 +45,8 @@ on:
         required: false
       NSGO_KEY_PASSWORD:
         required: false
+      NSGO_UPDATES_KEY:
+        required: false
 
 permissions:
   contents: read
@@ -61,10 +65,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # target: the nsgo build target of the row. file: what it must make in the releases folder, after mirra-<version>-, so that a package nsgo build leaves out (as it does the Windows installer without NSIS) fails the row rather than going missing from the release. scripts: install.sh and install.ps1, which nsgo build writes beside a desktop target's installer.
-          - { name: macOS, os: macos-latest, target: macos_arm64, file: macos-arm64.dmg, scripts: true }
-          - { name: Windows, os: ubuntu-latest, target: windows_x64, file: windows-x64-setup.exe }
-          - { name: Android, os: ubuntu-latest, target: android_arm64, file: android-arm64.apk }
+          # target: the nsgo build target of the row. file: what it must make in the releases folder, after mirra-<version>-, so that a package nsgo build leaves out (as it does the Windows installer without NSIS) fails the row rather than going missing from the release. scripts: install.sh and install.ps1, which nsgo build writes beside a desktop target's installer. appcast: the target updates itself, so a release build must make its appcast-<target>.xml.
+          - { name: macOS, os: macos-latest, target: macos_arm64, file: macos-arm64.dmg, scripts: true, appcast: true }
+          - { name: Windows, os: ubuntu-latest, target: windows_x64, file: windows-x64-setup.exe, appcast: true }
+          - { name: Android, os: ubuntu-latest, target: android_arm64, file: android-arm64.apk, appcast: true }
           - { name: Web, os: ubuntu-latest, target: web, file: web.zip }
     env:
       SIGN: ${{ (inputs.tag != '' || inputs.sign) && 'true' || '' }}
@@ -167,7 +171,17 @@ jobs:
           KEYSTORE: ${{ steps.android.outputs.keystore }}
           NSGO_KEYSTORE_PASSWORD: ${{ steps.android.outputs.keystore != '' && secrets.NSGO_KEYSTORE_PASSWORD || '' }}
           NSGO_KEY_PASSWORD: ${{ steps.android.outputs.keystore != '' && secrets.NSGO_KEY_PASSWORD || '' }}
+          # Only a release build gets the updates key: the appcasts other builds would make are thrown away.
+          UPDATES_KEY: ${{ inputs.tag != '' && matrix.appcast && secrets.NSGO_UPDATES_KEY || '' }}
+          RELEASE: ${{ inputs.tag != '' && matrix.appcast && 'true' || '' }}
         run: |
+          if [ -n "$RELEASE" ]; then
+            if [ -z "$UPDATES_KEY" ]; then
+              echo "::error::The NSGO_UPDATES_KEY secret is not set, so installed copies could not update to this release."
+              exit 1
+            fi
+            export NSGO_UPDATES_KEY=$UPDATES_KEY
+          fi
           sign=()
           if [ -n "$IDENTITY" ]; then
             sign=(-sign "$IDENTITY")
@@ -228,13 +242,14 @@ jobs:
             fi
             echo "signed: ${file#"$RUNNER_TEMP"/packages/}"
           done
-      # The row's file from nsgo build's releases folder, with its .sha256, and on the macOS row the install scripts. Their SHA-256 is taken here from the files nsgo build made, which Publish checks again.
+      # The row's file from nsgo build's releases folder, with its .sha256, on the macOS row the install scripts, and in a release build the target's appcast. Their SHA-256 is taken here from the files nsgo build made, which Publish checks again.
       - name: Collect the packages
         if: steps.android.outputs.skip != 'true'
         env:
           NAME: ${{ matrix.name }}
           FILE: ${{ matrix.file }}
           SCRIPTS: ${{ matrix.scripts && 'true' || '' }}
+          APPCAST: ${{ inputs.tag != '' && matrix.appcast && format('appcast-{0}.xml', matrix.target) || '' }}
         run: |
           cd "$RUNNER_TEMP/packages/releases"
           shopt -s nullglob
@@ -250,6 +265,13 @@ jobs:
               exit 1
             fi
             files+=(install.sh install.ps1)
+          fi
+          if [ -n "$APPCAST" ]; then
+            if [ ! -f "$APPCAST" ]; then
+              echo "::error::nsgo build made no $APPCAST"
+              exit 1
+            fi
+            files+=("$APPCAST")
           fi
           out=$RUNNER_TEMP/out
           mkdir "$out"

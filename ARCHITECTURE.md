@@ -30,7 +30,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/website/src/components/` | The website's sections, from the hero to the FAQ. |
 | `apps/website/vite.config.ts` | The build: the site's address and Pages path, the pages it prerenders and the sitemap, and the version, stars, contributors and latest release's files it reads. |
 | `apps/website/src/i18n/head.ts` | Each page's title, description, canonical and alternate links, Open Graph and Twitter cards and structured data. |
-| `.github/workflows/ci.yml`, `package.yml`, `release.yml` | CI on pull requests and `main`; the packages of every platform; the release of `main` once CI passes, versioned from its Conventional Commits. |
+| `.github/workflows/ci.yml`, `package.yml`, `release.yml` | CI on pull requests and `main`; the packages of every platform, with a release's signed appcasts; the release of `main` once CI passes, versioned from its Conventional Commits. |
 | `.github/scripts/` | The release's version (`next-version.sh`, `set-version.sh`), its notes from `CHANGELOG.md` (`changelog.sh`) and their test. |
 | `apps/website/src/routes/og.$lang.tsx`, `apps/website/scripts/og.sh` | The 1200x630 card each language's Open Graph image is taken from, served by the dev server only, and the script that takes them into `public/`. |
 
@@ -51,6 +51,8 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 **Generate.** Without a configured service, Generate opens the settings. Otherwise it downloads the chosen full images, sends them with the prompt to the chosen provider's API and writes the picture to the results folder, where it waits. Generate again and the outfit swap make the same request again, the swap with another outfit. Cancel stops the request through its context.
 
 **Save.** Saving moves the picture into the works folder under the next number and writes its sidecar; starring an unsaved picture saves it first. Opening a work brings back its look.
+
+**Updates.** The desktop and Android copies update themselves from the latest release's `appcast-<target>.xml`, signed with the key whose public half is `nsgo.yaml`'s `updates.key`: Sparkle and WinSparkle on their daily schedule, Android as it starts, and About's Check for updates through `updater.Check`. The web build is always the latest and the iOS app is built from source, so neither offers the check.
 
 **Service.** The service is one of the preset providers, each with its own key, address, model and size; a server the user runs may take no key. The connection test asks the provider's models, or sends Ark and Model Studio an empty request; changing the provider or any of its settings marks the service untested again.
 

@@ -224,6 +224,7 @@ const (
 	textResetDefaults
 	textVersion
 	textVersionDevelopment
+	textCheckForUpdates
 	textBaseURL
 	textApiKey
 	textApiKeyOptional
@@ -374,6 +375,7 @@ var keyOfText = [numTexts]string{
 	"resetDefaults",
 	"version",
 	"versionDevelopment",
+	"checkForUpdates",
 	"baseURL",
 	"apiKey",
 	"apiKeyOptional",
@@ -522,6 +524,7 @@ var textsEn = i18n.NewTexts(""+
 	"Reset to defaults"+
 	"Version"+
 	"Development build"+
+	"Check for updates"+
 	"Address"+
 	"API key"+
 	"API key (optional)"+
@@ -666,6 +669,7 @@ var textsEn = i18n.NewTexts(""+
 		9,
 		17,
 		7,
+		17,
 		17,
 		7,
 		7,
@@ -815,6 +819,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"恢复默认"+
 	"版本"+
 	"开发版"+
+	"检查更新"+
 	"接口地址"+
 	"API Key"+
 	"API Key（可留空）"+
@@ -960,6 +965,7 @@ var textsZhHans = i18n.NewTexts(""+
 		12,
 		6,
 		9,
+		12,
 		12,
 		7,
 		22,
@@ -2397,6 +2403,13 @@ func VersionDevelopment(cx *core.Scope) string { return For(cx).VersionDevelopme
 
 // VersionDevelopment is the package's VersionDevelopment in the language of msgs.
 func (msgs Messages) VersionDevelopment() string { return msgs.text(textVersionDevelopment) }
+
+// CheckForUpdates says "Check for updates"
+// in the language the app shows under cx.
+func CheckForUpdates(cx *core.Scope) string { return For(cx).CheckForUpdates() }
+
+// CheckForUpdates is the package's CheckForUpdates in the language of msgs.
+func (msgs Messages) CheckForUpdates() string { return msgs.text(textCheckForUpdates) }
 
 // BaseURL says "Address"
 // in the language the app shows under cx.
