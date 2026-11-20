@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://yldm-ai.github.io/mirra/">Website</a>
+  <a href="https://mirra.yldm.ai/">Website</a>
 </p>
 
 <p align="center">
@@ -79,7 +79,7 @@ The code map, with the boundaries the code keeps, is in [ARCHITECTURE.md](ARCHIT
 
 ## Run it
 
-The [latest release](https://github.com/yldm-ai/mirra/releases/latest) has the macOS disk image, the Windows installer, the Android APK when there is one, and the web build; the web app also runs at [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/). To build it yourself:
+The [latest release](https://github.com/yldm-ai/mirra/releases/latest) has the macOS disk image, the Windows installer, the Android APK when there is one, and the web build; the web app also runs at [mirra.yldm.ai/app/](https://mirra.yldm.ai/app/). To build it yourself:
 
 The repository keeps each app under `apps/`; Mirra, its Go module and its packaging configuration (`nsgo.yaml`) are in `apps/mirra`, and Go and NSGo commands run from there.
 
@@ -127,7 +127,7 @@ The connection test asks the provider for its models; Volcengine Ark and Model S
 | Android | Releases carry an APK signed with the release key, and the app offers each newer one as it starts; not yet run on a device |
 | iOS | Build from source (`go tool nsgo dev -target ios_simulator`); not yet run on a device |
 | Linux | Not in the build targets yet; NSGo supports it, untested here |
-| Web | Runs at [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/), built with the website. A browser has no secure store or file system for the app, so the key, works and added clothes last as long as the page; export pictures to keep them |
+| Web | Runs at [mirra.yldm.ai/app/](https://mirra.yldm.ai/app/), built with the website. A browser has no secure store or file system for the app, so the key, works and added clothes last as long as the page; export pictures to keep them |
 
 ## Privacy
 
@@ -153,13 +153,13 @@ If a gallery changes its page format, the picker shows "Couldn't load the galler
 
 ### Website
 
-The [website](https://yldm-ai.github.io/mirra/) is in `apps/website`: TanStack Start and Router on React, Tailwind and react-i18next, built with Vite+ and Bun and prerendered into static pages in Chinese (`/`), English (`/en/`) and Japanese (`/ja/`). Its words are in `src/i18n/copy.ts`; the version, stars, contributors and latest release come from `apps/mirra/nsgo.yaml` and GitHub's API at build time. Each page carries its canonical address, language alternates, Open Graph and Twitter cards and structured data, and the build writes `sitemap.xml`. From `apps/website`:
+The [website](https://mirra.yldm.ai/) is in `apps/website`: TanStack Start and Router on React, Tailwind and react-i18next, built with Vite+ and Bun and prerendered into static pages in Chinese (`/`), English (`/en/`) and Japanese (`/ja/`). Its words are in `src/i18n/copy.ts`; the version, stars, contributors and latest release come from `apps/mirra/nsgo.yaml` and GitHub's API at build time. Each page carries its canonical address, language alternates, Open Graph and Twitter cards and structured data, and the build writes `sitemap.xml`. From `apps/website`:
 
 ```sh
 bun install
 bun run dev         # http://localhost:5175/
 bun run typecheck
-bun run build       # dist/client; BASE_PATH=/mirra/ for the Pages path
+bun run build       # dist/client
 bun run og          # retake public/og-<lang>.png from the dev server's /og/<lang>/ cards
 ```
 

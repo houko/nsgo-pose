@@ -12,11 +12,11 @@ import type { SiteData } from './src/site'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 
-// The site is static: TanStack Start prerenders every page at build time. On GitHub Pages it lives under the repository's path, which CI passes as BASE_PATH; the dev server stays at /.
+// The site is static: TanStack Start prerenders every page at build time. It is served at the root of its domain; BASE_PATH serves it under a path instead.
 const base = process.env.BASE_PATH ?? '/'
 const repo = process.env.GITHUB_REPOSITORY ?? 'yldm-ai/mirra'
-// The site's absolute address, for canonical links, Open Graph images and the sitemap. CI passes the Pages origin; a custom domain sets its own.
-const origin = (process.env.SITE_URL ?? 'https://yldm-ai.github.io').replace(/\/+$/, '')
+// The site's absolute address, for canonical links, Open Graph images and the sitemap.
+const origin = (process.env.SITE_URL ?? 'https://mirra.yldm.ai').replace(/\/+$/, '')
 const url = `${origin}${base}`
 
 // The app's version, from the packaging configuration the app ships with.

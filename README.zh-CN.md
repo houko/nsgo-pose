@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://yldm-ai.github.io/mirra/">官网</a>
+  <a href="https://mirra.yldm.ai/">官网</a>
 </p>
 
 <p align="center">
@@ -79,7 +79,7 @@
 
 ## 运行
 
-[最新发布](https://github.com/yldm-ai/mirra/releases/latest)里有 macOS 磁盘映像、Windows 安装程序、Android APK（发布了的话）和网页版；网页版也可以直接在 [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/) 打开。想自己构建：
+[最新发布](https://github.com/yldm-ai/mirra/releases/latest)里有 macOS 磁盘映像、Windows 安装程序、Android APK（发布了的话）和网页版；网页版也可以直接在 [mirra.yldm.ai/app/](https://mirra.yldm.ai/app/) 打开。想自己构建：
 
 仓库里每个 App 放在 `apps/` 下；Mirra 的代码、Go 模块和打包配置（`nsgo.yaml`）都在 `apps/mirra`，Go 和 NSGo 命令在那里运行。
 
@@ -127,7 +127,7 @@ Key 存在 macOS / iOS 钥匙串、Android Keystore 或 Windows 凭据管理器�
 | Android | 发布里带有用正式密钥签名的 APK，App 启动时会提示安装更新的版本；还没有在设备上运行过 |
 | iOS | 从源码构建（`go tool nsgo dev -target ios_simulator`）；还没有在设备上运行过 |
 | Linux | 还不在构建目标里；NSGo 支持，这里没测过 |
-| 网页 | 在 [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/) 打开，和官网一起构建发布。浏览器里没有安全存储和文件系统，所以 Key、作品和上传的衣服只保存在当前页面，想保留的图片要导出 |
+| 网页 | 在 [mirra.yldm.ai/app/](https://mirra.yldm.ai/app/) 打开，和官网一起构建发布。浏览器里没有安全存储和文件系统，所以 Key、作品和上传的衣服只保存在当前页面，想保留的图片要导出 |
 
 ## 隐私
 
@@ -153,13 +153,13 @@ go run ./tools/appicon                                 # 重新绘制图标
 
 ### 官网
 
-[官网](https://yldm-ai.github.io/mirra/)在 `apps/website`：React 上的 TanStack Start 和 Router，加 Tailwind 和 react-i18next，用 Vite+ 和 Bun 构建，预渲染成中文（`/`）、英文（`/en/`）和日文（`/ja/`）三个静态页面。文案在 `src/i18n/copy.ts`；版本号、Star 数、贡献者和最新发布在构建时从 `apps/mirra/nsgo.yaml` 和 GitHub API 读取。每个页面都带 canonical 地址、语言版本链接、Open Graph 和 Twitter 卡片以及结构化数据，构建时还会生成 `sitemap.xml`。在 `apps/website` 目录下：
+[官网](https://mirra.yldm.ai/)在 `apps/website`：React 上的 TanStack Start 和 Router，加 Tailwind 和 react-i18next，用 Vite+ 和 Bun 构建，预渲染成中文（`/`）、英文（`/en/`）和日文（`/ja/`）三个静态页面。文案在 `src/i18n/copy.ts`；版本号、Star 数、贡献者和最新发布在构建时从 `apps/mirra/nsgo.yaml` 和 GitHub API 读取。每个页面都带 canonical 地址、语言版本链接、Open Graph 和 Twitter 卡片以及结构化数据，构建时还会生成 `sitemap.xml`。在 `apps/website` 目录下：
 
 ```sh
 bun install
 bun run dev         # http://localhost:5175/
 bun run typecheck
-bun run build       # 输出到 dist/client；Pages 路径用 BASE_PATH=/mirra/
+bun run build       # 输出到 dist/client
 bun run og          # 从 dev server 的 /og/<语言>/ 卡片重新截出 public/og-<语言>.png
 ```
 

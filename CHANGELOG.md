@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The website and the web app moved to https://mirra.yldm.ai and https://mirra.yldm.ai/app/; the old addresses lead there.
+
 ## 0.19.0 - 2026-11-20
 
 - The settings are laid out as cards of rows, each setting's name on the left and its control on the right, on the desktop and the phone alike. The AI service page opens on the chosen provider with its logo, the connection's state and the test, and a failed test says why across the card; the advanced settings and Reset to defaults follow the same cards.

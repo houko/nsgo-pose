@@ -57,9 +57,9 @@ jobs:
       - name: Build the website
         working-directory: apps/website
         env:
-          # The project site's origin and path, for canonical links, Open Graph images and the sitemap; the token lets the build read stars, contributors and the latest release.
-          SITE_URL: https://${{ github.repository_owner }}.github.io
-          BASE_PATH: /${{ github.event.repository.name }}/
+          # The site's origin and path, for canonical links, Open Graph images and the sitemap: Pages serves it at the custom domain set in the repository's Pages settings, at the root. The token lets the build read stars, contributors and the latest release.
+          SITE_URL: https://mirra.yldm.ai
+          BASE_PATH: /
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun run build

@@ -195,7 +195,7 @@ jobs:
             row "macOS (Apple silicon)" macos-arm64.dmg
             row "Windows (x64)" windows-x64-setup.exe
             row "Android (arm64)" android-arm64.apk
-            echo "| Web | [Open in the browser](https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/app/) · [mirra-$v-web.zip]($d/mirra-$v-web.zip), to serve yourself |"
+            echo "| Web | [Open in the browser](https://mirra.yldm.ai/app/) · [mirra-$v-web.zip]($d/mirra-$v-web.zip), to serve yourself |"
             echo "| iOS | [Build from source](https://github.com/$GITHUB_REPOSITORY#development) |"
             echo
             echo "\`checksums.txt\` lists the SHA-256 of every file, and \`gh attestation verify <file> --repo $GITHUB_REPOSITORY\` checks that a file was built by this repository's Release workflow."
