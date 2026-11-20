@@ -26,14 +26,6 @@
   <img src="screenshots/phone-me-en.png" alt="Me: the app and its AI service" width="260">
 </p>
 
-<p align="center">
-  <img src="screenshots/desktop-en.png" alt="The desktop studio: library, canvas and the look" width="800">
-</p>
-
-<p align="center">
-  <img src="screenshots/desktop-settings-en.png" alt="AI service settings on the desktop" width="800">
-</p>
-
 ## What it does
 
 - **Face, outfit, pose.** Choose a face (AI-generated, CC0), an outfit (clothes with no one wearing them) and a pose (a faceless gray mannequin), and the app asks an image model for a photo of one adult person with them, or of two adults for a two-person pose, the face and outfit going to the main one. Only the pose is required.
