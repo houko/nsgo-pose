@@ -280,7 +280,7 @@ func (s *studio) look() Request {
 func (s *studio) wide() bool { return s.cx.Env().Window().Width >= wideWidth }
 
 func (s *studio) toastError(title string, err error) {
-	s.toaster.Show(ui.ToastContent{Type: ui.ToastError, Title: title, Description: err.Error()})
+	s.toaster.Show(ui.ToastContent{Type: ui.ToastError, Title: title, Description: explain(locales.For(s.cx), err)})
 }
 
 // current is the chosen provider and what the user set for it.

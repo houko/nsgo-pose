@@ -53,6 +53,19 @@ func postJSON(ctx context.Context, client *http.Client, url string, headers map[
 	return nil
 }
 
+// statusError is an API's failed answer: its HTTP status and the message it put in its body, if any.
+type statusError struct {
+	Code            int
+	Status, Message string
+}
+
+func (e *statusError) Error() string {
+	if e.Message != "" {
+		return e.Status + ": " + e.Message
+	}
+	return "image API: " + e.Status
+}
+
 // apiError is a failed answer as an error, with the message the API put in its body: {"error":{"message"}} for most, {"message"} for DashScope.
 func apiError(resp *http.Response) error {
 	body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
@@ -74,10 +87,7 @@ func apiError(resp *http.Response) error {
 			msg = out.Message
 		}
 	}
-	if msg != "" {
-		return fmt.Errorf("%s: %s", resp.Status, msg)
-	}
-	return fmt.Errorf("image API: %s", resp.Status)
+	return &statusError{Code: resp.StatusCode, Status: resp.Status, Message: msg}
 }
 
 // bearer is the Authorization header most APIs take the key in, none without a key.

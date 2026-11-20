@@ -362,7 +362,7 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 		if err := res.Err(); err != nil && len(loaded(res).Items) == 0 {
 			return core.View{Style: fill.Merge(core.Style{AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter, Gap: 12, Padding: core.All(24)}), Children: []core.Node{
 				core.Text{Content: t.LoadFailed(), Style: ui.TypeHeading},
-				core.Text{Content: err.Error(), StyleFunc: func() core.Style {
+				core.Text{Content: explain(t, err), StyleFunc: func() core.Style {
 					return ui.TypeCaption.Merge(core.Style{Color: colors.Muted(), TextAlign: core.TextAlignCenter})
 				}},
 				ui.Button{Text: t.Retry(), Variant: ui.ButtonSecondary, OnPress: res.Refetch, TestID: "retry"},

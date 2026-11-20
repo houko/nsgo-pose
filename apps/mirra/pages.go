@@ -286,7 +286,7 @@ func (s *studio) testConnection() {
 		s.cx.Post(func() {
 			if err != nil {
 				s.conn.Set(connFailed)
-				s.connErr.Set(err.Error())
+				s.connErr.Set(explain(locales.For(s.cx), err))
 				return
 			}
 			s.conn.Set(connOK)

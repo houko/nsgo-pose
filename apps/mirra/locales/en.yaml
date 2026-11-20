@@ -183,7 +183,7 @@ testAgain: Test again
 connectionOK: Connected; you can start making looks.
 connectionFailed:
   message: "Couldn't connect: {error}"
-  description: Under Test connection; error is what the server or the network said.
+  description: Under Test connection; error says what went wrong, with what the service said on a line of its own.
 statusUnconfigured: No AI service
 statusConnected:
   message: "{service} · connected"
@@ -209,3 +209,12 @@ sourcesPose: Poses
 sourcesOutfit: Outfits
 sourcesFace: Faces
 sourcesFooter: Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them.
+errNoKey: Enter the API key first.
+errKeyRefused: The service refused the key. Check that it is right and may use this model.
+errNotFound: The address or the model wasn't found. Check them in the AI settings.
+errRateLimited: Too many requests, or the account is out of credit. Try again later, or check its balance.
+errRejected: The service refused the request.
+errServer: The service had a problem. Try again later.
+errTimeout: The service took too long to answer. Try again.
+errNetwork: Couldn't reach the service. Check the network and the address.
+errNoImage: The service answered without a picture. Try again, or change the look.
