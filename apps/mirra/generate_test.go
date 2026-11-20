@@ -210,3 +210,29 @@ func TestSideBySide(t *testing.T) {
 		t.Error("an unreadable reference made a sheet")
 	}
 }
+
+func TestStylesSetTheScene(t *testing.T) {
+	if p := (Request{Pose: &Item{}}).Prompt(); !hasAll(p, "Create one photorealistic photo of a single adult person", "on a plain light studio background.") {
+		t.Errorf("default style = %q", p)
+	}
+	if p := (Request{Pose: &Item{}, Style: StyleStreet}).Prompt(); !hasAll(p, "candid street-style photo of a single adult person", "on a city street") || strings.Contains(p, "studio background") {
+		t.Errorf("street = %q", p)
+	}
+	sheet := Request{Pose: &Item{}, Views: []*Item{{}, {}}, Style: StyleStreet}
+	if p := sheet.Prompt(); !hasAll(p, "2 panels side by side", "candid street-style photo", "on a city street") {
+		t.Errorf("street sheet = %q", p)
+	}
+	if p := (Request{Pose: &Item{}, Style: StyleAnime}).Prompt(); !strings.Contains(p, "anime illustration of a single adult person") || strings.Contains(p, "photorealistic") {
+		t.Errorf("anime = %q", p)
+	}
+	if p := (Request{Pose: &Item{People: 2}, Style: StyleFilm}).Prompt(); !hasAll(p, "35mm film photograph of two adult people", "golden-hour light. Call the more prominent figure") {
+		t.Errorf("two-person film = %q", p)
+	}
+}
+
+func TestSheetFollowsTheStyle(t *testing.T) {
+	a, b := &Item{Group: "正面"}, &Item{Group: "横"}
+	if p := (Request{Pose: a, Views: []*Item{a, b}, Style: StyleAnime}).Prompt(); !hasAll(p, "Create one high-quality anime illustration laid out the same way", "soft cel shading") || strings.Contains(p, "photorealistic") {
+		t.Errorf("anime sheet = %q", p)
+	}
+}

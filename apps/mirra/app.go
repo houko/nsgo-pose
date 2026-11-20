@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 
@@ -101,6 +102,8 @@ type studio struct {
 	note    *core.Signal[string]
 	// sheet asks for every camera angle of the pose side by side, rather than the chosen one.
 	sheet *core.Signal[bool]
+	// style is the look's style, kept for the next launch.
+	style *core.Signal[Style]
 
 	busy   *core.Signal[bool]
 	cancel context.CancelFunc
@@ -218,6 +221,7 @@ func newStudio(cx *core.Scope, a App) *studio {
 		step:          core.NewSignal(cx, KindFace),
 		note:          core.NewSignal(cx, ""),
 		sheet:         core.NewSignal(cx, false),
+		style:         core.NewSignal(cx, storedStyle(store)),
 		busy:          core.NewSignal(cx, false),
 		shot:          core.NewSignal[*shot](cx, nil),
 		zoom:          core.NewSignal(cx, 100),
@@ -307,7 +311,7 @@ func (s *studio) surprise() {
 
 // look is the look as chosen; reading it inside a binding follows every choice.
 func (s *studio) look() Request {
-	r := Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Note: s.note.Get()}
+	r := Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Note: s.note.Get(), Style: s.style.Get()}
 	if s.sheet.Get() {
 		r.Views = s.angles(r.Pose)
 	}
@@ -457,8 +461,9 @@ func (s *studio) openWork(w work) {
 		}
 	}
 	s.sheet.Set(len(w.Views) > 1)
+	s.setStyle(w.Style)
 	saved := w
-	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Views: w.Views}, Saved: &saved})
+	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Views: w.Views, Style: w.Style}, Saved: &saved})
 }
 
 // saveShot keeps the picture on show in Works, numbered after the others.
@@ -469,7 +474,7 @@ func (s *studio) saveShot(favorite bool) {
 	}
 	t := locales.For(s.cx)
 	dir, now, st := s.dir("works"), s.cx.Now(), s.pics
-	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose, Views: sh.Req.Views}
+	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose, Views: sh.Req.Views, Style: sh.Req.Style}
 	go func() {
 		w, err := saveWork(st, dir, sh.Path, now, meta)
 		s.cx.Post(func() {
@@ -596,6 +601,24 @@ func (s *studio) src(uri string) core.ImageSource {
 		return s.pics.Source(uri)
 	}
 	return core.Src(uri)
+}
+
+// keyStyle is the storage key of the look's style.
+const keyStyle = "style"
+
+// storedStyle is the style chosen last, the studio's when none was or it is no longer offered.
+func storedStyle(store core.Storage) Style {
+	v, _ := store.GetItem(keyStyle)
+	if st := Style(v); slices.Contains(Styles, st) {
+		return st
+	}
+	return StyleStudio
+}
+
+// setStyle chooses the look's style and keeps it for the next launch.
+func (s *studio) setStyle(st Style) {
+	s.style.Set(st)
+	_ = s.cx.Storage().SetItem(keyStyle, string(st))
 }
 
 // keyAdult is the storage key that holds "1" once the user said they are 18 or older.

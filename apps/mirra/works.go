@@ -25,6 +25,7 @@ type workMeta struct {
 	Pose     *Item `json:"pose,omitempty"`
 	// Views are the angles of a sheet, the pose's every camera angle side by side.
 	Views []*Item `json:"views,omitempty"`
+	Style Style   `json:"style,omitempty"`
 }
 
 func metaPath(picture string) string {

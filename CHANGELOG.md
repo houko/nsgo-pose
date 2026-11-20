@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- A style for the picture beside Generate: studio, street, white backdrop, film or anime. It is kept for the next launch and with each work, which opens again in its style.
+
 ## 0.13.0 - 2026-11-20
 
 - Settings have a language: follow the system, English or 简体中文, under General on the desktop and in Me on the phone. The app switches at once, keeping what is open, and keeps the choice for the next launch.

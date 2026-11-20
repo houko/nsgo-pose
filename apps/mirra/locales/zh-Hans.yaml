@@ -78,6 +78,12 @@ groupSexy: 性感
 adultChip: 18+
 loadFailed: 图库加载失败
 retry: 重试
+styleLabel: 风格
+styleStudio: 影棚
+styleStreet: 街拍
+styleWhite: 白底
+styleFilm: 胶片
+styleAnime: 动漫
 noteLabel: 补充要求
 notePlaceholder: 补充要求，例如光线、背景
 favorite: 收藏
