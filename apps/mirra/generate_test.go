@@ -236,3 +236,64 @@ func TestSheetFollowsTheStyle(t *testing.T) {
 		t.Errorf("anime sheet = %q", p)
 	}
 }
+
+// TestBackgroundCatalog lists the shipped backgrounds by group, each with a picture the app reads.
+func TestBackgroundCatalog(t *testing.T) {
+	c := backgroundCatalog()
+	if !slices.Equal(c.Groups, backgroundGroups) {
+		t.Errorf("groups = %v, want %v", c.Groups, backgroundGroups)
+	}
+	if len(c.Items) < 12 {
+		t.Fatalf("%d backgrounds, want at least 12", len(c.Items))
+	}
+	seen := map[string]bool{}
+	group := 0
+	for _, it := range c.Items {
+		if seen[it.ID] {
+			t.Errorf("%s is listed twice", it.ID)
+		}
+		seen[it.ID] = true
+		for group < len(c.Groups) && it.Group != c.Groups[group] {
+			group++
+		}
+		if group == len(c.Groups) {
+			t.Errorf("%s is out of its group's order", it.ID)
+		}
+		data, ok := backgroundData(it.Full)
+		if !ok || http.DetectContentType(data) != "image/jpeg" {
+			t.Errorf("%s has no JPEG picture", it.ID)
+		}
+	}
+	if _, ok := backgroundData("https://example.com/a.jpg"); ok {
+		t.Error("a URL read as a shipped background")
+	}
+}
+
+// TestBackgroundIsSentLast sends the background after the other references, names it in the prompt by its number in place of the style's scene, and leaves the prompt as it was without one.
+func TestBackgroundIsSentLast(t *testing.T) {
+	api := &fakeAPI{}
+	srv, sites := newServer(t, api)
+	ctx := context.Background()
+	poses, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindPose)
+	faces, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindFace)
+	bg := backgroundCatalog().Items[0]
+	r := Request{Pose: &poses.Items[0], Face: &faces.Items[1], Background: &bg, Style: StyleStreet}
+	if _, err := Generate(ctx, http.DefaultClient, Config{BaseURL: srv.URL + "/v1", APIKey: "k"}, r); err != nil {
+		t.Fatal(err)
+	}
+	req := api.last()
+	if want := bg.ID + ".jpg"; len(req.Images) != 3 || req.Images[2] != want {
+		t.Errorf("images = %v, want the background %s last", req.Images, want)
+	}
+	if !hasAll(req.Prompt, "in the place shown in image 3", "Image 3 is a background with no one in it") || strings.Contains(req.Prompt, "city street") {
+		t.Errorf("prompt = %q", req.Prompt)
+	}
+	r.Background = nil
+	if p := r.Prompt(); strings.Contains(p, "background with no one") || !strings.Contains(p, "city street") {
+		t.Errorf("without a background, prompt = %q", p)
+	}
+	pair := &Item{People: 2}
+	if p := (Request{Pose: pair, Costume: &Item{}, Background: &bg}).Prompt(); !hasAll(p, "in the place shown in image 3", "Image 3 is a background") {
+		t.Errorf("two people with a background = %q", p)
+	}
+}

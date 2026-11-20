@@ -37,12 +37,14 @@ const (
 	maxCount = 4
 )
 
-// Request is what the user put together: a pose, with an outfit and a face when chosen, all from the galleries. The app takes no photo of the user: the pose and outfit galleries' terms forbid depicting real people with their images.
+// Request is what the user put together: a pose, with an outfit, a face and a background when chosen, the first three from the galleries and the background one the app ships. The app takes no photo of the user: the pose and outfit galleries' terms forbid depicting real people with their images.
 type Request struct {
 	Pose    *Item
 	Costume *Item
 	Face    *Item
-	Note    string
+	// Background is a scene with no one in it to set the look in, sent after the other references; nil leaves the scene to the style.
+	Background *Item
+	Note       string
 	// Views are every camera angle of a one-person pose, Pose among them, for a sheet that shows the look from each side by side; nil for one picture of Pose.
 	Views []*Item
 	// Style is how the picture is shot or drawn, the studio's photo when "".
@@ -94,6 +96,25 @@ func (r Request) Validate() error {
 	return nil
 }
 
+// backgroundImage is the number of the background among the images sent: after the pose or sheet, the outfit and the face.
+func (r Request) backgroundImage() int { return 2 + boolInt(r.Costume != nil) + boolInt(r.Face != nil) }
+
+// shot is the style's kind of picture and scene, the scene the background's when one is chosen.
+func (r Request) shot() (kind, scene string) {
+	kind, scene = r.Style.shot()
+	if r.Background != nil {
+		scene = fmt.Sprintf("in the place shown in image %d", r.backgroundImage())
+	}
+	return kind, scene
+}
+
+// writeBackground says what the background is for, if one is chosen.
+func (r Request) writeBackground(b *strings.Builder) {
+	if r.Background != nil {
+		fmt.Fprintf(b, " Image %d is a background with no one in it: set the scene there, keeping its place, perspective and light, with the people lit to match it and in natural scale to it.", r.backgroundImage())
+	}
+}
+
 // sheet says whether the request is for a sheet of several camera angles.
 func (r Request) sheet() bool { return len(r.Views) > 1 && r.Pose != nil && r.Pose.People != 2 }
 
@@ -108,7 +129,7 @@ func (r Request) Prompt() string {
 		return r.sheetPrompt()
 	}
 	var b strings.Builder
-	kind, scene := r.Style.shot()
+	kind, scene := r.shot()
 	fmt.Fprintf(&b, "Image 1 is a faceless gray mannequin showing a pose and a camera angle. Create one %s of a single adult person in exactly that pose, framing and camera angle, %s.", kind, scene)
 	n := 2
 	if r.Costume != nil {
@@ -122,6 +143,7 @@ func (r Request) Prompt() string {
 	} else {
 		b.WriteString(" Give them a natural adult face.")
 	}
+	r.writeBackground(&b)
 	r.writeNote(&b)
 	b.WriteString(" Output a single image of one adult person; no text, no watermark.")
 	return b.String()
@@ -130,7 +152,7 @@ func (r Request) Prompt() string {
 // sheetPrompt is the prompt of a sheet: image 1 is the pose's angles side by side, which the picture lays out the same way.
 func (r Request) sheetPrompt() string {
 	var b strings.Builder
-	kind, scene := r.Style.shot()
+	kind, scene := r.shot()
 	n := len(r.Views)
 	fmt.Fprintf(&b, "Image 1 shows the same pose from %d camera angles in %d panels side by side, a faceless gray mannequin in each. Create one %s laid out the same way: %d panels side by side, each showing the same single adult person in exactly that pose and the camera angle of the matching panel, %s. The person, face, hair, outfit and lighting are identical in every panel.", n, n, kind, n, scene)
 	if r.Costume != nil {
@@ -143,6 +165,7 @@ func (r Request) sheetPrompt() string {
 	} else {
 		b.WriteString(" Give them a natural adult face.")
 	}
+	r.writeBackground(&b)
 	r.writeNote(&b)
 	fmt.Fprintf(&b, " Output a single image of %d evenly spaced panels of one adult person; no text, no labels, no watermark.", n)
 	return b.String()
@@ -158,7 +181,7 @@ func boolInt(b bool) int {
 // pairPrompt is the prompt of a two-person pose: the look's outfit and face go to the person the pose centers on, and the other person is an adult of their own.
 func (r Request) pairPrompt() string {
 	var b strings.Builder
-	kind, scene := r.Style.shot()
+	kind, scene := r.shot()
 	fmt.Fprintf(&b, "Image 1 shows two faceless gray mannequins in a pose and a camera angle. Create one %s of two adult people in exactly that pose, framing and camera angle, %s. Call the more prominent figure the main person and the other the partner.", kind, scene)
 	n := 2
 	if r.Costume != nil {
@@ -172,6 +195,7 @@ func (r Request) pairPrompt() string {
 	} else {
 		b.WriteString(" Give both natural, different adult faces.")
 	}
+	r.writeBackground(&b)
 	r.writeNote(&b)
 	b.WriteString(" Output a single image of these two adults; no text, no watermark.")
 	return b.String()
@@ -223,6 +247,13 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 			continue
 		}
 		p, err := download(ctx, client, cfg.ReadLocal, *it)
+		if err != nil {
+			return nil, err
+		}
+		parts = append(parts, p)
+	}
+	if r.Background != nil {
+		p, err := download(ctx, client, cfg.ReadLocal, *r.Background)
 		if err != nil {
 			return nil, err
 		}
@@ -321,7 +352,9 @@ func postEdits(ctx context.Context, client *http.Client, cfg Config, url string,
 func download(ctx context.Context, client *http.Client, readLocal func(string) ([]byte, error), it Item) (part, error) {
 	var data []byte
 	var err error
-	if filepath.IsAbs(it.Full) {
+	if shipped, ok := backgroundData(it.Full); ok {
+		data = shipped
+	} else if filepath.IsAbs(it.Full) {
 		if readLocal == nil {
 			readLocal = os.ReadFile
 		}
@@ -332,7 +365,7 @@ func download(ctx context.Context, client *http.Client, readLocal func(string) (
 	if err != nil {
 		return part{}, err
 	}
-	name := path.Base(it.Full)
+	name := path.Base(strings.TrimPrefix(it.Full, backgroundScheme))
 	return part{name: name, mime: http.DetectContentType(data), data: data}, nil
 }
 

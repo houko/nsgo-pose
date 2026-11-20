@@ -200,6 +200,14 @@ searchModels: Rechercher des modèles
 noModelMatches: Aucun modèle ne correspond
 refreshModels: Relister les modèles
 modelsFailed: "Impossible de lister les modèles : {error}"
+eyebrowBackground: 04 SCENE
+slotBackground: Décor
+stepBackground: Choisir un décor
+noBackground: Sans décor
+removeBackground: Retirer le décor
+groupIndoor: Intérieur
+groupCity: Ville
+groupNature: Nature
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Édition

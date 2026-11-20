@@ -200,6 +200,14 @@ searchModels: Modelle suchen
 noModelMatches: Kein passendes Modell
 refreshModels: Modelle neu laden
 modelsFailed: "Modelle konnten nicht geladen werden: {error}"
+eyebrowBackground: 04 SCENE
+slotBackground: Hintergrund
+stepBackground: Hintergrund wählen
+noBackground: Kein Hintergrund
+removeBackground: Hintergrund entfernen
+groupIndoor: Innen
+groupCity: Stadt
+groupNature: Natur
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Bearbeiten

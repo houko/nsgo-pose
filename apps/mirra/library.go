@@ -45,6 +45,8 @@ func slotName(t locales.Messages, k Kind) string {
 		return t.SlotFace()
 	case KindCostume:
 		return t.SlotCostume()
+	case KindBackground:
+		return t.SlotBackground()
 	default:
 		return t.SlotPose()
 	}
@@ -57,6 +59,8 @@ func slotEyebrow(t locales.Messages, k Kind) string {
 		return t.EyebrowFace()
 	case KindCostume:
 		return t.EyebrowOutfit()
+	case KindBackground:
+		return t.EyebrowBackground()
 	default:
 		return t.EyebrowPose()
 	}
@@ -68,6 +72,8 @@ func stepTitle(t locales.Messages, k Kind) string {
 		return t.StepFace()
 	case KindCostume:
 		return t.StepCostume()
+	case KindBackground:
+		return t.StepBackground()
 	default:
 		return t.StepPose()
 	}
@@ -79,6 +85,8 @@ func kindKey(k Kind) string {
 		return "face"
 	case KindCostume:
 		return "costume"
+	case KindBackground:
+		return "background"
 	default:
 		return "pose"
 	}
@@ -121,24 +129,38 @@ func groupLabel(t locales.Messages, g string) string {
 		return t.GroupLingerie()
 	case "セクシー":
 		return t.GroupSexy()
+	case groupIndoor:
+		return t.GroupIndoor()
+	case groupCity:
+		return t.GroupCity()
+	case groupNature:
+		return t.GroupNature()
 	case uploadGroup:
 		return t.MyUploads()
 	}
 	return g
 }
 
-// itemName is what a chosen item is called: an outfit's keywords or the user's upload, a pose's name, a face's hair length.
+// itemName is what a chosen item is called: an outfit's keywords or the user's upload, a pose's name, a face's hair length, a background's group.
 func itemName(t locales.Messages, it *Item) string {
 	if it == nil {
 		return t.NotChosen()
 	}
 	switch {
-	case it.Kind == KindFace:
+	case it.Kind == KindFace || it.Kind == KindBackground:
 		return groupLabel(t, it.Group)
 	case it.Group == uploadGroup:
 		return t.UploadName(strings.TrimPrefix(it.ID, uploadPrefix))
 	}
 	return it.Title
+}
+
+// chosenName is what a look's element is called: its item's name, or for the optional background "No background" while none is chosen.
+func chosenName(t locales.Messages, k Kind, it *Item) string {
+	if it == nil && k == KindBackground {
+		return t.NoBackground()
+	}
+	return itemName(t, it)
 }
 
 // itemSub is the line under an item's name: an outfit's category and code, a pose's angle, a face's code.
@@ -147,7 +169,7 @@ func itemSub(t locales.Messages, it *Item) string {
 		return ""
 	}
 	switch it.Kind {
-	case KindFace:
+	case KindFace, KindBackground:
 		return it.ID
 	case KindPose:
 		return groupLabel(t, it.Group)
@@ -186,14 +208,18 @@ func lookTitle(t locales.Messages, r Request) string {
 }
 
 func cellAspect(k Kind) float32 {
-	if k == KindFace {
+	switch k {
+	case KindFace:
 		return 0.8
+	case KindBackground:
+		return 1
 	}
 	return 0.75
 }
 
+// cellFit fills a face's or a background's cell, a photograph cropped, and fits a pose's or an outfit's whole, a figure on white.
 func cellFit(k Kind) core.ResizeMode {
-	if k == KindFace {
+	if k == KindFace || k == KindBackground {
 		return core.Cover
 	}
 	return core.Contain
@@ -246,7 +272,7 @@ func (s *studio) itemCard(cx *core.Scope, k Kind, item func() Item, on func() bo
 	}, Children: []core.Node{core.Image{ResizeMode: cellFit(k), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)},
 		SourceFunc: func() core.ImageSource { return s.src(item().Thumb) }}}}
 	children := []core.Node{picture}
-	if k != KindFace {
+	if k != KindFace && k != KindBackground {
 		children = append(children, core.View{Style: core.Style{Padding: core.Symmetric(8, 10), Gap: 2}, Children: []core.Node{
 			core.Text{ContentFunc: name, MaxLines: 1, Style: core.Style{FontSize: 14, FontWeight: core.FontWeightMedium}},
 			caption(cx, sub),
@@ -254,7 +280,7 @@ func (s *studio) itemCard(cx *core.Scope, k Kind, item func() Item, on func() bo
 	}
 	card := core.View{Role: core.RoleButton, LabelFunc: func() string {
 		it := item()
-		if it.Kind == KindFace {
+		if it.Kind == KindFace || it.Kind == KindBackground {
 			return name() + " · " + it.ID
 		}
 		return name()
@@ -361,7 +387,13 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 				return groupLabel(t, it.Group)
 			}
 			return s.itemCard(cx, k, item, on, sub, func() {
-				if it, ok := at(row.Index()); ok {
+				it, ok := at(row.Index())
+				switch {
+				case !ok:
+				// The background is optional: pressing the chosen one again goes back to none.
+				case k == KindBackground && on():
+					s.clearBackground()
+				default:
 					s.choose(k, it)
 				}
 			})
@@ -421,14 +453,14 @@ func (s *studio) lookRow(cx *core.Scope, k Kind, onPress func()) core.Node {
 	colors := ui.ColorsOf(cx)
 	chosen := s.chosen[k]
 	value := func() string {
-		if it := chosen.Get(); it != nil {
-			return itemName(t, it)
+		if it := chosen.Get(); it != nil || k == KindBackground {
+			return chosenName(t, k, it)
 		}
 		return slotName(t, k)
 	}
 	active := func() bool { return s.wide() && s.step.Get() == k }
 	return core.View{Role: core.RoleButton, TestID: "row-" + kindKey(k), Selected: active,
-		LabelFunc: func() string { return slotName(t, k) + ", " + itemName(t, chosen.Get()) },
+		LabelFunc: func() string { return slotName(t, k) + ", " + chosenName(t, k, chosen.Get()) },
 		OnPress:   func(core.PressEvent) { onPress() },
 		StyleFunc: func() core.Style {
 			st := core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 14, Padding: core.Symmetric(10, 12), CornerRadius: 16,
@@ -445,6 +477,9 @@ func (s *studio) lookRow(cx *core.Scope, k Kind, onPress func()) core.Node {
 					return core.Style{FontSize: 10, LetterSpacing: 1.5, Color: colors.Muted()}
 				}},
 				core.Text{ContentFunc: value, MaxLines: 1, Style: core.Style{FontSize: 15, FontWeight: core.FontWeightSemibold}},
+			}},
+			core.Show{When: func() bool { return k == KindBackground && chosen.Get() != nil }, Then: func(cx *core.Scope) core.Node {
+				return ui.IconButton{Icon: lucide.X, Label: t.RemoveBackground(), TestID: "clear-background", OnPress: s.clearBackground}
 			}},
 		},
 	}

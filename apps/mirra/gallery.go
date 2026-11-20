@@ -12,13 +12,16 @@ import (
 	"strings"
 )
 
-// Kind is one of the three reference galleries.
+// Kind is one of the look's references: the three galleries' and the backgrounds the app ships.
 type Kind int
 
 const (
 	KindPose Kind = iota
 	KindCostume
 	KindFace
+	KindBackground
+	// kindCount is how many kinds there are, the length of the studio's arrays by kind.
+	kindCount
 )
 
 // Sites are the galleries' origins, overridable in tests.
@@ -100,6 +103,9 @@ const maxIndexBytes = 16 << 20
 
 // FetchCatalog reads a gallery's index: the data array its page embeds for poses and costumes, and data/images.js for faces. It reads metadata only; no image is downloaded.
 func FetchCatalog(ctx context.Context, client *http.Client, sites Sites, k Kind) (Catalog, error) {
+	if k == KindBackground {
+		return backgroundCatalog(), nil
+	}
 	origin := strings.TrimRight(sites.origin(k), "/")
 	path := "/"
 	if k == KindFace {

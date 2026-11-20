@@ -23,6 +23,8 @@ type workMeta struct {
 	Face     *Item `json:"face,omitempty"`
 	Costume  *Item `json:"costume,omitempty"`
 	Pose     *Item `json:"pose,omitempty"`
+	// Background is the scene the person was set in, nil for the style's own.
+	Background *Item `json:"background,omitempty"`
 	// Views are the angles of a sheet, the pose's every camera angle side by side.
 	Views []*Item `json:"views,omitempty"`
 	Style Style   `json:"style,omitempty"`

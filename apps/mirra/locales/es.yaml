@@ -200,6 +200,14 @@ searchModels: Buscar modelos
 noModelMatches: Ningún modelo coincide
 refreshModels: Volver a listar los modelos
 modelsFailed: "No se pudieron listar los modelos: {error}"
+eyebrowBackground: 04 SCENE
+slotBackground: Fondo
+stepBackground: Elige un fondo
+noBackground: Sin fondo
+removeBackground: Quitar el fondo
+groupIndoor: Interior
+groupCity: Ciudad
+groupNature: Naturaleza
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Edición

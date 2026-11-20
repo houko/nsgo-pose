@@ -200,6 +200,14 @@ searchModels: Поиск моделей
 noModelMatches: Нет подходящих моделей
 refreshModels: Обновить список моделей
 modelsFailed: "Не удалось получить список моделей: {error}"
+eyebrowBackground: 04 SCENE
+slotBackground: Фон
+stepBackground: Выберите фон
+noBackground: Без фона
+removeBackground: Убрать фон
+groupIndoor: Интерьер
+groupCity: Город
+groupNature: Природа
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Правка

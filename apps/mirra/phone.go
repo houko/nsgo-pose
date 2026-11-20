@@ -56,9 +56,9 @@ func (s *studio) openEditor(k Kind) {
 	s.studioNav.SetRoutes(route{page: pageHome}, route{page: pageEditor})
 }
 
-// firstMissing is the first element still empty, or the pose.
+// firstMissing is the first element still empty, or the pose; the optional background is never missing.
 func (s *studio) firstMissing() Kind {
-	for _, k := range steps {
+	for _, k := range lookKinds {
 		if s.chosen[k].Get() == nil {
 			return k
 		}
@@ -72,7 +72,7 @@ func (s *studio) elementCard(cx *core.Scope, k Kind) core.Node {
 	colors := ui.ColorsOf(cx)
 	chosen := s.chosen[k]
 	return core.View{Role: core.RoleButton, TestID: "row-" + kindKey(k),
-		LabelFunc: func() string { return slotName(t, k) + ", " + itemName(t, chosen.Get()) },
+		LabelFunc: func() string { return slotName(t, k) + ", " + chosenName(t, k, chosen.Get()) },
 		OnPress:   func(core.PressEvent) { s.openEditor(k) },
 		StyleFunc: func() core.Style {
 			return core.Style{FlexGrow: 1, FlexBasis: core.Pt(0), CornerRadius: 18, Overflow: core.Hidden, Background: colors.Surface(), BorderWidth: 1, BorderColor: colors.Border()}
@@ -94,8 +94,8 @@ func (s *studio) elementCard(cx *core.Scope, k Kind) core.Node {
 				Else: func(*core.Scope) core.Node { return core.Icon{SVG: lucide.Plus(), Style: core.Style{FontSize: 20}} },
 			}}},
 			core.View{Style: core.Style{Padding: core.Symmetric(8, 10), Gap: 3}, Children: []core.Node{
-				core.Text{Content: slotEyebrow(t, k), StyleFunc: func() core.Style {
-					return core.Style{FontSize: 9, LetterSpacing: 1.5, Color: colors.Muted()}
+				core.Text{Content: slotEyebrow(t, k), MaxLines: 1, StyleFunc: func() core.Style {
+					return core.Style{FontSize: 9, LetterSpacing: 1, Color: colors.Muted()}
 				}},
 				core.Text{ContentFunc: func() string {
 					if it := chosen.Get(); it != nil {
@@ -219,7 +219,7 @@ func (s *studio) chosenCard(cx *core.Scope, k Kind) core.Node {
 			s.thumb(cx, k, chosen.Get, 72, 96, false),
 			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 6}, Children: []core.Node{
 				eyebrow(cx, top),
-				display(func() string { return itemName(t, chosen.Get()) }, 20),
+				display(func() string { return chosenName(t, k, chosen.Get()) }, 20),
 				caption(cx, func() string { return itemSub(t, chosen.Get()) }),
 			}},
 		},

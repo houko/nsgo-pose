@@ -200,6 +200,14 @@ searchModels: モデルを検索
 noModelMatches: 一致するモデルがありません
 refreshModels: モデル一覧を再取得
 modelsFailed: "モデル一覧を取得できませんでした：{error}"
+eyebrowBackground: 04 SCENE
+slotBackground: 背景
+stepBackground: 背景を選ぶ
+noBackground: 背景なし
+removeBackground: 背景を外す
+groupIndoor: 屋内
+groupCity: 街
+groupNature: 自然
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: 編集
