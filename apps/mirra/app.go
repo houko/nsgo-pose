@@ -15,6 +15,7 @@ import (
 	"github.com/nsgo-dev/nsgo"
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
+	"github.com/nsgo-dev/nsgo/desktop"
 	"github.com/nsgo-dev/nsgo/ui"
 	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
@@ -146,6 +147,10 @@ func (a App) Root(cx *core.Scope) core.Node {
 	s := newStudio(cx, a)
 	colors := ui.ColorsOf(cx)
 	env := cx.Env()
+	// Only macOS: Windows and Linux would draw a menu bar into the window, which the app's own top bar already serves.
+	if env.OS() == core.OSMacOS {
+		cx.Effect(func() { desktop.SetApplicationMenu(cx, s.menu(cx, locales.For(cx))) })
+	}
 	return core.View{
 		StyleFunc: func() core.Style {
 			return core.Style{FlexGrow: 1, FlexShrink: 1, Background: colors.Background(), Color: colors.Text()}

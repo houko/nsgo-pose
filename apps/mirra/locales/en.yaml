@@ -170,6 +170,10 @@ resetDefaults: Reset to defaults
 version: Version
 versionDevelopment: Development build
 checkForUpdates: Check for updates
+menuSettings: Settings…
+menuCheckForUpdates: Check for Updates…
+menuEdit: Edit
+menuWindow: Window
 baseURL: Address
 apiKey: API key
 apiKeyOptional: API key (optional)

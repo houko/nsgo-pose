@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- On macOS, the app menu has About, Settings… (⌘,) and Check for Updates…, with the Services, Hide and Window items Mac apps have; it held only Quit.
 ## 0.9.0 - 2026-11-20
 
 - The update prompts show what the new version changes: its section of this changelog, in Sparkle's and WinSparkle's dialogs on macOS and Windows and below the version on Android.

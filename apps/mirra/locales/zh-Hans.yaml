@@ -138,6 +138,10 @@ resetDefaults: 恢复默认
 version: 版本
 versionDevelopment: 开发版
 checkForUpdates: 检查更新
+menuSettings: 设置…
+menuCheckForUpdates: 检查更新…
+menuEdit: 编辑
+menuWindow: 窗口
 baseURL: 接口地址
 apiKey: API Key
 apiKeyOptional: API Key（可留空）

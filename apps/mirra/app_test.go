@@ -466,3 +466,23 @@ func TestPicturesInMemory(t *testing.T) {
 	app.Press("text:Works")
 	app.WaitFor("id:page-only", wait)
 }
+
+// TestMacMenuOpensSettingsAndChecksForUpdates gives the macOS menu bar the app menu's Settings… and Check for Updates…, where Mac users look for them.
+func TestMacMenuOpensSettingsAndChecksForUpdates(t *testing.T) {
+	if nsgotest.Target() != "" && nsgotest.Target() != "macos" {
+		t.Skip("the menu is macOS's")
+	}
+	app := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en", OS: core.OSMacOS}), nsgotest.Size(1440, 1000))
+	app.ChooseMenu("Mirra", "Settings…")
+	app.WaitFor("id:version", wait)
+	if nsgotest.Target() == "" {
+		app.ChooseMenu("Mirra", "Check for Updates…")
+		if checks := app.UpdateChecks; len(checks) != 1 || checks[0] {
+			t.Errorf("update checks %v, want one asked for", checks)
+		}
+	}
+	other := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en", OS: core.OSWindows}), nsgotest.Size(1440, 1000))
+	if nsgotest.Target() == "" && len(other.Menu) != 0 {
+		t.Errorf("Windows got a menu bar: %v", other.Menu)
+	}
+}
