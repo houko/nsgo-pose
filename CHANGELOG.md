@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The answer to the 18+ switch's age question is kept, as works and favorites from those categories show on later launches; it was asked again every launch.
 - Errors say what went wrong in the app's language, such as a refused key, a model that isn't found, no credit left, a timeout or no network, with what the service said below, where they showed its raw message or Go's network error in English.
 - Azure OpenAI asks for the deployment's name beside its key and address, where it was hidden under Advanced, and OpenRouter's connection test checks the key, which listing its models never did.
 

@@ -343,6 +343,34 @@ func TestAdultChipAsksAge(t *testing.T) {
 	app.WaitFor(outfitLingerie, wait)
 }
 
+// TestAgeAnswerIsKept remembers that the user is 18 or older, since works and favorites from the adults-only categories show again on the next launch.
+func TestAgeAnswerIsKept(t *testing.T) {
+	app, _ := start(t, &fakeAPI{}, "k", nsgotest.PendingAlerts())
+	app.Press("text:Wardrobe")
+	app.Press("id:closet-gallery")
+	app.WaitFor(outfitKnit, wait)
+	app.Press("id:chip-adult")
+	app.Answer(1)
+	app.WaitFor(outfitLingerie, wait)
+	if v, ok := app.Storage().GetItem(keyAdult); !ok || v != "1" {
+		t.Fatalf("the answer was not kept: %q, %v", v, ok)
+	}
+
+	api := &fakeAPI{}
+	srv, _ := newServer(t, api)
+	stored := testStorage(srv.URL)
+	stored[keyAdult] = "1"
+	again, _ := start(t, api, "k", nsgotest.PendingAlerts(), nsgotest.Storage(stored))
+	again.Press("text:Wardrobe")
+	again.Press("id:closet-gallery")
+	again.WaitFor(outfitKnit, wait)
+	again.Press("id:chip-adult")
+	again.WaitFor(outfitLingerie, wait)
+	if a := again.Alerts(); len(a) != 0 {
+		t.Errorf("asked again: %+v", a)
+	}
+}
+
 func TestWardrobeFavorites(t *testing.T) {
 	app, _ := start(t, &fakeAPI{}, "k")
 	app.Press("text:Wardrobe")
