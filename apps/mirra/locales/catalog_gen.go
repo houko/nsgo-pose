@@ -2581,13 +2581,18 @@ var textsDe = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Gesicht"+
 	"Outfit"+
 	"Pose"+
+	"Hintergrund"+
 	"Nicht gewählt"+
+	"Kein Hintergrund"+
+	"Hintergrund entfernen"+
 	"Gesicht wählen"+
 	"Outfit wählen"+
 	"Pose festlegen"+
+	"Hintergrund wählen"+
 	"Schritte"+
 	"Fertig"+
 	"Zurück"+
@@ -2624,6 +2629,9 @@ var textsDe = i18n.NewTexts(""+
 	"Sommer"+
 	"Herbst"+
 	"Winter"+
+	"Innen"+
+	"Stadt"+
+	"Natur"+
 	"Party"+
 	"Bademode"+
 	"Dessous"+
@@ -2760,13 +2768,18 @@ var textsDe = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		7,
 		6,
 		4,
+		11,
 		14,
+		16,
+		21,
 		15,
 		14,
 		14,
+		19,
 		8,
 		6,
 		7,
@@ -2803,6 +2816,9 @@ var textsDe = i18n.NewTexts(""+
 		6,
 		6,
 		6,
+		5,
+		5,
+		5,
 		5,
 		8,
 		7,
@@ -2942,13 +2958,18 @@ var textsEs = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Rostro"+
 	"Atuendo"+
 	"Pose"+
+	"Fondo"+
 	"Sin elegir"+
+	"Sin fondo"+
+	"Quitar el fondo"+
 	"Elige un rostro"+
 	"Elige un atuendo"+
 	"Elige la pose"+
+	"Elige un fondo"+
 	"Pasos"+
 	"Listo"+
 	"Atrás"+
@@ -2985,6 +3006,9 @@ var textsEs = i18n.NewTexts(""+
 	"Verano"+
 	"Otoño"+
 	"Invierno"+
+	"Interior"+
+	"Ciudad"+
+	"Naturaleza"+
 	"Fiesta"+
 	"Baño"+
 	"Lencería"+
@@ -3121,13 +3145,18 @@ var textsEs = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		6,
 		7,
 		4,
+		5,
 		10,
+		9,
+		15,
 		15,
 		16,
 		13,
+		14,
 		5,
 		5,
 		6,
@@ -3164,6 +3193,9 @@ var textsEs = i18n.NewTexts(""+
 		6,
 		6,
 		8,
+		8,
+		6,
+		10,
 		6,
 		5,
 		9,
@@ -3303,13 +3335,18 @@ var textsFr = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Visage"+
 	"Tenue"+
 	"Pose"+
+	"Décor"+
 	"Non choisi"+
+	"Sans décor"+
+	"Retirer le décor"+
 	"Choisir un visage"+
 	"Choisir une tenue"+
 	"Définir la pose"+
+	"Choisir un décor"+
 	"Étapes"+
 	"Terminé"+
 	"Retour"+
@@ -3346,6 +3383,9 @@ var textsFr = i18n.NewTexts(""+
 	"Été"+
 	"Automne"+
 	"Hiver"+
+	"Intérieur"+
+	"Ville"+
+	"Nature"+
 	"Soirée"+
 	"Maillots de bain"+
 	"Lingerie"+
@@ -3482,13 +3522,18 @@ var textsFr = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		6,
 		5,
 		4,
+		6,
 		10,
+		11,
+		17,
 		17,
 		17,
 		16,
+		17,
 		7,
 		8,
 		6,
@@ -3525,6 +3570,9 @@ var textsFr = i18n.NewTexts(""+
 		5,
 		7,
 		5,
+		10,
+		5,
+		6,
 		7,
 		16,
 		8,
@@ -3664,13 +3712,18 @@ var textsIt = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Viso"+
 	"Outfit"+
 	"Posa"+
+	"Sfondo"+
 	"Non scelto"+
+	"Nessuno sfondo"+
+	"Rimuovi lo sfondo"+
 	"Scegli un viso"+
 	"Scegli un outfit"+
 	"Imposta la posa"+
+	"Scegli uno sfondo"+
 	"Passaggi"+
 	"Fatto"+
 	"Indietro"+
@@ -3707,6 +3760,9 @@ var textsIt = i18n.NewTexts(""+
 	"Estate"+
 	"Autunno"+
 	"Inverno"+
+	"Interni"+
+	"Città"+
+	"Natura"+
 	"Festa"+
 	"Costumi da bagno"+
 	"Lingerie"+
@@ -3843,13 +3899,18 @@ var textsIt = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		4,
 		6,
 		4,
+		6,
 		10,
+		14,
+		17,
 		14,
 		16,
 		15,
+		17,
 		8,
 		5,
 		8,
@@ -3886,6 +3947,9 @@ var textsIt = i18n.NewTexts(""+
 		6,
 		7,
 		7,
+		7,
+		6,
+		6,
 		5,
 		16,
 		8,
@@ -4025,13 +4089,18 @@ var textsJa = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"顔"+
 	"服装"+
 	"ポーズ"+
+	"背景"+
 	"未選択"+
+	"背景なし"+
+	"背景を外す"+
 	"顔を選ぶ"+
 	"服装を選ぶ"+
 	"ポーズを決める"+
+	"背景を選ぶ"+
 	"ステップ"+
 	"完了"+
 	"戻る"+
@@ -4068,6 +4137,9 @@ var textsJa = i18n.NewTexts(""+
 	"夏"+
 	"秋"+
 	"冬"+
+	"屋内"+
+	"街"+
+	"自然"+
 	"パーティー"+
 	"水着"+
 	"ランジェリー"+
@@ -4204,13 +4276,18 @@ var textsJa = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		3,
 		6,
 		9,
+		6,
 		9,
 		12,
 		15,
+		12,
+		15,
 		21,
+		15,
 		12,
 		6,
 		6,
@@ -4247,6 +4324,9 @@ var textsJa = i18n.NewTexts(""+
 		3,
 		3,
 		3,
+		6,
+		3,
+		6,
 		15,
 		6,
 		18,
@@ -4386,13 +4466,18 @@ var textsKo = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"얼굴"+
 	"의상"+
 	"포즈"+
+	"배경"+
 	"선택 안 함"+
+	"배경 없음"+
+	"배경 지우기"+
 	"얼굴 선택"+
 	"의상 고르기"+
 	"포즈 설정"+
+	"배경 선택"+
 	"단계"+
 	"완료"+
 	"뒤로"+
@@ -4429,6 +4514,9 @@ var textsKo = i18n.NewTexts(""+
 	"여름"+
 	"가을"+
 	"겨울"+
+	"실내"+
+	"도시"+
+	"자연"+
 	"파티"+
 	"수영복"+
 	"란제리"+
@@ -4565,12 +4653,17 @@ var textsKo = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
+		6,
 		6,
 		6,
 		6,
 		14,
 		13,
 		16,
+		13,
+		16,
+		13,
 		13,
 		6,
 		6,
@@ -4605,6 +4698,9 @@ var textsKo = i18n.NewTexts(""+
 		13,
 		6,
 		3,
+		6,
+		6,
+		6,
 		6,
 		6,
 		6,
@@ -4747,13 +4843,18 @@ var textsPtBR = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Rosto"+
 	"Roupa"+
 	"Pose"+
+	"Cenário"+
 	"Não escolhido"+
+	"Sem cenário"+
+	"Remover o cenário"+
 	"Escolha um rosto"+
 	"Escolha uma roupa"+
 	"Defina a pose"+
+	"Escolha um cenário"+
 	"Etapas"+
 	"Concluído"+
 	"Voltar"+
@@ -4790,6 +4891,9 @@ var textsPtBR = i18n.NewTexts(""+
 	"Verão"+
 	"Outono"+
 	"Inverno"+
+	"Interior"+
+	"Cidade"+
+	"Natureza"+
 	"Festa"+
 	"Moda praia"+
 	"Lingerie"+
@@ -4926,13 +5030,18 @@ var textsPtBR = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
 		5,
 		5,
 		4,
+		8,
 		14,
+		12,
+		18,
 		16,
 		17,
 		13,
+		19,
 		6,
 		10,
 		6,
@@ -4969,6 +5078,9 @@ var textsPtBR = i18n.NewTexts(""+
 		6,
 		6,
 		7,
+		8,
+		6,
+		8,
 		5,
 		10,
 		8,
@@ -5108,13 +5220,18 @@ var textsRu = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"Лицо"+
 	"Наряд"+
 	"Поза"+
+	"Фон"+
 	"Не выбрано"+
+	"Без фона"+
+	"Убрать фон"+
 	"Выберите лицо"+
 	"Выберите наряд"+
 	"Выберите позу"+
+	"Выберите фон"+
 	"Шаги"+
 	"Готово"+
 	"Назад"+
@@ -5151,6 +5268,9 @@ var textsRu = i18n.NewTexts(""+
 	"Лето"+
 	"Осень"+
 	"Зима"+
+	"Интерьер"+
+	"Город"+
+	"Природа"+
 	"Вечеринка"+
 	"Купальники"+
 	"Бельё"+
@@ -5288,12 +5408,17 @@ var textsRu = i18n.NewTexts(""+
 		9,
 		7,
 		8,
+		8,
 		10,
 		8,
+		6,
+		19,
+		15,
 		19,
 		25,
 		27,
 		25,
+		23,
 		8,
 		12,
 		10,
@@ -5330,6 +5455,9 @@ var textsRu = i18n.NewTexts(""+
 		8,
 		10,
 		8,
+		16,
+		10,
+		14,
 		18,
 		20,
 		10,
@@ -5846,13 +5974,18 @@ var textsZhHant = i18n.NewTexts(""+
 	"01 FACE"+
 	"02 OUTFIT"+
 	"03 POSE"+
+	"04 SCENE"+
 	"臉孔"+
 	"服裝"+
 	"姿勢"+
+	"背景"+
 	"未選擇"+
+	"無背景"+
+	"移除背景"+
 	"選擇臉孔"+
 	"挑選服裝"+
 	"設定姿勢"+
+	"選擇背景"+
 	"步驟"+
 	"完成"+
 	"返回"+
@@ -5889,6 +6022,9 @@ var textsZhHant = i18n.NewTexts(""+
 	"夏"+
 	"秋"+
 	"冬"+
+	"室內"+
+	"城市"+
+	"自然"+
 	"派對"+
 	"泳裝"+
 	"內衣"+
@@ -6025,10 +6161,15 @@ var textsZhHant = i18n.NewTexts(""+
 		7,
 		9,
 		7,
+		8,
+		6,
 		6,
 		6,
 		6,
 		9,
+		9,
+		12,
+		12,
 		12,
 		12,
 		12,
@@ -6068,6 +6209,9 @@ var textsZhHant = i18n.NewTexts(""+
 		3,
 		3,
 		3,
+		6,
+		6,
+		6,
 		6,
 		6,
 		6,

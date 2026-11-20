@@ -200,6 +200,14 @@ searchModels: Cerca modelli
 noModelMatches: Nessun modello corrisponde
 refreshModels: Ricarica l’elenco dei modelli
 modelsFailed: "Impossibile elencare i modelli: {error}"
+eyebrowBackground: 04 SCENE
+slotBackground: Sfondo
+stepBackground: Scegli uno sfondo
+noBackground: Nessuno sfondo
+removeBackground: Rimuovi lo sfondo
+groupIndoor: Interni
+groupCity: Città
+groupNature: Natura
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Composizione

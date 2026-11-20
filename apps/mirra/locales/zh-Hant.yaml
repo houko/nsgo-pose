@@ -200,6 +200,14 @@ searchModels: 搜尋模型
 noModelMatches: 沒有符合的模型
 refreshModels: 重新取得模型清單
 modelsFailed: "無法取得模型清單：{error}"
+eyebrowBackground: 04 SCENE
+slotBackground: 背景
+stepBackground: 選擇背景
+noBackground: 無背景
+removeBackground: 移除背景
+groupIndoor: 室內
+groupCity: 城市
+groupNature: 自然
 
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: 編輯
