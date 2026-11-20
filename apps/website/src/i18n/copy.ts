@@ -1,4 +1,4 @@
-// The site's words in each language. The design's copy, corrected to what the app does: faces come from a CC0 library rather than selfies, a local server must speak the OpenAI-compatible API (ComfyUI's own does not work), and there is no web app.
+// The site's words in each language. The design's copy, corrected to what the app does: faces come from a CC0 library rather than selfies, and a server of your own must speak the OpenAI-compatible API (ComfyUI's own does not work).
 
 const zh = {
   meta: {
@@ -34,7 +34,7 @@ const zh = {
     sub: '镜衣从设计上就不碰你的数据：没有账号，没有我们的服务器，也不读取任何人的照片。',
     feats: [
       ['开源免费', '代码全部公开，以 MIT 协议发布。不收费，不需要注册账号。'],
-      ['用你自己的 AI', '接入任意 OpenAI 兼容的云端 API，或者你自己部署的 OpenAI 兼容服务，本地运行没有调用费。'],
+      ['用你自己的 AI', '预置 OpenAI、Google Gemini、火山方舟、xAI、OpenRouter、阿里云百炼和 Azure OpenAI，选好服务商、填入 Key 就能用；也能接任意 OpenAI 兼容服务，或在本机运行 stable-diffusion.cpp，没有调用费。'],
       ['只在本机', 'API Key 存在系统钥匙串里，衣服照片和作品只存在你的设备上。生成请求直接从你的设备发往你配置的服务。'],
       ['一套体验，全平台', '手机、桌面和浏览器用的是同一套流程：衣橱、作品、AI 服务设置都一样。网页版的 Key 和作品只保存在当前页面。'],
     ],
@@ -47,12 +47,12 @@ const zh = {
     steps: [
       [
         ['下载安装', '在下方选择你的平台，下载并安装镜衣。', ''],
-        ['打开 AI 服务设置', '手机上进入「我的」，桌面上点右上角的设置按钮，选择「云端 API」或「本地部署」。', ''],
-        ['填写并测试连接', '填入接口地址（云端 API 还要填 Key），点「测试连接」，通过后就能生成。', ''],
+        ['打开 AI 服务设置', '手机上进入「我的」，桌面上点右上角的设置按钮，选择服务商。', ''],
+        ['填入 Key 并测试连接', '填入 API Key（点「获取 API Key」会打开服务商的页面），点「测试连接」，通过后就能生成。地址、模型和尺寸都已预置，需要时在「高级设置」里改。', ''],
       ],
       [
-        ['准备一个兼容服务', '在你的电脑上运行一个 OpenAI 兼容的图片编辑服务，它需要提供 /v1/images/edits 和 /v1/models。', ''],
-        ['在镜衣里选择本地部署', '打开 AI 服务设置，选择「本地部署」，填入服务的地址，Key 可以留空。', 'http://127.0.0.1:8080/v1'],
+        ['准备一个兼容服务', '在你的电脑上运行 stable-diffusion.cpp 的服务，或其他提供 /v1/images/edits 和 /v1/models 的 OpenAI 兼容图片编辑服务。', ''],
+        ['在镜衣里选择服务商', '打开 AI 服务设置，选择「stable-diffusion.cpp」，地址已经填好；其他服务选择「自定义（OpenAI 兼容）」并填入地址。Key 可以留空。', 'http://127.0.0.1:8080/v1'],
         ['测试连接', '点「测试连接」，镜衣会请求服务的模型列表，通过后就能生成。', ''],
       ],
       [
@@ -62,7 +62,7 @@ const zh = {
       ],
     ],
     backends: '已支持的 AI 服务：',
-    backendList: ['OpenAI 兼容接口（云端）', 'OpenAI 兼容接口（本地部署）'],
+    backendList: ['OpenAI', 'Google Gemini', '火山方舟', 'xAI', 'OpenRouter', '阿里云百炼', 'Azure OpenAI', 'stable-diffusion.cpp', 'OpenAI 兼容接口'],
     copy: '复制',
     copied: '已复制',
   },
@@ -78,7 +78,7 @@ const zh = {
     ],
     soon: '即将发布',
     noRelease: '还没有正式发布的版本：可以先从源码构建，或者在 GitHub 上关注 Releases。',
-    note: '首次打开时，在 AI 服务设置里填好接口地址并测试连接，就可以开始生成。',
+    note: '首次打开时，在 AI 服务设置里选好服务商、填入 Key 并测试连接，就可以开始生成。macOS、Windows 和 Android 版有新版本时会提示更新。',
   },
   oss: {
     kicker: 'OPEN SOURCE',
@@ -101,7 +101,7 @@ const zh = {
     items: [
       ['镜衣真的免费吗？', '是的。镜衣以 MIT 协议开源，不收费，也不需要账号。如果你用云端 API，费用由你选的服务商收取；用自己部署的服务则没有调用费。'],
       ['我的数据会被上传吗？', '镜衣没有自己的服务器。API Key 存在你设备的系统钥匙串里，衣服照片和作品只存在本机；生成时，你选的图片和提示词直接发往你自己配置的 AI 服务。'],
-      ['没有显卡能用吗？', '可以。选择「云端 API」，填入任意 OpenAI 兼容服务的地址和 Key 就行。只有自己部署模型时才需要能跑模型的显卡。'],
+      ['没有显卡能用吗？', '可以。选一家云端服务商，填入它的 Key 就行。只有自己部署模型时才需要能跑模型的显卡。'],
       ['内置的人脸、服装和姿势素材从哪来？', '模特脸来自 CC0 授权的 AI 人像库。服装和姿势来自第三方参考图库，镜衣只在你使用时单独获取，不内置也不转发，具体来源和授权见「素材来源与授权」。'],
       ['能用自己或别人的照片换脸吗？', '不能。镜衣不读取任何人的照片：姿势库和服装库的条款禁止用它们的图片表现真实的人。人脸只来自 CC0 的 AI 模特脸库，上传的只能是衣服照片。'],
       ['怎么参与贡献？', '先读一读 README 里的开发说明和 ARCHITECTURE.md，然后在 GitHub 上提 Issue 或 Pull Request。代码、翻译和文档都很欢迎。'],
@@ -152,7 +152,7 @@ const en: Copy = {
     sub: 'Mirra is designed never to touch your data: no account, no servers of ours, and no one’s photos.',
     feats: [
       ['Open source & free', 'All code is public under MIT. No fees, no sign-up.'],
-      ['Bring your own AI', 'Connect any OpenAI-compatible cloud API, or an OpenAI-compatible service you run yourself at no per-call cost.'],
+      ['Bring your own AI', 'OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, Alibaba Cloud Model Studio and Azure OpenAI are preset: choose one and enter its key. Or connect any OpenAI-compatible service, or run stable-diffusion.cpp on your own machine at no per-call cost.'],
       ['On your device only', 'API keys stay in the system keychain; photos of your clothes and your looks stay on your device. Requests go straight to the service you set up.'],
       ['One experience, everywhere', 'Phone, desktop and browser share the same flow, including wardrobe, lookbook and AI settings. The web version keeps its key and looks only as long as the page.'],
     ],
@@ -165,12 +165,12 @@ const en: Copy = {
     steps: [
       [
         ['Download & install', 'Pick your platform below, then download and install Mirra.', ''],
-        ['Open AI service', 'Open Me on a phone, or the settings button at the top right on a desktop, and choose Cloud API or Local server.', ''],
-        ['Fill in & test', 'Enter the address (and a key for cloud APIs), press Test connection, and you are ready to generate.', ''],
+        ['Open AI service', 'Open Me on a phone, or the settings button at the top right on a desktop, and choose a provider.', ''],
+        ['Enter a key & test', 'Enter your API key (Get an API key opens the provider’s page), press Test connection, and you are ready to generate. The address, model and size are preset; change them under Advanced if you need to.', ''],
       ],
       [
-        ['Run a compatible service', 'Run an OpenAI-compatible image editing service on your computer; it needs /v1/images/edits and /v1/models.', ''],
-        ['Choose Local server', 'In AI service settings, choose Local server and enter its address; the key may stay empty.', 'http://127.0.0.1:8080/v1'],
+        ['Run a compatible service', 'Run stable-diffusion.cpp’s server on your computer, or another OpenAI-compatible image editing service with /v1/images/edits and /v1/models.', ''],
+        ['Choose its provider', 'In AI service settings, choose stable-diffusion.cpp, whose address is filled in; for another service, choose Custom (OpenAI-compatible) and enter its address. The key may stay empty.', 'http://127.0.0.1:8080/v1'],
         ['Test the connection', 'Press Test connection: Mirra asks the service for its models, and once it answers you can generate.', ''],
       ],
       [
@@ -180,7 +180,7 @@ const en: Copy = {
       ],
     ],
     backends: 'Supported AI services:',
-    backendList: ['OpenAI-compatible APIs (cloud)', 'OpenAI-compatible APIs (local)'],
+    backendList: ['OpenAI', 'Google Gemini', 'Volcengine Ark', 'xAI', 'OpenRouter', 'Alibaba Cloud Model Studio', 'Azure OpenAI', 'stable-diffusion.cpp', 'OpenAI-compatible APIs'],
     copy: 'Copy',
     copied: 'Copied',
   },
@@ -196,7 +196,7 @@ const en: Copy = {
     ],
     soon: 'Coming soon',
     noRelease: 'No release is out yet: build from source for now, or watch Releases on GitHub.',
-    note: 'On first launch, enter your service’s address in AI service settings and test the connection, then start generating.',
+    note: 'On first launch, choose a provider in AI service settings, enter its key and test the connection, then start generating. The macOS, Windows and Android apps offer each new version as it comes out.',
   },
   oss: {
     kicker: 'OPEN SOURCE',
@@ -219,7 +219,7 @@ const en: Copy = {
     items: [
       ['Is Mirra really free?', 'Yes. Mirra is open source under MIT, with no fees and no account. If you use a cloud API, your provider bills you; a service you run yourself has no per-call cost.'],
       ['Is my data uploaded?', 'Mirra has no servers of its own. API keys stay in your device’s keychain, and photos of your clothes and your looks stay on your device; when you generate, the images you chose and the prompt go straight to the AI service you set up.'],
-      ['Can I use it without a GPU?', 'Yes. Choose Cloud API and enter the address and key of any OpenAI-compatible service. Only running a model yourself needs a GPU that can run it.'],
+      ['Can I use it without a GPU?', 'Yes. Choose a cloud provider and enter its key. Only running a model yourself needs a GPU that can run it.'],
       ['Where do the built-in faces, outfits and poses come from?', 'Model faces come from a CC0-licensed AI portrait library. Outfits and poses come from third-party reference galleries, which Mirra fetches only when you use them and never bundles or redistributes; see Asset sources & licenses.'],
       ['Can I use my own or someone else’s photo as the face?', 'No. Mirra takes no one’s photo: the pose and outfit galleries’ terms forbid using their images to depict real people. Faces come only from the CC0 model library, and the photos you add are of clothes.'],
       ['How can I contribute?', 'Read the development notes in the README and ARCHITECTURE.md, then open an issue or a pull request on GitHub. Code, translations and docs are all welcome.'],
@@ -268,7 +268,7 @@ const ja: Copy = {
     sub: 'Mirra はあなたのデータに触れないよう設計されています。アカウントも、私たちのサーバーもなく、誰の写真も読み込みません。',
     feats: [
       ['オープンソースで無料', 'コードはすべて MIT ライセンスで公開。料金も登録も不要です。'],
-      ['自分の AI を使う', 'OpenAI 互換のクラウド API、または自分で動かす OpenAI 互換サービスにつなげます。ローカルなら呼び出し料金はかかりません。'],
+      ['自分の AI を使う', 'OpenAI、Google Gemini、Volcengine Ark、xAI、OpenRouter、Alibaba Cloud Model Studio、Azure OpenAI をあらかじめ用意。選んでキーを入れるだけです。OpenAI 互換サービスや、自分のマシンで動かす stable-diffusion.cpp にもつなげ、ローカルなら呼び出し料金はかかりません。'],
       ['端末の中だけ', 'API キーはシステムのキーチェーンに、服の写真と作品は端末内だけに保存されます。リクエストは設定したサービスへ直接送られます。'],
       ['ひとつの体験を、どこでも', 'スマホ、デスクトップ、ブラウザで同じ流れ。クローゼット、作品、AI サービス設定も共通です。Web 版のキーと作品はページを開いている間だけ保存されます。'],
     ],
@@ -281,12 +281,12 @@ const ja: Copy = {
     steps: [
       [
         ['ダウンロードしてインストール', '下からプラットフォームを選び、Mirra をダウンロードしてインストールします。', ''],
-        ['AI サービス設定を開く', 'スマホでは「マイ」、デスクトップでは右上の設定ボタンから、「クラウド API」か「ローカル」を選びます。', ''],
-        ['入力して接続テスト', 'アドレス（クラウド API ならキーも）を入力し、「接続テスト」が通れば生成できます。', ''],
+        ['AI サービス設定を開く', 'スマホでは「マイ」、デスクトップでは右上の設定ボタンから、プロバイダーを選びます。', ''],
+        ['キーを入力して接続テスト', 'API キーを入力し（「API キーを取得」でプロバイダーのページが開きます）、「接続テスト」が通れば生成できます。アドレス・モデル・サイズは設定済みで、必要なら「詳細設定」で変えられます。', ''],
       ],
       [
-        ['互換サービスを用意する', 'OpenAI 互換の画像編集サービスを自分のコンピューターで動かします。/v1/images/edits と /v1/models が必要です。', ''],
-        ['Mirra でローカルを選ぶ', 'AI サービス設定で「ローカル」を選び、サービスのアドレスを入力します。キーは空欄でもかまいません。', 'http://127.0.0.1:8080/v1'],
+        ['互換サービスを用意する', 'stable-diffusion.cpp のサーバー、または /v1/images/edits と /v1/models を備えた OpenAI 互換の画像編集サービスを自分のコンピューターで動かします。', ''],
+        ['Mirra でプロバイダーを選ぶ', 'AI サービス設定で「stable-diffusion.cpp」を選べばアドレスは入力済みです。ほかのサービスは「カスタム（OpenAI 互換）」を選んでアドレスを入力します。キーは空欄でもかまいません。', 'http://127.0.0.1:8080/v1'],
         ['接続をテストする', '「接続テスト」を押すと、Mirra がモデル一覧を問い合わせます。応答があれば生成できます。', ''],
       ],
       [
@@ -296,7 +296,7 @@ const ja: Copy = {
       ],
     ],
     backends: '対応している AI サービス：',
-    backendList: ['OpenAI 互換 API（クラウド）', 'OpenAI 互換 API（ローカル）'],
+    backendList: ['OpenAI', 'Google Gemini', 'Volcengine Ark', 'xAI', 'OpenRouter', 'Alibaba Cloud Model Studio', 'Azure OpenAI', 'stable-diffusion.cpp', 'OpenAI 互換 API'],
     copy: 'コピー',
     copied: 'コピーしました',
   },
@@ -312,7 +312,7 @@ const ja: Copy = {
     ],
     soon: '近日公開',
     noRelease: 'まだ正式リリースはありません。今はソースからビルドするか、GitHub の Releases をウォッチしてください。',
-    note: '初回起動時に AI サービス設定でアドレスを入力し、接続テストをすれば生成を始められます。',
+    note: '初回起動時に AI サービス設定でプロバイダーを選び、キーを入力して接続テストをすれば生成を始められます。macOS・Windows・Android 版は新しいバージョンが出ると更新を案内します。',
   },
   oss: {
     kicker: 'OPEN SOURCE',
@@ -335,7 +335,7 @@ const ja: Copy = {
     items: [
       ['本当に無料ですか？', 'はい。Mirra は MIT ライセンスのオープンソースで、料金もアカウントも不要です。クラウド API を使う場合はその提供元から請求され、自分で動かすサービスなら呼び出し料金はかかりません。'],
       ['データはアップロードされますか？', 'Mirra は自前のサーバーを持ちません。API キーは端末のキーチェーンに、服の写真と作品は端末内に保存されます。生成時には、選んだ画像とプロンプトがあなたの設定した AI サービスへ直接送られます。'],
-      ['GPU がなくても使えますか？', 'はい。「クラウド API」を選び、OpenAI 互換サービスのアドレスとキーを入力するだけです。モデルを自分で動かす場合にのみ、それを動かせる GPU が必要です。'],
+      ['GPU がなくても使えますか？', 'はい。クラウドのプロバイダーを選び、そのキーを入力するだけです。モデルを自分で動かす場合にのみ、それを動かせる GPU が必要です。'],
       ['内蔵の顔・服・ポーズの素材はどこから？', 'モデルの顔は CC0 ライセンスの AI ポートレートライブラリから。服とポーズは第三者の参考ギャラリーのもので、使うときにだけ個別に取得し、同梱も再配布もしません。詳しくは「素材の出典とライセンス」をご覧ください。'],
       ['自分や他人の写真で顔を入れ替えられますか？', 'できません。Mirra は誰の写真も読み込みません。ポーズと服のギャラリーの規約は、その画像で実在の人物を表すことを禁じています。顔は CC0 の AI モデル顔ライブラリからのみ選べ、追加できる写真は服だけです。'],
       ['どうやって貢献できますか？', 'README の開発メモと ARCHITECTURE.md を読んでから、GitHub で Issue や Pull Request を作ってください。コード、翻訳、ドキュメント、どれも歓迎です。'],
