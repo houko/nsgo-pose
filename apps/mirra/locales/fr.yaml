@@ -117,6 +117,8 @@ adultConfirm: Avez-vous 18 ans ou plus ?
 adultConfirmBody: Ce contenu est réservé aux adultes de 18 ans et plus.
 adultYes: J’ai 18 ans ou plus
 adultNo: J’ai moins de 18 ans
+adultSetting: Catégories 18+
+adultSettingDetail: Afficher les catégories 18+ des galeries sans demander votre âge
 saveFailed: Impossible d’enregistrer
 backToEdit: Retour au look
 worksFilter: Afficher
@@ -156,6 +158,9 @@ size: Format
 testConnection: Tester la connexion
 testAgain: Tester à nouveau
 connectionOK: Connecté ; vous pouvez commencer à créer des looks.
+connectionUntested: Pas encore testé
+connectionTesting: Test en cours…
+connectionFailedShort: Connexion impossible
 connectionFailed: "Connexion impossible : {error}"
 statusUnconfigured: Aucun service d’IA
 statusConnected: "{service} · connecté"
@@ -179,6 +184,7 @@ license: Licence
 sourcesPose: Poses
 sourcesOutfit: Tenues
 sourcesFace: Visages
+sourcesBackgrounds: Décors
 sourcesFooter: Chaque image des galeries n’est récupérée que lorsque vous l’utilisez ; l’app ne les intègre ni ne les redistribue.
 errNoKey: Saisissez d’abord la clé API.
 errKeyRefused: Le service a refusé la clé. Vérifiez qu’elle est correcte et qu’elle autorise ce modèle.

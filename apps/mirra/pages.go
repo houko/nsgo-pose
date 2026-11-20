@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"net/url"
 	"slices"
 	"strings"
 	"time"
@@ -327,10 +328,9 @@ func (s *studio) testConnection() {
 	}()
 }
 
-// modelPicker chooses the model among those the key can use, searchable, with a button that lists them again. The chosen model and the preset's always show, listed or not; choosing the preset's keeps the setting following the preset.
+// modelPicker chooses the model among those the key can use, searchable, with a button that lists them again. The chosen model and the preset's always show, listed or not; choosing the preset's keeps the setting following the preset. Its error shows under its card.
 func (s *studio) modelPicker(cx *core.Scope, p provider, set providerSettings, setModel func(string)) core.Node {
 	t := locales.For(cx)
-	colors := ui.ColorsOf(cx)
 	value := func() string { return or(set.model.Get(), p.Model) }
 	options := func() []ui.Option[string] {
 		ids := slices.Clone(set.models.Get())
@@ -353,33 +353,22 @@ func (s *studio) modelPicker(cx *core.Scope, p provider, set providerSettings, s
 			}
 			setModel(v)
 		}}
-	refresh := ui.IconButton{Icon: lucide.RefreshCw, Label: t.RefreshModels(), TestID: "refresh-models", Size: 40, IconSize: 18, Disabled: set.listing.Get, OnPress: s.listModels}
-	return core.View{Style: core.Style{Gap: 6}, Children: []core.Node{
-		core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 8}, Children: []core.Node{
-			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{picker}}, refresh}},
-		core.Show{When: func() bool { return set.modelsErr.Get() != "" }, Then: func(cx *core.Scope) core.Node {
-			return core.Text{ContentFunc: func() string { return t.ModelsFailed(set.modelsErr.Get()) }, TestID: "models-error", StyleFunc: func() core.Style {
-				return ui.TypeCaption.Merge(core.Style{Color: colors.Muted()})
-			}}
-		}},
-	}}
+	refresh := ui.IconButton{Icon: lucide.RefreshCw, Label: t.RefreshModels(), TestID: "refresh-models", Size: 32, IconSize: 16, Disabled: set.listing.Get, OnPress: s.listModels}
+	return core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 4, Width: core.Pt(controlWidth)}, Children: []core.Node{
+		core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{picker}}, refresh}}
 }
 
-// field is a labeled input as a column: the label above, then the field.
-func field(cx *core.Scope, label func() string, in core.Node) core.Node {
-	return core.View{Style: core.Style{Gap: 8}, Children: []core.Node{caption(cx, label), in}}
-}
+// controlWidth is the width of a settings row's control, so the rows' controls line up.
+const controlWidth core.Points = 220
 
-// serviceForm is the AI service's settings in parts, which the phone shows in one card and the desktop on two tabs.
+// serviceForm is the AI service's settings in parts, which the phone shows in one column and the desktop on two tabs.
 type serviceForm struct {
-	// intro asks for a service while none is set up.
-	intro, provider core.Node
-	// fields are the chosen provider's: the key, the model and what they need beside them in basic, the address and size in advanced. They are built in a Dynamic that tracks the provider.
-	fields func(cx *core.Scope) (basic, advanced []core.Node)
+	// intro asks for a service while none is set up; header is the chosen provider with the connection's state and its test.
+	intro, header core.Node
+	// sections are the chosen provider's settings as cards of rows: the provider, its key and model in main; its address and the picture's size in advanced. They are built in a Dynamic that tracks the provider.
+	sections func(cx *core.Scope) (main, advanced []core.Node)
 	// changed says whether an advanced setting differs from the preset's.
 	changed func() bool
-	// test is the connection test with its result, then what is sent where.
-	test, privacy core.Node
 }
 
 // serviceForm sets up the AI service: the provider, its key and where to get one, its model, its address and size, and a test of the connection. Each provider keeps its own settings, so switching back finds them again.
@@ -388,6 +377,7 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 	colors := ui.ColorsOf(cx)
 	store := cx.Storage()
 	secrets := cx.Secrets()
+	open := opener(cx)
 	setStored := func(field string, sig func(providerSettings) *core.Signal[string]) func(string) {
 		return func(v string) {
 			p, set := s.current()
@@ -439,7 +429,7 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 		options = append(options, ui.Option[string]{Value: p.ID, Label: p.name(t), TestID: "provider-" + p.ID,
 			Leading: core.Icon{SVG: p.icon(), Label: p.name(t), Style: core.Style{FontSize: 18}}})
 	}
-	picker := ui.Select[string]{Label: t.Provider(), Options: options, Value: s.provider.Get, TestID: "provider", Style: core.Style{Width: core.Pct(100)},
+	picker := ui.Select[string]{Label: t.Provider(), Options: options, Value: s.provider.Get, TestID: "provider", Style: core.Style{Width: core.Pt(controlWidth)},
 		OnChange: func(id string) {
 			s.provider.Set(id)
 			s.showKey.Set(false)
@@ -452,19 +442,29 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 		_, set := s.current()
 		return set.url.Get() != "" || set.size.Get() != ""
 	}
-	fields := func(cx *core.Scope) (basic, advanced []core.Node) {
+	privacy := func() string {
+		p, _ := s.current()
+		switch {
+		case !s.keyKept.Get():
+			return t.PrivacyWeb()
+		case p.OwnServer:
+			return t.PrivacyLocal()
+		}
+		return t.PrivacyCloud()
+	}
+	sections := func(cx *core.Scope) (main, advanced []core.Node) {
 		p, set := s.current()
 		keyLabel := t.ApiKey()
 		if p.KeyOptional {
 			keyLabel = t.ApiKeyOptional()
 		}
-		keyRow := core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 8}, Children: []core.Node{
+		keyControl := core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 4, Width: core.Pt(controlWidth)}, Children: []core.Node{
 			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{
 				core.Dynamic(func(cx *core.Scope) core.Node {
 					return ui.Input{Value: set.key.Get, OnChange: setKey, OnBlur: saveKey, Masked: !s.showKey.Get(), Label: keyLabel, Placeholder: p.KeyHint, TestID: "api-key"}
 				}),
 			}},
-			ui.IconButton{TestID: "show-key", Size: 40, IconSize: 18,
+			ui.IconButton{TestID: "show-key", Size: 32, IconSize: 16,
 				Icon: func() *core.SVG {
 					if s.showKey.Get() {
 						return lucide.EyeOff()
@@ -480,18 +480,50 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 				Selected: s.showKey.Get,
 				OnPress:  func() { s.showKey.Update(func(v bool) bool { return !v }) }},
 		}}
-		key := []core.Node{caption(cx, func() string { return keyLabel }), keyRow}
-		if p.KeyURL != "" {
-			key = append(key, ui.Link{Text: t.GetApiKey(), Href: p.KeyURL, TestID: "get-key", Style: core.Style{FontSize: 13}})
-		}
 		urlHint := p.BaseURL
 		if urlHint == "" {
 			urlHint = p.URLHint
 		}
-		address := field(cx, t.BaseURL, ui.Input{Value: set.url.Get, OnChange: setStored("url", func(ps providerSettings) *core.Signal[string] { return ps.url }),
-			Label: t.BaseURL(), Placeholder: urlHint, KeyboardType: core.KeyboardURL, TestID: "base-url"})
+		address := ui.FormRow{Title: t.BaseURL(), TestID: "base-url-row", Control: ui.Input{Value: set.url.Get, OnChange: setStored("url", func(ps providerSettings) *core.Signal[string] { return ps.url }),
+			Label: t.BaseURL(), Placeholder: urlHint, KeyboardType: core.KeyboardURL, TestID: "base-url", Style: core.Style{Width: core.Pt(controlWidth)}}}
+		account := []core.Node{ui.FormRow{Title: t.Provider(), Control: picker}, ui.FormRow{Title: keyLabel, Control: keyControl}}
+		if p.KeyURL != "" {
+			account = append(account, ui.FormRow{Title: t.GetApiKey(), Detail: host(p.KeyURL), OnPress: open(p.KeyURL), TestID: "get-key"})
+		}
+		// A provider without an address of its own, such as Azure's, needs the user's: it shows with the key rather than among the advanced settings.
+		if p.BaseURL == "" {
+			account = append(account, address)
+		}
+		main = append(main, core.Dynamic(func(cx *core.Scope) core.Node {
+			return ui.FormSection{Children: account, Footer: privacy()}
+		}))
+		modelLabel := t.Model
+		if p.Deployment {
+			modelLabel = t.Deployment
+		}
+		setModel := setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model })
+		var model core.Node = ui.Input{Value: set.model.Get, OnChange: setModel, Label: modelLabel(), Placeholder: p.Model, TestID: "model", Style: core.Style{Width: core.Pt(controlWidth)}}
+		if canListModels(p) {
+			model = s.modelPicker(cx, p, set, setModel)
+			// The models are listed once the field shows, then again for a new key or a passed test.
+			core.Untracked(cx, func() bool {
+				if set.models.Get() == nil {
+					s.listModels()
+				}
+				return true
+			})
+		}
+		modelRow := ui.FormRow{Title: modelLabel(), Control: model}
+		main = append(main, core.Dynamic(func(cx *core.Scope) core.Node {
+			footer := ""
+			if err := set.modelsErr.Get(); err != "" {
+				footer = t.ModelsFailed(err)
+			}
+			return ui.FormSection{Children: []core.Node{modelRow}, Footer: footer, TestID: "model-section"}
+		}))
+
 		size := func() string { return or(set.size.Get(), p.Size) }
-		sizes := ui.Tabs[string]{Label: t.Size(), Equal: true, Value: size, TestID: "size",
+		sizes := ui.Tabs[string]{Label: t.Size(), Equal: true, Value: size, TestID: "size", Style: core.Style{Width: core.Pt(controlWidth)},
 			OnChange: func(v string) {
 				// The preset's own size is kept as "", so the setting follows the preset.
 				if v == p.Size {
@@ -504,7 +536,12 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 				{Value: sizeSquare, Label: t.SizeSquare(), TestID: "size-square"},
 				{Value: sizeLandscape, Label: t.SizeLandscape(), TestID: "size-landscape"},
 			}}
-		reset := ui.Button{Text: t.ResetDefaults(), Icon: lucide.RotateCcw, Variant: ui.ButtonGhost, Size: ui.SizeSmall, TestID: "reset-defaults", Disabled: func() bool { return !changed() },
+		var output []core.Node
+		if p.BaseURL != "" {
+			output = append(output, address)
+		}
+		output = append(output, ui.FormRow{Title: t.Size(), Control: sizes})
+		reset := ui.FormRow{Title: t.ResetDefaults(), Variant: ui.FormRowAccent, TestID: "reset-defaults", Disabled: func() bool { return !changed() },
 			OnPress: func() {
 				for _, f := range []struct {
 					name string
@@ -515,94 +552,101 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 				}
 				s.resetConnection()
 			}}
-		// A provider without an address of its own, such as Azure's, needs the user's: it shows with the key rather than among the advanced settings.
-		if p.BaseURL != "" {
-			advanced = append(advanced, address)
-		}
-		modelLabel := t.Model
-		if p.Deployment {
-			modelLabel = t.Deployment
-		}
-		setModel := setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model })
-		model := field(cx, modelLabel, ui.Input{Value: set.model.Get, OnChange: setModel, Label: modelLabel(), Placeholder: p.Model, TestID: "model"})
-		if canListModels(p) {
-			model = field(cx, modelLabel, s.modelPicker(cx, p, set, setModel))
-			// The models are listed once the field shows, then again for a new key or a passed test.
-			core.Untracked(cx, func() bool {
-				if set.models.Get() == nil {
-					s.listModels()
-				}
-				return true
-			})
-		}
-		advanced = append(advanced,
-			field(cx, t.Size, sizes),
-			core.View{Style: core.Style{Direction: core.Row}, Children: []core.Node{reset}})
-		basic = []core.Node{core.View{Style: core.Style{Gap: 8}, Children: key}}
-		if p.BaseURL == "" {
-			basic = append(basic, address)
-		}
-		// The model is chosen with the key, on the same page: its list comes from the key.
-		basic = append(basic, model)
-		return basic, advanced
+		advanced = []core.Node{ui.FormSection{Children: output}, ui.FormSection{Children: []core.Node{reset}}}
+		return main, advanced
 	}
-	result := core.Dynamic(func(cx *core.Scope) core.Node {
-		switch s.conn.Get() {
-		case connOK:
-			return core.Text{Content: "✓ " + t.ConnectionOK(), TestID: "conn-ok", StyleFunc: func() core.Style { return core.Style{FontSize: 14, Color: colors.Up()} }}
-		case connFailed:
-			return core.Text{Content: t.ConnectionFailed(s.connErr.Get()), TestID: "conn-failed", StyleFunc: func() core.Style { return core.Style{FontSize: 14, Color: colors.Danger()} }}
-		}
-		return nil
-	})
 	return serviceForm{
 		intro: core.Show{When: func() bool { return !s.configured() }, Then: func(cx *core.Scope) core.Node {
 			return core.View{StyleFunc: func() core.Style {
 				return core.Style{Padding: core.Symmetric(10, 14), CornerRadius: 12, BorderWidth: 1, BorderColor: colors.Accent().Faded(0.4), Background: colors.Accent().Faded(0.08)}
 			}, Children: []core.Node{core.Text{Content: t.ServiceIntro(), StyleFunc: func() core.Style { return core.Style{FontSize: 14, Color: colors.Accent()} }}}}
 		}},
-		provider: field(cx, t.Provider, picker),
-		fields:   fields,
+		header:   s.serviceHeader(cx),
+		sections: sections,
 		changed:  changed,
-		test: core.View{Style: core.Style{Gap: 16}, Children: []core.Node{
-			core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 12}, Children: []core.Node{
-				core.Dynamic(func(cx *core.Scope) core.Node {
-					text := t.TestConnection()
-					if s.conn.Get() == connOK || s.conn.Get() == connFailed {
-						text = t.TestAgain()
-					}
-					return ui.Button{Text: text, TestID: "test-connection", Style: core.Style{CornerRadius: 999},
-						Busy: func() bool { return s.conn.Get() == connTesting }, Disabled: func() bool { return strings.TrimSpace(s.config().BaseURL) == "" }, OnPress: s.testConnection}
-				}),
-			}},
-			result,
-		}},
-		privacy: core.Text{ContentFunc: func() string {
-			p, _ := s.current()
-			switch {
-			case !s.keyKept.Get():
-				return t.PrivacyWeb()
-			case p.OwnServer:
-				return t.PrivacyLocal()
-			}
-			return t.PrivacyCloud()
-		}, TestID: "privacy", StyleFunc: func() core.Style { return core.Style{FontSize: 13, Color: colors.Muted()} }},
 	}
+}
+
+// serviceHeader is the chosen provider at a glance: its logo and name, the state of the connection, and the test that checks it.
+func (s *studio) serviceHeader(cx *core.Scope) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	logo := core.View{StyleFunc: func() core.Style {
+		return core.Style{Width: core.Pt(44), Height: core.Pt(44), FlexShrink: 0, CornerRadius: 12, Background: colors.Inset(), AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}
+	}, Children: []core.Node{core.Dynamic(func(cx *core.Scope) core.Node {
+		p, _ := s.current()
+		return core.Icon{SVG: p.icon(), Label: p.name(t), Style: core.Style{FontSize: 24}}
+	})}}
+	// state is the connection's state in a word; a failure's reason goes under the row, where it has the card's width.
+	state := core.Dynamic(func(cx *core.Scope) core.Node {
+		text, testID, color := t.ConnectionUntested(), "conn-untested", colors.Muted
+		switch {
+		case s.conn.Get() == connTesting:
+			text, testID, color = t.ConnectionTesting(), "conn-testing", colors.Accent
+		case s.conn.Get() == connOK:
+			text, testID, color = t.ConnectionOK(), "conn-ok", colors.Up
+		case s.conn.Get() == connFailed:
+			text, testID, color = t.ConnectionFailedShort(), "conn-failed-short", colors.Danger
+		case !s.configured():
+			text, testID = t.StatusUnconfigured(), "conn-unconfigured"
+		}
+		return core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 6}, Children: []core.Node{
+			core.View{StyleFunc: func() core.Style {
+				return core.Style{Width: core.Pt(7), Height: core.Pt(7), CornerRadius: 4, FlexShrink: 0, Background: color()}
+			}},
+			core.Text{Content: text, TestID: testID, MaxLines: 2, Style: core.Style{FlexShrink: 1}, StyleFunc: func() core.Style { return core.Style{FontSize: 13, Color: color()} }},
+		}}
+	})
+	reason := core.Show{When: func() bool { return s.conn.Get() == connFailed }, Then: func(cx *core.Scope) core.Node {
+		return core.Text{ContentFunc: func() string { return t.ConnectionFailed(s.connErr.Get()) }, TestID: "conn-failed", StyleFunc: func() core.Style {
+			return core.Style{FontSize: 13, LineHeight: 18, Color: colors.Danger()}
+		}}
+	}}
+	name := core.Text{ContentFunc: func() string {
+		p, _ := s.current()
+		return p.name(t)
+	}, MaxLines: 1, Style: core.Style{FontSize: 16, FontWeight: core.FontWeightSemibold}}
+	test := core.Dynamic(func(cx *core.Scope) core.Node {
+		text := t.TestConnection()
+		if s.conn.Get() == connOK || s.conn.Get() == connFailed {
+			text = t.TestAgain()
+		}
+		return ui.Button{Text: text, TestID: "test-connection", Style: core.Style{CornerRadius: 999},
+			Busy: func() bool { return s.conn.Get() == connTesting }, Disabled: func() bool { return strings.TrimSpace(s.config().BaseURL) == "" }, OnPress: s.testConnection}
+	})
+	return core.View{TestID: "service-header", StyleFunc: func() core.Style {
+		return core.Style{Gap: 12, Padding: core.All(14), CornerRadius: ui.RadiusCard, BorderCurve: core.BorderCurveContinuous, Background: ui.Alpha(colors.Text(), 0.045)}
+	}, Children: []core.Node{
+		core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 14}, Children: []core.Node{
+			logo,
+			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 4}, Children: []core.Node{name, state}},
+			core.View{Style: core.Style{FlexShrink: 0}, Children: []core.Node{test}},
+		}},
+		reason,
+	}}
+}
+
+// host is a URL's host, what a link row names it by.
+func host(rawURL string) string {
+	if u, err := url.Parse(rawURL); err == nil && u.Host != "" {
+		return strings.TrimPrefix(u.Host, "www.")
+	}
+	return rawURL
 }
 
 // serviceSettings is the AI service in one column, as the phone's Me tab shows it, with the address and size under Advanced.
 func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	f := s.serviceForm(cx)
-	// The fields are the chosen provider's, drawn again when another is chosen.
-	fields := core.Dynamic(func(cx *core.Scope) core.Node {
-		basic, advanced := f.fields(cx)
-		// The advanced settings open on their own when the user changed one; read untracked, so changing a field does not draw the fields again.
+	// The settings are the chosen provider's, drawn again when another is chosen.
+	sections := core.Dynamic(func(cx *core.Scope) core.Node {
+		main, advanced := f.sections(cx)
+		// The advanced settings open on their own when the user changed one; read untracked, so changing a field does not draw the settings again.
 		open := core.NewSignal(cx, core.Untracked(cx, f.changed))
-		return core.View{Style: core.Style{Gap: 16}, Children: append(basic, ui.Collapsible{Text: t.AdvancedSettings(), Open: open.Get, OnOpenChange: open.Set, TestID: "advanced",
+		return core.View{Style: core.Style{Gap: 16}, Children: append(main, ui.Collapsible{Text: t.AdvancedSettings(), Open: open.Get, OnOpenChange: open.Set, TestID: "advanced",
 			Content: core.View{Style: core.Style{Gap: 16, Padding: core.Edges{Top: 12}}, Children: advanced}})}
 	})
-	return core.View{Style: core.Style{Gap: 16}, Children: []core.Node{f.intro, f.provider, fields, f.test, f.privacy}}
+	return core.View{Style: core.Style{Gap: 16}, Children: []core.Node{f.intro, f.header, sections}}
 }
 
 // opener opens a link in the browser.
@@ -628,7 +672,7 @@ func (s *studio) appRows(cx *core.Scope) []core.Node {
 		ui.FormRow{Title: t.License(), Detail: "MIT", OnPress: open(repoURL + "/blob/main/LICENSE")})
 }
 
-// sourceRows are where the three galleries come from.
+// sourceRows are where the three galleries and the backgrounds come from.
 func (s *studio) sourceRows(cx *core.Scope) []core.Node {
 	t := locales.For(cx)
 	open := opener(cx)
@@ -636,13 +680,8 @@ func (s *studio) sourceRows(cx *core.Scope) []core.Node {
 		ui.FormRow{Title: t.SourcesPose(), Detail: "POSE-DB-01", OnPress: open(DefaultSites.Pose)},
 		ui.FormRow{Title: t.SourcesOutfit(), Detail: "COSTUME-DB-01", OnPress: open(DefaultSites.Costume)},
 		ui.FormRow{Title: t.SourcesFace(), Detail: "FACE REFERENCE · CC0", OnPress: open(DefaultSites.Face)},
+		ui.FormRow{Title: t.SourcesBackgrounds(), Detail: "StockSnap · rawpixel · CC0", OnPress: open(repoURL + "/blob/main/NOTICE.md#backgrounds")},
 	}
-}
-
-// aboutLinks are the app's source, its license and where its references come from, in one section.
-func (s *studio) aboutLinks(cx *core.Scope) core.Node {
-	t := locales.For(cx)
-	return ui.FormSection{Title: t.AboutSection(), Children: append(s.appRows(cx), s.sourceRows(cx)...), Footer: t.SourcesFooter()}
 }
 
 // updatable says whether the app updates itself where it runs: the desktop and Android copies from the latest release. The web build is always the latest, and the iOS app, which is built from source, is in no store to ask.
@@ -657,42 +696,50 @@ func updatable(env *core.Env) bool {
 	return false
 }
 
-// card is a rounded panel on the page.
-func card(cx *core.Scope, children ...core.Node) core.Node {
-	colors := ui.ColorsOf(cx)
-	return core.View{StyleFunc: func() core.Style {
-		return core.Style{Padding: core.All(20), Gap: 14, CornerRadius: 24, Background: colors.Surface(), BorderWidth: 1, BorderColor: colors.Border()}
-	}, Children: children}
-}
-
-// appCard is the app's name and terms with the service's status.
-func (s *studio) appCard(cx *core.Scope) core.Node {
+// appIdentity is the app's icon, name and the line under it.
+func appIdentity(cx *core.Scope, line func() string) core.Node {
 	t := locales.For(cx)
-	colors := ui.ColorsOf(cx)
-	return card(cx, core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 14}, Children: []core.Node{
-		core.View{StyleFunc: func() core.Style {
-			return core.Style{Width: core.Pt(56), Height: core.Pt(56), CornerRadius: 16, Background: colors.Text(), AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}
-		}, Children: []core.Node{core.Text{Content: "M", StyleFunc: func() core.Style {
-			return core.Style{FontFamily: displayFont, FontSize: 26, FontWeight: core.FontWeightBold, Color: colors.Background()}
-		}}}},
+	return core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 14}, Children: []core.Node{
+		core.Image{Source: core.ImageSource{URI: "mirra-icon", Data: appIcon}, ResizeMode: core.Cover, Label: t.Brand(),
+			Style: core.Style{Width: core.Pt(56), Height: core.Pt(56), FlexShrink: 0, CornerRadius: 14, Overflow: core.Hidden}},
 		core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1, Gap: 4}, Children: []core.Node{
 			core.Text{Content: t.Brand() + " " + t.BrandTagline(), Style: core.Style{FontSize: 18, FontWeight: core.FontWeightBold}},
-			caption(cx, t.OpenSourceTerms),
+			caption(cx, line),
 		}},
-	}}, s.statusBadge(cx))
+	}}
 }
 
-// settingsPage is the phone's Me tab: the app, its AI service and where it comes from.
+// aboutHeader is the app's icon, name and terms, heading the desktop's About and the phone's Me tab.
+func aboutHeader(cx *core.Scope) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	return core.View{StyleFunc: func() core.Style {
+		return core.Style{Padding: core.All(16), CornerRadius: ui.RadiusCard, BorderCurve: core.BorderCurveContinuous, Background: ui.Alpha(colors.Text(), 0.045)}
+	}, Children: []core.Node{appIdentity(cx, t.OpenSourceTerms)}}
+}
+
+// generalRows are the app-wide settings: the language and whether the galleries' 18+ categories show without asking.
+func (s *studio) generalRows(cx *core.Scope) []core.Node {
+	t := locales.For(cx)
+	return []core.Node{
+		s.languageRow(cx),
+		ui.FormRow{Title: t.AdultSetting(), Detail: t.AdultSettingDetail(), TestID: "adult-setting",
+			Control: ui.Switch{Checked: s.adultOK.Get, OnChange: s.setAdultOK, Label: t.AdultSetting(), TestID: "adult-switch"}},
+	}
+}
+
+// settingsPage is the phone's Me tab: the app, its settings, its AI service and where it comes from.
 func (s *studio) settingsPage(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	return core.Screen{HeaderHidden: true, Title: t.TabMe(), Style: fill, Children: []core.Node{
 		core.Scroll{Style: fill, Children: []core.Node{
-			core.View{TestID: "settings", Style: core.Style{Padding: core.All(20), Gap: 16, PaddingEnv: core.EnvEdges{Top: core.EnvSafeArea}}, Children: []core.Node{
+			core.View{TestID: "settings", Style: core.Style{Padding: core.All(20), Gap: 20, PaddingEnv: core.EnvEdges{Top: core.EnvSafeArea}}, Children: []core.Node{
 				core.View{Style: core.Style{Gap: 4}, Children: []core.Node{eyebrow(cx, t.EyebrowSettings), display(t.TabMe, 30)}},
-				s.appCard(cx),
-				ui.FormSection{Title: t.SettingsGeneral(), Children: []core.Node{s.languageRow(cx)}},
-				card(cx, display(t.AiService, 20), s.serviceSettings(cx)),
-				s.aboutLinks(cx),
+				aboutHeader(cx),
+				ui.FormSection{Title: t.SettingsGeneral(), Children: s.generalRows(cx)},
+				core.View{Style: core.Style{Gap: 10}, Children: []core.Node{display(t.AiService, 20), s.serviceSettings(cx)}},
+				ui.FormSection{Title: t.AboutSection(), Children: s.appRows(cx)},
+				ui.FormSection{Title: t.SourcesSection(), Children: s.sourceRows(cx), Footer: t.SourcesFooter()},
 			}},
 		}},
 	}}
@@ -707,7 +754,7 @@ const (
 	settingsSources  = "sources"
 )
 
-// settingsDialog is the desktop's settings: the AI service, its advanced settings, the app and the galleries' sources, each on a tab down the side.
+// settingsDialog is the desktop's settings: the app-wide settings, the AI service, its advanced settings, the app and the galleries' sources, each on a tab down the side.
 func (s *studio) settingsDialog(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	f := s.serviceForm(cx)
@@ -718,16 +765,16 @@ func (s *studio) settingsDialog(cx *core.Scope) core.Node {
 		return ui.SettingsCategory{ID: id, Title: title, Icon: icon, Groups: []ui.SettingsGroup{{ID: id, Items: []ui.SettingsItem{{ID: id, Content: content}}}}}
 	}
 	categories := []ui.SettingsCategory{
-		page(settingsGeneral, t.SettingsGeneral(), lucide.Languages, ui.FormSection{Children: []core.Node{s.languageRow(cx)}}),
-		page(settingsService, t.AiService(), lucide.Plug, column(f.intro, f.provider, core.Dynamic(func(cx *core.Scope) core.Node {
-			basic, _ := f.fields(cx)
-			return column(basic...)
-		}), f.test, f.privacy)),
+		page(settingsGeneral, t.SettingsGeneral(), lucide.Languages, ui.FormSection{Children: s.generalRows(cx)}),
+		page(settingsService, t.AiService(), lucide.Plug, column(f.intro, f.header, core.Dynamic(func(cx *core.Scope) core.Node {
+			main, _ := f.sections(cx)
+			return column(main...)
+		}))),
 		page(settingsAdvanced, t.AdvancedSettings(), lucide.SlidersHorizontal, core.Dynamic(func(cx *core.Scope) core.Node {
-			_, advanced := f.fields(cx)
+			_, advanced := f.sections(cx)
 			return column(advanced...)
 		})),
-		page(settingsAbout, t.AboutSection(), lucide.Info, ui.FormSection{Children: s.appRows(cx)}),
+		page(settingsAbout, t.AboutSection(), lucide.Info, column(aboutHeader(cx), ui.FormSection{Children: s.appRows(cx)})),
 		page(settingsSources, t.SourcesSection(), lucide.Library, ui.FormSection{Children: s.sourceRows(cx), Footer: t.SourcesFooter()}),
 	}
 	closeDialog := func() { s.settingsShown.Set(false) }

@@ -117,6 +117,8 @@ adultConfirm: Вам уже есть 18?
 adultConfirmBody: Здесь контент для взрослых — только для тех, кому 18 и больше.
 adultYes: Мне есть 18
 adultNo: Мне нет 18
+adultSetting: Категории 18+
+adultSettingDetail: Показывать категории 18+ в галереях, не спрашивая возраст
 saveFailed: Не удалось сохранить
 backToEdit: Назад к образу
 worksFilter: Показать
@@ -156,6 +158,9 @@ size: Размер
 testConnection: Проверить подключение
 testAgain: Проверить снова
 connectionOK: Подключено — можно создавать образы.
+connectionUntested: Ещё не проверено
+connectionTesting: Проверка…
+connectionFailedShort: Не удалось подключиться
 connectionFailed: "Не удалось подключиться: {error}"
 statusUnconfigured: ИИ-сервис не настроен
 statusConnected: "{service} · подключено"
@@ -179,6 +184,7 @@ license: Лицензия
 sourcesPose: Позы
 sourcesOutfit: Наряды
 sourcesFace: Лица
+sourcesBackgrounds: Фоны
 sourcesFooter: Каждое изображение из галереи загружается, только когда вы его используете; приложение не содержит и не распространяет их.
 errNoKey: Сначала введите API-ключ.
 errKeyRefused: Сервис отклонил ключ. Проверьте, что он верный и даёт доступ к этой модели.

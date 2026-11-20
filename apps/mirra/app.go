@@ -28,6 +28,11 @@ func main() {
 	nsgo.Run(app.Root, nsgo.WindowSize(1280, 860))
 }
 
+// appIcon is the app's icon, which the settings show beside its name.
+//
+//go:embed assets/Icon.png
+var appIcon []byte
+
 //go:embed theme.yaml
 var themeYAML []byte
 

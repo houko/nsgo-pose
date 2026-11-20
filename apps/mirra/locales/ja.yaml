@@ -117,6 +117,8 @@ adultConfirm: 18 歳以上ですか？
 adultConfirmBody: 成人向けのコンテンツです。18 歳以上の方のみご覧いただけます。
 adultYes: 18 歳以上です
 adultNo: 18 歳未満です
+adultSetting: 18+ カテゴリ
+adultSettingDetail: ギャラリーの 18+ カテゴリを開くときに年齢を確認しない
 saveFailed: 保存できませんでした
 backToEdit: コーデに戻る
 worksFilter: 表示
@@ -156,6 +158,9 @@ size: サイズ
 testConnection: 接続をテスト
 testAgain: 再テスト
 connectionOK: 接続しました。コーデの生成を始められます。
+connectionUntested: 未テスト
+connectionTesting: テスト中…
+connectionFailedShort: 接続できませんでした
 connectionFailed: "接続できませんでした: {error}"
 statusUnconfigured: AI サービス未設定
 statusConnected: "{service} · 接続済み"
@@ -179,6 +184,7 @@ license: ライセンス
 sourcesPose: ポーズ
 sourcesOutfit: 服装
 sourcesFace: 顔
+sourcesBackgrounds: 背景素材
 sourcesFooter: ギャラリーの画像は使うときにだけ個別に取得します。アプリに同梱したり再配布したりすることはありません。
 errNoKey: 先に API Key を入力してください。
 errKeyRefused: サービスがキーを拒否しました。キーが正しいか、このモデルを使えるかを確認してください。
