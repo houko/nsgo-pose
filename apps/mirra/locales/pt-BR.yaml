@@ -333,3 +333,7 @@ github.com/nsgo-dev/nsgo/base/textview/locales:
   alertImportant: Importante
   alertWarning: Aviso
   alertCaution: Cuidado
+viewFullScreen: Ver em tela cheia
+previousWork: Trabalho anterior
+nextWork: Próximo trabalho
+workPosition: "{n, number} / {count, number}"

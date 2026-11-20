@@ -16,6 +16,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/providers.go` | The preset providers, with their logos from `ai-logo`, and the settings and keys each keeps, carried over from the cloud or local service of earlier versions. |
 | `apps/mirra/service.go` | The connection test and the list of image models in each provider's protocol. |
 | `apps/mirra/store.go` | Where pictures are kept: files natively, memory in a browser, where the WebAssembly build has no file system. |
+| `apps/mirra/viewer.go` | A picture full screen, and stepping from a saved picture to the next in Works by arrows, keys and swipes. |
 | `apps/mirra/works.go` | The lookbook: pictures named by when they were made, with a JSON sidecar for their number, star and look. |
 | `apps/mirra/wardrobe.go` | Favorite outfits, photos of the user's own clothes, and what the look is wearing. |
 | `apps/mirra/library.go` | What both layouts share: labels, a gallery's chips and grid, the look's rows, the service's status and Generate. |

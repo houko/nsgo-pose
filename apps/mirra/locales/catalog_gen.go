@@ -1764,6 +1764,7 @@ var Parameters = map[string][]string{
 	"StatusUntested":      {"service"},
 	"StatusTesting":       {"service"},
 	"StatusFailed":        {"service"},
+	"WorkPosition":        {"n", "count"},
 }
 
 // Translation is a language's messages another package supplies:
@@ -1796,6 +1797,7 @@ type Translation struct {
 	StatusUntested      func(service string) string
 	StatusTesting       func(service string) string
 	StatusFailed        func(service string) string
+	WorkPosition        func(n int, count int) string
 }
 
 var supplied = map[string]Translation{}
@@ -1994,6 +1996,9 @@ const (
 	textErrTimeout
 	textErrNetwork
 	textErrNoImage
+	textViewFullScreen
+	textPreviousWork
+	textNextWork
 	numTexts
 )
 
@@ -2192,6 +2197,9 @@ var keyOfText = [numTexts]string{
 	"errTimeout",
 	"errNetwork",
 	"errNoImage",
+	"viewFullScreen",
+	"previousWork",
+	"nextWork",
 }
 
 // textsEn are the messages without arguments in en.
@@ -2387,7 +2395,10 @@ var textsEn = i18n.NewTexts(""+
 	"The service had a problem. Try again later."+
 	"The service took too long to answer. Try again."+
 	"Couldn't reach the service. Check the network and the address."+
-	"The service answered without a picture. Try again, or change the look.",
+	"The service answered without a picture. Try again, or change the look."+
+	"View full screen"+
+	"Previous work"+
+	"Next work",
 	[]uint16{
 		5,
 		5,
@@ -2581,6 +2592,9 @@ var textsEn = i18n.NewTexts(""+
 		47,
 		62,
 		70,
+		16,
+		13,
+		9,
 	})
 
 // textsDe are the messages without arguments in de.
@@ -2776,7 +2790,10 @@ var textsDe = i18n.NewTexts(""+
 	"Beim Dienst ist ein Fehler aufgetreten. Versuch es später erneut."+
 	"Der Dienst hat zu lange gebraucht. Versuch es erneut."+
 	"Dienst nicht erreichbar. Prüfe das Netzwerk und die Adresse."+
-	"Der Dienst hat ohne Bild geantwortet. Versuch es erneut oder ändere den Look.",
+	"Der Dienst hat ohne Bild geantwortet. Versuch es erneut oder ändere den Look."+
+	"Im Vollbild ansehen"+
+	"Vorheriges Werk"+
+	"Nächstes Werk",
 	[]uint16{
 		5,
 		5,
@@ -2970,6 +2987,9 @@ var textsDe = i18n.NewTexts(""+
 		53,
 		61,
 		78,
+		19,
+		15,
+		14,
 	})
 
 // textsEs are the messages without arguments in es.
@@ -3165,7 +3185,10 @@ var textsEs = i18n.NewTexts(""+
 	"El servicio tuvo un problema. Inténtalo más tarde."+
 	"El servicio tardó demasiado en responder. Inténtalo de nuevo."+
 	"No se pudo conectar con el servicio. Revisa la red y la dirección."+
-	"El servicio respondió sin ninguna imagen. Inténtalo de nuevo o cambia el look.",
+	"El servicio respondió sin ninguna imagen. Inténtalo de nuevo o cambia el look."+
+	"Ver a pantalla completa"+
+	"Obra anterior"+
+	"Obra siguiente",
 	[]uint16{
 		5,
 		5,
@@ -3359,6 +3382,9 @@ var textsEs = i18n.NewTexts(""+
 		63,
 		67,
 		80,
+		23,
+		13,
+		14,
 	})
 
 // textsFr are the messages without arguments in fr.
@@ -3554,7 +3580,10 @@ var textsFr = i18n.NewTexts(""+
 	"Le service a rencontré un problème. Réessayez plus tard."+
 	"Le service a mis trop de temps à répondre. Réessayez."+
 	"Impossible de joindre le service. Vérifiez le réseau et l’adresse."+
-	"Le service a répondu sans image. Réessayez ou modifiez le look.",
+	"Le service a répondu sans image. Réessayez ou modifiez le look."+
+	"Afficher en plein écran"+
+	"Œuvre précédente"+
+	"Œuvre suivante",
 	[]uint16{
 		5,
 		5,
@@ -3748,6 +3777,9 @@ var textsFr = i18n.NewTexts(""+
 		56,
 		70,
 		65,
+		24,
+		19,
+		15,
 	})
 
 // textsIt are the messages without arguments in it.
@@ -3943,7 +3975,10 @@ var textsIt = i18n.NewTexts(""+
 	"Il servizio ha avuto un problema. Riprova più tardi."+
 	"Il servizio ha impiegato troppo a rispondere. Riprova."+
 	"Impossibile raggiungere il servizio. Controlla la rete e l’indirizzo."+
-	"Il servizio ha risposto senza un’immagine. Riprova o cambia il look.",
+	"Il servizio ha risposto senza un’immagine. Riprova o cambia il look."+
+	"Guarda a schermo intero"+
+	"Opera precedente"+
+	"Opera successiva",
 	[]uint16{
 		5,
 		5,
@@ -4137,6 +4172,9 @@ var textsIt = i18n.NewTexts(""+
 		54,
 		71,
 		70,
+		23,
+		16,
+		16,
 	})
 
 // textsJa are the messages without arguments in ja.
@@ -4332,7 +4370,10 @@ var textsJa = i18n.NewTexts(""+
 	"サービスで問題が発生しました。しばらくしてから再試行してください。"+
 	"サービスの応答がタイムアウトしました。再試行してください。"+
 	"サービスに接続できません。ネットワークとアドレスを確認してください。"+
-	"サービスから画像が返されませんでした。再試行するか、コーデを変更してください。",
+	"サービスから画像が返されませんでした。再試行するか、コーデを変更してください。"+
+	"全画面で見る"+
+	"前の作品"+
+	"次の作品",
 	[]uint16{
 		5,
 		5,
@@ -4526,6 +4567,9 @@ var textsJa = i18n.NewTexts(""+
 		87,
 		102,
 		117,
+		18,
+		12,
+		12,
 	})
 
 // textsKo are the messages without arguments in ko.
@@ -4721,7 +4765,10 @@ var textsKo = i18n.NewTexts(""+
 	"서비스에 문제가 생겼어요. 잠시 후 다시 시도하세요."+
 	"서비스 응답이 너무 늦어요. 다시 시도하세요."+
 	"서비스에 연결할 수 없어요. 네트워크와 주소를 확인하세요."+
-	"서비스가 이미지 없이 응답했어요. 다시 시도하거나 룩을 바꿔 보세요.",
+	"서비스가 이미지 없이 응답했어요. 다시 시도하거나 룩을 바꿔 보세요."+
+	"전체 화면으로 보기"+
+	"이전 작품"+
+	"다음 작품",
 	[]uint16{
 		5,
 		5,
@@ -4915,6 +4962,9 @@ var textsKo = i18n.NewTexts(""+
 		61,
 		80,
 		94,
+		26,
+		13,
+		13,
 	})
 
 // textsPtBR are the messages without arguments in pt-BR.
@@ -5110,7 +5160,10 @@ var textsPtBR = i18n.NewTexts(""+
 	"O serviço teve um problema. Tente mais tarde."+
 	"O serviço demorou demais para responder. Tente de novo."+
 	"Não foi possível acessar o serviço. Verifique a rede e o endereço."+
-	"O serviço respondeu sem uma imagem. Tente de novo ou mude o look.",
+	"O serviço respondeu sem uma imagem. Tente de novo ou mude o look."+
+	"Ver em tela cheia"+
+	"Trabalho anterior"+
+	"Próximo trabalho",
 	[]uint16{
 		5,
 		5,
@@ -5304,6 +5357,9 @@ var textsPtBR = i18n.NewTexts(""+
 		56,
 		70,
 		66,
+		17,
+		17,
+		17,
 	})
 
 // textsRu are the messages without arguments in ru.
@@ -5499,7 +5555,10 @@ var textsRu = i18n.NewTexts(""+
 	"Ошибка на стороне сервиса. Повторите позже."+
 	"Сервис слишком долго не отвечал. Повторите попытку."+
 	"Не удалось связаться с сервисом. Проверьте сеть и адрес."+
-	"Сервис ответил без изображения. Повторите попытку или измените образ.",
+	"Сервис ответил без изображения. Повторите попытку или измените образ."+
+	"Открыть на весь экран"+
+	"Предыдущая работа"+
+	"Следующая работа",
 	[]uint16{
 		5,
 		5,
@@ -5693,6 +5752,9 @@ var textsRu = i18n.NewTexts(""+
 		94,
 		102,
 		128,
+		39,
+		33,
+		31,
 	})
 
 // textsZhHans are the messages without arguments in zh-Hans.
@@ -5888,7 +5950,10 @@ var textsZhHans = i18n.NewTexts(""+
 	"服务出了问题，请稍后再试。"+
 	"服务响应超时，请重试。"+
 	"连不上服务，请检查网络和地址。"+
-	"服务返回了结果，但没有图片。请重试，或换一套搭配。",
+	"服务返回了结果，但没有图片。请重试，或换一套搭配。"+
+	"全屏查看"+
+	"上一张作品"+
+	"下一张作品",
 	[]uint16{
 		6,
 		5,
@@ -6082,6 +6147,9 @@ var textsZhHans = i18n.NewTexts(""+
 		33,
 		45,
 		75,
+		12,
+		15,
+		15,
 	})
 
 // textsZhHant are the messages without arguments in zh-Hant.
@@ -6277,7 +6345,10 @@ var textsZhHant = i18n.NewTexts(""+
 	"服務發生問題，請稍後再試。"+
 	"服務回應逾時，請重試。"+
 	"無法連上服務，請檢查網路和位址。"+
-	"服務回傳了結果，但沒有圖片。請重試，或換一套搭配。",
+	"服務回傳了結果，但沒有圖片。請重試，或換一套搭配。"+
+	"全螢幕檢視"+
+	"上一張作品"+
+	"下一張作品",
 	[]uint16{
 		6,
 		5,
@@ -6471,6 +6542,9 @@ var textsZhHant = i18n.NewTexts(""+
 		33,
 		48,
 		75,
+		15,
+		15,
+		15,
 	})
 
 // texts returns the messages without arguments in lang, nil for a
@@ -6616,6 +6690,9 @@ func Supply(lang string, t Translation) {
 	}
 	if t.StatusFailed != nil {
 		s.StatusFailed = t.StatusFailed
+	}
+	if t.WorkPosition != nil {
+		s.WorkPosition = t.WorkPosition
 	}
 	supplied[lang] = s
 	Catalog.Add(lang)
@@ -8981,6 +9058,69 @@ func ErrNoImage(cx *core.Scope) string { return For(cx).ErrNoImage() }
 
 // ErrNoImage is the package's ErrNoImage in the language of msgs.
 func (msgs Messages) ErrNoImage() string { return msgs.text(textErrNoImage) }
+
+// ViewFullScreen says "View full screen"
+// in the language the app shows under cx.
+func ViewFullScreen(cx *core.Scope) string { return For(cx).ViewFullScreen() }
+
+// ViewFullScreen is the package's ViewFullScreen in the language of msgs.
+func (msgs Messages) ViewFullScreen() string { return msgs.text(textViewFullScreen) }
+
+// PreviousWork says "Previous work"
+// in the language the app shows under cx.
+func PreviousWork(cx *core.Scope) string { return For(cx).PreviousWork() }
+
+// PreviousWork is the package's PreviousWork in the language of msgs.
+func (msgs Messages) PreviousWork() string { return msgs.text(textPreviousWork) }
+
+// NextWork says "Next work"
+// in the language the app shows under cx.
+func NextWork(cx *core.Scope) string { return For(cx).NextWork() }
+
+// NextWork is the package's NextWork in the language of msgs.
+func (msgs Messages) NextWork() string { return msgs.text(textNextWork) }
+
+// WorkPosition says "{n, number} / {count, number}"
+// in the language the app shows under cx.
+//
+// Which of the shown works is on show, over the full-screen picture, as "3 / 12".
+func WorkPosition(cx *core.Scope, n int, count int) string { return For(cx).WorkPosition(n, count) }
+
+// WorkPosition is the package's WorkPosition in the language of msgs.
+func (msgs Messages) WorkPosition(n int, count int) string {
+	if i18n.IsPseudo(msgs.lang) {
+		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.WorkPosition(n, count))
+	}
+	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
+		if f := supplied[lang].WorkPosition; f != nil {
+			return f(n, count)
+		}
+		switch lang {
+		case "", "en":
+			return msgs.arg(i18n.FormatNumber("en", float64(n))) + " / " + msgs.arg(i18n.FormatNumber("en", float64(count)))
+		case "de":
+			return i18n.FormatNumber("de", float64(n)) + " / " + i18n.FormatNumber("de", float64(count))
+		case "es":
+			return i18n.FormatNumber("es", float64(n)) + " / " + i18n.FormatNumber("es", float64(count))
+		case "fr":
+			return i18n.FormatNumber("fr", float64(n)) + " / " + i18n.FormatNumber("fr", float64(count))
+		case "it":
+			return i18n.FormatNumber("it", float64(n)) + " / " + i18n.FormatNumber("it", float64(count))
+		case "ja":
+			return i18n.FormatNumber("ja", float64(n)) + " / " + i18n.FormatNumber("ja", float64(count))
+		case "ko":
+			return i18n.FormatNumber("ko", float64(n)) + " / " + i18n.FormatNumber("ko", float64(count))
+		case "pt-BR":
+			return i18n.FormatNumber("pt-BR", float64(n)) + " / " + i18n.FormatNumber("pt-BR", float64(count))
+		case "ru":
+			return i18n.FormatNumber("ru", float64(n)) + " / " + i18n.FormatNumber("ru", float64(count))
+		case "zh-Hans":
+			return i18n.FormatNumber("zh-Hans", float64(n)) + " / " + i18n.FormatNumber("zh-Hans", float64(count))
+		case "zh-Hant":
+			return i18n.FormatNumber("zh-Hant", float64(n)) + " / " + i18n.FormatNumber("zh-Hant", float64(count))
+		}
+	}
+}
 
 // dated is lang with the hour cycle the user set, which times take.
 func (msgs Messages) dated(lang string) string {

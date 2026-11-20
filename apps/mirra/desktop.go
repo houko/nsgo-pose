@@ -279,16 +279,18 @@ func (s *studio) previewCanvas(cx *core.Scope) core.Node {
 func (s *studio) resultCanvas(cx *core.Scope, sh *shot) core.Node {
 	t := locales.For(cx)
 	back := ui.Button{Text: t.BackToEdit(), Icon: lucide.ChevronLeft, Variant: ui.ButtonOutline, TestID: "close-shot", Style: core.Style{CornerRadius: 999}, OnPress: s.closeShot}
+	s.stepKeys(cx)
 	actions := []core.Node{
 		s.favoriteButton(cx, sh),
 		ui.IconButton{Icon: lucide.Download, Label: t.Export(), Variant: ui.IconButtonRaised, TestID: "export", OnPress: func() { s.saveFile(cx, sh.Path) }},
 		ui.IconButton{Icon: lucide.Trash, Label: t.Delete(), Variant: ui.IconButtonRaised, TestID: "delete", OnPress: s.discardShot},
 		core.View{Style: core.Style{Width: core.Pt(150)}, Children: []core.Node{s.saveButton(cx, sh)}},
 	}
-	stage := core.View{Style: fill.Merge(core.Style{AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}), Children: []core.Node{
-		core.Image{Source: s.src(sh.Path), ResizeMode: core.Contain, TestID: "shot-image", Label: lookTitle(t, sh.Req), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}},
+	stage := core.View{Style: fill.Merge(core.Style{AlignItems: core.AlignCenter, JustifyContent: core.JustifyCenter}), Children: append([]core.Node{
+		s.pictureButton(cx, sh),
 		core.View{Style: core.Style{Position: core.Absolute, Right: core.Pt(0), Bottom: core.Pt(0)}, Children: []core.Node{s.usedRefs(cx, sh)}},
-	}}
+		core.View{Style: core.Style{Position: core.Absolute, Top: core.Pt(0), Right: core.Pt(0)}, Children: []core.Node{s.fullScreenButton(cx)}},
+	}, s.stepButtons(cx)...)}
 	return panel(cx, fill.Merge(core.Style{Gap: 16}),
 		canvasHeader(cx, func() string { return shotEyebrow(t, sh) }, func() string { return lookTitle(t, sh.Req) }, nil, back, actions...),
 		stage,

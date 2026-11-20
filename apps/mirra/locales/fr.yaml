@@ -336,3 +336,7 @@ github.com/nsgo-dev/nsgo/base/textview/locales:
   alertImportant: Important
   alertWarning: Avertissement
   alertCaution: Attention
+viewFullScreen: Afficher en plein écran
+previousWork: Œuvre précédente
+nextWork: Œuvre suivante
+workPosition: "{n, number} / {count, number}"

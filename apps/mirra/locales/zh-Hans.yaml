@@ -216,3 +216,7 @@ errServer: 服务出了问题，请稍后再试。
 errTimeout: 服务响应超时，请重试。
 errNetwork: 连不上服务，请检查网络和地址。
 errNoImage: 服务返回了结果，但没有图片。请重试，或换一套搭配。
+viewFullScreen: 全屏查看
+previousWork: 上一张作品
+nextWork: 下一张作品
+workPosition: "{n, number} / {count, number}"
