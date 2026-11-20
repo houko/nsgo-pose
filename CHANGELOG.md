@@ -3,6 +3,7 @@
 ## Unreleased
 
 - The website and the web app moved to https://mirra.yldm.ai and https://mirra.yldm.ai/app/; the old addresses lead there.
+- The background's library tab reads Scene in English and German, which fit it on one line beside Face, Outfit and Pose.
 
 ## 0.19.0 - 2026-11-20
 

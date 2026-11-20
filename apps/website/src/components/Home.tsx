@@ -10,19 +10,18 @@ import { OpenSource } from './OpenSource'
 import { QuickStart } from './QuickStart'
 import { Why } from './Why'
 
-// Home is the landing page in one language. Japanese shows the English screenshots: the app has no Japanese yet.
+// Home is the landing page in one language, with the app's screenshots in it.
 export function Home({ lang }: { lang: Lang }) {
-  const zh = lang === 'zh'
   return (
     <LangProvider lang={lang}>
       <Nav />
       <main>
-        <Hero zh={zh} />
+        <Hero lang={lang} />
         <How />
         <Why />
         <QuickStart />
         <Download />
-        <OpenSource zh={zh} />
+        <OpenSource lang={lang} />
         <Faq />
       </main>
       <Footer />

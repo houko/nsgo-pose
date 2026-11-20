@@ -1,11 +1,11 @@
-import desktopEn from '../../../../screenshots/desktop-en.png'
-import desktopZh from '../../../../screenshots/desktop-zh-Hans.png'
 import { useCopy } from '../i18n/i18n'
+import type { Lang } from '../i18n/langs'
+import { screenshots } from '../screenshots'
 import { links, site } from '../site'
 import { Command } from './QuickStart'
 import { Button, Card, Section } from './ui'
 
-export function OpenSource({ zh }: { zh: boolean }) {
+export function OpenSource({ lang }: { lang: Lang }) {
   const t = useCopy()
   const communityLinks = [links.issues, links.discussions, links.development]
   return (
@@ -22,7 +22,7 @@ export function OpenSource({ zh }: { zh: boolean }) {
           </div>
         </div>
         <div className="relative hidden items-center overflow-hidden bg-raised md:flex">
-          <img src={zh ? desktopZh : desktopEn} alt="" width={1440} height={1000} loading="lazy" className="ml-8 w-[160%] max-w-none rounded-2xl border border-line shadow-2xl" />
+          <img src={screenshots[lang].desktop} alt="" width={1440} height={917} loading="lazy" className="ml-8 w-[160%] max-w-none rounded-2xl border border-line shadow-2xl" />
         </div>
       </Card>
       <div className="mt-5 grid gap-5 md:grid-cols-3">

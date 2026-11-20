@@ -2,6 +2,9 @@ import { useCopy } from '../i18n/i18n'
 import { FigureIcon, HangerIcon } from './icons'
 import { Card, Chip, Heading, Section, face } from './ui'
 
+// BACKGROUNDS are three of the app's own backgrounds, public domain photographs with no one in them (NOTICE.md), in public/backgrounds.
+const BACKGROUNDS = ['indoor-bright-loft', 'city-skyline-dusk', 'nature-lavender']
+
 export function How() {
   const t = useCopy()
   const visuals = [
@@ -18,11 +21,16 @@ export function How() {
       <FigureIcon className="size-14" />
       <div className="flex flex-wrap justify-center gap-2">{t.how.angleTags.map((tag) => <Chip key={tag}>{tag}</Chip>)}</div>
     </div>,
+    <div key="background" className="grid h-full grid-cols-3 gap-2 p-3">
+      {BACKGROUNDS.map((name) => (
+        <img key={name} src={`${import.meta.env.BASE_URL}backgrounds/${name}.webp`} alt="" width={400} height={500} loading="lazy" className="h-full w-full rounded-xl object-cover" />
+      ))}
+    </div>,
   ]
   return (
     <Section id="how">
       <Heading kicker={t.how.kicker} title={t.how.title} />
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
+      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {t.how.steps.map(([title, body], i) => (
           <Card key={title} className="overflow-hidden">
             <div className="h-56 border-b border-line bg-raised">{visuals[i]}</div>
