@@ -231,6 +231,7 @@ const (
 	textShowKey
 	textHideKey
 	textModel
+	textDeployment
 	textSize
 	textTestConnection
 	textTestAgain
@@ -382,6 +383,7 @@ var keyOfText = [numTexts]string{
 	"showKey",
 	"hideKey",
 	"model",
+	"deployment",
 	"size",
 	"testConnection",
 	"testAgain",
@@ -531,6 +533,7 @@ var textsEn = i18n.NewTexts(""+
 	"Show"+
 	"Hide"+
 	"Model"+
+	"Deployment name"+
 	"Size"+
 	"Test connection"+
 	"Test again"+
@@ -677,6 +680,7 @@ var textsEn = i18n.NewTexts(""+
 		4,
 		4,
 		5,
+		15,
 		4,
 		15,
 		10,
@@ -826,6 +830,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"显示"+
 	"隐藏"+
 	"模型"+
+	"部署名称"+
 	"尺寸"+
 	"测试连接"+
 	"重新测试"+
@@ -972,6 +977,7 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		6,
 		6,
+		12,
 		6,
 		12,
 		12,
@@ -2452,6 +2458,13 @@ func Model(cx *core.Scope) string { return For(cx).Model() }
 
 // Model is the package's Model in the language of msgs.
 func (msgs Messages) Model() string { return msgs.text(textModel) }
+
+// Deployment says "Deployment name"
+// in the language the app shows under cx.
+func Deployment(cx *core.Scope) string { return For(cx).Deployment() }
+
+// Deployment is the package's Deployment in the language of msgs.
+func (msgs Messages) Deployment() string { return msgs.text(textDeployment) }
 
 // Size says "Size"
 // in the language the app shows under cx.

@@ -176,6 +176,7 @@ apiKeyOptional: API key (optional)
 showKey: Show
 hideKey: Hide
 model: Model
+deployment: Deployment name
 size: Size
 testConnection: Test connection
 testAgain: Test again

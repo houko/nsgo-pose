@@ -48,6 +48,8 @@ type provider struct {
 	KeyOptional bool
 	// OwnServer marks software the user runs on their own machine, which costs nothing a request.
 	OwnServer bool
+	// Deployment marks a service whose model is a deployment the user named, as Azure's is: it shows with the key, as the deployment's name, rather than among the advanced settings.
+	Deployment bool
 }
 
 // name is what the app calls the provider in the user's language.
@@ -97,7 +99,7 @@ var providers = []provider{
 	{ID: "dashscope", Name: "Alibaba Cloud Model Studio", Local: func(t locales.Messages) string { return t.ProviderDashScope() }, Logo: "bailian", Protocol: protoDashScope,
 		BaseURL: "https://dashscope.aliyuncs.com/api/v1", Model: "qwen-image-2.0-pro", Size: defaultSize,
 		KeyURL: "https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key", KeyHint: "sk-…"},
-	{ID: "azure", Name: "Azure OpenAI", Logo: "azure", Protocol: protoAzure, URLHint: "https://<resource>.openai.azure.com/openai/v1", Model: defaultModel, Size: defaultSize,
+	{ID: "azure", Name: "Azure OpenAI", Logo: "azure", Protocol: protoAzure, URLHint: "https://<resource>.openai.azure.com/openai/v1", Model: defaultModel, Size: defaultSize, Deployment: true,
 		KeyURL: "https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI"},
 	{ID: "sdcpp", Name: "stable-diffusion.cpp", Protocol: protoOpenAI, BaseURL: "http://127.0.0.1:1234/v1", Model: "sd-cpp-local", Size: defaultSize, KeyOptional: true, OwnServer: true},
 	{ID: providerCustom, Name: "OpenAI-compatible", Local: func(t locales.Messages) string { return t.ProviderCustom() }, Protocol: protoOpenAI, URLHint: defaultLocalURL,

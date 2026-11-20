@@ -290,6 +290,23 @@ func TestCheckConnectionProtocols(t *testing.T) {
 	if c := azureCalls()[0]; c.Header.Get("api-key") != "az" {
 		t.Errorf("Azure's test headers = %v", c.Header)
 	}
+	// OpenRouter lists its models to anyone, so its test asks about the key.
+	keyStatus := http.StatusOK
+	openrouter, keyCalls := fakeProvider(t, "/api/v1/key", func(_ string, w http.ResponseWriter, _ apiCall) {
+		w.WriteHeader(keyStatus)
+		io.WriteString(w, `{"data":{"label":"sk-or-…"}}`)
+	})
+	or := Config{Protocol: protoOpenRouter, BaseURL: openrouter.URL + "/api/v1", APIKey: "ork"}
+	if err := CheckConnection(context.Background(), http.DefaultClient, or); err != nil {
+		t.Fatal(err)
+	}
+	if c := keyCalls()[0]; c.Method != http.MethodGet || c.Header.Get("Authorization") != "Bearer ork" {
+		t.Errorf("OpenRouter's test = %s with %v", c.Method, c.Header)
+	}
+	keyStatus = http.StatusUnauthorized
+	if err := CheckConnection(context.Background(), http.DefaultClient, or); err == nil {
+		t.Error("an OpenRouter key the API refused passed")
+	}
 }
 
 func TestAspectRatio(t *testing.T) {

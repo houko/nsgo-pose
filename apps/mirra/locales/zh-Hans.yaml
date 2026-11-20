@@ -144,6 +144,7 @@ apiKeyOptional: API Key（可留空）
 showKey: 显示
 hideKey: 隐藏
 model: 模型
+deployment: 部署名称
 size: 尺寸
 testConnection: 测试连接
 testAgain: 重新测试
