@@ -84,7 +84,7 @@ func TestParseRejectsChangedFormat(t *testing.T) {
 			t.Errorf("%s: err = %v, want a format error", name, err)
 		}
 	}
-	if got, err := parsePoses([]byte(`const D=[{"id":"a","系統":"2人絡み","原寸":"a.png"}];`), "https://x"); err != nil || len(got.Items) != 1 {
+	if got, err := parsePoses([]byte(`const D=[{"id":"a","系統":"2人絡み","原寸":"a.png"}];`), "https://x"); err != nil || len(got.Items) != 1 || got.Items[0].People != 2 {
 		t.Errorf("a page with a pose from any line should parse: catalog=%+v err=%v", got, err)
 	}
 }

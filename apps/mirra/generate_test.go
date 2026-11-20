@@ -31,6 +31,21 @@ func TestPromptNumbersImagesInOrder(t *testing.T) {
 	}
 }
 
+func TestTwoPersonPosesAskForTwoPeople(t *testing.T) {
+	pair := &Item{People: 2}
+	p := Request{Pose: pair, Costume: &Item{}, Face: &Item{}, Note: "laughing"}.Prompt()
+	if !hasAll(p, "two faceless gray mannequins", "two adult people", "Image 2 shows an outfit", "dress the main person", "Image 3 is a portrait", "give the main person that face", "Also: laughing", "these two adults") || strings.Contains(p, "single adult person") || strings.Contains(p, "one adult person") {
+		t.Errorf("two-person prompt = %q", p)
+	}
+	p = Request{Pose: pair}.Prompt()
+	if !hasAll(p, "Dress both", "Give both natural, different adult faces") || strings.Contains(p, "Image 2") {
+		t.Errorf("two-person pose alone = %q", p)
+	}
+	if p := (Request{Pose: &Item{People: 1}}).Prompt(); !strings.Contains(p, "single adult person") {
+		t.Errorf("one-person pose = %q", p)
+	}
+}
+
 func TestGenerateSendsReferencesInOrder(t *testing.T) {
 	api := &fakeAPI{}
 	srv, sites := newServer(t, api)
