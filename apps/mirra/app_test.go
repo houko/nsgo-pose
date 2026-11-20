@@ -247,6 +247,42 @@ func TestOldSettingsCarryOver(t *testing.T) {
 	}
 }
 
+// TestAdvancedSettings opens on the provider and key alone, keeps the address, model and size under Advanced, sends the size chosen there, and resets them to the preset's.
+func TestAdvancedSettings(t *testing.T) {
+	fresh := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}))
+	fresh.Press("text:Me")
+	fresh.Find("id:api-key")
+	fresh.Find("id:version")
+	if fresh.Exists("id:base-url") {
+		t.Error("a fresh install shows the address before Advanced is opened")
+	}
+	fresh.Press("id:advanced >> role:button")
+	fresh.WaitFor("id:base-url", wait)
+	fresh.Find("id:size-portrait")
+
+	api := &fakeAPI{}
+	app, _ := start(t, api, "k")
+	app.Press("text:Me")
+	// The test's address and model differ from OpenAI's, so Advanced opens on its own.
+	app.Find("id:base-url")
+	app.Press("id:size-square")
+	app.Press("text:Studio")
+	app.Press("id:row-pose")
+	choose(t, app, poseStand)
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := api.last().Size; got != sizeSquare {
+		t.Errorf("size = %q, want the square one chosen", got)
+	}
+	app.Press("id:close-shot")
+	app.Press("text:Me")
+	app.Press("id:reset-defaults")
+	app.WaitUntil(wait, func() bool { return app.Find("id:reset-defaults").Props.Disabled })
+	if !app.Find("id:size-portrait").Props.Selected {
+		t.Error("resetting left the size other than the preset's portrait")
+	}
+}
+
 func TestConnectionTestReportsFailure(t *testing.T) {
 	app, _ := start(t, &fakeAPI{}, "bad")
 	app.Press("text:Me")

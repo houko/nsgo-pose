@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The AI settings show the provider and key first, with the address, model and size under Advanced and a reset to the provider's defaults; the size is chosen as portrait, square or landscape, the key is shown with an eye button, the About section gives the version, and the desktop settings scroll when they are taller than the window.
 - The AI settings preset OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, Alibaba Cloud Model Studio, Azure OpenAI and stable-diffusion.cpp, with their logos and a link to get a key, besides any OpenAI-compatible address. Each provider keeps its own key and settings; the cloud or local service set up before carries over.
 
 ## 0.5.0 - 2026-11-20
