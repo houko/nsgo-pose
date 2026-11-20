@@ -37,7 +37,7 @@
 ## What it does
 
 - **Face, outfit, pose.** Choose a face (AI-generated, CC0), an outfit (clothes with no one wearing them) and a pose (a faceless gray mannequin), and the app asks an image model for a photo of one adult person with them, or of two adults for a two-person pose, the face and outfit going to the main one. Only the pose is required.
-- **A background, if you want one.** By default the style sets the scene; or choose one of the app's backgrounds, indoor, city or nature, public domain photographs with no one in them, and the person is set there.
+- **A background, if you want one.** By default the style sets the scene; or choose one of the app's 130 backgrounds, nature and city scenes with a few rooms, public domain photographs with no one in them, and the person is set there.
 - **Two layouts.** In a window narrower than 900 points, the phone layout: Studio, Wardrobe, Works and Me over a tab bar, with the look put together in three steps. Wider, the desktop studio: the galleries on the left, a zoomable canvas with the look or its result in the middle, the summary and Generate on the right, and the AI service in a dialog.
 - **Filters that match the galleries.** Faces by hair length, outfits by season and occasion, poses by camera angle. Lingerie, sexy outfits and revealing or two-person poses stay behind an 18+ switch, which asks your age the first time.
 - **A result you decide on.** A new picture waits until you save it to Works. Generate it again, or put another outfit on the same face and pose with one tap; star it, export it or delete it.

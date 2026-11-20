@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 130 backgrounds instead of 14, most of them outdoors: beaches, lakes, mountains, forests, fields, deserts, streets, old towns and harbors, besides a few rooms.
 - The website and the web app moved to https://mirra.yldm.ai and https://mirra.yldm.ai/app/; the old addresses lead there.
 - The background's library tab reads Scene in English and German, which fit it on one line beside Face, Outfit and Pose.
 
