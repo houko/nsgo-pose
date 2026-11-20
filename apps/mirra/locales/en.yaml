@@ -221,6 +221,7 @@ errNoKey: Enter the API key first.
 errKeyRefused: The service refused the key. Check that it is right and may use this model.
 errNotFound: The address or the model wasn't found. Check them in the AI settings.
 errRateLimited: Too many requests, or the account is out of credit. Try again later, or check its balance.
+errBlocked: The service's safety check stopped this picture. Try another outfit or pose, or another service.
 errRejected: The service refused the request.
 errServer: The service had a problem. Try again later.
 errTimeout: The service took too long to answer. Try again.

@@ -19,6 +19,15 @@ func explain(t locales.Messages, err error) string {
 		return t.ErrNoKey()
 	case errors.Is(err, errNoImage):
 		return t.ErrNoImage()
+	case errors.Is(err, errBlocked):
+		var blocked *blockedError
+		detail := ""
+		if errors.As(err, &status) {
+			detail = or(status.Message, status.Status)
+		} else if errors.As(err, &blocked) {
+			detail = blocked.Reason
+		}
+		return withDetail(t.ErrBlocked(), detail)
 	case errors.As(err, &status):
 		detail := status.Message
 		if detail == "" {

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -316,5 +317,50 @@ func TestAspectRatio(t *testing.T) {
 		if got := aspectRatio(c.size, geminiRatios); got != c.want {
 			t.Errorf("aspectRatio(%q) = %q, want %q", c.size, got, c.want)
 		}
+	}
+}
+
+// TestSafetyRefusals reads each service's way of saying its safety system refused the request as errBlocked, and nothing else as it.
+func TestSafetyRefusals(t *testing.T) {
+	answer := func(status int, body string) *http.Response {
+		return &http.Response{StatusCode: status, Status: http.StatusText(status), Body: io.NopCloser(strings.NewReader(body))}
+	}
+	for _, c := range []struct {
+		name    string
+		err     error
+		blocked bool
+	}{
+		{"OpenAI", apiError(answer(400, `{"error":{"message":"Your request was rejected by the safety system.","type":"image_generation_user_error","code":"moderation_blocked"}}`)), true},
+		{"Azure", apiError(answer(400, `{"error":{"code":"content_filter","message":"The response was filtered"}}`)), true},
+		{"DashScope", apiError(answer(400, `{"code":"DataInspectionFailed","message":"Input data may contain inappropriate content."}`)), true},
+		{"Ark", apiError(answer(400, `{"error":{"code":"InputImageSensitiveContentDetected","message":"The request failed because the input image may contain sensitive information."}}`)), true},
+		{"a bad size", apiError(answer(400, `{"error":{"message":"Invalid size","code":"invalid_value"}}`)), false},
+		{"a refused key", apiError(answer(401, `{"error":{"message":"Incorrect API key provided","code":"invalid_api_key"}}`)), false},
+		{"a numeric code", apiError(answer(400, `{"error":{"message":"bad","code":400}}`)), false},
+	} {
+		if got := errors.Is(c.err, errBlocked); got != c.blocked {
+			t.Errorf("%s: blocked = %v, want %v (%v)", c.name, got, c.blocked, c.err)
+		}
+	}
+
+	gemini := func(body string) error {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, body) }))
+		defer srv.Close()
+		_, err := generate(context.Background(), srv.Client(), Config{Protocol: protoGemini, BaseURL: srv.URL, APIKey: "k", Model: "m"}, "p", nil, 1)
+		return err
+	}
+	if err := gemini(`{"candidates":[{"finishReason":"IMAGE_SAFETY"}]}`); !errors.Is(err, errBlocked) {
+		t.Errorf("Gemini's IMAGE_SAFETY: %v", err)
+	}
+	if err := gemini(`{"candidates":[{"finishReason":"MAX_TOKENS"}]}`); err == nil || errors.Is(err, errBlocked) {
+		t.Errorf("Gemini's MAX_TOKENS: %v", err)
+	}
+
+	ark := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, `{"data":[{"error":{"code":"OutputImageSensitiveContentDetected","message":"The generated image may contain sensitive information."}}]}`)
+	}))
+	defer ark.Close()
+	if _, err := generate(context.Background(), ark.Client(), Config{Protocol: protoSeedream, BaseURL: ark.URL, APIKey: "k", Model: "m"}, "p", nil, 1); !errors.Is(err, errBlocked) {
+		t.Errorf("Ark's per-image refusal: %v", err)
 	}
 }

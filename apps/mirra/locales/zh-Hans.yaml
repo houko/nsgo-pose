@@ -179,6 +179,7 @@ errNoKey: 请先填写 API Key。
 errKeyRefused: 服务拒绝了这个 Key，请检查它是否正确、能否使用这个模型。
 errNotFound: 找不到这个地址或模型，请在 AI 设置里检查。
 errRateLimited: 请求过多，或账户额度已用完。请稍后再试，或检查余额。
+errBlocked: 服务商的安全审核拦下了这张图。可以换一套服装或姿势，或换一家服务商再试。
 errRejected: 服务拒绝了这个请求。
 errServer: 服务出了问题，请稍后再试。
 errTimeout: 服务响应超时，请重试。
