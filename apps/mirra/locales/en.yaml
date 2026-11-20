@@ -190,6 +190,12 @@ showKey: Show
 hideKey: Hide
 model: Model
 deployment: Deployment name
+searchModels: Search models
+noModelMatches: No model matches
+refreshModels: List the models again
+modelsFailed:
+  message: "Couldn't list the models: {error}"
+  description: Under the model field; error is what the service or the network said.
 size: Size
 testConnection: Test connection
 testAgain: Test again

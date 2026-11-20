@@ -252,6 +252,7 @@ func TestAdvancedSettings(t *testing.T) {
 	fresh := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}))
 	fresh.Press("text:Me")
 	fresh.Find("id:api-key")
+	fresh.Find("id:model")
 	fresh.Find("id:version")
 	if fresh.Exists("id:base-url") {
 		t.Error("a fresh install shows the address before Advanced is opened")
@@ -295,14 +296,16 @@ func TestDesktopSettingsTabs(t *testing.T) {
 	app.Press("id:open-settings")
 	app.WaitFor("id:api-key", wait)
 	app.Find("id:test-connection")
+	// The model is chosen beside the key, whose models it lists.
+	app.Find("id:model")
 	if app.Exists("id:base-url") || app.Exists("id:version") {
 		t.Error("the service's tab shows another tab's settings")
 	}
 	app.Press("id:settings-nav-advanced")
 	app.WaitFor("id:base-url", wait)
 	app.Find("id:size-portrait")
-	if app.Exists("id:api-key") {
-		t.Error("the advanced tab shows the key")
+	if app.Exists("id:api-key") || app.Exists("id:model") {
+		t.Error("the advanced tab shows the key or the model")
 	}
 	app.Press("id:settings-nav-sources")
 	app.WaitFor("text:Poses", wait)
@@ -651,5 +654,30 @@ func TestStyleIsSentKeptAndRestored(t *testing.T) {
 	again.WaitFor("id:style-Film", wait)
 	if !again.Find("id:style-Film").Props.Selected || again.Find("id:style-Studio").Props.Selected {
 		t.Error("the stored style is not the one chosen")
+	}
+}
+
+func TestModelIsChosenFromTheListedOnes(t *testing.T) {
+	api := &fakeAPI{}
+	app, _ := start(t, api, "k")
+	app.Press("text:Me")
+	app.WaitFor("id:model", wait)
+	app.Press("id:model")
+	app.WaitFor("role:option gpt-image-2", wait)
+	if app.Exists("role:option gpt-5") {
+		t.Error("a chat model is offered")
+	}
+	app.Press("role:option gpt-image-2")
+	// gpt-image-2 is OpenAI's preset, so the setting follows the preset again.
+	if v, _ := app.Storage().GetItem(providerByID(providerOpenAI).storageKey("model")); v != "" {
+		t.Errorf("stored model = %q, want the preset's", v)
+	}
+	app.Press("text:Studio")
+	app.Press("id:row-pose")
+	choose(t, app, poseStand)
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := api.last().Model; got != "gpt-image-2" {
+		t.Errorf("model = %q", got)
 	}
 }

@@ -61,6 +61,7 @@ var Parameters = map[string][]string{
 	"SwapTo":              {"name"},
 	"SavedToWorks":        {"no"},
 	"OpenWork":            {"no"},
+	"ModelsFailed":        {"error_"},
 	"ConnectionFailed":    {"error_"},
 	"StatusConnected":     {"service"},
 	"StatusUntested":      {"service"},
@@ -92,6 +93,7 @@ type Translation struct {
 	SwapTo              func(name string) string
 	SavedToWorks        func(no string) string
 	OpenWork            func(no string) string
+	ModelsFailed        func(error_ string) string
 	ConnectionFailed    func(error_ string) string
 	StatusConnected     func(service string) string
 	StatusUntested      func(service string) string
@@ -245,6 +247,9 @@ const (
 	textHideKey
 	textModel
 	textDeployment
+	textSearchModels
+	textNoModelMatches
+	textRefreshModels
 	textSize
 	textTestConnection
 	textTestAgain
@@ -426,6 +431,9 @@ var keyOfText = [numTexts]string{
 	"hideKey",
 	"model",
 	"deployment",
+	"searchModels",
+	"noModelMatches",
+	"refreshModels",
 	"size",
 	"testConnection",
 	"testAgain",
@@ -605,6 +613,9 @@ var textsEn = i18n.NewTexts(""+
 	"Hide"+
 	"Model"+
 	"Deployment name"+
+	"Search models"+
+	"No model matches"+
+	"List the models again"+
 	"Size"+
 	"Test connection"+
 	"Test again"+
@@ -781,6 +792,9 @@ var textsEn = i18n.NewTexts(""+
 		4,
 		5,
 		15,
+		13,
+		16,
+		21,
 		4,
 		15,
 		10,
@@ -960,6 +974,9 @@ var textsZhHans = i18n.NewTexts(""+
 	"隐藏"+
 	"模型"+
 	"部署名称"+
+	"搜索模型"+
+	"没有匹配的模型"+
+	"重新获取模型列表"+
 	"尺寸"+
 	"测试连接"+
 	"重新测试"+
@@ -1136,6 +1153,9 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		6,
 		12,
+		12,
+		21,
+		24,
 		6,
 		12,
 		12,
@@ -1278,6 +1298,9 @@ func Supply(lang string, t Translation) {
 	}
 	if t.OpenWork != nil {
 		s.OpenWork = t.OpenWork
+	}
+	if t.ModelsFailed != nil {
+		s.ModelsFailed = t.ModelsFailed
 	}
 	if t.ConnectionFailed != nil {
 		s.ConnectionFailed = t.ConnectionFailed
@@ -2730,6 +2753,51 @@ func Deployment(cx *core.Scope) string { return For(cx).Deployment() }
 
 // Deployment is the package's Deployment in the language of msgs.
 func (msgs Messages) Deployment() string { return msgs.text(textDeployment) }
+
+// SearchModels says "Search models"
+// in the language the app shows under cx.
+func SearchModels(cx *core.Scope) string { return For(cx).SearchModels() }
+
+// SearchModels is the package's SearchModels in the language of msgs.
+func (msgs Messages) SearchModels() string { return msgs.text(textSearchModels) }
+
+// NoModelMatches says "No model matches"
+// in the language the app shows under cx.
+func NoModelMatches(cx *core.Scope) string { return For(cx).NoModelMatches() }
+
+// NoModelMatches is the package's NoModelMatches in the language of msgs.
+func (msgs Messages) NoModelMatches() string { return msgs.text(textNoModelMatches) }
+
+// RefreshModels says "List the models again"
+// in the language the app shows under cx.
+func RefreshModels(cx *core.Scope) string { return For(cx).RefreshModels() }
+
+// RefreshModels is the package's RefreshModels in the language of msgs.
+func (msgs Messages) RefreshModels() string { return msgs.text(textRefreshModels) }
+
+// ModelsFailed says "Couldn't list the models: {error}"
+// in the language the app shows under cx.
+//
+// Under the model field; error is what the service or the network said.
+func ModelsFailed(cx *core.Scope, error_ string) string { return For(cx).ModelsFailed(error_) }
+
+// ModelsFailed is the package's ModelsFailed in the language of msgs.
+func (msgs Messages) ModelsFailed(error_ string) string {
+	if i18n.IsPseudo(msgs.lang) {
+		return i18n.Pseudo(msgs.lang, Messages{lang: Source, mark: true}.ModelsFailed(error_))
+	}
+	for lang := msgs.lang; ; lang = i18n.Parent(lang) {
+		if f := supplied[lang].ModelsFailed; f != nil {
+			return f(error_)
+		}
+		switch lang {
+		case "", "en":
+			return "Couldn't list the models: " + msgs.arg(error_)
+		case "zh-Hans":
+			return "没能获取模型列表：" + error_
+		}
+	}
+}
 
 // Size says "Size"
 // in the language the app shows under cx.

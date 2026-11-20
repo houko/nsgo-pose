@@ -121,7 +121,7 @@ func newServer(t testing.TB, api *fakeAPI) (*httptest.Server, Sites) {
 			io.WriteString(w, `{"error":{"message":"Incorrect API key provided."}}`)
 			return
 		}
-		io.WriteString(w, `{"data":[{"id":"test-model"}]}`)
+		io.WriteString(w, `{"data":[{"id":"test-model"},{"id":"gpt-image-2"},{"id":"gpt-5"}]}`)
 	})
 	mux.HandleFunc("/v1/images/edits", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseMultipartForm(32 << 20); err != nil {

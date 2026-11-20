@@ -98,7 +98,7 @@ go tool nsgo build                   # packages for every target in nsgo.yaml, i
 
 ### Set up the image API
 
-Open **Me** on a phone, or the settings button at the top right on the desktop, choose a provider, enter its key and press **Test connection**. The address, model and size start on the provider's own and sit under **Advanced**; change them only to use another region, gateway or model, and **Reset to defaults** puts them back. Azure OpenAI and a custom server ask for their address beside the key.
+Open **Me** on a phone, or the settings button at the top right on the desktop, choose a provider, enter its key and press **Test connection**. The model is chosen below the key, from the image models the key can use, listed from the provider once the key is entered; it starts on the provider's own. The address and size also start on the provider's own and sit under **Advanced**; change them only to use another region or gateway, and **Reset to defaults** puts them back. Alibaba Cloud Model Studio and Azure OpenAI, which a key can't list, take it typed. Azure OpenAI and a custom server ask for their address beside the key.
 
 | Provider | API | Model it starts with |
 | --- | --- | --- |
