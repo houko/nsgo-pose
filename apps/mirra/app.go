@@ -17,6 +17,7 @@ import (
 	"github.com/nsgo-dev/nsgo/base"
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/desktop"
+	"github.com/nsgo-dev/nsgo/i18n"
 	"github.com/nsgo-dev/nsgo/ui"
 	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
@@ -149,6 +150,7 @@ func (a App) Root(cx *core.Scope) core.Node {
 	}
 	cx.SetTheme(theme)
 	cx.SetAppearance(core.AppearanceDark)
+	rememberLanguage(cx)
 	s := newStudio(cx, a)
 	colors := ui.ColorsOf(cx)
 	env := cx.Env()
@@ -161,12 +163,21 @@ func (a App) Root(cx *core.Scope) core.Node {
 			return core.Style{FlexGrow: 1, FlexShrink: 1, Background: colors.Background(), Color: colors.Text()}
 		},
 		Children: []core.Node{
-			core.Show{
-				When: func() bool { return env.Window().Width >= wideWidth },
-				Then: s.desktop,
-				Else: s.phone,
-			},
-			core.Show{When: s.busy.Get, Then: s.generatingScreen},
+			// A new language builds the app again in it, keeping what is open: the state is the studio's, outside the build.
+			core.Dynamic(func(cx *core.Scope) core.Node {
+				i18n.Language(cx)
+				// What is built mounts untracked, outside this function.
+				return core.Func(func(cx *core.Scope) core.Node {
+					return core.View{Style: fill, Children: []core.Node{
+						core.Show{
+							When: func() bool { return env.Window().Width >= wideWidth },
+							Then: s.desktop,
+							Else: s.phone,
+						},
+						core.Show{When: s.busy.Get, Then: s.generatingScreen},
+					}}
+				})
+			}),
 			ui.Toasts{Toaster: s.toaster, Placement: ui.ToastTop},
 		},
 	}

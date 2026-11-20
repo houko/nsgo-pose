@@ -170,6 +170,12 @@ keyUnavailable: 这台设备没有可以保存 Key 的安全存储。
 aboutSection: 关于
 sourcesSection: 素材来源
 settings: 设置
+settingsGeneral: 通用
+language: 语言
+languageSystem: 跟随系统
+languageName:
+  message: 简体中文
+  description: The name of the language this catalog is in, written in it, in the language menu.
 sourceCode: 源代码
 license: 开源许可
 sourcesPose: 姿势素材

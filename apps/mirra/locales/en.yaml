@@ -212,6 +212,12 @@ keyUnavailable: This device has no secure store for the key.
 aboutSection: About
 sourcesSection: Sources
 settings: Settings
+settingsGeneral: General
+language: Language
+languageSystem: System
+languageName:
+  message: English
+  description: The name of the language this catalog is in, written in it, in the language menu.
 sourceCode: Source code
 license: License
 sourcesPose: Poses

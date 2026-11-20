@@ -593,3 +593,36 @@ func TestDesktopColumnsResize(t *testing.T) {
 		t.Errorf("the next launch opens the library %v wide, want the %v it was dragged to", got, after)
 	}
 }
+
+// TestLanguageSetting switches the app's language in the settings, on the phone and on the desktop, at once and for the next launch, and follows the system's again.
+func TestLanguageSetting(t *testing.T) {
+	dir := t.TempDir()
+	app := nsgotest.Start(t, App{DataDir: dir}.Root, nsgotest.Environment(core.Environment{Locale: "en"}))
+	app.Press("text:Me")
+	app.Press("id:language")
+	app.Press("role:option 简体中文")
+	app.WaitFor("text:工作室", wait)
+	if got, _ := app.Storage().GetItem(keyLanguage); got != "zh-Hans" {
+		t.Errorf("kept %q, want zh-Hans", got)
+	}
+	again := nsgotest.Start(t, App{DataDir: dir}.Root, nsgotest.Environment(core.Environment{Locale: "en"}),
+		nsgotest.Storage(map[string]string{keyLanguage: "zh-Hans"}))
+	again.Find("text:工作室")
+	again.Press("text:我")
+	again.Press("id:language")
+	again.Press("role:option 跟随系统")
+	again.WaitFor("text:Studio", wait)
+	if _, ok := again.Storage().GetItem(keyLanguage); ok {
+		t.Error("following the system keeps a language")
+	}
+
+	desk := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}), nsgotest.Size(1440, 1000))
+	desk.Press("id:open-settings")
+	desk.Press("id:settings-nav-general")
+	desk.Press("id:language")
+	desk.Press("role:option 简体中文")
+	// The settings stay open, in the new language.
+	desk.WaitFor("role:header 设置", wait)
+	desk.Find("id:settings-nav-general")
+	desk.Find("id:settings-dialog")
+}

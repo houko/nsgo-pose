@@ -252,6 +252,10 @@ const (
 	textAboutSection
 	textSourcesSection
 	textSettings
+	textSettingsGeneral
+	textLanguage
+	textLanguageSystem
+	textLanguageName
 	textSourceCode
 	textLicense
 	textSourcesPose
@@ -423,6 +427,10 @@ var keyOfText = [numTexts]string{
 	"aboutSection",
 	"sourcesSection",
 	"settings",
+	"settingsGeneral",
+	"language",
+	"languageSystem",
+	"languageName",
 	"sourceCode",
 	"license",
 	"sourcesPose",
@@ -592,6 +600,10 @@ var textsEn = i18n.NewTexts(""+
 	"About"+
 	"Sources"+
 	"Settings"+
+	"General"+
+	"Language"+
+	"System"+
+	"English"+
 	"Source code"+
 	"License"+
 	"Poses"+
@@ -758,6 +770,10 @@ var textsEn = i18n.NewTexts(""+
 		5,
 		7,
 		8,
+		7,
+		8,
+		6,
+		7,
 		11,
 		7,
 		5,
@@ -927,6 +943,10 @@ var textsZhHans = i18n.NewTexts(""+
 	"关于"+
 	"素材来源"+
 	"设置"+
+	"通用"+
+	"语言"+
+	"跟随系统"+
+	"简体中文"+
 	"源代码"+
 	"开源许可"+
 	"姿势素材"+
@@ -1093,6 +1113,10 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		12,
 		6,
+		6,
+		6,
+		12,
+		12,
 		9,
 		12,
 		12,
@@ -2839,6 +2863,36 @@ func Settings(cx *core.Scope) string { return For(cx).Settings() }
 
 // Settings is the package's Settings in the language of msgs.
 func (msgs Messages) Settings() string { return msgs.text(textSettings) }
+
+// SettingsGeneral says "General"
+// in the language the app shows under cx.
+func SettingsGeneral(cx *core.Scope) string { return For(cx).SettingsGeneral() }
+
+// SettingsGeneral is the package's SettingsGeneral in the language of msgs.
+func (msgs Messages) SettingsGeneral() string { return msgs.text(textSettingsGeneral) }
+
+// Language says "Language"
+// in the language the app shows under cx.
+func Language(cx *core.Scope) string { return For(cx).Language() }
+
+// Language is the package's Language in the language of msgs.
+func (msgs Messages) Language() string { return msgs.text(textLanguage) }
+
+// LanguageSystem says "System"
+// in the language the app shows under cx.
+func LanguageSystem(cx *core.Scope) string { return For(cx).LanguageSystem() }
+
+// LanguageSystem is the package's LanguageSystem in the language of msgs.
+func (msgs Messages) LanguageSystem() string { return msgs.text(textLanguageSystem) }
+
+// LanguageName says "English"
+// in the language the app shows under cx.
+//
+// The name of the language this catalog is in, written in it, in the language menu.
+func LanguageName(cx *core.Scope) string { return For(cx).LanguageName() }
+
+// LanguageName is the package's LanguageName in the language of msgs.
+func (msgs Messages) LanguageName() string { return msgs.text(textLanguageName) }
 
 // SourceCode says "Source code"
 // in the language the app shows under cx.
