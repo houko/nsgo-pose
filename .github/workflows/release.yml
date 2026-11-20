@@ -154,11 +154,11 @@ jobs:
           pattern: mirra-*
           merge-multiple: true
           path: dist
-      # A platform whose artifact went missing would publish a release without it, so each one's checksums must be there. Android's is left out of a release when the ANDROID_KEYSTORE secret is not set (see package.yml).
+      # A platform whose artifact went missing would publish a release without it, so each one's checksums must be there; Android's too, as installed Android copies update from this release.
       - name: Check every platform is there
         working-directory: dist
         run: |
-          for name in macOS Windows Web; do
+          for name in macOS Windows Android Web; do
             if [ ! -f "checksums-$name.txt" ]; then
               echo "::error::The mirra-$name artifact is missing."
               exit 1
