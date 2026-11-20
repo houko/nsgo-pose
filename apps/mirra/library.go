@@ -165,7 +165,11 @@ func lookLine(t locales.Messages, r Request) string {
 		parts = append(parts, itemName(t, r.Face))
 	}
 	if r.Pose != nil {
-		parts = append(parts, r.Pose.Title, groupLabel(t, r.Pose.Group))
+		angle := groupLabel(t, r.Pose.Group)
+		if r.sheet() {
+			angle = t.AllAngles()
+		}
+		parts = append(parts, r.Pose.Title, angle)
 	}
 	return strings.Join(parts, " · ")
 }
@@ -324,6 +328,11 @@ func (s *studio) library(cx *core.Scope, k Kind, columns int) core.Node {
 			options = append(options, chipOption{g, groupLabel(t, g)})
 		}
 		var extra []core.Node
+		if k == KindPose {
+			extra = append(extra, core.Show{When: func() bool { return s.angles(chosen.Get()) != nil }, Then: func(cx *core.Scope) core.Node {
+				return pill(cx, t.AllAngles(), "chip-sheet", s.sheet.Get, func() { s.sheet.Set(!s.sheet.Get()) }, true)
+			}})
+		}
 		if len(cat.AdultGroups) > 0 {
 			extra = append(extra, pill(cx, t.AdultChip(), "chip-adult", adult.Get, func() { s.toggleAdult(k) }, true))
 		}

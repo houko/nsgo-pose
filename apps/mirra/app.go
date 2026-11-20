@@ -97,6 +97,8 @@ type studio struct {
 	// adultOK is the user's answer that they are 18 or older, asked once and kept, since works and favorites from the adults-only categories show without asking.
 	adultOK *core.Signal[bool]
 	note    *core.Signal[string]
+	// sheet asks for every camera angle of the pose side by side, rather than the chosen one.
+	sheet *core.Signal[bool]
 
 	busy   *core.Signal[bool]
 	cancel context.CancelFunc
@@ -201,6 +203,7 @@ func newStudio(cx *core.Scope, a App) *studio {
 		section:       core.NewSignal(cx, sectionStudio),
 		step:          core.NewSignal(cx, KindFace),
 		note:          core.NewSignal(cx, ""),
+		sheet:         core.NewSignal(cx, false),
 		busy:          core.NewSignal(cx, false),
 		shot:          core.NewSignal[*shot](cx, nil),
 		zoom:          core.NewSignal(cx, 100),
@@ -279,7 +282,27 @@ func (s *studio) choose(k Kind, it Item) {
 
 // look is the look as chosen; reading it inside a binding follows every choice.
 func (s *studio) look() Request {
-	return Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Note: s.note.Get()}
+	r := Request{Face: s.chosen[KindFace].Get(), Costume: s.chosen[KindCostume].Get(), Pose: s.chosen[KindPose].Get(), Note: s.note.Get()}
+	if s.sheet.Get() {
+		r.Views = s.angles(r.Pose)
+	}
+	return r
+}
+
+// angles are every camera angle of a one-person pose, nil for a two-person pose, one that has a single angle, or none.
+func (s *studio) angles(pose *Item) []*Item {
+	if pose == nil || pose.People == 2 {
+		return nil
+	}
+	items := loaded(s.catalogs[KindPose]).Angles(*pose)
+	if len(items) < 2 {
+		return nil
+	}
+	out := make([]*Item, len(items))
+	for i := range items {
+		out[i] = &items[i]
+	}
+	return out
 }
 
 func (s *studio) wide() bool { return s.cx.Env().Window().Width >= wideWidth }
@@ -407,8 +430,9 @@ func (s *studio) openWork(w work) {
 			s.chosen[k].Set(it)
 		}
 	}
+	s.sheet.Set(len(w.Views) > 1)
 	saved := w
-	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose}, Saved: &saved})
+	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Views: w.Views}, Saved: &saved})
 }
 
 // saveShot keeps the picture on show in Works, numbered after the others.
@@ -419,7 +443,7 @@ func (s *studio) saveShot(favorite bool) {
 	}
 	t := locales.For(s.cx)
 	dir, now, st := s.dir("works"), s.cx.Now(), s.pics
-	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose}
+	meta := workMeta{Favorite: favorite, Face: sh.Req.Face, Costume: sh.Req.Costume, Pose: sh.Req.Pose, Views: sh.Req.Views}
 	go func() {
 		w, err := saveWork(st, dir, sh.Path, now, meta)
 		s.cx.Post(func() {

@@ -10,6 +10,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/app.go` | Entry point; the app's state, the choice of layout by window width, generating, saving, starring and deleting a picture. |
 | `apps/mirra/gallery.go` | Reading the three galleries' indexes live, which items are adults-only, and the chips each filters by. |
 | `apps/mirra/generate.go` | The request: the prompt, the reference images in order, and OpenAI's multipart `/images/edits`. |
+| `apps/mirra/sheet.go` | A sheet of all angles: the pose's angles joined side by side into one reference, and its landscape size. |
 | `apps/mirra/apis.go` | The other providers' image APIs: Gemini, Volcengine Ark, xAI, OpenRouter, Model Studio and Azure OpenAI. |
 | `apps/mirra/providers.go` | The preset providers, with their logos from `ai-logo`, and the settings and keys each keeps, carried over from the cloud or local service of earlier versions. |
 | `apps/mirra/service.go` | The connection test in each provider's protocol. |
@@ -48,7 +49,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 
 **A look.** The galleries load as resources at start. Choosing a face, an outfit and a pose sets the studio's three signals; only the pose is required.
 
-**Generate.** Without a configured service, Generate opens the settings. Otherwise it downloads the chosen full images, sends them with the prompt to the chosen provider's API and writes the picture to the results folder, where it waits. Generate again and the outfit swap make the same request again, the swap with another outfit. Cancel stops the request through its context.
+**Generate.** Without a configured service, Generate opens the settings. Otherwise it downloads the chosen full images, for a sheet of all angles every angle of the pose joined side by side into one, sends them with the prompt to the chosen provider's API and writes the picture to the results folder, where it waits. Generate again and the outfit swap make the same request again, the swap with another outfit. Cancel stops the request through its context.
 
 **Save.** Saving moves the picture into the works folder under the next number and writes its sidecar; starring an unsaved picture saves it first. Opening a work brings back its look.
 

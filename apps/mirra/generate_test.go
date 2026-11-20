@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"image/png"
 	"net/http"
 	"slices"
 	"strings"
@@ -149,5 +150,63 @@ func TestCheckConnection(t *testing.T) {
 	}
 	if err := CheckConnection(context.Background(), http.DefaultClient, Config{BaseURL: srv.URL + "/nowhere"}); err == nil {
 		t.Error("a wrong address passed")
+	}
+}
+
+func TestSheetSendsTheAnglesAsOneImage(t *testing.T) {
+	api := &fakeAPI{}
+	srv, sites := newServer(t, api)
+	ctx := context.Background()
+	poses, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindPose)
+	faces, _ := FetchCatalog(ctx, http.DefaultClient, sites, KindFace)
+	views := poses.Angles(poses.Items[0])
+	r := Request{Pose: &views[0], Views: []*Item{&views[0], &views[1]}, Face: &faces.Items[1]}
+	if _, err := Generate(ctx, http.DefaultClient, Config{BaseURL: srv.URL + "/v1", APIKey: "k", Size: "1024x1536"}, r); err != nil {
+		t.Fatal(err)
+	}
+	req := api.last()
+	if want := []string{"angles.png", "f001.png"}; !slices.Equal(req.Images, want) {
+		t.Errorf("images = %v, want %v", req.Images, want)
+	}
+	if req.Size != "1536x1024" {
+		t.Errorf("size = %q, want the portrait size on its side", req.Size)
+	}
+	if !hasAll(req.Prompt, "from 2 camera angles in 2 panels", "Image 2 is a portrait", "2 evenly spaced panels") || strings.Contains(req.Prompt, "Image 3") {
+		t.Errorf("prompt = %q", req.Prompt)
+	}
+	if want := []string{"/pose/img/full_std_P001_front.png", "/pose/img/full_std_P001_side.png", "/face/img/full/f001.png"}; !slices.Equal(req.Downloads, want) {
+		t.Errorf("downloads = %v, want %v", req.Downloads, want)
+	}
+
+	if p := (Request{Pose: &views[0], Views: []*Item{&views[0], &views[1]}, Costume: &Item{}}).Prompt(); !hasAll(p, "Image 2 shows an outfit", "natural adult face") {
+		t.Errorf("sheet with an outfit = %q", p)
+	}
+	pair := &Item{People: 2}
+	if p := (Request{Pose: pair, Views: []*Item{pair, pair}}).Prompt(); strings.Contains(p, "panels") {
+		t.Errorf("a two-person pose asked for a sheet: %q", p)
+	}
+	for in, want := range map[string]string{"1024x1536": "1536x1024", "1024*1536": "1536x1024", "1536x1024": "1536x1024", "1024x1024": "1024x1024", "2K": "2K"} {
+		if got := landscape(in); got != want {
+			t.Errorf("landscape(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+func TestSideBySide(t *testing.T) {
+	pic := part{name: "a.png", data: tinyPNG(t)}
+	out, err := sideBySide([]part{pic, pic})
+	if err != nil {
+		t.Fatal(err)
+	}
+	img, err := png.Decode(bytes.NewReader(out.data))
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Two 2×3 images scaled to 768 high are 512 wide each, with a 24-pixel gap around them.
+	if b := img.Bounds(); b.Dx() != 24+512+24+512+24 || b.Dy() != 768+48 {
+		t.Errorf("sheet is %v", b)
+	}
+	if _, err := sideBySide([]part{{name: "bad", data: []byte("not an image")}}); err == nil {
+		t.Error("an unreadable reference made a sheet")
 	}
 }

@@ -55,6 +55,7 @@ zoomPercent: "{n, number}%"
 filtersLabel: 素材库
 all: 全部
 allCount: 全部 {n, number}
+allAngles: 全部角度
 angleFront: 正面
 angleThreeQuarter: 斜侧
 angleSide: 侧面

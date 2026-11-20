@@ -58,6 +58,8 @@ type Item struct {
 	Adult bool
 	// People is how many people a pose shows, 2 for the two-person line; 0 means one, as items saved before it was set have.
 	People int `json:",omitempty"`
+	// Set names the pose a pose item is one camera angle of, its line and number, which every angle of it shares; "" for outfits and faces.
+	Set string `json:",omitempty"`
 }
 
 // Catalog is a gallery's usable items and their groups in the gallery's order: Groups those of the items for everyone, AdultGroups those of the adults-only ones.
@@ -65,6 +67,21 @@ type Catalog struct {
 	Items       []Item
 	Groups      []string
 	AdultGroups []string
+}
+
+// Angles returns every camera angle of the pose it is one of, in the order the chips show the angles; nil for an item of no set.
+func (c Catalog) Angles(it Item) []Item {
+	if it.Set == "" {
+		return nil
+	}
+	var out []Item
+	for _, o := range c.Items {
+		if o.Set == it.Set {
+			out = append(out, o)
+		}
+	}
+	slices.SortStableFunc(out, func(a, b Item) int { return rank(poseAngleOrder, a.Group) - rank(poseAngleOrder, b.Group) })
+	return out
 }
 
 // InGroup returns the items for everyone, or the adults-only ones, of one group, all of them for "".
@@ -157,6 +174,7 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 		ID       string `json:"id"`
 		Line     string `json:"系統"`
 		Category string `json:"分類"`
+		Number   string `json:"ポーズ番号"`
 		Name     string `json:"ポーズ名"`
 		Angle    string `json:"アングル"`
 		Thumb    string `json:"サムネ"`
@@ -183,7 +201,7 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 		if strings.HasPrefix(r.Line, "2人") {
 			people = 2
 		}
-		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name, Adult: adult, People: people,
+		c.Items = append(c.Items, Item{Kind: KindPose, ID: r.ID, Group: r.Angle, Title: r.Name, Adult: adult, People: people, Set: poseSet(r.Line, r.Number),
 			Thumb: origin + "/" + r.Thumb, Full: origin + "/" + r.Full})
 	}
 	// The gallery lists its glamour line first; the app opens on the everyday poses.
@@ -193,6 +211,14 @@ func parsePoses(page []byte, origin string) (Catalog, error) {
 	slices.SortStableFunc(adultGroups.list, byAngle)
 	c.Groups, c.AdultGroups = groups.list, adultGroups.list
 	return nonEmpty(c)
+}
+
+// poseSet names a pose by its line and number, "" when the gallery gives no number.
+func poseSet(line, number string) string {
+	if number == "" {
+		return ""
+	}
+	return line + " " + number
 }
 
 // adultPose says whether a pose is adults-only: the glamour and two-person lines, and the upper-body poses that are revealing.

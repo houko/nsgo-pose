@@ -43,6 +43,8 @@ type Request struct {
 	Costume *Item
 	Face    *Item
 	Note    string
+	// Views are every camera angle of a one-person pose, Pose among them, for a sheet that shows the look from each side by side; nil for one picture of Pose.
+	Views []*Item
 	// Count is how many pictures to ask for, 1 when 0.
 	Count int
 }
@@ -61,12 +63,18 @@ func (r Request) Validate() error {
 	return nil
 }
 
+// sheet says whether the request is for a sheet of several camera angles.
+func (r Request) sheet() bool { return len(r.Views) > 1 && r.Pose != nil && r.Pose.People != 2 }
+
 func (r Request) count() int { return min(max(r.Count, 1), maxCount) }
 
 // Prompt says what each attached image is for, in the order the images are sent.
 func (r Request) Prompt() string {
 	if r.Pose != nil && r.Pose.People == 2 {
 		return r.pairPrompt()
+	}
+	if r.sheet() {
+		return r.sheetPrompt()
 	}
 	var b strings.Builder
 	b.WriteString("Image 1 is a faceless gray mannequin showing a pose and a camera angle. Create one photorealistic photo of a single adult person in exactly that pose, framing and camera angle, on a plain light studio background.")
@@ -85,6 +93,34 @@ func (r Request) Prompt() string {
 	r.writeNote(&b)
 	b.WriteString(" Output a single image of one adult person; no text, no watermark.")
 	return b.String()
+}
+
+// sheetPrompt is the prompt of a sheet: image 1 is the pose's angles side by side, which the picture lays out the same way.
+func (r Request) sheetPrompt() string {
+	var b strings.Builder
+	kind, scene := "photorealistic photo", "on a plain light studio background"
+	n := len(r.Views)
+	fmt.Fprintf(&b, "Image 1 shows the same pose from %d camera angles in %d panels side by side, a faceless gray mannequin in each. Create one %s laid out the same way: %d panels side by side, each showing the same single adult person in exactly that pose and the camera angle of the matching panel, %s. The person, face, hair, outfit and lighting are identical in every panel.", n, n, kind, n, scene)
+	if r.Costume != nil {
+		b.WriteString(" Image 2 shows an outfit with no one wearing it: dress the person in exactly that outfit, with the same garments, colors, materials, patterns and details, fitted naturally to their body and pose.")
+	} else {
+		b.WriteString(" Dress them in simple, plain everyday clothes.")
+	}
+	if r.Face != nil {
+		fmt.Fprintf(&b, " Image %d is a portrait: give the person that face, with the same facial features, skin tone, hairstyle and hair color.", 2+boolInt(r.Costume != nil))
+	} else {
+		b.WriteString(" Give them a natural adult face.")
+	}
+	r.writeNote(&b)
+	fmt.Fprintf(&b, " Output a single image of %d evenly spaced panels of one adult person; no text, no labels, no watermark.", n)
+	return b.String()
+}
+
+func boolInt(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }
 
 // pairPrompt is the prompt of a two-person pose: the look's outfit and face go to the person the pose centers on, and the other person is an adult of their own.
@@ -133,8 +169,24 @@ func Generate(ctx context.Context, client *http.Client, cfg Config, r Request) (
 		return nil, ErrNoAPIKey
 	}
 	var parts []part
-	for _, it := range []*Item{r.Pose, r.Costume, r.Face} {
-		if it == nil {
+	if r.sheet() {
+		var views []part
+		for _, it := range r.Views {
+			p, err := download(ctx, client, cfg.ReadLocal, *it)
+			if err != nil {
+				return nil, err
+			}
+			views = append(views, p)
+		}
+		p, err := sideBySide(views)
+		if err != nil {
+			return nil, err
+		}
+		parts = append(parts, p)
+		cfg.Size = landscape(or(cfg.Size, defaultSize))
+	}
+	for i, it := range []*Item{r.Pose, r.Costume, r.Face} {
+		if it == nil || i == 0 && r.sheet() {
 			continue
 		}
 		p, err := download(ctx, client, cfg.ReadLocal, *it)

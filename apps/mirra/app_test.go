@@ -486,3 +486,36 @@ func TestMacMenuOpensSettingsAndChecksForUpdates(t *testing.T) {
 		t.Errorf("Windows got a menu bar: %v", other.Menu)
 	}
 }
+
+func TestSheetOfAllAngles(t *testing.T) {
+	api := &fakeAPI{}
+	app, dir := start(t, api, "k")
+	app.Press("id:row-face")
+	choose(t, app, faceShort)
+	app.Press("id:next")
+	choose(t, app, outfitCoat)
+	app.Press("id:next")
+	if app.Exists("id:chip-sheet") {
+		t.Error("All angles shows before a pose is chosen")
+	}
+	choose(t, app, poseStand)
+	app.WaitFor("id:chip-sheet", wait)
+	app.Press("id:chip-sheet")
+	app.WaitUntil(wait, func() bool { return app.Find("id:chip-sheet").Props.Selected })
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := api.last().Images; !slices.Equal(got, []string{"angles.png", "WIN-0001.png", "f001.png"}) {
+		t.Errorf("images = %v", got)
+	}
+	app.Press("id:save-to-works")
+	app.WaitFor("id:saved", wait)
+	ws := works(t, dir)
+	if len(ws) != 1 || len(ws[0].Views) != 2 || ws[0].Views[1].ID != "full_std_P001_side" {
+		t.Fatalf("works = %+v", ws)
+	}
+	app.Press("id:regenerate")
+	app.WaitUntil(wait, func() bool { return len(api.requests) == 2 })
+	if got := api.last().Images; len(got) == 0 || got[0] != "angles.png" {
+		t.Errorf("Generate again sent %v, not the sheet", got)
+	}
+}
