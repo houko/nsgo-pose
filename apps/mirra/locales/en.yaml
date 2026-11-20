@@ -58,6 +58,7 @@ back: Back
 close: Close
 nextCostume: "Next: outfit"
 nextPose: "Next: pose"
+surprise: Surprise me
 generate: Generate
 generateNeedsService: "Generate · set up an AI service"
 needPose: Choose a pose first.

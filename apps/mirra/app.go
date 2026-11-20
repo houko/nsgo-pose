@@ -6,6 +6,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
+	"math/rand/v2"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -277,6 +278,16 @@ func (s *studio) choose(k Kind, it Item) {
 	s.chosen[k].Set(&it)
 	if sh := s.shot.Get(); sh != nil && sh.Saved == nil {
 		s.shot.Set(nil)
+	}
+}
+
+// surprise chooses a face, an outfit and a pose at random, each from what its gallery shows: its chip and, only where the user turned it on, its adults-only items.
+func (s *studio) surprise() {
+	for _, k := range steps {
+		items := loaded(s.catalogs[k]).InGroup(s.filter[k].Get(), s.adult[k].Get())
+		if len(items) > 0 {
+			s.choose(k, items[rand.IntN(len(items))])
+		}
 	}
 }
 

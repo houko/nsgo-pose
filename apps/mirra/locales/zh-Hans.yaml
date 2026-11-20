@@ -38,6 +38,7 @@ back: 返回
 close: 关闭
 nextCostume: 下一步 · 选服装
 nextPose: 下一步 · 选姿势
+surprise: 随机一套
 generate: 生成造型
 generateNeedsService: 生成造型 · 先配置 AI 服务
 needPose: 先选一个姿势。

@@ -519,3 +519,20 @@ func TestSheetOfAllAngles(t *testing.T) {
 		t.Errorf("Generate again sent %v, not the sheet", got)
 	}
 }
+
+func TestSurpriseChoosesAShownLook(t *testing.T) {
+	api := &fakeAPI{}
+	app, _ := start(t, api, "k")
+	app.WaitFor("id:surprise", wait)
+	// The galleries load after the first frame; a press before they have is a no-op.
+	app.WaitUntil(wait, func() bool {
+		app.Press("id:surprise")
+		return app.Enabled("id:generate")
+	})
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	got := api.last().Images
+	if len(got) != 3 || got[0] != "full_std_P001_front.png" || (got[1] != "SPR-0001.png" && got[1] != "WIN-0001.png") || (got[2] != "f001.png" && got[2] != "f002.png") {
+		t.Errorf("images = %v, want the front pose, an outfit and a face for everyone", got)
+	}
+}

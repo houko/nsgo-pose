@@ -136,6 +136,7 @@ const (
 	textClose
 	textNextCostume
 	textNextPose
+	textSurprise
 	textGenerate
 	textGenerateNeedsService
 	textNeedPose
@@ -302,6 +303,7 @@ var keyOfText = [numTexts]string{
 	"close",
 	"nextCostume",
 	"nextPose",
+	"surprise",
 	"generate",
 	"generateNeedsService",
 	"needPose",
@@ -466,6 +468,7 @@ var textsEn = i18n.NewTexts(""+
 	"Close"+
 	"Next: outfit"+
 	"Next: pose"+
+	"Surprise me"+
 	"Generate"+
 	"Generate · set up an AI service"+
 	"Choose a pose first."+
@@ -627,6 +630,7 @@ var textsEn = i18n.NewTexts(""+
 		5,
 		12,
 		10,
+		11,
 		8,
 		32,
 		20,
@@ -791,6 +795,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"关闭"+
 	"下一步 · 选服装"+
 	"下一步 · 选姿势"+
+	"随机一套"+
 	"生成造型"+
 	"生成造型 · 先配置 AI 服务"+
 	"先选一个姿势。"+
@@ -952,6 +957,7 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		22,
 		22,
+		12,
 		12,
 		35,
 		21,
@@ -1623,6 +1629,13 @@ func NextPose(cx *core.Scope) string { return For(cx).NextPose() }
 
 // NextPose is the package's NextPose in the language of msgs.
 func (msgs Messages) NextPose() string { return msgs.text(textNextPose) }
+
+// Surprise says "Surprise me"
+// in the language the app shows under cx.
+func Surprise(cx *core.Scope) string { return For(cx).Surprise() }
+
+// Surprise is the package's Surprise in the language of msgs.
+func (msgs Messages) Surprise() string { return msgs.text(textSurprise) }
 
 // Generate says "Generate"
 // in the language the app shows under cx.
