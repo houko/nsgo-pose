@@ -262,6 +262,7 @@ const (
 	textErrKeyRefused
 	textErrNotFound
 	textErrRateLimited
+	textErrBlocked
 	textErrRejected
 	textErrServer
 	textErrTimeout
@@ -432,6 +433,7 @@ var keyOfText = [numTexts]string{
 	"errKeyRefused",
 	"errNotFound",
 	"errRateLimited",
+	"errBlocked",
 	"errRejected",
 	"errServer",
 	"errTimeout",
@@ -600,6 +602,7 @@ var textsEn = i18n.NewTexts(""+
 	"The service refused the key. Check that it is right and may use this model."+
 	"The address or the model wasn't found. Check them in the AI settings."+
 	"Too many requests, or the account is out of credit. Try again later, or check its balance."+
+	"The service's safety check stopped this picture. Try another outfit or pose, or another service."+
 	"The service refused the request."+
 	"The service had a problem. Try again later."+
 	"The service took too long to answer. Try again."+
@@ -765,6 +768,7 @@ var textsEn = i18n.NewTexts(""+
 		75,
 		69,
 		90,
+		96,
 		32,
 		43,
 		47,
@@ -933,6 +937,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"服务拒绝了这个 Key，请检查它是否正确、能否使用这个模型。"+
 	"找不到这个地址或模型，请在 AI 设置里检查。"+
 	"请求过多，或账户额度已用完。请稍后再试，或检查余额。"+
+	"服务商的安全审核拦下了这张图。可以换一套服装或姿势，或换一家服务商再试。"+
 	"服务拒绝了这个请求。"+
 	"服务出了问题，请稍后再试。"+
 	"服务响应超时，请重试。"+
@@ -1098,6 +1103,7 @@ var textsZhHans = i18n.NewTexts(""+
 		82,
 		61,
 		78,
+		108,
 		30,
 		39,
 		33,
@@ -2903,6 +2909,13 @@ func ErrRateLimited(cx *core.Scope) string { return For(cx).ErrRateLimited() }
 
 // ErrRateLimited is the package's ErrRateLimited in the language of msgs.
 func (msgs Messages) ErrRateLimited() string { return msgs.text(textErrRateLimited) }
+
+// ErrBlocked says "The service's safety check stopped this picture. Try another outfit or pose, or another service."
+// in the language the app shows under cx.
+func ErrBlocked(cx *core.Scope) string { return For(cx).ErrBlocked() }
+
+// ErrBlocked is the package's ErrBlocked in the language of msgs.
+func (msgs Messages) ErrBlocked() string { return msgs.text(textErrBlocked) }
 
 // ErrRejected says "The service refused the request."
 // in the language the app shows under cx.

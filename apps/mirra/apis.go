@@ -10,6 +10,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -57,6 +58,38 @@ func postJSON(ctx context.Context, client *http.Client, url string, headers map[
 type statusError struct {
 	Code            int
 	Status, Message string
+	// Type is the machine-readable code or type of the error the body names, such as OpenAI's "moderation_blocked", if any.
+	Type string
+}
+
+// Is makes a refusal by the service's safety system match errBlocked.
+func (e *statusError) Is(target error) bool {
+	return target == errBlocked && isBlocked(e.Type, e.Message)
+}
+
+// errBlocked is a request the service's safety system refused: the prompt, a reference image or the picture made broke its content rules.
+var errBlocked = errors.New("image API: blocked by the safety system")
+
+// blockedError is a refusal by the safety system that an answer reports without a failed HTTP status, with the reason it gave.
+type blockedError struct{ Reason string }
+
+func (e *blockedError) Error() string        { return errBlocked.Error() + ": " + e.Reason }
+func (e *blockedError) Is(target error) bool { return target == errBlocked }
+
+// isBlocked says whether an error's code or message is the safety system's: OpenAI's moderation_blocked and content_policy_violation, Azure's content_filter, Ark's *SensitiveContentDetected, DashScope's DataInspectionFailed, and messages that say as much.
+func isBlocked(code, message string) bool {
+	code, message = strings.ToLower(code), strings.ToLower(message)
+	for _, c := range []string{"moderation", "content_policy", "content_filter", "sensitive", "safety", "responsibleai", "datainspection"} {
+		if strings.Contains(code, c) {
+			return true
+		}
+	}
+	for _, m := range []string{"safety system", "content policy", "content filter", "moderation", "sensitive content", "inappropriate content", "data inspection failed"} {
+		if strings.Contains(message, m) {
+			return true
+		}
+	}
+	return false
 }
 
 func (e *statusError) Error() string {
@@ -72,22 +105,34 @@ func apiError(resp *http.Response) error {
 	var out struct {
 		Error   json.RawMessage `json:"error"`
 		Message string          `json:"message"`
+		Code    json.RawMessage `json:"code"`
 	}
-	msg := ""
+	msg, kind := "", ""
 	if json.Unmarshal(body, &out) == nil {
 		var nested struct {
-			Message string `json:"message"`
+			Message string          `json:"message"`
+			Code    json.RawMessage `json:"code"`
+			Type    json.RawMessage `json:"type"`
 		}
 		switch {
 		case len(out.Error) > 0 && json.Unmarshal(out.Error, &nested) == nil && nested.Message != "":
-			msg = nested.Message
+			msg, kind = nested.Message, or(text(nested.Code), text(nested.Type))
 		case len(out.Error) > 0 && out.Error[0] == '"':
 			_ = json.Unmarshal(out.Error, &msg)
 		default:
-			msg = out.Message
+			msg, kind = out.Message, text(out.Code)
 		}
 	}
-	return &statusError{Code: resp.StatusCode, Status: resp.Status, Message: msg}
+	return &statusError{Code: resp.StatusCode, Status: resp.Status, Message: msg, Type: kind}
+}
+
+// text is a JSON string's value, "" for a number, null or anything else.
+func text(raw json.RawMessage) string {
+	var s string
+	if json.Unmarshal(raw, &s) != nil {
+		return ""
+	}
+	return s
 }
 
 // bearer is the Authorization header most APIs take the key in, none without a key.
@@ -261,9 +306,13 @@ func generateGemini(ctx context.Context, client *http.Client, cfg Config, prompt
 		}
 		if len(b64s) == 0 {
 			if out.PromptFeedback != nil && out.PromptFeedback.BlockReason != "" {
-				return nil, fmt.Errorf("image API: blocked: %s", out.PromptFeedback.BlockReason)
+				return nil, &blockedError{Reason: out.PromptFeedback.BlockReason}
 			}
 			if len(out.Candidates) > 0 && out.Candidates[0].FinishReason != "" {
+				// SAFETY, IMAGE_SAFETY, PROHIBITED_CONTENT, BLOCKLIST and SPII are Gemini's reasons for withholding what it made.
+				if reason := out.Candidates[0].FinishReason; slices.ContainsFunc([]string{"SAFETY", "PROHIBITED", "BLOCKLIST", "SPII"}, func(s string) bool { return strings.Contains(reason, s) }) {
+					return nil, &blockedError{Reason: reason}
+				}
 				return nil, fmt.Errorf("image API returned no image: %s", out.Candidates[0].FinishReason)
 			}
 		}
@@ -293,6 +342,7 @@ func dataImages(ctx context.Context, client *http.Client, url string, headers ma
 			B64JSON string `json:"b64_json"`
 			URL     string `json:"url"`
 			Error   *struct {
+				Code    string `json:"code"`
 				Message string `json:"message"`
 			} `json:"error"`
 		} `json:"data"`
@@ -301,7 +351,7 @@ func dataImages(ctx context.Context, client *http.Client, url string, headers ma
 		return nil, err
 	}
 	var b64s, urls []string
-	var failed string
+	var failed, failedCode string
 	for _, d := range out.Data {
 		switch {
 		case d.B64JSON != "":
@@ -309,10 +359,13 @@ func dataImages(ctx context.Context, client *http.Client, url string, headers ma
 		case d.URL != "":
 			urls = append(urls, d.URL)
 		case d.Error != nil:
-			failed = d.Error.Message
+			failed, failedCode = d.Error.Message, d.Error.Code
 		}
 	}
 	if len(b64s)+len(urls) == 0 && failed != "" {
+		if isBlocked(failedCode, failed) {
+			return nil, &blockedError{Reason: failed}
+		}
 		return nil, fmt.Errorf("image API: %s", failed)
 	}
 	return decodeImages(ctx, client, b64s, urls)
