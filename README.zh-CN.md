@@ -26,14 +26,6 @@
   <img src="screenshots/phone-me-zh-Hans.png" alt="我的：App 信息和 AI 服务" width="260">
 </p>
 
-<p align="center">
-  <img src="screenshots/desktop-zh-Hans.png" alt="桌面工作室：素材库、画布和本次造型" width="800">
-</p>
-
-<p align="center">
-  <img src="screenshots/desktop-settings-zh-Hans.png" alt="桌面上的 AI 服务设置" width="800">
-</p>
-
 ## 功能
 
 - **人脸、服装、姿势。** 选一张脸（AI 生成，CC0）、一套服装（没有人穿的衣服）和一个姿势（无脸的灰色人偶），App 让图像模型生成一张具备这些的成年人照片；双人姿势生成两位成年人，人脸和服装用在主要的那位身上。只有姿势是必选的。
