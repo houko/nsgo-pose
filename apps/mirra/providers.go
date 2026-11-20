@@ -131,6 +131,13 @@ const (
 	keyProvider      = "provider"
 )
 
+// The sizes the settings offer: portrait, which suits a full-length look, square and landscape.
+const (
+	sizePortrait  = "1024x1536"
+	sizeSquare    = "1024x1024"
+	sizeLandscape = "1536x1024"
+)
+
 // defaultLocalURL is the address an OpenAI-compatible server on the user's machine starts with.
 const defaultLocalURL = "http://127.0.0.1:8080/v1"
 

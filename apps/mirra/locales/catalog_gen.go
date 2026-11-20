@@ -217,6 +217,13 @@ const (
 	textProviderVolcengine
 	textProviderDashScope
 	textGetApiKey
+	textAdvancedSettings
+	textSizePortrait
+	textSizeSquare
+	textSizeLandscape
+	textResetDefaults
+	textVersion
+	textVersionDevelopment
 	textBaseURL
 	textApiKey
 	textApiKeyOptional
@@ -360,6 +367,13 @@ var keyOfText = [numTexts]string{
 	"providerVolcengine",
 	"providerDashScope",
 	"getApiKey",
+	"advancedSettings",
+	"sizePortrait",
+	"sizeSquare",
+	"sizeLandscape",
+	"resetDefaults",
+	"version",
+	"versionDevelopment",
 	"baseURL",
 	"apiKey",
 	"apiKeyOptional",
@@ -501,6 +515,13 @@ var textsEn = i18n.NewTexts(""+
 	"Volcengine Ark"+
 	"Alibaba Cloud Model Studio"+
 	"Get an API key"+
+	"Advanced"+
+	"Portrait"+
+	"Square"+
+	"Landscape"+
+	"Reset to defaults"+
+	"Version"+
+	"Development build"+
 	"Address"+
 	"API key"+
 	"API key (optional)"+
@@ -639,6 +660,13 @@ var textsEn = i18n.NewTexts(""+
 		14,
 		26,
 		14,
+		8,
+		8,
+		6,
+		9,
+		17,
+		7,
+		17,
 		7,
 		7,
 		18,
@@ -780,6 +808,13 @@ var textsZhHans = i18n.NewTexts(""+
 	"火山方舟"+
 	"阿里云百炼"+
 	"获取 API Key"+
+	"高级设置"+
+	"竖版"+
+	"方形"+
+	"横版"+
+	"恢复默认"+
+	"版本"+
+	"开发版"+
 	"接口地址"+
 	"API Key"+
 	"API Key（可留空）"+
@@ -918,6 +953,13 @@ var textsZhHans = i18n.NewTexts(""+
 		12,
 		15,
 		14,
+		12,
+		6,
+		6,
+		6,
+		12,
+		6,
+		9,
 		12,
 		7,
 		22,
@@ -2306,6 +2348,55 @@ func GetApiKey(cx *core.Scope) string { return For(cx).GetApiKey() }
 
 // GetApiKey is the package's GetApiKey in the language of msgs.
 func (msgs Messages) GetApiKey() string { return msgs.text(textGetApiKey) }
+
+// AdvancedSettings says "Advanced"
+// in the language the app shows under cx.
+func AdvancedSettings(cx *core.Scope) string { return For(cx).AdvancedSettings() }
+
+// AdvancedSettings is the package's AdvancedSettings in the language of msgs.
+func (msgs Messages) AdvancedSettings() string { return msgs.text(textAdvancedSettings) }
+
+// SizePortrait says "Portrait"
+// in the language the app shows under cx.
+func SizePortrait(cx *core.Scope) string { return For(cx).SizePortrait() }
+
+// SizePortrait is the package's SizePortrait in the language of msgs.
+func (msgs Messages) SizePortrait() string { return msgs.text(textSizePortrait) }
+
+// SizeSquare says "Square"
+// in the language the app shows under cx.
+func SizeSquare(cx *core.Scope) string { return For(cx).SizeSquare() }
+
+// SizeSquare is the package's SizeSquare in the language of msgs.
+func (msgs Messages) SizeSquare() string { return msgs.text(textSizeSquare) }
+
+// SizeLandscape says "Landscape"
+// in the language the app shows under cx.
+func SizeLandscape(cx *core.Scope) string { return For(cx).SizeLandscape() }
+
+// SizeLandscape is the package's SizeLandscape in the language of msgs.
+func (msgs Messages) SizeLandscape() string { return msgs.text(textSizeLandscape) }
+
+// ResetDefaults says "Reset to defaults"
+// in the language the app shows under cx.
+func ResetDefaults(cx *core.Scope) string { return For(cx).ResetDefaults() }
+
+// ResetDefaults is the package's ResetDefaults in the language of msgs.
+func (msgs Messages) ResetDefaults() string { return msgs.text(textResetDefaults) }
+
+// Version says "Version"
+// in the language the app shows under cx.
+func Version(cx *core.Scope) string { return For(cx).Version() }
+
+// Version is the package's Version in the language of msgs.
+func (msgs Messages) Version() string { return msgs.text(textVersion) }
+
+// VersionDevelopment says "Development build"
+// in the language the app shows under cx.
+func VersionDevelopment(cx *core.Scope) string { return For(cx).VersionDevelopment() }
+
+// VersionDevelopment is the package's VersionDevelopment in the language of msgs.
+func (msgs Messages) VersionDevelopment() string { return msgs.text(textVersionDevelopment) }
 
 // BaseURL says "Address"
 // in the language the app shows under cx.

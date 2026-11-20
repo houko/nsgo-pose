@@ -162,6 +162,13 @@ providerCustom: Custom (OpenAI-compatible)
 providerVolcengine: Volcengine Ark
 providerDashScope: Alibaba Cloud Model Studio
 getApiKey: Get an API key
+advancedSettings: Advanced
+sizePortrait: Portrait
+sizeSquare: Square
+sizeLandscape: Landscape
+resetDefaults: Reset to defaults
+version: Version
+versionDevelopment: Development build
 baseURL: Address
 apiKey: API key
 apiKeyOptional: API key (optional)

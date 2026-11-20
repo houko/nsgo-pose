@@ -366,20 +366,27 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		if p.KeyOptional {
 			keyLabel = t.ApiKeyOptional()
 		}
-		keyRow := core.View{Style: core.Style{Direction: core.Row, Gap: 8}, Children: []core.Node{
+		keyRow := core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 8}, Children: []core.Node{
 			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{
 				core.Dynamic(func(cx *core.Scope) core.Node {
 					return ui.Input{Value: set.key.Get, OnChange: setKey, OnBlur: saveKey, Masked: !s.showKey.Get(), Label: keyLabel, Placeholder: p.KeyHint, TestID: "api-key"}
 				}),
 			}},
-			core.Dynamic(func(cx *core.Scope) core.Node {
-				text := t.ShowKey()
-				if s.showKey.Get() {
-					text = t.HideKey()
-				}
-				return ui.Button{Variant: ui.ButtonOutline, TestID: "show-key", Style: core.Style{CornerRadius: 12},
-					Text: text, OnPress: func() { s.showKey.Update(func(v bool) bool { return !v }) }}
-			}),
+			ui.IconButton{TestID: "show-key", Size: 40, IconSize: 18,
+				Icon: func() *core.SVG {
+					if s.showKey.Get() {
+						return lucide.EyeOff()
+					}
+					return lucide.Eye()
+				},
+				LabelFunc: func() string {
+					if s.showKey.Get() {
+						return t.HideKey()
+					}
+					return t.ShowKey()
+				},
+				Selected: s.showKey.Get,
+				OnPress:  func() { s.showKey.Update(func(v bool) bool { return !v }) }},
 		}}
 		key := []core.Node{caption(cx, func() string { return keyLabel }), keyRow}
 		if p.KeyURL != "" {
@@ -389,20 +396,53 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 		if urlHint == "" {
 			urlHint = p.URLHint
 		}
-		half := func(n core.Node) core.Node {
-			return core.View{Style: core.Style{FlexGrow: 1, FlexBasis: core.Pt(0)}, Children: []core.Node{n}}
+		address := field(cx, t.BaseURL, ui.Input{Value: set.url.Get, OnChange: setStored("url", func(ps providerSettings) *core.Signal[string] { return ps.url }),
+			Label: t.BaseURL(), Placeholder: urlHint, KeyboardType: core.KeyboardURL, TestID: "base-url"})
+		size := func() string { return or(set.size.Get(), p.Size) }
+		sizes := ui.Tabs[string]{Label: t.Size(), Equal: true, Value: size, TestID: "size",
+			OnChange: func(v string) {
+				// The preset's own size is kept as "", so the setting follows the preset.
+				if v == p.Size {
+					v = ""
+				}
+				setStored("size", func(ps providerSettings) *core.Signal[string] { return ps.size })(v)
+			},
+			Options: []ui.Option[string]{
+				{Value: sizePortrait, Label: t.SizePortrait(), TestID: "size-portrait"},
+				{Value: sizeSquare, Label: t.SizeSquare(), TestID: "size-square"},
+				{Value: sizeLandscape, Label: t.SizeLandscape(), TestID: "size-landscape"},
+			}}
+		changed := func() bool { return set.url.Get() != "" || set.model.Get() != "" || set.size.Get() != "" }
+		reset := ui.Button{Text: t.ResetDefaults(), Icon: lucide.RotateCcw, Variant: ui.ButtonGhost, Size: ui.SizeSmall, TestID: "reset-defaults", Disabled: func() bool { return !changed() },
+			OnPress: func() {
+				for _, f := range []struct {
+					name string
+					sig  *core.Signal[string]
+				}{{"url", set.url}, {"model", set.model}, {"size", set.size}} {
+					f.sig.Set("")
+					store.RemoveItem(p.storageKey(f.name))
+				}
+				s.resetConnection()
+			}}
+		var advanced []core.Node
+		// A provider without an address of its own, such as Azure's, needs the user's: it shows with the key rather than among the advanced settings.
+		if p.BaseURL != "" {
+			advanced = append(advanced, address)
 		}
-		return core.View{Style: core.Style{Gap: 16}, Children: []core.Node{
-			core.View{Style: core.Style{Gap: 8}, Children: key},
-			field(cx, t.BaseURL, ui.Input{Value: set.url.Get, OnChange: setStored("url", func(ps providerSettings) *core.Signal[string] { return ps.url }),
-				Label: t.BaseURL(), Placeholder: urlHint, KeyboardType: core.KeyboardURL, TestID: "base-url"}),
-			core.View{Style: core.Style{Direction: core.Row, Gap: 10}, Children: []core.Node{
-				half(field(cx, t.Model, ui.Input{Value: set.model.Get, OnChange: setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model }),
-					Label: t.Model(), Placeholder: p.Model, TestID: "model"})),
-				half(field(cx, t.Size, ui.Input{Value: set.size.Get, OnChange: setStored("size", func(ps providerSettings) *core.Signal[string] { return ps.size }),
-					Label: t.Size(), Placeholder: p.Size, TestID: "size"})),
-			}},
-		}}
+		advanced = append(advanced,
+			field(cx, t.Model, ui.Input{Value: set.model.Get, OnChange: setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model }),
+				Label: t.Model(), Placeholder: p.Model, TestID: "model"}),
+			field(cx, t.Size, sizes),
+			core.View{Style: core.Style{Direction: core.Row}, Children: []core.Node{reset}})
+		// The advanced settings open on their own when the user changed one; read untracked, so changing a field does not draw the fields again.
+		open := core.NewSignal(cx, core.Untracked(cx, changed))
+		children := []core.Node{core.View{Style: core.Style{Gap: 8}, Children: key}}
+		if p.BaseURL == "" {
+			children = append(children, address)
+		}
+		children = append(children, ui.Collapsible{Text: t.AdvancedSettings(), Open: open.Get, OnOpenChange: open.Set, TestID: "advanced",
+			Content: core.View{Style: core.Style{Gap: 16, Padding: core.Edges{Top: 12}}, Children: advanced}})
+		return core.View{Style: core.Style{Gap: 16}, Children: children}
 	})
 	result := core.Dynamic(func(cx *core.Scope) core.Node {
 		switch s.conn.Get() {
@@ -449,7 +489,12 @@ func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 func (s *studio) aboutLinks(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	open := func(url string) func() { return func() { cx.OpenURL(url, func(bool) {}) } }
+	version := core.App().Version
+	if version == "" {
+		version = t.VersionDevelopment()
+	}
 	return ui.FormSection{Title: t.AboutSection(), Children: []core.Node{
+		ui.FormRow{Title: t.Version(), Detail: version, OnPress: open(repoURL + "/releases"), TestID: "version"},
 		ui.FormRow{Title: t.SourceCode(), Detail: "GitHub", OnPress: open(repoURL)},
 		ui.FormRow{Title: t.License(), Detail: "MIT", OnPress: open(repoURL + "/blob/main/LICENSE")},
 		ui.FormRow{Title: t.SourcesPose(), Detail: "POSE-DB-01", OnPress: open(DefaultSites.Pose)},
@@ -506,6 +551,9 @@ func (s *studio) settingsDialog(cx *core.Scope) core.Node {
 		Footer: []core.Node{ui.Button{Text: t.Close(), Variant: ui.ButtonSecondary, TestID: "close-settings", Style: core.Style{CornerRadius: 999},
 			OnPress: func() { s.settingsShown.Set(false) }}},
 		Children: []core.Node{
-			core.View{TestID: "settings", Style: core.Style{Gap: 16}, Children: []core.Node{s.serviceSettings(cx), s.aboutLinks(cx)}},
+			// The dialog stops at the window's height; with Advanced open the settings are taller, so they scroll inside it.
+			core.Scroll{Style: core.Style{FlexShrink: 1, MinHeight: core.Pt(0)}, Children: []core.Node{
+				core.View{TestID: "settings", Style: core.Style{Gap: 16}, Children: []core.Node{s.serviceSettings(cx), s.aboutLinks(cx)}},
+			}},
 		}}
 }

@@ -98,7 +98,7 @@ go tool nsgo build                   # packages for every target in nsgo.yaml, i
 
 ### Set up the image API
 
-Open **Me** on a phone, or the settings button at the top right on the desktop, choose a provider, enter its key and press **Test connection**. The address, model and size start on the provider's own; change them only to use another region, gateway or model.
+Open **Me** on a phone, or the settings button at the top right on the desktop, choose a provider, enter its key and press **Test connection**. The address, model and size start on the provider's own and sit under **Advanced**; change them only to use another region, gateway or model, and **Reset to defaults** puts them back. Azure OpenAI and a custom server ask for their address beside the key.
 
 | Provider | API | Model it starts with |
 | --- | --- | --- |
@@ -112,7 +112,7 @@ Open **Me** on a phone, or the settings button at the top right on the desktop, 
 | stable-diffusion.cpp | its server's OpenAI-compatible `/images/edits` | `sd-cpp-local` |
 | Custom | any OpenAI-compatible `/images/edits` | `gpt-image-2` |
 
-Keys are stored in the macOS / iOS keychain, Android Keystore or Windows Credential Manager. The size is written as `1024x1536`; providers that take an aspect ratio get the closest one, `2:3`.
+Keys are stored in the macOS / iOS keychain, Android Keystore or Windows Credential Manager. The size is portrait (`1024x1536`), square (`1024x1024`) or landscape (`1536x1024`); providers that take an aspect ratio get the matching one, such as `2:3`.
 
 The connection test asks the provider for its models; Volcengine Ark and Model Studio have no such list, so the test sends them an empty request, which a valid key gets a 400 for. Each Generate is one call, or one per picture on Ark and Gemini, paid on a cloud provider. The requests follow each provider's API reference and are tested against fakes of them; they have not all been tried against the real services yet, and reports of what a provider does with them are welcome.
 

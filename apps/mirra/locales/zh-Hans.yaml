@@ -130,6 +130,13 @@ providerCustom: 自定义（OpenAI 兼容）
 providerVolcengine: 火山方舟
 providerDashScope: 阿里云百炼
 getApiKey: 获取 API Key
+advancedSettings: 高级设置
+sizePortrait: 竖版
+sizeSquare: 方形
+sizeLandscape: 横版
+resetDefaults: 恢复默认
+version: 版本
+versionDevelopment: 开发版
 baseURL: 接口地址
 apiKey: API Key
 apiKeyOptional: API Key（可留空）
