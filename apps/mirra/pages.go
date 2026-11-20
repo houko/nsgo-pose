@@ -608,6 +608,7 @@ func (s *studio) settingsPage(cx *core.Scope) core.Node {
 			core.View{TestID: "settings", Style: core.Style{Padding: core.All(20), Gap: 16, PaddingEnv: core.EnvEdges{Top: core.EnvSafeArea}}, Children: []core.Node{
 				core.View{Style: core.Style{Gap: 4}, Children: []core.Node{eyebrow(cx, t.EyebrowSettings), display(t.TabMe, 30)}},
 				s.appCard(cx),
+				ui.FormSection{Title: t.SettingsGeneral(), Children: []core.Node{s.languageRow(cx)}},
 				card(cx, display(t.AiService, 20), s.serviceSettings(cx)),
 				s.aboutLinks(cx),
 			}},
@@ -617,6 +618,7 @@ func (s *studio) settingsPage(cx *core.Scope) core.Node {
 
 // The desktop settings' tabs.
 const (
+	settingsGeneral  = "general"
 	settingsService  = "service"
 	settingsAdvanced = "advanced"
 	settingsAbout    = "about"
@@ -634,6 +636,7 @@ func (s *studio) settingsDialog(cx *core.Scope) core.Node {
 		return ui.SettingsCategory{ID: id, Title: title, Icon: icon, Groups: []ui.SettingsGroup{{ID: id, Items: []ui.SettingsItem{{ID: id, Content: content}}}}}
 	}
 	categories := []ui.SettingsCategory{
+		page(settingsGeneral, t.SettingsGeneral(), lucide.Languages, ui.FormSection{Children: []core.Node{s.languageRow(cx)}}),
 		page(settingsService, t.AiService(), lucide.Plug, column(f.intro, f.provider, core.Dynamic(func(cx *core.Scope) core.Node {
 			basic, _ := f.fields(cx)
 			return column(basic...)
