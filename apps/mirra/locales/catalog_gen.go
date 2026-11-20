@@ -249,6 +249,15 @@ const (
 	textSourcesOutfit
 	textSourcesFace
 	textSourcesFooter
+	textErrNoKey
+	textErrKeyRefused
+	textErrNotFound
+	textErrRateLimited
+	textErrRejected
+	textErrServer
+	textErrTimeout
+	textErrNetwork
+	textErrNoImage
 	numTexts
 )
 
@@ -401,6 +410,15 @@ var keyOfText = [numTexts]string{
 	"sourcesOutfit",
 	"sourcesFace",
 	"sourcesFooter",
+	"errNoKey",
+	"errKeyRefused",
+	"errNotFound",
+	"errRateLimited",
+	"errRejected",
+	"errServer",
+	"errTimeout",
+	"errNetwork",
+	"errNoImage",
 }
 
 // textsEn are the messages without arguments in en.
@@ -550,7 +568,16 @@ var textsEn = i18n.NewTexts(""+
 	"Poses"+
 	"Outfits"+
 	"Faces"+
-	"Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them.",
+	"Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them."+
+	"Enter the API key first."+
+	"The service refused the key. Check that it is right and may use this model."+
+	"The address or the model wasn't found. Check them in the AI settings."+
+	"Too many requests, or the account is out of credit. Try again later, or check its balance."+
+	"The service refused the request."+
+	"The service had a problem. Try again later."+
+	"The service took too long to answer. Try again."+
+	"Couldn't reach the service. Check the network and the address."+
+	"The service answered without a picture. Try again, or change the look.",
 	[]uint16{
 		5,
 		5,
@@ -698,6 +725,15 @@ var textsEn = i18n.NewTexts(""+
 		7,
 		5,
 		99,
+		24,
+		75,
+		69,
+		90,
+		32,
+		43,
+		47,
+		62,
+		70,
 	})
 
 // textsZhHans are the messages without arguments in zh-Hans.
@@ -847,7 +883,16 @@ var textsZhHans = i18n.NewTexts(""+
 	"姿势素材"+
 	"服装素材"+
 	"人脸素材"+
-	"每张图库图片只在你使用时单独获取，App 不内置、也不转发这些图片。",
+	"每张图库图片只在你使用时单独获取，App 不内置、也不转发这些图片。"+
+	"请先填写 API Key。"+
+	"服务拒绝了这个 Key，请检查它是否正确、能否使用这个模型。"+
+	"找不到这个地址或模型，请在 AI 设置里检查。"+
+	"请求过多，或账户额度已用完。请稍后再试，或检查余额。"+
+	"服务拒绝了这个请求。"+
+	"服务出了问题，请稍后再试。"+
+	"服务响应超时，请重试。"+
+	"连不上服务，请检查网络和地址。"+
+	"服务返回了结果，但没有图片。请重试，或换一套搭配。",
 	[]uint16{
 		6,
 		5,
@@ -995,6 +1040,15 @@ var textsZhHans = i18n.NewTexts(""+
 		12,
 		12,
 		94,
+		23,
+		82,
+		61,
+		78,
+		30,
+		39,
+		33,
+		45,
+		75,
 	})
 
 // texts returns the messages without arguments in lang, nil for a
@@ -2497,7 +2551,7 @@ func (msgs Messages) ConnectionOK() string { return msgs.text(textConnectionOK) 
 // ConnectionFailed says "Couldn't connect: {error}"
 // in the language the app shows under cx.
 //
-// Under Test connection; error is what the server or the network said.
+// Under Test connection; error says what went wrong, with what the service said on a line of its own.
 func ConnectionFailed(cx *core.Scope, error_ string) string { return For(cx).ConnectionFailed(error_) }
 
 // ConnectionFailed is the package's ConnectionFailed in the language of msgs.
@@ -2704,3 +2758,66 @@ func SourcesFooter(cx *core.Scope) string { return For(cx).SourcesFooter() }
 
 // SourcesFooter is the package's SourcesFooter in the language of msgs.
 func (msgs Messages) SourcesFooter() string { return msgs.text(textSourcesFooter) }
+
+// ErrNoKey says "Enter the API key first."
+// in the language the app shows under cx.
+func ErrNoKey(cx *core.Scope) string { return For(cx).ErrNoKey() }
+
+// ErrNoKey is the package's ErrNoKey in the language of msgs.
+func (msgs Messages) ErrNoKey() string { return msgs.text(textErrNoKey) }
+
+// ErrKeyRefused says "The service refused the key. Check that it is right and may use this model."
+// in the language the app shows under cx.
+func ErrKeyRefused(cx *core.Scope) string { return For(cx).ErrKeyRefused() }
+
+// ErrKeyRefused is the package's ErrKeyRefused in the language of msgs.
+func (msgs Messages) ErrKeyRefused() string { return msgs.text(textErrKeyRefused) }
+
+// ErrNotFound says "The address or the model wasn't found. Check them in the AI settings."
+// in the language the app shows under cx.
+func ErrNotFound(cx *core.Scope) string { return For(cx).ErrNotFound() }
+
+// ErrNotFound is the package's ErrNotFound in the language of msgs.
+func (msgs Messages) ErrNotFound() string { return msgs.text(textErrNotFound) }
+
+// ErrRateLimited says "Too many requests, or the account is out of credit. Try again later, or check its balance."
+// in the language the app shows under cx.
+func ErrRateLimited(cx *core.Scope) string { return For(cx).ErrRateLimited() }
+
+// ErrRateLimited is the package's ErrRateLimited in the language of msgs.
+func (msgs Messages) ErrRateLimited() string { return msgs.text(textErrRateLimited) }
+
+// ErrRejected says "The service refused the request."
+// in the language the app shows under cx.
+func ErrRejected(cx *core.Scope) string { return For(cx).ErrRejected() }
+
+// ErrRejected is the package's ErrRejected in the language of msgs.
+func (msgs Messages) ErrRejected() string { return msgs.text(textErrRejected) }
+
+// ErrServer says "The service had a problem. Try again later."
+// in the language the app shows under cx.
+func ErrServer(cx *core.Scope) string { return For(cx).ErrServer() }
+
+// ErrServer is the package's ErrServer in the language of msgs.
+func (msgs Messages) ErrServer() string { return msgs.text(textErrServer) }
+
+// ErrTimeout says "The service took too long to answer. Try again."
+// in the language the app shows under cx.
+func ErrTimeout(cx *core.Scope) string { return For(cx).ErrTimeout() }
+
+// ErrTimeout is the package's ErrTimeout in the language of msgs.
+func (msgs Messages) ErrTimeout() string { return msgs.text(textErrTimeout) }
+
+// ErrNetwork says "Couldn't reach the service. Check the network and the address."
+// in the language the app shows under cx.
+func ErrNetwork(cx *core.Scope) string { return For(cx).ErrNetwork() }
+
+// ErrNetwork is the package's ErrNetwork in the language of msgs.
+func (msgs Messages) ErrNetwork() string { return msgs.text(textErrNetwork) }
+
+// ErrNoImage says "The service answered without a picture. Try again, or change the look."
+// in the language the app shows under cx.
+func ErrNoImage(cx *core.Scope) string { return For(cx).ErrNoImage() }
+
+// ErrNoImage is the package's ErrNoImage in the language of msgs.
+func (msgs Messages) ErrNoImage() string { return msgs.text(textErrNoImage) }
