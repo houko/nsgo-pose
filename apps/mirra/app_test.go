@@ -562,3 +562,34 @@ func TestSurpriseChoosesAShownLook(t *testing.T) {
 		t.Errorf("images = %v, want the front pose, an outfit and a face for everyone", got)
 	}
 }
+
+// TestDesktopColumnsResize opens the side columns at a share of the window, wider in a wider one, lets the user drag the gutter between them, and keeps what they dragged to for the next launch.
+func TestDesktopColumnsResize(t *testing.T) {
+	width := func(app *nsgotest.App, id string) core.Points { return app.Find("id:" + id).Frame.Size.Width }
+	small := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}), nsgotest.Size(1280, 900))
+	large := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}), nsgotest.Size(2400, 1300))
+	if s, l := width(small, "column-library"), width(large, "column-library"); l <= s {
+		t.Errorf("the library is %v wide in the large window and %v in the small one, want it wider in the large", l, s)
+	}
+	if s, l := width(small, "column-look"), width(large, "column-look"); l <= s {
+		t.Errorf("the look is %v wide in the large window and %v in the small one, want it wider in the large", l, s)
+	}
+
+	dir := t.TempDir()
+	app := nsgotest.Start(t, App{DataDir: dir}.Root, nsgotest.Environment(core.Environment{Locale: "en"}), nsgotest.Size(1440, 1000))
+	before := width(app, "column-library")
+	app.Drag("id:columns-handle-0", core.Point{X: 20}, core.Point{X: 40}, core.Point{X: 60})
+	after := width(app, "column-library")
+	if after-before < 50 {
+		t.Fatalf("dragging the gutter 60 points took the library from %v to %v", before, after)
+	}
+	share, ok := app.Storage().GetItem(keyLibraryShare)
+	if !ok {
+		t.Fatal("the dragged width was not kept")
+	}
+	again := nsgotest.Start(t, App{DataDir: dir}.Root, nsgotest.Environment(core.Environment{Locale: "en"}), nsgotest.Size(1440, 1000),
+		nsgotest.Storage(map[string]string{keyLibraryShare: share}))
+	if got := width(again, "column-library"); got < after-2 || got > after+2 {
+		t.Errorf("the next launch opens the library %v wide, want the %v it was dragged to", got, after)
+	}
+}

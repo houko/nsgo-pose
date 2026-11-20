@@ -73,6 +73,7 @@ generateFailed: Generation failed
 changeFace: Change face
 changePose: Change pose
 zoomIn: Zoom in
+resizeColumn: Resize the column
 zoomOut: Zoom out
 zoomPercent: "{n, number}%"
 filtersLabel: Galleries

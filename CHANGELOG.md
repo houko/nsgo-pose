@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The desktop studio's three columns are resized by dragging the gutters between them. The library and the look open at a share of the window, wider on a larger screen, and keep the width they were dragged to as a share of the window; the library shows more columns of pictures as it widens.
+
 ## 0.11.0 - 2026-11-20
 
 - Surprise me, the dice beside the studio's title on the phone and the canvas's zoom on the desktop, chooses a face, an outfit and a pose at random from what each gallery shows, adults-only items only where they are turned on.

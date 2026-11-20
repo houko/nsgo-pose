@@ -148,6 +148,7 @@ const (
 	textChangeFace
 	textChangePose
 	textZoomIn
+	textResizeColumn
 	textZoomOut
 	textFiltersLabel
 	textAll
@@ -317,6 +318,7 @@ var keyOfText = [numTexts]string{
 	"changeFace",
 	"changePose",
 	"zoomIn",
+	"resizeColumn",
 	"zoomOut",
 	"filtersLabel",
 	"all",
@@ -484,6 +486,7 @@ var textsEn = i18n.NewTexts(""+
 	"Change face"+
 	"Change pose"+
 	"Zoom in"+
+	"Resize the column"+
 	"Zoom out"+
 	"Galleries"+
 	"All"+
@@ -648,6 +651,7 @@ var textsEn = i18n.NewTexts(""+
 		11,
 		11,
 		7,
+		17,
 		8,
 		9,
 		3,
@@ -815,6 +819,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"换人脸"+
 	"换姿势"+
 	"放大"+
+	"调整栏宽"+
 	"缩小"+
 	"素材库"+
 	"全部"+
@@ -979,6 +984,7 @@ var textsZhHans = i18n.NewTexts(""+
 		9,
 		9,
 		6,
+		12,
 		6,
 		9,
 		6,
@@ -1749,6 +1755,13 @@ func ZoomIn(cx *core.Scope) string { return For(cx).ZoomIn() }
 
 // ZoomIn is the package's ZoomIn in the language of msgs.
 func (msgs Messages) ZoomIn() string { return msgs.text(textZoomIn) }
+
+// ResizeColumn says "Resize the column"
+// in the language the app shows under cx.
+func ResizeColumn(cx *core.Scope) string { return For(cx).ResizeColumn() }
+
+// ResizeColumn is the package's ResizeColumn in the language of msgs.
+func (msgs Messages) ResizeColumn() string { return msgs.text(textResizeColumn) }
 
 // ZoomOut says "Zoom out"
 // in the language the app shows under cx.

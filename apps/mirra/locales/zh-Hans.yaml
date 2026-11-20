@@ -51,6 +51,7 @@ generateFailed: 生成失败
 changeFace: 换人脸
 changePose: 换姿势
 zoomIn: 放大
+resizeColumn: 调整栏宽
 zoomOut: 缩小
 zoomPercent: "{n, number}%"
 filtersLabel: 素材库
