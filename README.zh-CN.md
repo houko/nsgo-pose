@@ -18,6 +18,10 @@
 </p>
 
 <p align="center">
+  <a href="screenshots/promo.mp4"><img src="screenshots/promo.webp" alt="27 秒介绍：同一个造型从街道换到薰衣草田，在 App 里选脸、选场景，再换场景、风格和服装" width="800"></a>
+</p>
+
+<p align="center">
   <img src="screenshots/phone-home-zh-Hans.png" alt="手机上的工作室：今日造型和三个要素" width="260">
   <img src="screenshots/phone-me-zh-Hans.png" alt="我的：App 信息和 AI 服务" width="260">
 </p>
