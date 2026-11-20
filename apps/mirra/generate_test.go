@@ -243,8 +243,8 @@ func TestBackgroundCatalog(t *testing.T) {
 	if !slices.Equal(c.Groups, backgroundGroups) {
 		t.Errorf("groups = %v, want %v", c.Groups, backgroundGroups)
 	}
-	if len(c.Items) < 12 {
-		t.Fatalf("%d backgrounds, want at least 12", len(c.Items))
+	if len(c.Items) < 100 {
+		t.Fatalf("%d backgrounds, want at least 100", len(c.Items))
 	}
 	seen := map[string]bool{}
 	group := 0
