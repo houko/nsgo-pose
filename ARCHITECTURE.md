@@ -13,7 +13,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/sheet.go` | A sheet of all angles: the pose's angles joined side by side into one reference, and its landscape size. |
 | `apps/mirra/apis.go` | The other providers' image APIs: Gemini, Volcengine Ark, xAI, OpenRouter, Model Studio and Azure OpenAI. |
 | `apps/mirra/providers.go` | The preset providers, with their logos from `ai-logo`, and the settings and keys each keeps, carried over from the cloud or local service of earlier versions. |
-| `apps/mirra/service.go` | The connection test in each provider's protocol. |
+| `apps/mirra/service.go` | The connection test and the list of image models in each provider's protocol. |
 | `apps/mirra/store.go` | Where pictures are kept: files natively, memory in a browser, where the WebAssembly build has no file system. |
 | `apps/mirra/works.go` | The lookbook: pictures named by when they were made, with a JSON sidecar for their number, star and look. |
 | `apps/mirra/wardrobe.go` | Favorite outfits, photos of the user's own clothes, and what the look is wearing. |

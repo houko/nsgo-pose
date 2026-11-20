@@ -158,6 +158,10 @@ showKey: 显示
 hideKey: 隐藏
 model: 模型
 deployment: 部署名称
+searchModels: 搜索模型
+noModelMatches: 没有匹配的模型
+refreshModels: 重新获取模型列表
+modelsFailed: "没能获取模型列表：{error}"
 size: 尺寸
 testConnection: 测试连接
 testAgain: 重新测试

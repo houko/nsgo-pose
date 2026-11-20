@@ -121,6 +121,10 @@ func providerByID(id string) provider {
 // providerSettings are what the user set for one provider: "" keeps the preset's address, model or size.
 type providerSettings struct {
 	url, key, model, size *core.Signal[string]
+	// models are the image models the key can use, nil until listed; listing is on while they are fetched, and modelsErr says why they couldn't be.
+	models    *core.Signal[[]string]
+	listing   *core.Signal[bool]
+	modelsErr *core.Signal[string]
 }
 
 // Storage keys of the settings before providers, read once to carry them over.

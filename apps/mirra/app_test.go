@@ -653,3 +653,28 @@ func TestStyleIsSentKeptAndRestored(t *testing.T) {
 		t.Error("the stored style is not the one chosen")
 	}
 }
+
+func TestModelIsChosenFromTheListedOnes(t *testing.T) {
+	api := &fakeAPI{}
+	app, _ := start(t, api, "k")
+	app.Press("text:Me")
+	app.WaitFor("id:model", wait)
+	app.Press("id:model")
+	app.WaitFor("role:option gpt-image-2", wait)
+	if app.Exists("role:option gpt-5") {
+		t.Error("a chat model is offered")
+	}
+	app.Press("role:option gpt-image-2")
+	// gpt-image-2 is OpenAI's preset, so the setting follows the preset again.
+	if v, _ := app.Storage().GetItem(providerByID(providerOpenAI).storageKey("model")); v != "" {
+		t.Errorf("stored model = %q, want the preset's", v)
+	}
+	app.Press("text:Studio")
+	app.Press("id:row-pose")
+	choose(t, app, poseStand)
+	app.Press("id:generate")
+	app.WaitFor("id:shot-image", wait)
+	if got := api.last().Model; got != "gpt-image-2" {
+		t.Errorf("model = %q", got)
+	}
+}

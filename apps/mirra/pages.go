@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"slices"
 	"strings"
 	"time"
 
@@ -275,6 +276,37 @@ func (s *studio) resetConnection() {
 	s.connErr.Set("")
 }
 
+// listModels fetches the image models the chosen provider's key can use, for the model field to offer; nothing for a provider that can't list them, without a key a cloud service needs, or while it is already listing.
+func (s *studio) listModels() {
+	p, set := s.current()
+	cfg, client := s.config(), s.Client
+	if !canListModels(p) || set.listing.Get() || strings.TrimSpace(cfg.BaseURL) == "" || !cfg.Local && strings.TrimSpace(cfg.APIKey) == "" {
+		return
+	}
+	set.listing.Set(true)
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+		defer cancel()
+		ids, err := ListModels(ctx, client, cfg)
+		s.cx.Post(func() {
+			set.listing.Set(false)
+			if err != nil {
+				set.modelsErr.Set(explain(locales.For(s.cx), err))
+				return
+			}
+			set.modelsErr.Set("")
+			set.models.Set(ids)
+		})
+	}()
+}
+
+// forgetModels drops the listed models, which a new key or address may not offer.
+func (s *studio) forgetModels() {
+	_, set := s.current()
+	set.models.Set(nil)
+	set.modelsErr.Set("")
+}
+
 func (s *studio) testConnection() {
 	cfg, client := s.config(), s.Client
 	s.conn.Set(connTesting)
@@ -290,8 +322,47 @@ func (s *studio) testConnection() {
 				return
 			}
 			s.conn.Set(connOK)
+			s.listModels()
 		})
 	}()
+}
+
+// modelPicker chooses the model among those the key can use, searchable, with a button that lists them again. The chosen model and the preset's always show, listed or not; choosing the preset's keeps the setting following the preset.
+func (s *studio) modelPicker(cx *core.Scope, p provider, set providerSettings, setModel func(string)) core.Node {
+	t := locales.For(cx)
+	colors := ui.ColorsOf(cx)
+	value := func() string { return or(set.model.Get(), p.Model) }
+	options := func() []ui.Option[string] {
+		ids := slices.Clone(set.models.Get())
+		for _, id := range []string{p.Model, value()} {
+			if id != "" && !slices.Contains(ids, id) {
+				ids = append([]string{id}, ids...)
+			}
+		}
+		out := make([]ui.Option[string], len(ids))
+		for i, id := range ids {
+			out[i] = ui.Option[string]{Value: id, Label: id}
+		}
+		return out
+	}
+	picker := ui.Select[string]{Label: t.Model(), OptionsFunc: options, Value: value, Searchable: true, SearchPlaceholder: t.SearchModels(), Empty: t.NoModelMatches(),
+		TestID: "model", Style: core.Style{Width: core.Pct(100)},
+		OnChange: func(v string) {
+			if v == p.Model {
+				v = ""
+			}
+			setModel(v)
+		}}
+	refresh := ui.IconButton{Icon: lucide.RefreshCw, Label: t.RefreshModels(), TestID: "refresh-models", Size: 40, IconSize: 18, Disabled: set.listing.Get, OnPress: s.listModels}
+	return core.View{Style: core.Style{Gap: 6}, Children: []core.Node{
+		core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 8}, Children: []core.Node{
+			core.View{Style: core.Style{FlexGrow: 1, FlexShrink: 1}, Children: []core.Node{picker}}, refresh}},
+		core.Show{When: func() bool { return set.modelsErr.Get() != "" }, Then: func(cx *core.Scope) core.Node {
+			return core.Text{ContentFunc: func() string { return t.ModelsFailed(set.modelsErr.Get()) }, TestID: "models-error", StyleFunc: func() core.Style {
+				return ui.TypeCaption.Merge(core.Style{Color: colors.Muted()})
+			}}
+		}},
+	}}
 }
 
 // field is a labeled input as a column: the label above, then the field.
@@ -322,6 +393,9 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 			p, set := s.current()
 			sig(set).Set(v)
 			s.resetConnection()
+			if field == "url" {
+				s.forgetModels()
+			}
 			if err := store.SetItem(p.storageKey(field), v); err != nil {
 				s.toastError(t.SaveFailed(), err)
 			}
@@ -331,8 +405,10 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 		_, set := s.current()
 		set.key.Set(v)
 		s.resetConnection()
+		s.forgetModels()
 	}
 	saveKey := func() {
+		s.listModels()
 		// A browser has no secure store; the settings say the key lasts as long as the page.
 		if !s.keyKept.Get() {
 			return
@@ -447,8 +523,18 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 		if p.Deployment {
 			modelLabel = t.Deployment
 		}
-		model := field(cx, modelLabel, ui.Input{Value: set.model.Get, OnChange: setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model }),
-			Label: modelLabel(), Placeholder: p.Model, TestID: "model"})
+		setModel := setStored("model", func(ps providerSettings) *core.Signal[string] { return ps.model })
+		model := field(cx, modelLabel, ui.Input{Value: set.model.Get, OnChange: setModel, Label: modelLabel(), Placeholder: p.Model, TestID: "model"})
+		if canListModels(p) {
+			model = field(cx, modelLabel, s.modelPicker(cx, p, set, setModel))
+			// The models are listed once the field shows, then again for a new key or a passed test.
+			core.Untracked(cx, func() bool {
+				if set.models.Get() == nil {
+					s.listModels()
+				}
+				return true
+			})
+		}
 		if !p.Deployment {
 			advanced = append(advanced, model)
 		}

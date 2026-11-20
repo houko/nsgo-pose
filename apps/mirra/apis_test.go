@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"sync"
 	"testing"
@@ -387,5 +388,52 @@ func TestEveryAPIIsOpenAICompatible(t *testing.T) {
 	p := providerByID("everyapi")
 	if p.ID != "everyapi" || p.Protocol != protoOpenAI || p.BaseURL != "https://api.everyapi.ai/v1" || p.Model != defaultModel {
 		t.Errorf("EveryAPI preset = %+v", p)
+	}
+}
+
+// TestListModels reads each provider's list of models into the image models' IDs.
+func TestListModels(t *testing.T) {
+	var gotPath, gotAuth string
+	answer := ""
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath, gotAuth = r.URL.RequestURI(), r.Header.Get("Authorization")+r.Header.Get("x-goog-api-key")
+		io.WriteString(w, answer)
+	}))
+	defer srv.Close()
+	for _, c := range []struct {
+		name, answer, path string
+		protocol           protocol
+		want               []string
+	}{
+		{"OpenAI", `{"data":[{"id":"gpt-5"},{"id":"gpt-image-2"},{"id":"dall-e-3"},{"id":"gpt-image-2"}]}`, "/models", protoOpenAI, []string{"dall-e-3", "gpt-image-2"}},
+		{"a server of no image names", `{"data":[{"id":"my-model"},{"id":"another"}]}`, "/models", protoOpenAI, []string{"another", "my-model"}},
+		{"Gemini", `{"models":[{"name":"models/gemini-3-pro"},{"name":"models/gemini-3-pro-image"},{"name":"models/gemini-nano-banana-2.1"}]}`, "/models?pageSize=1000", protoGemini, []string{"gemini-3-pro-image", "gemini-nano-banana-2.1"}},
+		{"xAI", `{"models":[{"id":"grok-imagine-image-2.0"}]}`, "/image-generation-models", protoXAI, []string{"grok-imagine-image-2.0"}},
+		{"OpenRouter", `{"data":[{"id":"a/img","architecture":{"output_modalities":["image","text"]}},{"id":"a/txt","architecture":{"output_modalities":["text"]}}]}`, "/models?output_modalities=image", protoOpenRouter, []string{"a/img"}},
+		{"Ark", `{"data":[{"id":"doubao-seed-2","domain":"LLM"},{"id":"doubao-seedream-5-5","domain":"ImageGeneration"},{"id":"x","domain":"VLM","modalities":{"output_modalities":["image"]}}]}`, "/models", protoSeedream, []string{"doubao-seedream-5-5", "x"}},
+	} {
+		answer = c.answer
+		got, err := ListModels(context.Background(), srv.Client(), Config{Protocol: c.protocol, BaseURL: srv.URL + "/", APIKey: "k"})
+		if err != nil || !slices.Equal(got, c.want) {
+			t.Errorf("%s: %v, %v; want %v", c.name, got, err, c.want)
+		}
+		if gotPath != c.path || !strings.Contains(gotAuth, "k") {
+			t.Errorf("%s asked %s with %q", c.name, gotPath, gotAuth)
+		}
+	}
+
+	refused := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusUnauthorized)
+		io.WriteString(w, `{"error":{"message":"bad key"}}`)
+	}))
+	defer refused.Close()
+	var status *statusError
+	if _, err := ListModels(context.Background(), refused.Client(), Config{BaseURL: refused.URL, APIKey: "k"}); !errors.As(err, &status) || status.Code != http.StatusUnauthorized {
+		t.Errorf("a refused key: %v", err)
+	}
+	for _, p := range []string{"dashscope", "azure"} {
+		if canListModels(providerByID(p)) {
+			t.Errorf("%s's models are listed", p)
+		}
 	}
 }

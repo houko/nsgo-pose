@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The model is chosen from a searchable list of the image models the key can use, fetched from the provider once the key is entered or the connection test passes, with a button to fetch it again; it was typed. Alibaba Cloud Model Studio and Azure OpenAI, whose models a key can't list, still take it typed.
+
 ## 0.15.0 - 2026-11-20
 
 - EveryAPI is preset among the AI services, with its logo and a link to get a key; it starts on `gpt-image-2` through its OpenAI-compatible API, and its China address can be set under Advanced.
