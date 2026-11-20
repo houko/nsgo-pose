@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.1 - 2026-11-20
+
 - On macOS, the app menu has About, Settings… (⌘,) and Check for Updates…, with the Services, Hide and Window items Mac apps have; it held only Quit.
 ## 0.9.0 - 2026-11-20
 
