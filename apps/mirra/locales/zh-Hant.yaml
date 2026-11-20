@@ -1,0 +1,192 @@
+appName: 鏡衣
+brand: Mirra
+brandTagline: 鏡衣
+openSourceBadge: OPEN SOURCE
+openSourceTerms: 開源版 · 免費使用 · 無需帳號
+tabStudio: 工作室
+tabWardrobe: 衣櫥
+tabWorks: 作品
+worksTabCount: 作品 {n, number}
+tabMe: 我的
+tabsLabel: 分區
+lookTitle: 本次造型
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: TODAY'S LOOK · {group}
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: LIVE PREVIEW · {group}
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: NEW LOOK · 第 {n, number} 次生成
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: 臉孔
+slotCostume: 服裝
+slotPose: 姿勢
+notChosen: 未選擇
+stepFace: 選擇臉孔
+stepCostume: 挑選服裝
+stepPose: 設定姿勢
+stepTab: "{n} {name}"
+stepsLabel: 步驟
+selectedItem: 已選 · {id}
+done: 完成
+back: 返回
+close: 關閉
+nextCostume: 下一步 · 選服裝
+nextPose: 下一步 · 選姿勢
+surprise: 隨機一套
+generate: 生成造型
+generateNeedsService: 生成造型 · 先設定 AI 服務
+needPose: 請先選一個姿勢。
+needService: 請先設定 AI 服務。
+viaService: 透過「{service}」生成 · 不經過第三方
+configureOnce: 開源版免費使用，設定一次即可
+generating: 正在生成
+cancel: 取消
+generateFailed: 生成失敗
+changeFace: 換臉孔
+changePose: 換姿勢
+zoomIn: 放大
+resizeColumn: 調整欄寬
+zoomOut: 縮小
+zoomPercent: "{n, number}%"
+filtersLabel: 素材庫
+all: 全部
+allCount: 全部 {n, number}
+allAngles: 全部角度
+angleFront: 正面
+angleThreeQuarter: 斜側
+angleSide: 側面
+angleHigh: 俯視
+angleLow: 仰視
+hairShort: 短髮
+hairMedium: 中髮
+hairSemiLong: 中長髮
+hairLong: 長髮
+groupSpring: 春
+groupSummer: 夏
+groupAutumn: 秋
+groupWinter: 冬
+groupParty: 派對
+groupSwimwear: 泳裝
+groupLingerie: 內衣
+groupSexy: 性感
+adultChip: 18+
+loadFailed: 圖庫載入失敗
+retry: 重試
+noteLabel: 補充要求
+notePlaceholder: 補充要求，例如光線、背景
+favorite: 收藏
+unfavorite: 取消收藏
+favorites: 收藏
+favoritesCount: 收藏 {n, number}
+myUploads: 我的上傳
+uploadsCount: 我的上傳 {n, number}
+outfitGallery: 服裝庫
+galleryCount: 服裝庫 {n, number}
+uploadName: 我的衣服 {n}
+uploadClothes: 上傳衣服
+wearing: 正在穿
+tapToTry: 點一下試穿 · {group}
+wearAndGenerate: 穿上生成
+noFavoritesTitle: 還沒有收藏
+noFavoritesBody: 到「服裝庫」點 ♡ 收藏喜歡的搭配
+noUploadsTitle: 還沒上傳過衣服
+noUploadsBody: 點「上傳衣服」，拍一張平放或掛著的衣服照片即可
+swapOutfit: 同一張臉，一鍵換搭配
+swapTo: 換成「{name}」
+usedFace: 使用的臉孔
+usedPose: 使用的姿勢
+regenerate: 再生成
+regenerateOnce: 再生成一次
+saveToWorks: 儲存到作品
+inWorks: 已在作品中
+savedToWorks: "已儲存為作品 No.{no}"
+seeWorks: 去查看
+export: 匯出
+exported: 已匯出
+deleted: 作品已刪除
+delete: 刪除
+deleteConfirm: 刪除這張圖片？
+deleteConfirmBody: 會從這台裝置上移除。
+adultConfirm: 你已年滿 18 歲嗎？
+adultConfirmBody: 這裡是成人內容，僅限 18 歲以上的使用者瀏覽。
+adultYes: 已滿 18 歲
+adultNo: 未滿 18 歲
+saveFailed: 儲存失敗
+backToEdit: 返回編輯
+worksFilter: 作品篩選
+noWorksTitle: 造型冊還是空的
+noWorksBody: 生成後點「儲存到作品」，就會收進這本造型冊
+noFavoriteWorksTitle: 還沒有收藏的作品
+firstLook: 去生成第一套
+openWork: "開啟作品 No.{no}"
+aiService: AI 服務
+aiServiceSettings: AI 服務設定
+serviceIntro: 開源版無需帳號——設定一次 AI 服務並測試連線，就可以開始生成造型。
+provider: 服務商
+providerCustom: 自訂（OpenAI 相容）
+providerVolcengine: 火山方舟
+providerDashScope: 阿里雲百煉
+getApiKey: 取得 API Key
+advancedSettings: 進階設定
+sizePortrait: 直式
+sizeSquare: 方形
+sizeLandscape: 橫式
+resetDefaults: 恢復預設值
+version: 版本
+versionDevelopment: 開發版
+checkForUpdates: 檢查更新
+menuSettings: 設定…
+menuCheckForUpdates: 檢查更新…
+menuEdit: 編輯
+menuWindow: 視窗
+baseURL: API 位址
+apiKey: API Key
+apiKeyOptional: API Key（可留空）
+showKey: 顯示
+hideKey: 隱藏
+model: 模型
+deployment: 部署名稱
+size: 尺寸
+testConnection: 測試連線
+testAgain: 重新測試
+connectionOK: 連線成功，可以開始生成了
+connectionFailed: 連線失敗：{error}
+statusUnconfigured: 未設定 AI 服務
+statusConnected: "{service} · 已連線"
+statusUntested: "{service} · 未測試"
+statusTesting: "{service} · 測試中…"
+statusFailed: "{service} · 連線失敗"
+privacyCloud: Key 只儲存在本機的系統鑰匙圈，不經過任何第三方伺服器；請求從你的裝置直接傳送到你設定的服務。
+privacyLocal: 請求從你的裝置直接傳送到你自己架設的伺服器，不經過任何第三方伺服器，也不產生費用。
+privacyWeb: 網頁版不會保存 Key，重新整理頁面後需要重新輸入；請求從你的瀏覽器直接傳送到你設定的服務。
+pageOnly: 網頁版的作品和衣服照片只保存在目前的頁面，關閉前請匯出想保留的。
+keyUnavailable: 這台裝置沒有可以保存 Key 的安全儲存空間。
+aboutSection: 關於
+sourcesSection: 素材來源
+settings: 設定
+settingsGeneral: 一般
+language: 語言
+languageSystem: 跟隨系統
+languageName: 繁體中文
+sourceCode: 原始碼
+license: 開源授權
+sourcesPose: 姿勢素材
+sourcesOutfit: 服裝素材
+sourcesFace: 臉孔素材
+sourcesFooter: 每張圖庫圖片只在你使用時個別取得，App 不內建、也不轉發這些圖片。
+errNoKey: 請先輸入 API Key。
+errKeyRefused: 服務拒絕了這個 Key，請檢查它是否正確、能否使用這個模型。
+errNotFound: 找不到這個位址或模型，請到 AI 設定中檢查。
+errRateLimited: 請求次數過多，或帳戶額度已用完。請稍後再試，或檢查餘額。
+errBlocked: 服務商的安全審查擋下了這張圖。可以換一套服裝或姿勢，或換一家服務商再試。
+errRejected: 服務拒絕了這個請求。
+errServer: 服務發生問題，請稍後再試。
+errTimeout: 服務回應逾時，請重試。
+errNetwork: 無法連上服務，請檢查網路和位址。
+errNoImage: 服務回傳了結果，但沒有圖片。請重試，或換一套搭配。

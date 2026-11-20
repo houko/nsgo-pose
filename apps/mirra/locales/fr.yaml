@@ -1,0 +1,192 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: Open source · gratuit · sans compte
+tabStudio: Studio
+tabWardrobe: Garde-robe
+tabWorks: Créations
+worksTabCount: "Créations {n, number}"
+tabMe: Moi
+tabsLabel: Sections
+lookTitle: Ce look
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: "TODAY'S LOOK · {group}"
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: "LIVE PREVIEW · {group}"
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: "NEW LOOK · ESSAI {n, number}"
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: Visage
+slotCostume: Tenue
+slotPose: Pose
+notChosen: Non choisi
+stepFace: Choisir un visage
+stepCostume: Choisir une tenue
+stepPose: Définir la pose
+stepTab: "{n} {name}"
+stepsLabel: Étapes
+selectedItem: "Sélection · {id}"
+done: Terminé
+back: Retour
+close: Fermer
+nextCostume: "Suivant : tenue"
+nextPose: "Suivant : pose"
+surprise: Surprenez-moi
+generate: Générer
+generateNeedsService: "Générer · configurer un service d’IA"
+needPose: Choisissez d’abord une pose.
+needService: Configurez d’abord un service d’IA.
+viaService: "Généré via {service}, sans intermédiaire"
+configureOnce: Gratuit et open source ; à configurer une seule fois
+generating: Génération en cours
+cancel: Annuler
+generateFailed: Échec de la génération
+changeFace: Changer de visage
+changePose: Changer de pose
+zoomIn: Zoom avant
+resizeColumn: Redimensionner la colonne
+zoomOut: Zoom arrière
+zoomPercent: "{n, number} %"
+filtersLabel: Galeries
+all: Tout
+allCount: "Tout {n, number}"
+allAngles: Tous les angles
+angleFront: Face
+angleThreeQuarter: Trois-quarts
+angleSide: Profil
+angleHigh: Plongée
+angleLow: Contre-plongée
+hairShort: Courts
+hairMedium: Mi-longs
+hairSemiLong: Aux épaules
+hairLong: Longs
+groupSpring: Printemps
+groupSummer: Été
+groupAutumn: Automne
+groupWinter: Hiver
+groupParty: Soirée
+groupSwimwear: Maillots de bain
+groupLingerie: Lingerie
+groupSexy: Sexy
+adultChip: 18+
+loadFailed: Impossible de charger la galerie
+retry: Réessayer
+noteLabel: Instructions supplémentaires
+notePlaceholder: Autre chose, comme l’éclairage ou l’arrière-plan
+favorite: Ajouter aux favoris
+unfavorite: Retirer des favoris
+favorites: Favoris
+favoritesCount: "Favoris {n, number}"
+myUploads: Mes vêtements
+uploadsCount: "Mes vêtements {n, number}"
+outfitGallery: Galerie de tenues
+galleryCount: "Galerie {n, number}"
+uploadName: "Mon vêtement {n}"
+uploadClothes: Ajouter des vêtements
+wearing: Porté
+tapToTry: "Touchez pour essayer · {group}"
+wearAndGenerate: Porter
+noFavoritesTitle: Aucun favori
+noFavoritesBody: Touchez ♡ sur une tenue de la galerie pour la retrouver ici.
+noUploadsTitle: Aucun vêtement ajouté
+noUploadsBody: Ajoutez une photo de vêtements posés à plat ou sur un cintre.
+swapOutfit: Même visage, autre tenue
+swapTo: "Porter {name}"
+usedFace: Visage utilisé
+usedPose: Pose utilisée
+regenerate: Encore
+regenerateOnce: Générer à nouveau
+saveToWorks: Enregistrer dans Créations
+inWorks: Dans Créations
+savedToWorks: "Enregistré sous le n° {no}"
+seeWorks: Voir
+export: Exporter
+exported: Exporté
+deleted: Supprimé
+delete: Supprimer
+deleteConfirm: Supprimer cette image ?
+deleteConfirmBody: Elle sera supprimée de cet appareil.
+adultConfirm: Avez-vous 18 ans ou plus ?
+adultConfirmBody: Ce contenu est réservé aux adultes de 18 ans et plus.
+adultYes: J’ai 18 ans ou plus
+adultNo: J’ai moins de 18 ans
+saveFailed: Impossible d’enregistrer
+backToEdit: Retour au look
+worksFilter: Afficher
+noWorksTitle: Votre lookbook est vide
+noWorksBody: Générez un look et enregistrez-le dans Créations pour le retrouver ici.
+noFavoriteWorksTitle: Aucune image favorite
+firstLook: Créer votre premier look
+openWork: "Ouvrir le n° {no}"
+aiService: Service d’IA
+aiServiceSettings: Réglages du service d’IA
+serviceIntro: Configurez un service d’IA et testez la connexion pour commencer à créer des looks.
+provider: Fournisseur
+providerCustom: Personnalisé (compatible OpenAI)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: Obtenir une clé API
+advancedSettings: Avancé
+sizePortrait: Portrait
+sizeSquare: Carré
+sizeLandscape: Paysage
+resetDefaults: Rétablir les valeurs par défaut
+version: Version
+versionDevelopment: Version de développement
+checkForUpdates: Rechercher des mises à jour
+menuSettings: Réglages…
+menuCheckForUpdates: Rechercher des mises à jour…
+menuEdit: Édition
+menuWindow: Fenêtre
+baseURL: Adresse
+apiKey: Clé API
+apiKeyOptional: Clé API (facultative)
+showKey: Afficher
+hideKey: Masquer
+model: Modèle
+deployment: Nom du déploiement
+size: Format
+testConnection: Tester la connexion
+testAgain: Tester à nouveau
+connectionOK: Connecté ; vous pouvez commencer à créer des looks.
+connectionFailed: "Connexion impossible : {error}"
+statusUnconfigured: Aucun service d’IA
+statusConnected: "{service} · connecté"
+statusUntested: "{service} · non testé"
+statusTesting: "{service} · test en cours…"
+statusFailed: "{service} · connexion impossible"
+privacyCloud: La clé reste dans le trousseau de cet appareil. Les requêtes vont directement de votre appareil au service configuré, sans passer par un autre serveur.
+privacyLocal: Les requêtes vont directement de votre appareil à votre propre serveur, sans passer par un autre serveur et sans frais.
+privacyWeb: La version web ne conserve pas la clé après la fermeture de la page ; saisissez-la à nouveau après un rechargement. Les requêtes vont directement de votre navigateur au service configuré.
+pageOnly: Dans la version web, les images et les vêtements ne sont conservés que tant que cette page reste ouverte. Exportez ceux que vous voulez garder.
+keyUnavailable: Cet appareil n’a pas de stockage sécurisé pour la clé.
+aboutSection: À propos
+sourcesSection: Sources
+settings: Réglages
+settingsGeneral: Général
+language: Langue
+languageSystem: Système
+languageName: Français
+sourceCode: Code source
+license: Licence
+sourcesPose: Poses
+sourcesOutfit: Tenues
+sourcesFace: Visages
+sourcesFooter: Chaque image des galeries n’est récupérée que lorsque vous l’utilisez ; l’app ne les intègre ni ne les redistribue.
+errNoKey: Saisissez d’abord la clé API.
+errKeyRefused: Le service a refusé la clé. Vérifiez qu’elle est correcte et qu’elle autorise ce modèle.
+errNotFound: Adresse ou modèle introuvable. Vérifiez-les dans les réglages d’IA.
+errRateLimited: Trop de requêtes, ou crédit du compte épuisé. Réessayez plus tard ou vérifiez le solde.
+errBlocked: Le contrôle de sécurité du service a bloqué cette image. Essayez une autre tenue ou pose, ou un autre service.
+errRejected: Le service a refusé la requête.
+errServer: Le service a rencontré un problème. Réessayez plus tard.
+errTimeout: Le service a mis trop de temps à répondre. Réessayez.
+errNetwork: Impossible de joindre le service. Vérifiez le réseau et l’adresse.
+errNoImage: Le service a répondu sans image. Réessayez ou modifiez le look.

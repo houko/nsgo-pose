@@ -1,0 +1,192 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: Código aberto · grátis · sem conta
+tabStudio: Estúdio
+tabWardrobe: Guarda-roupa
+tabWorks: Criações
+worksTabCount: "Criações {n, number}"
+tabMe: Eu
+tabsLabel: Seções
+lookTitle: Este look
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: "TODAY'S LOOK · {group}"
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: "LIVE PREVIEW · {group}"
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: "NEW LOOK · TENTATIVA {n, number}"
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: Rosto
+slotCostume: Roupa
+slotPose: Pose
+notChosen: Não escolhido
+stepFace: Escolha um rosto
+stepCostume: Escolha uma roupa
+stepPose: Defina a pose
+stepTab: "{n} {name}"
+stepsLabel: Etapas
+selectedItem: "Selecionado · {id}"
+done: Concluído
+back: Voltar
+close: Fechar
+nextCostume: "Próximo: roupa"
+nextPose: "Próximo: pose"
+surprise: Me surpreenda
+generate: Gerar
+generateNeedsService: Gerar · configure um serviço de IA
+needPose: Escolha uma pose primeiro.
+needService: Configure um serviço de IA primeiro.
+viaService: Gerado via {service}, sem intermediários
+configureOnce: Grátis e de código aberto; configure uma vez só
+generating: Gerando
+cancel: Cancelar
+generateFailed: Falha ao gerar
+changeFace: Trocar rosto
+changePose: Trocar pose
+zoomIn: Ampliar
+resizeColumn: Redimensionar a coluna
+zoomOut: Reduzir
+zoomPercent: "{n, number}%"
+filtersLabel: Galerias
+all: Todos
+allCount: "Todos {n, number}"
+allAngles: Todos os ângulos
+angleFront: Frente
+angleThreeQuarter: Três quartos
+angleSide: Perfil
+angleHigh: De cima
+angleLow: De baixo
+hairShort: Curto
+hairMedium: Médio
+hairSemiLong: Na altura dos ombros
+hairLong: Longo
+groupSpring: Primavera
+groupSummer: Verão
+groupAutumn: Outono
+groupWinter: Inverno
+groupParty: Festa
+groupSwimwear: Moda praia
+groupLingerie: Lingerie
+groupSexy: Sexy
+adultChip: 18+
+loadFailed: Não foi possível carregar a galeria
+retry: Tentar de novo
+noteLabel: Instruções extras
+notePlaceholder: Algo mais, como iluminação ou fundo
+favorite: Adicionar aos favoritos
+unfavorite: Remover dos favoritos
+favorites: Favoritos
+favoritesCount: "Favoritos {n, number}"
+myUploads: Minhas roupas
+uploadsCount: "Minhas roupas {n, number}"
+outfitGallery: Galeria de roupas
+galleryCount: "Galeria {n, number}"
+uploadName: "Minha roupa {n}"
+uploadClothes: Adicionar roupas
+wearing: Vestindo
+tapToTry: "Toque para provar · {group}"
+wearAndGenerate: Vestir
+noFavoritesTitle: Nenhum favorito ainda
+noFavoritesBody: Toque em ♡ numa roupa da galeria para guardá-la aqui.
+noUploadsTitle: Nenhuma roupa adicionada ainda
+noUploadsBody: Adicione uma foto de roupas estendidas ou num cabide.
+swapOutfit: Mesmo rosto, outra roupa
+swapTo: Vestir {name}
+usedFace: Rosto usado
+usedPose: Pose usada
+regenerate: De novo
+regenerateOnce: Gerar de novo
+saveToWorks: Salvar em Criações
+inWorks: Em Criações
+savedToWorks: Salvo como No.{no}
+seeWorks: Ver
+export: Exportar
+exported: Exportado
+deleted: Excluído
+delete: Excluir
+deleteConfirm: Excluir esta imagem?
+deleteConfirmBody: Ela será removida deste dispositivo.
+adultConfirm: Você tem 18 anos ou mais?
+adultConfirmBody: Isto mostra conteúdo adulto, apenas para maiores de 18 anos.
+adultYes: Tenho 18 anos ou mais
+adultNo: Tenho menos de 18 anos
+saveFailed: Não foi possível salvar
+backToEdit: Voltar ao look
+worksFilter: Mostrar
+noWorksTitle: Seu lookbook está vazio
+noWorksBody: Gere um look e salve em Criações para guardá-lo aqui.
+noFavoriteWorksTitle: Nenhuma imagem favorita ainda
+firstLook: Crie seu primeiro look
+openWork: Abrir No.{no}
+aiService: Serviço de IA
+aiServiceSettings: Configurações do serviço de IA
+serviceIntro: Configure um serviço de IA e teste a conexão para começar a criar looks.
+provider: Provedor
+providerCustom: Personalizado (compatível com OpenAI)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: Obter uma chave de API
+advancedSettings: Avançado
+sizePortrait: Retrato
+sizeSquare: Quadrado
+sizeLandscape: Paisagem
+resetDefaults: Restaurar padrões
+version: Versão
+versionDevelopment: Versão de desenvolvimento
+checkForUpdates: Verificar atualizações
+menuSettings: Configurações…
+menuCheckForUpdates: Verificar Atualizações…
+menuEdit: Editar
+menuWindow: Janela
+baseURL: Endereço
+apiKey: Chave de API
+apiKeyOptional: Chave de API (opcional)
+showKey: Mostrar
+hideKey: Ocultar
+model: Modelo
+deployment: Nome da implantação
+size: Tamanho
+testConnection: Testar conexão
+testAgain: Testar de novo
+connectionOK: Conectado; você já pode criar looks.
+connectionFailed: "Falha na conexão: {error}"
+statusUnconfigured: Nenhum serviço de IA
+statusConnected: "{service} · conectado"
+statusUntested: "{service} · não testado"
+statusTesting: "{service} · testando…"
+statusFailed: "{service} · sem conexão"
+privacyCloud: A chave fica nas chaves seguras deste dispositivo. As solicitações vão direto do seu dispositivo para o serviço que você configurou, sem passar por nenhum outro servidor.
+privacyLocal: As solicitações vão direto do seu dispositivo para o seu próprio servidor, sem passar por nenhum outro servidor e sem custo.
+privacyWeb: Esta versão web não guarda a chave depois que a página é fechada; digite-a de novo após recarregar. As solicitações vão direto do seu navegador para o serviço que você configurou.
+pageOnly: Na versão web, as imagens e roupas duram enquanto esta página estiver aberta. Exporte as que quiser guardar.
+keyUnavailable: Este dispositivo não tem um armazenamento seguro para a chave.
+aboutSection: Sobre
+sourcesSection: Fontes
+settings: Configurações
+settingsGeneral: Geral
+language: Idioma
+languageSystem: Sistema
+languageName: Português (Brasil)
+sourceCode: Código-fonte
+license: Licença
+sourcesPose: Poses
+sourcesOutfit: Roupas
+sourcesFace: Rostos
+sourcesFooter: Cada imagem das galerias só é baixada quando você a usa; o app não as inclui nem as redistribui.
+errNoKey: Digite a chave de API primeiro.
+errKeyRefused: O serviço recusou a chave. Verifique se ela está correta e se pode usar este modelo.
+errNotFound: O endereço ou o modelo não foi encontrado. Verifique-os nas configurações de IA.
+errRateLimited: Solicitações demais, ou a conta está sem créditos. Tente mais tarde ou verifique o saldo.
+errBlocked: A verificação de segurança do serviço bloqueou esta imagem. Tente outra roupa, outra pose ou outro serviço.
+errRejected: O serviço recusou a solicitação.
+errServer: O serviço teve um problema. Tente mais tarde.
+errTimeout: O serviço demorou demais para responder. Tente de novo.
+errNetwork: Não foi possível acessar o serviço. Verifique a rede e o endereço.
+errNoImage: O serviço respondeu sem uma imagem. Tente de novo ou mude o look.

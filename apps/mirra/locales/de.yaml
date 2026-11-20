@@ -1,0 +1,192 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: Open Source · kostenlos · ohne Konto
+tabStudio: Studio
+tabWardrobe: Garderobe
+tabWorks: Werke
+worksTabCount: Werke {n, number}
+tabMe: Ich
+tabsLabel: Bereiche
+lookTitle: Dieser Look
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: TODAY'S LOOK · {group}
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: LIVE PREVIEW · {group}
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: NEW LOOK · VERSUCH {n, number}
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: Gesicht
+slotCostume: Outfit
+slotPose: Pose
+notChosen: Nicht gewählt
+stepFace: Gesicht wählen
+stepCostume: Outfit wählen
+stepPose: Pose festlegen
+stepTab: "{n} {name}"
+stepsLabel: Schritte
+selectedItem: Ausgewählt · {id}
+done: Fertig
+back: Zurück
+close: Schließen
+nextCostume: "Weiter: Outfit"
+nextPose: "Weiter: Pose"
+surprise: Überrasch mich
+generate: Erstellen
+generateNeedsService: Erstellen · KI-Dienst einrichten
+needPose: Wähle zuerst eine Pose.
+needService: Richte zuerst einen KI-Dienst ein.
+viaService: Erstellt über {service}, ohne Dritte
+configureOnce: Kostenlos und Open Source; einmal einrichten
+generating: Wird erstellt
+cancel: Abbrechen
+generateFailed: Erstellen fehlgeschlagen
+changeFace: Gesicht ändern
+changePose: Pose ändern
+zoomIn: Vergrößern
+resizeColumn: Spaltenbreite ändern
+zoomOut: Verkleinern
+zoomPercent: "{n, number} %"
+filtersLabel: Galerien
+all: Alle
+allCount: Alle {n, number}
+allAngles: Alle Winkel
+angleFront: Frontal
+angleThreeQuarter: Halbprofil
+angleSide: Profil
+angleHigh: Von oben
+angleLow: Von unten
+hairShort: Kurz
+hairMedium: Mittellang
+hairSemiLong: Schulterlang
+hairLong: Lang
+groupSpring: Frühling
+groupSummer: Sommer
+groupAutumn: Herbst
+groupWinter: Winter
+groupParty: Party
+groupSwimwear: Bademode
+groupLingerie: Dessous
+groupSexy: Sexy
+adultChip: 18+
+loadFailed: Galerie konnte nicht geladen werden
+retry: Erneut versuchen
+noteLabel: Zusätzliche Anweisungen
+notePlaceholder: Sonst noch etwas, etwa Licht oder Hintergrund
+favorite: Zu Favoriten hinzufügen
+unfavorite: Aus Favoriten entfernen
+favorites: Favoriten
+favoritesCount: Favoriten {n, number}
+myUploads: Meine Kleidung
+uploadsCount: Meine Kleidung {n, number}
+outfitGallery: Outfit-Galerie
+galleryCount: Galerie {n, number}
+uploadName: Meine Kleidung {n}
+uploadClothes: Kleidung hinzufügen
+wearing: Angezogen
+tapToTry: Tippen zum Anprobieren · {group}
+wearAndGenerate: Anziehen
+noFavoritesTitle: Noch keine Favoriten
+noFavoritesBody: Tippe in der Galerie bei einem Outfit auf ♡, um es hier zu behalten.
+noUploadsTitle: Noch keine Kleidung hinzugefügt
+noUploadsBody: Füge ein Foto von Kleidung hinzu, flach ausgelegt oder auf einem Bügel.
+swapOutfit: Gleiches Gesicht, anderes Outfit
+swapTo: "{name} anziehen"
+usedFace: Verwendetes Gesicht
+usedPose: Verwendete Pose
+regenerate: Nochmal
+regenerateOnce: Nochmal erstellen
+saveToWorks: In Werken sichern
+inWorks: In Werken
+savedToWorks: Als Nr. {no} gesichert
+seeWorks: Ansehen
+export: Exportieren
+exported: Exportiert
+deleted: Gelöscht
+delete: Löschen
+deleteConfirm: Dieses Bild löschen?
+deleteConfirmBody: Es wird von diesem Gerät entfernt.
+adultConfirm: Bist du 18 oder älter?
+adultConfirmBody: Hier werden Inhalte für Erwachsene gezeigt, nur für Personen ab 18.
+adultYes: Ich bin 18 oder älter
+adultNo: Ich bin unter 18
+saveFailed: Sichern fehlgeschlagen
+backToEdit: Zurück zum Look
+worksFilter: Anzeigen
+noWorksTitle: Dein Lookbook ist leer
+noWorksBody: Erstelle einen Look und sichere ihn in Werken, um ihn hier zu behalten.
+noFavoriteWorksTitle: Noch keine Lieblingsbilder
+firstLook: Erstelle deinen ersten Look
+openWork: Nr. {no} öffnen
+aiService: KI-Dienst
+aiServiceSettings: KI-Dienst-Einstellungen
+serviceIntro: Richte einen KI-Dienst ein und teste die Verbindung, dann kannst du Looks erstellen.
+provider: Anbieter
+providerCustom: Eigener (OpenAI-kompatibel)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: API-Schlüssel holen
+advancedSettings: Erweitert
+sizePortrait: Hochformat
+sizeSquare: Quadratisch
+sizeLandscape: Querformat
+resetDefaults: Auf Standard zurücksetzen
+version: Version
+versionDevelopment: Entwicklerversion
+checkForUpdates: Nach Updates suchen
+menuSettings: Einstellungen …
+menuCheckForUpdates: Nach Updates suchen …
+menuEdit: Bearbeiten
+menuWindow: Fenster
+baseURL: Adresse
+apiKey: API-Schlüssel
+apiKeyOptional: API-Schlüssel (optional)
+showKey: Einblenden
+hideKey: Ausblenden
+model: Modell
+deployment: Deployment-Name
+size: Größe
+testConnection: Verbindung testen
+testAgain: Erneut testen
+connectionOK: Verbunden; du kannst Looks erstellen.
+connectionFailed: "Keine Verbindung: {error}"
+statusUnconfigured: Kein KI-Dienst
+statusConnected: "{service} · verbunden"
+statusUntested: "{service} · nicht getestet"
+statusTesting: "{service} · wird getestet …"
+statusFailed: "{service} · keine Verbindung"
+privacyCloud: Der Schlüssel bleibt im Schlüsselbund dieses Geräts. Anfragen gehen direkt von deinem Gerät an den eingerichteten Dienst, über keinen anderen Server.
+privacyLocal: Anfragen gehen direkt von deinem Gerät an deinen eigenen Server, über keinen anderen Server und kostenlos.
+privacyWeb: Diese Webversion behält keinen Schlüssel, sobald die Seite geschlossen wird; gib ihn nach dem Neuladen erneut ein. Anfragen gehen direkt von deinem Browser an den eingerichteten Dienst.
+pageOnly: In der Webversion bleiben Bilder und Kleidung nur erhalten, solange diese Seite offen ist. Exportiere, was du behalten möchtest.
+keyUnavailable: Dieses Gerät hat keinen sicheren Speicher für den Schlüssel.
+aboutSection: Über
+sourcesSection: Quellen
+settings: Einstellungen
+settingsGeneral: Allgemein
+language: Sprache
+languageSystem: System
+languageName: Deutsch
+sourceCode: Quellcode
+license: Lizenz
+sourcesPose: Posen
+sourcesOutfit: Outfits
+sourcesFace: Gesichter
+sourcesFooter: Jedes Galeriebild wird erst geladen, wenn du es verwendest; die App liefert sie weder mit noch verbreitet sie sie weiter.
+errNoKey: Gib zuerst den API-Schlüssel ein.
+errKeyRefused: Der Dienst hat den Schlüssel abgelehnt. Prüfe, ob er stimmt und für dieses Modell freigegeben ist.
+errNotFound: Adresse oder Modell nicht gefunden. Prüfe sie in den KI-Einstellungen.
+errRateLimited: Zu viele Anfragen, oder das Konto hat kein Guthaben mehr. Versuch es später erneut oder prüfe das Guthaben.
+errBlocked: Die Sicherheitsprüfung des Dienstes hat dieses Bild gestoppt. Versuch ein anderes Outfit, eine andere Pose oder einen anderen Dienst.
+errRejected: Der Dienst hat die Anfrage abgelehnt.
+errServer: Beim Dienst ist ein Fehler aufgetreten. Versuch es später erneut.
+errTimeout: Der Dienst hat zu lange gebraucht. Versuch es erneut.
+errNetwork: Dienst nicht erreichbar. Prüfe das Netzwerk und die Adresse.
+errNoImage: Der Dienst hat ohne Bild geantwortet. Versuch es erneut oder ändere den Look.

@@ -1,0 +1,192 @@
+appName: Mirra
+brand: Mirra
+brandTagline: ""
+openSourceBadge: OPEN SOURCE
+openSourceTerms: Открытый код · бесплатно · без аккаунта
+tabStudio: Студия
+tabWardrobe: Гардероб
+tabWorks: Работы
+worksTabCount: Работы {n, number}
+tabMe: Профиль
+tabsLabel: Разделы
+lookTitle: Этот образ
+eyebrowToday: TODAY'S LOOK
+eyebrowTodayGroup: "TODAY'S LOOK · {group}"
+eyebrowPreview: LIVE PREVIEW
+eyebrowPreviewGroup: "LIVE PREVIEW · {group}"
+eyebrowThisLook: THIS LOOK
+eyebrowWardrobe: WARDROBE
+eyebrowLookbook: LOOKBOOK
+eyebrowSettings: SETTINGS
+eyebrowLookbookNo: "LOOKBOOK · NO.{no}"
+eyebrowNewLook: "NEW LOOK · попытка {n, number}"
+eyebrowFace: 01 FACE
+eyebrowOutfit: 02 OUTFIT
+eyebrowPose: 03 POSE
+slotFace: Лицо
+slotCostume: Наряд
+slotPose: Поза
+notChosen: Не выбрано
+stepFace: Выберите лицо
+stepCostume: Выберите наряд
+stepPose: Выберите позу
+stepTab: "{n} {name}"
+stepsLabel: Шаги
+selectedItem: Выбрано · {id}
+done: Готово
+back: Назад
+close: Закрыть
+nextCostume: "Далее: наряд"
+nextPose: "Далее: поза"
+surprise: Случайный образ
+generate: Создать
+generateNeedsService: Создать · настройте ИИ-сервис
+needPose: Сначала выберите позу.
+needService: Сначала настройте ИИ-сервис.
+viaService: Создаётся через {service}, без посредников
+configureOnce: Бесплатно и с открытым кодом — достаточно настроить один раз
+generating: Создание
+cancel: Отмена
+generateFailed: Не удалось создать
+changeFace: Сменить лицо
+changePose: Сменить позу
+zoomIn: Увеличить
+resizeColumn: Изменить ширину колонки
+zoomOut: Уменьшить
+zoomPercent: "{n, number}%"
+filtersLabel: Галереи
+all: Все
+allCount: Все {n, number}
+allAngles: Все ракурсы
+angleFront: Спереди
+angleThreeQuarter: Вполоборота
+angleSide: Сбоку
+angleHigh: Сверху
+angleLow: Снизу
+hairShort: Короткие
+hairMedium: Средние
+hairSemiLong: До плеч
+hairLong: Длинные
+groupSpring: Весна
+groupSummer: Лето
+groupAutumn: Осень
+groupWinter: Зима
+groupParty: Вечеринка
+groupSwimwear: Купальники
+groupLingerie: Бельё
+groupSexy: Секси
+adultChip: 18+
+loadFailed: Не удалось загрузить галерею
+retry: Повторить
+noteLabel: Дополнительные указания
+notePlaceholder: Что-то ещё, например свет или фон
+favorite: В избранное
+unfavorite: Убрать из избранного
+favorites: Избранное
+favoritesCount: Избранное {n, number}
+myUploads: Моя одежда
+uploadsCount: Моя одежда {n, number}
+outfitGallery: Галерея нарядов
+galleryCount: Галерея {n, number}
+uploadName: Моя одежда {n}
+uploadClothes: Добавить одежду
+wearing: Надето
+tapToTry: Нажмите, чтобы примерить · {group}
+wearAndGenerate: Надеть
+noFavoritesTitle: Пока нет избранного
+noFavoritesBody: Нажмите ♡ на наряде в галерее, чтобы сохранить его здесь.
+noUploadsTitle: Одежда ещё не добавлена
+noUploadsBody: Добавьте фото одежды, разложенной на ровной поверхности или на вешалке.
+swapOutfit: То же лицо, другой наряд
+swapTo: Надеть «{name}»
+usedFace: Использованное лицо
+usedPose: Использованная поза
+regenerate: Ещё раз
+regenerateOnce: Создать ещё раз
+saveToWorks: Сохранить в работы
+inWorks: В работах
+savedToWorks: Сохранено как № {no}
+seeWorks: Открыть
+export: Экспорт
+exported: Экспортировано
+deleted: Удалено
+delete: Удалить
+deleteConfirm: Удалить это изображение?
+deleteConfirmBody: Оно будет удалено с этого устройства.
+adultConfirm: Вам уже есть 18?
+adultConfirmBody: Здесь контент для взрослых — только для тех, кому 18 и больше.
+adultYes: Мне есть 18
+adultNo: Мне нет 18
+saveFailed: Не удалось сохранить
+backToEdit: Назад к образу
+worksFilter: Показать
+noWorksTitle: Лукбук пока пуст
+noWorksBody: Создайте образ и сохраните его в работы — он появится здесь.
+noFavoriteWorksTitle: Пока нет избранных изображений
+firstLook: Создать первый образ
+openWork: Открыть № {no}
+aiService: ИИ-сервис
+aiServiceSettings: Настройки ИИ-сервиса
+serviceIntro: Настройте ИИ-сервис и проверьте подключение — и можно создавать образы.
+provider: Провайдер
+providerCustom: Другой (совместимый с OpenAI)
+providerVolcengine: Volcengine Ark
+providerDashScope: Alibaba Cloud Model Studio
+getApiKey: Получить API-ключ
+advancedSettings: Дополнительно
+sizePortrait: Вертикальный
+sizeSquare: Квадратный
+sizeLandscape: Горизонтальный
+resetDefaults: Сбросить настройки
+version: Версия
+versionDevelopment: Сборка для разработки
+checkForUpdates: Проверить обновления
+menuSettings: Настройки…
+menuCheckForUpdates: Проверить обновления…
+menuEdit: Правка
+menuWindow: Окно
+baseURL: Адрес
+apiKey: API-ключ
+apiKeyOptional: API-ключ (необязательно)
+showKey: Показать
+hideKey: Скрыть
+model: Модель
+deployment: Имя развёртывания
+size: Размер
+testConnection: Проверить подключение
+testAgain: Проверить снова
+connectionOK: Подключено — можно создавать образы.
+connectionFailed: "Не удалось подключиться: {error}"
+statusUnconfigured: ИИ-сервис не настроен
+statusConnected: "{service} · подключено"
+statusUntested: "{service} · не проверено"
+statusTesting: "{service} · проверка…"
+statusFailed: "{service} · нет подключения"
+privacyCloud: Ключ хранится в связке ключей этого устройства. Запросы идут напрямую с вашего устройства в настроенный сервис, без других серверов.
+privacyLocal: Запросы идут напрямую с вашего устройства на ваш собственный сервер, без других серверов и бесплатно.
+privacyWeb: Веб-версия не хранит ключ после закрытия страницы; после перезагрузки введите его снова. Запросы идут напрямую из вашего браузера в настроенный сервис.
+pageOnly: В веб-версии изображения и одежда хранятся, пока открыта эта страница. Экспортируйте то, что хотите сохранить.
+keyUnavailable: На этом устройстве нет защищённого хранилища для ключа.
+aboutSection: О приложении
+sourcesSection: Источники
+settings: Настройки
+settingsGeneral: Общие
+language: Язык
+languageSystem: Как в системе
+languageName: Русский
+sourceCode: Исходный код
+license: Лицензия
+sourcesPose: Позы
+sourcesOutfit: Наряды
+sourcesFace: Лица
+sourcesFooter: Каждое изображение из галереи загружается, только когда вы его используете; приложение не содержит и не распространяет их.
+errNoKey: Сначала введите API-ключ.
+errKeyRefused: Сервис отклонил ключ. Проверьте, что он верный и даёт доступ к этой модели.
+errNotFound: Адрес или модель не найдены. Проверьте их в настройках ИИ.
+errRateLimited: Слишком много запросов или на счёте закончились средства. Повторите позже или проверьте баланс.
+errBlocked: Проверка безопасности сервиса остановила это изображение. Попробуйте другой наряд, позу или сервис.
+errRejected: Сервис отклонил запрос.
+errServer: Ошибка на стороне сервиса. Повторите позже.
+errTimeout: Сервис слишком долго не отвечал. Повторите попытку.
+errNetwork: Не удалось связаться с сервисом. Проверьте сеть и адрес.
+errNoImage: Сервис ответил без изображения. Повторите попытку или измените образ.

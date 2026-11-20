@@ -23,7 +23,7 @@ Mirra is an NSGo app for macOS, iOS, Android and Windows that puts a face, an ou
 | `apps/mirra/pages.go` | A result, Works and the AI service settings. |
 | `apps/mirra/language.go` | The language setting: the system's or one of the catalogs', kept in storage and set at start. |
 | `apps/mirra/theme.yaml` | The dark amber theme the app always shows. |
-| `apps/mirra/locales/` | NSGo message catalogs in English and Simplified Chinese, and the accessors the `nsgo` tool writes from them. |
+| `apps/mirra/locales/` | NSGo message catalogs, English the source, in eleven languages, and the accessors the `nsgo` tool writes from them. |
 | `apps/mirra/assets/`, `apps/mirra/tools/appicon` | The app icon and the program that draws it. |
 | `apps/mirra/*_test.go` | Headless and target tests; `fixtures_test.go` fakes the galleries and the image API. |
 | `screenshots/` | The README's and the website's screenshots. |

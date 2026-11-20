@@ -10,8 +10,8 @@ import (
 // Source is the language the messages are written in.
 const Source = "en"
 
-// Catalog holds the messages' languages: en, the source, zh-Hans, and those other packages supply.
-var Catalog = i18n.NewCatalog("en", "zh-Hans")
+// Catalog holds the messages' languages: en, the source, de, es, fr, it, ja, ko, pt-BR, ru, zh-Hans, zh-Hant, and those other packages supply.
+var Catalog = i18n.NewCatalog("en", "de", "es", "fr", "it", "ja", "ko", "pt-BR", "ru", "zh-Hans", "zh-Hant")
 
 // The catalog's languages are the app's: those it shows.
 func init() {
@@ -830,6 +830,2750 @@ var textsEn = i18n.NewTexts(""+
 		70,
 	})
 
+// textsDe are the messages without arguments in de.
+var textsDe = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"Open Source · kostenlos · ohne Konto"+
+	"Studio"+
+	"Garderobe"+
+	"Werke"+
+	"Ich"+
+	"Bereiche"+
+	"Dieser Look"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"Gesicht"+
+	"Outfit"+
+	"Pose"+
+	"Nicht gewählt"+
+	"Gesicht wählen"+
+	"Outfit wählen"+
+	"Pose festlegen"+
+	"Schritte"+
+	"Fertig"+
+	"Zurück"+
+	"Schließen"+
+	"Weiter: Outfit"+
+	"Weiter: Pose"+
+	"Überrasch mich"+
+	"Erstellen"+
+	"Erstellen · KI-Dienst einrichten"+
+	"Wähle zuerst eine Pose."+
+	"Richte zuerst einen KI-Dienst ein."+
+	"Kostenlos und Open Source; einmal einrichten"+
+	"Wird erstellt"+
+	"Abbrechen"+
+	"Erstellen fehlgeschlagen"+
+	"Gesicht ändern"+
+	"Pose ändern"+
+	"Vergrößern"+
+	"Spaltenbreite ändern"+
+	"Verkleinern"+
+	"Galerien"+
+	"Alle"+
+	"Alle Winkel"+
+	"Frontal"+
+	"Halbprofil"+
+	"Profil"+
+	"Von oben"+
+	"Von unten"+
+	"Kurz"+
+	"Mittellang"+
+	"Schulterlang"+
+	"Lang"+
+	"Frühling"+
+	"Sommer"+
+	"Herbst"+
+	"Winter"+
+	"Party"+
+	"Bademode"+
+	"Dessous"+
+	"Sexy"+
+	"18+"+
+	"Galerie konnte nicht geladen werden"+
+	"Erneut versuchen"+
+	"Zusätzliche Anweisungen"+
+	"Sonst noch etwas, etwa Licht oder Hintergrund"+
+	"Zu Favoriten hinzufügen"+
+	"Aus Favoriten entfernen"+
+	"Favoriten"+
+	"Meine Kleidung"+
+	"Outfit-Galerie"+
+	"Kleidung hinzufügen"+
+	"Angezogen"+
+	"Anziehen"+
+	"Noch keine Favoriten"+
+	"Tippe in der Galerie bei einem Outfit auf ♡, um es hier zu behalten."+
+	"Noch keine Kleidung hinzugefügt"+
+	"Füge ein Foto von Kleidung hinzu, flach ausgelegt oder auf einem Bügel."+
+	"Gleiches Gesicht, anderes Outfit"+
+	"Verwendetes Gesicht"+
+	"Verwendete Pose"+
+	"Nochmal"+
+	"Nochmal erstellen"+
+	"In Werken sichern"+
+	"In Werken"+
+	"Ansehen"+
+	"Exportieren"+
+	"Exportiert"+
+	"Gelöscht"+
+	"Löschen"+
+	"Dieses Bild löschen?"+
+	"Es wird von diesem Gerät entfernt."+
+	"Bist du 18 oder älter?"+
+	"Hier werden Inhalte für Erwachsene gezeigt, nur für Personen ab 18."+
+	"Ich bin 18 oder älter"+
+	"Ich bin unter 18"+
+	"Sichern fehlgeschlagen"+
+	"Zurück zum Look"+
+	"Anzeigen"+
+	"Dein Lookbook ist leer"+
+	"Erstelle einen Look und sichere ihn in Werken, um ihn hier zu behalten."+
+	"Noch keine Lieblingsbilder"+
+	"Erstelle deinen ersten Look"+
+	"KI-Dienst"+
+	"KI-Dienst-Einstellungen"+
+	"Richte einen KI-Dienst ein und teste die Verbindung, dann kannst du Looks erstellen."+
+	"Anbieter"+
+	"Eigener (OpenAI-kompatibel)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"API-Schlüssel holen"+
+	"Erweitert"+
+	"Hochformat"+
+	"Quadratisch"+
+	"Querformat"+
+	"Auf Standard zurücksetzen"+
+	"Version"+
+	"Entwicklerversion"+
+	"Nach Updates suchen"+
+	"Einstellungen …"+
+	"Nach Updates suchen …"+
+	"Bearbeiten"+
+	"Fenster"+
+	"Adresse"+
+	"API-Schlüssel"+
+	"API-Schlüssel (optional)"+
+	"Einblenden"+
+	"Ausblenden"+
+	"Modell"+
+	"Deployment-Name"+
+	"Größe"+
+	"Verbindung testen"+
+	"Erneut testen"+
+	"Verbunden; du kannst Looks erstellen."+
+	"Kein KI-Dienst"+
+	"Der Schlüssel bleibt im Schlüsselbund dieses Geräts. Anfragen gehen direkt von deinem Gerät an den eingerichteten Dienst, über keinen anderen Server."+
+	"Anfragen gehen direkt von deinem Gerät an deinen eigenen Server, über keinen anderen Server und kostenlos."+
+	"Diese Webversion behält keinen Schlüssel, sobald die Seite geschlossen wird; gib ihn nach dem Neuladen erneut ein. Anfragen gehen direkt von deinem Browser an den eingerichteten Dienst."+
+	"In der Webversion bleiben Bilder und Kleidung nur erhalten, solange diese Seite offen ist. Exportiere, was du behalten möchtest."+
+	"Dieses Gerät hat keinen sicheren Speicher für den Schlüssel."+
+	"Über"+
+	"Quellen"+
+	"Einstellungen"+
+	"Allgemein"+
+	"Sprache"+
+	"System"+
+	"Deutsch"+
+	"Quellcode"+
+	"Lizenz"+
+	"Posen"+
+	"Outfits"+
+	"Gesichter"+
+	"Jedes Galeriebild wird erst geladen, wenn du es verwendest; die App liefert sie weder mit noch verbreitet sie sie weiter."+
+	"Gib zuerst den API-Schlüssel ein."+
+	"Der Dienst hat den Schlüssel abgelehnt. Prüfe, ob er stimmt und für dieses Modell freigegeben ist."+
+	"Adresse oder Modell nicht gefunden. Prüfe sie in den KI-Einstellungen."+
+	"Zu viele Anfragen, oder das Konto hat kein Guthaben mehr. Versuch es später erneut oder prüfe das Guthaben."+
+	"Die Sicherheitsprüfung des Dienstes hat dieses Bild gestoppt. Versuch ein anderes Outfit, eine andere Pose oder einen anderen Dienst."+
+	"Der Dienst hat die Anfrage abgelehnt."+
+	"Beim Dienst ist ein Fehler aufgetreten. Versuch es später erneut."+
+	"Der Dienst hat zu lange gebraucht. Versuch es erneut."+
+	"Dienst nicht erreichbar. Prüfe das Netzwerk und die Adresse."+
+	"Der Dienst hat ohne Bild geantwortet. Versuch es erneut oder ändere den Look.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		38,
+		6,
+		9,
+		5,
+		3,
+		8,
+		11,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		7,
+		6,
+		4,
+		14,
+		15,
+		14,
+		14,
+		8,
+		6,
+		7,
+		10,
+		14,
+		12,
+		15,
+		9,
+		33,
+		24,
+		34,
+		44,
+		13,
+		9,
+		24,
+		15,
+		12,
+		12,
+		21,
+		11,
+		8,
+		4,
+		11,
+		7,
+		10,
+		6,
+		8,
+		9,
+		4,
+		10,
+		12,
+		4,
+		9,
+		6,
+		6,
+		6,
+		5,
+		8,
+		7,
+		4,
+		3,
+		35,
+		16,
+		24,
+		45,
+		24,
+		23,
+		9,
+		14,
+		14,
+		20,
+		9,
+		8,
+		20,
+		70,
+		32,
+		73,
+		32,
+		19,
+		15,
+		7,
+		17,
+		17,
+		9,
+		7,
+		11,
+		10,
+		9,
+		8,
+		21,
+		35,
+		23,
+		69,
+		22,
+		16,
+		22,
+		16,
+		8,
+		22,
+		71,
+		26,
+		27,
+		9,
+		23,
+		84,
+		8,
+		27,
+		14,
+		26,
+		20,
+		9,
+		10,
+		11,
+		10,
+		26,
+		7,
+		17,
+		19,
+		17,
+		23,
+		10,
+		7,
+		7,
+		14,
+		25,
+		10,
+		10,
+		6,
+		15,
+		7,
+		17,
+		13,
+		37,
+		14,
+		154,
+		108,
+		187,
+		129,
+		63,
+		5,
+		7,
+		13,
+		9,
+		7,
+		6,
+		7,
+		9,
+		6,
+		5,
+		7,
+		9,
+		121,
+		34,
+		101,
+		71,
+		109,
+		134,
+		37,
+		66,
+		53,
+		61,
+		78,
+	})
+
+// textsEs are the messages without arguments in es.
+var textsEs = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"Código abierto · gratis · sin cuenta"+
+	"Estudio"+
+	"Armario"+
+	"Obras"+
+	"Yo"+
+	"Secciones"+
+	"Este look"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"Rostro"+
+	"Atuendo"+
+	"Pose"+
+	"Sin elegir"+
+	"Elige un rostro"+
+	"Elige un atuendo"+
+	"Elige la pose"+
+	"Pasos"+
+	"Listo"+
+	"Atrás"+
+	"Cerrar"+
+	"Siguiente: atuendo"+
+	"Siguiente: pose"+
+	"Sorpréndeme"+
+	"Generar"+
+	"Generar · configura un servicio de IA"+
+	"Elige primero una pose."+
+	"Configura primero un servicio de IA."+
+	"Gratis y de código abierto; configúralo una vez"+
+	"Generando"+
+	"Cancelar"+
+	"No se pudo generar"+
+	"Cambiar rostro"+
+	"Cambiar pose"+
+	"Acercar"+
+	"Cambiar el ancho de la columna"+
+	"Alejar"+
+	"Galerías"+
+	"Todo"+
+	"Todos los ángulos"+
+	"De frente"+
+	"Tres cuartos"+
+	"De perfil"+
+	"Desde arriba"+
+	"Desde abajo"+
+	"Corto"+
+	"Medio"+
+	"Hasta los hombros"+
+	"Largo"+
+	"Primavera"+
+	"Verano"+
+	"Otoño"+
+	"Invierno"+
+	"Fiesta"+
+	"Baño"+
+	"Lencería"+
+	"Sexy"+
+	"18+"+
+	"No se pudo cargar la galería"+
+	"Reintentar"+
+	"Instrucciones adicionales"+
+	"Algo más, como la luz o el fondo"+
+	"Añadir a favoritos"+
+	"Quitar de favoritos"+
+	"Favoritos"+
+	"Mi ropa"+
+	"Galería de atuendos"+
+	"Añadir ropa"+
+	"Puesto"+
+	"Ponértelo"+
+	"Aún no hay favoritos"+
+	"Toca ♡ en un atuendo de la galería para guardarlo aquí."+
+	"Aún no has añadido ropa"+
+	"Añade una foto de ropa extendida o en una percha."+
+	"El mismo rostro, otro atuendo"+
+	"Rostro usado"+
+	"Pose usada"+
+	"Otra vez"+
+	"Generar de nuevo"+
+	"Guardar en Obras"+
+	"En Obras"+
+	"Ver"+
+	"Exportar"+
+	"Exportado"+
+	"Eliminado"+
+	"Eliminar"+
+	"¿Eliminar esta imagen?"+
+	"Se quitará de este dispositivo."+
+	"¿Tienes 18 años o más?"+
+	"Esto muestra contenido para adultos, solo para mayores de 18 años."+
+	"Tengo 18 años o más"+
+	"Soy menor de 18"+
+	"No se pudo guardar"+
+	"Volver al look"+
+	"Mostrar"+
+	"Tu lookbook está vacío"+
+	"Genera un look y guárdalo en Obras para tenerlo aquí."+
+	"Aún no hay imágenes favoritas"+
+	"Crea tu primer look"+
+	"Servicio de IA"+
+	"Ajustes del servicio de IA"+
+	"Configura un servicio de IA y prueba la conexión para empezar a crear looks."+
+	"Proveedor"+
+	"Personalizado (compatible con OpenAI)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"Obtener una clave de API"+
+	"Avanzado"+
+	"Vertical"+
+	"Cuadrado"+
+	"Horizontal"+
+	"Restablecer valores predeterminados"+
+	"Versión"+
+	"Versión de desarrollo"+
+	"Buscar actualizaciones"+
+	"Ajustes…"+
+	"Buscar actualizaciones…"+
+	"Edición"+
+	"Ventana"+
+	"Dirección"+
+	"Clave de API"+
+	"Clave de API (opcional)"+
+	"Mostrar"+
+	"Ocultar"+
+	"Modelo"+
+	"Nombre de la implementación"+
+	"Tamaño"+
+	"Probar conexión"+
+	"Probar de nuevo"+
+	"Conectado; ya puedes crear looks."+
+	"Sin servicio de IA"+
+	"La clave se queda en el llavero de este dispositivo. Las solicitudes van directamente de tu dispositivo al servicio que configuraste, sin pasar por ningún otro servidor."+
+	"Las solicitudes van directamente de tu dispositivo a tu propio servidor, sin pasar por ningún otro servidor y sin coste."+
+	"Esta versión web no guarda la clave al cerrar la página; vuelve a introducirla tras recargar. Las solicitudes van directamente de tu navegador al servicio que configuraste."+
+	"En la versión web, las imágenes y la ropa duran lo que dure esta página. Exporta las que quieras conservar."+
+	"Este dispositivo no tiene un almacén seguro para la clave."+
+	"Acerca de"+
+	"Fuentes"+
+	"Ajustes"+
+	"General"+
+	"Idioma"+
+	"Sistema"+
+	"Español"+
+	"Código fuente"+
+	"Licencia"+
+	"Poses"+
+	"Atuendos"+
+	"Rostros"+
+	"Cada imagen de las galerías se descarga solo cuando la usas; la app no las incluye ni las redistribuye."+
+	"Introduce primero la clave de API."+
+	"El servicio rechazó la clave. Comprueba que sea correcta y que pueda usar este modelo."+
+	"No se encontró la dirección o el modelo. Revísalos en los ajustes de IA."+
+	"Demasiadas solicitudes, o la cuenta se quedó sin saldo. Inténtalo más tarde o revisa el saldo."+
+	"El filtro de seguridad del servicio bloqueó esta imagen. Prueba otro atuendo, otra pose u otro servicio."+
+	"El servicio rechazó la solicitud."+
+	"El servicio tuvo un problema. Inténtalo más tarde."+
+	"El servicio tardó demasiado en responder. Inténtalo de nuevo."+
+	"No se pudo conectar con el servicio. Revisa la red y la dirección."+
+	"El servicio respondió sin ninguna imagen. Inténtalo de nuevo o cambia el look.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		39,
+		7,
+		7,
+		5,
+		2,
+		9,
+		9,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		6,
+		7,
+		4,
+		10,
+		15,
+		16,
+		13,
+		5,
+		5,
+		6,
+		6,
+		18,
+		15,
+		12,
+		7,
+		38,
+		23,
+		36,
+		49,
+		9,
+		8,
+		18,
+		14,
+		12,
+		7,
+		30,
+		6,
+		9,
+		4,
+		18,
+		9,
+		12,
+		9,
+		12,
+		11,
+		5,
+		5,
+		17,
+		5,
+		9,
+		6,
+		6,
+		8,
+		6,
+		5,
+		9,
+		4,
+		3,
+		29,
+		10,
+		25,
+		33,
+		19,
+		19,
+		9,
+		7,
+		20,
+		12,
+		6,
+		10,
+		21,
+		59,
+		25,
+		50,
+		29,
+		12,
+		10,
+		8,
+		16,
+		16,
+		8,
+		3,
+		8,
+		9,
+		9,
+		8,
+		23,
+		32,
+		25,
+		67,
+		21,
+		15,
+		18,
+		14,
+		7,
+		24,
+		55,
+		31,
+		19,
+		14,
+		26,
+		77,
+		9,
+		37,
+		14,
+		26,
+		24,
+		8,
+		8,
+		8,
+		10,
+		35,
+		8,
+		22,
+		22,
+		10,
+		25,
+		8,
+		7,
+		10,
+		12,
+		23,
+		7,
+		7,
+		6,
+		28,
+		7,
+		16,
+		15,
+		33,
+		18,
+		170,
+		121,
+		174,
+		110,
+		59,
+		9,
+		7,
+		7,
+		7,
+		6,
+		7,
+		8,
+		14,
+		8,
+		5,
+		8,
+		7,
+		104,
+		34,
+		87,
+		75,
+		97,
+		105,
+		34,
+		52,
+		63,
+		67,
+		80,
+	})
+
+// textsFr are the messages without arguments in fr.
+var textsFr = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"Open source · gratuit · sans compte"+
+	"Studio"+
+	"Garde-robe"+
+	"Créations"+
+	"Moi"+
+	"Sections"+
+	"Ce look"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"Visage"+
+	"Tenue"+
+	"Pose"+
+	"Non choisi"+
+	"Choisir un visage"+
+	"Choisir une tenue"+
+	"Définir la pose"+
+	"Étapes"+
+	"Terminé"+
+	"Retour"+
+	"Fermer"+
+	"Suivant\u00a0: tenue"+
+	"Suivant\u00a0: pose"+
+	"Surprenez-moi"+
+	"Générer"+
+	"Générer · configurer un service d’IA"+
+	"Choisissez d’abord une pose."+
+	"Configurez d’abord un service d’IA."+
+	"Gratuit et open source\u00a0; à configurer une seule fois"+
+	"Génération en cours"+
+	"Annuler"+
+	"Échec de la génération"+
+	"Changer de visage"+
+	"Changer de pose"+
+	"Zoom avant"+
+	"Redimensionner la colonne"+
+	"Zoom arrière"+
+	"Galeries"+
+	"Tout"+
+	"Tous les angles"+
+	"Face"+
+	"Trois-quarts"+
+	"Profil"+
+	"Plongée"+
+	"Contre-plongée"+
+	"Courts"+
+	"Mi-longs"+
+	"Aux épaules"+
+	"Longs"+
+	"Printemps"+
+	"Été"+
+	"Automne"+
+	"Hiver"+
+	"Soirée"+
+	"Maillots de bain"+
+	"Lingerie"+
+	"Sexy"+
+	"18+"+
+	"Impossible de charger la galerie"+
+	"Réessayer"+
+	"Instructions supplémentaires"+
+	"Autre chose, comme l’éclairage ou l’arrière-plan"+
+	"Ajouter aux favoris"+
+	"Retirer des favoris"+
+	"Favoris"+
+	"Mes vêtements"+
+	"Galerie de tenues"+
+	"Ajouter des vêtements"+
+	"Porté"+
+	"Porter"+
+	"Aucun favori"+
+	"Touchez ♡ sur une tenue de la galerie pour la retrouver ici."+
+	"Aucun vêtement ajouté"+
+	"Ajoutez une photo de vêtements posés à plat ou sur un cintre."+
+	"Même visage, autre tenue"+
+	"Visage utilisé"+
+	"Pose utilisée"+
+	"Encore"+
+	"Générer à nouveau"+
+	"Enregistrer dans Créations"+
+	"Dans Créations"+
+	"Voir"+
+	"Exporter"+
+	"Exporté"+
+	"Supprimé"+
+	"Supprimer"+
+	"Supprimer cette image\u00a0?"+
+	"Elle sera supprimée de cet appareil."+
+	"Avez-vous 18 ans ou plus\u00a0?"+
+	"Ce contenu est réservé aux adultes de 18 ans et plus."+
+	"J’ai 18 ans ou plus"+
+	"J’ai moins de 18 ans"+
+	"Impossible d’enregistrer"+
+	"Retour au look"+
+	"Afficher"+
+	"Votre lookbook est vide"+
+	"Générez un look et enregistrez-le dans Créations pour le retrouver ici."+
+	"Aucune image favorite"+
+	"Créer votre premier look"+
+	"Service d’IA"+
+	"Réglages du service d’IA"+
+	"Configurez un service d’IA et testez la connexion pour commencer à créer des looks."+
+	"Fournisseur"+
+	"Personnalisé (compatible OpenAI)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"Obtenir une clé API"+
+	"Avancé"+
+	"Portrait"+
+	"Carré"+
+	"Paysage"+
+	"Rétablir les valeurs par défaut"+
+	"Version"+
+	"Version de développement"+
+	"Rechercher des mises à jour"+
+	"Réglages…"+
+	"Rechercher des mises à jour…"+
+	"Édition"+
+	"Fenêtre"+
+	"Adresse"+
+	"Clé API"+
+	"Clé API (facultative)"+
+	"Afficher"+
+	"Masquer"+
+	"Modèle"+
+	"Nom du déploiement"+
+	"Format"+
+	"Tester la connexion"+
+	"Tester à nouveau"+
+	"Connecté\u00a0; vous pouvez commencer à créer des looks."+
+	"Aucun service d’IA"+
+	"La clé reste dans le trousseau de cet appareil. Les requêtes vont directement de votre appareil au service configuré, sans passer par un autre serveur."+
+	"Les requêtes vont directement de votre appareil à votre propre serveur, sans passer par un autre serveur et sans frais."+
+	"La version web ne conserve pas la clé après la fermeture de la page\u00a0; saisissez-la à nouveau après un rechargement. Les requêtes vont directement de votre navigateur au service configuré."+
+	"Dans la version web, les images et les vêtements ne sont conservés que tant que cette page reste ouverte. Exportez ceux que vous voulez garder."+
+	"Cet appareil n’a pas de stockage sécurisé pour la clé."+
+	"À propos"+
+	"Sources"+
+	"Réglages"+
+	"Général"+
+	"Langue"+
+	"Système"+
+	"Français"+
+	"Code source"+
+	"Licence"+
+	"Poses"+
+	"Tenues"+
+	"Visages"+
+	"Chaque image des galeries n’est récupérée que lorsque vous l’utilisez\u00a0; l’app ne les intègre ni ne les redistribue."+
+	"Saisissez d’abord la clé API."+
+	"Le service a refusé la clé. Vérifiez qu’elle est correcte et qu’elle autorise ce modèle."+
+	"Adresse ou modèle introuvable. Vérifiez-les dans les réglages d’IA."+
+	"Trop de requêtes, ou crédit du compte épuisé. Réessayez plus tard ou vérifiez le solde."+
+	"Le contrôle de sécurité du service a bloqué cette image. Essayez une autre tenue ou pose, ou un autre service."+
+	"Le service a refusé la requête."+
+	"Le service a rencontré un problème. Réessayez plus tard."+
+	"Le service a mis trop de temps à répondre. Réessayez."+
+	"Impossible de joindre le service. Vérifiez le réseau et l’adresse."+
+	"Le service a répondu sans image. Réessayez ou modifiez le look.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		37,
+		6,
+		10,
+		10,
+		3,
+		8,
+		7,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		6,
+		5,
+		4,
+		10,
+		17,
+		17,
+		16,
+		7,
+		8,
+		6,
+		6,
+		16,
+		15,
+		13,
+		9,
+		41,
+		30,
+		39,
+		54,
+		21,
+		7,
+		25,
+		17,
+		15,
+		10,
+		25,
+		13,
+		8,
+		4,
+		15,
+		4,
+		12,
+		6,
+		8,
+		15,
+		6,
+		8,
+		12,
+		5,
+		9,
+		5,
+		7,
+		5,
+		7,
+		16,
+		8,
+		4,
+		3,
+		32,
+		10,
+		29,
+		54,
+		19,
+		19,
+		7,
+		14,
+		17,
+		22,
+		6,
+		6,
+		12,
+		62,
+		23,
+		64,
+		25,
+		15,
+		14,
+		6,
+		20,
+		27,
+		15,
+		4,
+		8,
+		8,
+		9,
+		9,
+		24,
+		37,
+		27,
+		55,
+		21,
+		22,
+		26,
+		14,
+		8,
+		23,
+		74,
+		21,
+		25,
+		14,
+		27,
+		87,
+		11,
+		33,
+		14,
+		26,
+		20,
+		7,
+		8,
+		6,
+		7,
+		33,
+		7,
+		25,
+		28,
+		12,
+		31,
+		8,
+		8,
+		7,
+		8,
+		22,
+		8,
+		7,
+		7,
+		19,
+		6,
+		19,
+		17,
+		55,
+		20,
+		154,
+		121,
+		194,
+		145,
+		59,
+		9,
+		7,
+		9,
+		9,
+		6,
+		8,
+		9,
+		11,
+		7,
+		5,
+		6,
+		7,
+		126,
+		32,
+		96,
+		72,
+		93,
+		114,
+		33,
+		59,
+		56,
+		70,
+		65,
+	})
+
+// textsIt are the messages without arguments in it.
+var textsIt = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"Open source · gratis · senza account"+
+	"Studio"+
+	"Guardaroba"+
+	"Creazioni"+
+	"Profilo"+
+	"Sezioni"+
+	"Questo look"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"Viso"+
+	"Outfit"+
+	"Posa"+
+	"Non scelto"+
+	"Scegli un viso"+
+	"Scegli un outfit"+
+	"Imposta la posa"+
+	"Passaggi"+
+	"Fatto"+
+	"Indietro"+
+	"Chiudi"+
+	"Avanti: outfit"+
+	"Avanti: posa"+
+	"Sorprendimi"+
+	"Genera"+
+	"Genera · configura un servizio IA"+
+	"Scegli prima una posa."+
+	"Configura prima un servizio IA."+
+	"Gratis e open source; basta configurarlo una volta"+
+	"Generazione in corso"+
+	"Annulla"+
+	"Generazione non riuscita"+
+	"Cambia viso"+
+	"Cambia posa"+
+	"Ingrandisci"+
+	"Ridimensiona la colonna"+
+	"Riduci"+
+	"Gallerie"+
+	"Tutti"+
+	"Tutte le angolazioni"+
+	"Frontale"+
+	"Tre quarti"+
+	"Di profilo"+
+	"Dall’alto"+
+	"Dal basso"+
+	"Corti"+
+	"Medi"+
+	"Alle spalle"+
+	"Lunghi"+
+	"Primavera"+
+	"Estate"+
+	"Autunno"+
+	"Inverno"+
+	"Festa"+
+	"Costumi da bagno"+
+	"Lingerie"+
+	"Sexy"+
+	"18+"+
+	"Impossibile caricare la galleria"+
+	"Riprova"+
+	"Istruzioni aggiuntive"+
+	"Altro, come luce o sfondo"+
+	"Aggiungi ai preferiti"+
+	"Rimuovi dai preferiti"+
+	"Preferiti"+
+	"I miei vestiti"+
+	"Galleria outfit"+
+	"Aggiungi vestiti"+
+	"Indossato"+
+	"Indossalo"+
+	"Ancora nessun preferito"+
+	"Tocca ♡ su un outfit della galleria per tenerlo qui."+
+	"Ancora nessun vestito aggiunto"+
+	"Aggiungi una foto di vestiti stesi in piano o su una gruccia."+
+	"Stesso viso, altro outfit"+
+	"Viso usato"+
+	"Posa usata"+
+	"Ancora"+
+	"Genera di nuovo"+
+	"Salva nelle creazioni"+
+	"Nelle creazioni"+
+	"Vedi"+
+	"Esporta"+
+	"Esportato"+
+	"Eliminato"+
+	"Elimina"+
+	"Eliminare questa immagine?"+
+	"Verrà rimossa da questo dispositivo."+
+	"Hai almeno 18 anni?"+
+	"Qui ci sono contenuti per adulti, riservati a chi ha almeno 18 anni."+
+	"Ho almeno 18 anni"+
+	"Ho meno di 18 anni"+
+	"Impossibile salvare"+
+	"Torna al look"+
+	"Mostra"+
+	"Il tuo lookbook è vuoto"+
+	"Genera un look e salvalo nelle creazioni per tenerlo qui."+
+	"Ancora nessuna immagine preferita"+
+	"Crea il tuo primo look"+
+	"Servizio IA"+
+	"Impostazioni del servizio IA"+
+	"Configura un servizio IA e prova la connessione, poi puoi iniziare a creare look."+
+	"Fornitore"+
+	"Personalizzato (compatibile con OpenAI)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"Ottieni una chiave API"+
+	"Avanzate"+
+	"Verticale"+
+	"Quadrato"+
+	"Orizzontale"+
+	"Ripristina predefiniti"+
+	"Versione"+
+	"Build di sviluppo"+
+	"Controlla aggiornamenti"+
+	"Impostazioni…"+
+	"Controlla aggiornamenti…"+
+	"Modifica"+
+	"Finestra"+
+	"Indirizzo"+
+	"Chiave API"+
+	"Chiave API (facoltativa)"+
+	"Mostra"+
+	"Nascondi"+
+	"Modello"+
+	"Nome del deployment"+
+	"Dimensioni"+
+	"Prova connessione"+
+	"Riprova"+
+	"Connesso; puoi iniziare a creare look."+
+	"Nessun servizio IA"+
+	"La chiave resta nel portachiavi di questo dispositivo. Le richieste vanno direttamente dal tuo dispositivo al servizio che hai configurato, senza passare da altri server."+
+	"Le richieste vanno direttamente dal tuo dispositivo al tuo server, senza passare da altri server e senza costi."+
+	"La versione web non conserva la chiave dopo la chiusura della pagina; inseriscila di nuovo dopo un ricaricamento. Le richieste vanno direttamente dal tuo browser al servizio che hai configurato."+
+	"Nella versione web, immagini e vestiti durano quanto questa pagina. Esporta quelli che vuoi tenere."+
+	"Questo dispositivo non ha un archivio sicuro per la chiave."+
+	"Informazioni"+
+	"Fonti"+
+	"Impostazioni"+
+	"Generali"+
+	"Lingua"+
+	"Sistema"+
+	"Italiano"+
+	"Codice sorgente"+
+	"Licenza"+
+	"Pose"+
+	"Outfit"+
+	"Visi"+
+	"Ogni immagine delle gallerie viene scaricata solo quando la usi; l’app non le include né le ridistribuisce."+
+	"Inserisci prima la chiave API."+
+	"Il servizio ha rifiutato la chiave. Verifica che sia corretta e che possa usare questo modello."+
+	"Indirizzo o modello non trovato. Controllali nelle impostazioni IA."+
+	"Troppe richieste, oppure il credito dell’account è esaurito. Riprova più tardi o controlla il saldo."+
+	"Il controllo di sicurezza del servizio ha bloccato questa immagine. Prova un altro outfit o un’altra posa, oppure un altro servizio."+
+	"Il servizio ha rifiutato la richiesta."+
+	"Il servizio ha avuto un problema. Riprova più tardi."+
+	"Il servizio ha impiegato troppo a rispondere. Riprova."+
+	"Impossibile raggiungere il servizio. Controlla la rete e l’indirizzo."+
+	"Il servizio ha risposto senza un’immagine. Riprova o cambia il look.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		38,
+		6,
+		10,
+		9,
+		7,
+		7,
+		11,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		4,
+		6,
+		4,
+		10,
+		14,
+		16,
+		15,
+		8,
+		5,
+		8,
+		6,
+		14,
+		12,
+		11,
+		6,
+		34,
+		22,
+		31,
+		50,
+		20,
+		7,
+		24,
+		11,
+		11,
+		11,
+		23,
+		6,
+		8,
+		5,
+		20,
+		8,
+		10,
+		10,
+		11,
+		9,
+		5,
+		4,
+		11,
+		6,
+		9,
+		6,
+		7,
+		7,
+		5,
+		16,
+		8,
+		4,
+		3,
+		32,
+		7,
+		21,
+		25,
+		21,
+		21,
+		9,
+		14,
+		15,
+		16,
+		9,
+		9,
+		23,
+		54,
+		30,
+		61,
+		25,
+		10,
+		10,
+		6,
+		15,
+		21,
+		15,
+		4,
+		7,
+		9,
+		9,
+		7,
+		26,
+		37,
+		19,
+		68,
+		17,
+		18,
+		19,
+		13,
+		6,
+		24,
+		57,
+		33,
+		22,
+		11,
+		28,
+		81,
+		9,
+		39,
+		14,
+		26,
+		22,
+		8,
+		9,
+		8,
+		11,
+		22,
+		8,
+		17,
+		23,
+		15,
+		26,
+		8,
+		8,
+		9,
+		10,
+		24,
+		6,
+		8,
+		7,
+		19,
+		10,
+		17,
+		7,
+		38,
+		18,
+		170,
+		111,
+		194,
+		99,
+		59,
+		12,
+		5,
+		12,
+		8,
+		6,
+		7,
+		8,
+		15,
+		7,
+		4,
+		6,
+		4,
+		110,
+		30,
+		95,
+		67,
+		104,
+		134,
+		38,
+		53,
+		54,
+		71,
+		70,
+	})
+
+// textsJa are the messages without arguments in ja.
+var textsJa = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"オープンソース · 無料 · アカウント不要"+
+	"スタジオ"+
+	"ワードローブ"+
+	"作品"+
+	"マイページ"+
+	"セクション"+
+	"今回のコーデ"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"顔"+
+	"服装"+
+	"ポーズ"+
+	"未選択"+
+	"顔を選ぶ"+
+	"服装を選ぶ"+
+	"ポーズを決める"+
+	"ステップ"+
+	"完了"+
+	"戻る"+
+	"閉じる"+
+	"次へ · 服装を選ぶ"+
+	"次へ · ポーズを選ぶ"+
+	"おまかせ"+
+	"生成する"+
+	"生成する · AI サービスを設定"+
+	"先にポーズを選んでください。"+
+	"先に AI サービスを設定してください。"+
+	"オープンソースで無料、設定は一度だけ"+
+	"生成中"+
+	"キャンセル"+
+	"生成に失敗しました"+
+	"顔を変更"+
+	"ポーズを変更"+
+	"拡大"+
+	"列の幅を調整"+
+	"縮小"+
+	"ギャラリー"+
+	"すべて"+
+	"すべての角度"+
+	"正面"+
+	"斜め"+
+	"横向き"+
+	"俯瞰"+
+	"あおり"+
+	"ショート"+
+	"ミディアム"+
+	"セミロング"+
+	"ロング"+
+	"春"+
+	"夏"+
+	"秋"+
+	"冬"+
+	"パーティー"+
+	"水着"+
+	"ランジェリー"+
+	"セクシー"+
+	"18+"+
+	"ギャラリーを読み込めませんでした"+
+	"再試行"+
+	"追加の指示"+
+	"照明や背景など、そのほかの要望"+
+	"お気に入りに追加"+
+	"お気に入りから削除"+
+	"お気に入り"+
+	"マイ服"+
+	"服装ギャラリー"+
+	"服を追加"+
+	"着用中"+
+	"着て生成"+
+	"お気に入りはまだありません"+
+	"ギャラリーの服装で ♡ をタップすると、ここに保存されます。"+
+	"追加した服はまだありません"+
+	"平置きかハンガーに掛けた服の写真を追加してください。"+
+	"同じ顔で、別の服装に"+
+	"使用した顔"+
+	"使用したポーズ"+
+	"もう一度"+
+	"もう一度生成"+
+	"作品に保存"+
+	"作品に保存済み"+
+	"見る"+
+	"書き出す"+
+	"書き出しました"+
+	"削除しました"+
+	"削除"+
+	"この画像を削除しますか？"+
+	"このデバイスから削除されます。"+
+	"18 歳以上ですか？"+
+	"成人向けのコンテンツです。18 歳以上の方のみご覧いただけます。"+
+	"18 歳以上です"+
+	"18 歳未満です"+
+	"保存できませんでした"+
+	"コーデに戻る"+
+	"表示"+
+	"ルックブックはまだ空です"+
+	"コーデを生成して「作品に保存」すると、ここに残ります。"+
+	"お気に入りの作品はまだありません"+
+	"最初のコーデを作る"+
+	"AI サービス"+
+	"AI サービスの設定"+
+	"AI サービスを設定して接続をテストすれば、コーデの生成を始められます。"+
+	"プロバイダ"+
+	"カスタム（OpenAI 互換）"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"API Key を取得"+
+	"詳細設定"+
+	"縦長"+
+	"正方形"+
+	"横長"+
+	"デフォルトに戻す"+
+	"バージョン"+
+	"開発版"+
+	"アップデートを確認"+
+	"設定…"+
+	"アップデートを確認…"+
+	"編集"+
+	"ウインドウ"+
+	"アドレス"+
+	"API Key"+
+	"API Key（省略可）"+
+	"表示"+
+	"隠す"+
+	"モデル"+
+	"デプロイ名"+
+	"サイズ"+
+	"接続をテスト"+
+	"再テスト"+
+	"接続しました。コーデの生成を始められます。"+
+	"AI サービス未設定"+
+	"キーはこのデバイスのキーチェーンにのみ保存されます。リクエストは他のサーバーを経由せず、デバイスから設定したサービスへ直接送信されます。"+
+	"リクエストは他のサーバーを経由せず、デバイスからご自身のサーバーへ直接送信されます。費用はかかりません。"+
+	"Web 版はページを閉じるとキーを保持しません。再読み込み後はもう一度入力してください。リクエストはブラウザから設定したサービスへ直接送信されます。"+
+	"Web 版では、作品や服の写真はこのページを開いている間だけ保持されます。残したいものは書き出してください。"+
+	"このデバイスにはキーを保存できる安全な保管場所がありません。"+
+	"このアプリについて"+
+	"素材の出典"+
+	"設定"+
+	"一般"+
+	"言語"+
+	"システムに従う"+
+	"日本語"+
+	"ソースコード"+
+	"ライセンス"+
+	"ポーズ"+
+	"服装"+
+	"顔"+
+	"ギャラリーの画像は使うときにだけ個別に取得します。アプリに同梱したり再配布したりすることはありません。"+
+	"先に API Key を入力してください。"+
+	"サービスがキーを拒否しました。キーが正しいか、このモデルを使えるかを確認してください。"+
+	"アドレスまたはモデルが見つかりません。AI の設定を確認してください。"+
+	"リクエストが多すぎるか、アカウントのクレジットが不足しています。しばらくしてから再試行するか、残高を確認してください。"+
+	"サービスの安全審査によりこの画像は生成されませんでした。別の服装やポーズ、または別のサービスでお試しください。"+
+	"サービスがリクエストを拒否しました。"+
+	"サービスで問題が発生しました。しばらくしてから再試行してください。"+
+	"サービスの応答がタイムアウトしました。再試行してください。"+
+	"サービスに接続できません。ネットワークとアドレスを確認してください。"+
+	"サービスから画像が返されませんでした。再試行するか、コーデを変更してください。",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		56,
+		12,
+		18,
+		6,
+		15,
+		15,
+		18,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		3,
+		6,
+		9,
+		9,
+		12,
+		15,
+		21,
+		12,
+		6,
+		6,
+		9,
+		25,
+		28,
+		12,
+		12,
+		40,
+		42,
+		52,
+		54,
+		9,
+		15,
+		27,
+		12,
+		18,
+		6,
+		18,
+		6,
+		15,
+		9,
+		18,
+		6,
+		6,
+		9,
+		6,
+		9,
+		12,
+		15,
+		15,
+		9,
+		3,
+		3,
+		3,
+		3,
+		15,
+		6,
+		18,
+		12,
+		3,
+		48,
+		9,
+		15,
+		45,
+		24,
+		27,
+		15,
+		9,
+		21,
+		12,
+		9,
+		12,
+		39,
+		86,
+		39,
+		78,
+		30,
+		15,
+		21,
+		12,
+		18,
+		15,
+		21,
+		6,
+		12,
+		21,
+		18,
+		6,
+		36,
+		45,
+		24,
+		90,
+		18,
+		18,
+		30,
+		18,
+		6,
+		36,
+		81,
+		48,
+		27,
+		15,
+		24,
+		102,
+		15,
+		31,
+		14,
+		26,
+		17,
+		12,
+		6,
+		9,
+		6,
+		24,
+		15,
+		9,
+		27,
+		9,
+		30,
+		6,
+		15,
+		12,
+		7,
+		22,
+		6,
+		6,
+		9,
+		15,
+		9,
+		18,
+		12,
+		63,
+		24,
+		204,
+		156,
+		214,
+		154,
+		90,
+		27,
+		15,
+		6,
+		6,
+		6,
+		21,
+		9,
+		18,
+		15,
+		9,
+		6,
+		3,
+		153,
+		45,
+		129,
+		99,
+		177,
+		165,
+		54,
+		99,
+		87,
+		102,
+		117,
+	})
+
+// textsKo are the messages without arguments in ko.
+var textsKo = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"오픈 소스 · 무료 · 계정 불필요"+
+	"스튜디오"+
+	"옷장"+
+	"작품"+
+	"나"+
+	"섹션"+
+	"이번 룩"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"얼굴"+
+	"의상"+
+	"포즈"+
+	"선택 안 함"+
+	"얼굴 선택"+
+	"의상 고르기"+
+	"포즈 설정"+
+	"단계"+
+	"완료"+
+	"뒤로"+
+	"닫기"+
+	"다음: 의상"+
+	"다음: 포즈"+
+	"랜덤 코디"+
+	"생성하기"+
+	"생성하기 · AI 서비스를 먼저 설정하세요"+
+	"먼저 포즈를 선택하세요."+
+	"먼저 AI 서비스를 설정하세요."+
+	"무료 오픈 소스, 한 번만 설정하면 돼요"+
+	"생성 중"+
+	"취소"+
+	"생성 실패"+
+	"얼굴 바꾸기"+
+	"포즈 바꾸기"+
+	"확대"+
+	"열 너비 조절"+
+	"축소"+
+	"갤러리"+
+	"전체"+
+	"모든 각도"+
+	"정면"+
+	"3/4 측면"+
+	"측면"+
+	"하이 앵글"+
+	"로우 앵글"+
+	"단발"+
+	"중단발"+
+	"어깨 기장"+
+	"장발"+
+	"봄"+
+	"여름"+
+	"가을"+
+	"겨울"+
+	"파티"+
+	"수영복"+
+	"란제리"+
+	"섹시"+
+	"18+"+
+	"갤러리를 불러오지 못했어요"+
+	"다시 시도"+
+	"추가 요청"+
+	"조명, 배경 등 추가 요청"+
+	"즐겨찾기에 추가"+
+	"즐겨찾기에서 삭제"+
+	"즐겨찾기"+
+	"내 옷"+
+	"의상 갤러리"+
+	"옷 추가"+
+	"착용 중"+
+	"입어 보기"+
+	"아직 즐겨찾기가 없어요"+
+	"갤러리에서 의상의 ♡를 탭하면 여기에 모여요."+
+	"아직 추가한 옷이 없어요"+
+	"옷을 바닥에 펼치거나 옷걸이에 걸어 찍은 사진을 추가하세요."+
+	"같은 얼굴, 다른 의상"+
+	"사용한 얼굴"+
+	"사용한 포즈"+
+	"다시"+
+	"다시 생성"+
+	"작품에 저장"+
+	"작품에 있음"+
+	"보기"+
+	"내보내기"+
+	"내보냈어요"+
+	"삭제했어요"+
+	"삭제"+
+	"이 이미지를 삭제할까요?"+
+	"이 기기에서 삭제돼요."+
+	"만 18세 이상인가요?"+
+	"성인 콘텐츠예요. 만 18세 이상만 볼 수 있어요."+
+	"만 18세 이상이에요"+
+	"만 18세 미만이에요"+
+	"저장하지 못했어요"+
+	"룩으로 돌아가기"+
+	"보기"+
+	"룩북이 비어 있어요"+
+	"룩을 생성하고 작품에 저장하면 여기에 모여요."+
+	"아직 즐겨찾기한 작품이 없어요"+
+	"첫 룩 만들기"+
+	"AI 서비스"+
+	"AI 서비스 설정"+
+	"AI 서비스를 설정하고 연결을 테스트하면 바로 룩을 만들 수 있어요."+
+	"제공업체"+
+	"사용자 지정(OpenAI 호환)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"API Key 발급받기"+
+	"고급 설정"+
+	"세로"+
+	"정사각형"+
+	"가로"+
+	"기본값으로 재설정"+
+	"버전"+
+	"개발 빌드"+
+	"업데이트 확인"+
+	"설정…"+
+	"업데이트 확인…"+
+	"편집"+
+	"윈도우"+
+	"주소"+
+	"API Key"+
+	"API Key(선택 사항)"+
+	"보기"+
+	"숨기기"+
+	"모델"+
+	"배포 이름"+
+	"크기"+
+	"연결 테스트"+
+	"다시 테스트"+
+	"연결됐어요. 이제 룩을 만들 수 있어요."+
+	"AI 서비스 없음"+
+	"Key는 이 기기의 키체인에만 저장돼요. 요청은 다른 서버를 거치지 않고 기기에서 설정한 서비스로 바로 전송돼요."+
+	"요청은 다른 서버를 거치지 않고 기기에서 내가 운영하는 서버로 바로 전송되며, 비용이 들지 않아요."+
+	"웹 버전은 페이지를 닫으면 Key를 보관하지 않아요. 새로고침한 뒤에는 다시 입력하세요. 요청은 브라우저에서 설정한 서비스로 바로 전송돼요."+
+	"웹 버전에서는 이미지와 옷 사진이 이 페이지에만 남아요. 보관하고 싶은 것은 내보내세요."+
+	"이 기기에는 Key를 저장할 보안 저장소가 없어요."+
+	"정보"+
+	"출처"+
+	"설정"+
+	"일반"+
+	"언어"+
+	"시스템 설정"+
+	"한국어"+
+	"소스 코드"+
+	"라이선스"+
+	"포즈"+
+	"의상"+
+	"얼굴"+
+	"갤러리 이미지는 사용할 때만 하나씩 가져와요. 앱에 포함하거나 재배포하지 않아요."+
+	"먼저 API Key를 입력하세요."+
+	"서비스가 Key를 거부했어요. Key가 올바른지, 이 모델을 사용할 수 있는지 확인하세요."+
+	"주소나 모델을 찾지 못했어요. AI 설정에서 확인하세요."+
+	"요청이 너무 많거나 계정 크레딧이 부족해요. 잠시 후 다시 시도하거나 잔액을 확인하세요."+
+	"서비스의 안전 검사로 이 이미지가 차단됐어요. 다른 의상이나 포즈, 또는 다른 서비스로 시도해 보세요."+
+	"서비스가 요청을 거부했어요."+
+	"서비스에 문제가 생겼어요. 잠시 후 다시 시도하세요."+
+	"서비스 응답이 너무 늦어요. 다시 시도하세요."+
+	"서비스에 연결할 수 없어요. 네트워크와 주소를 확인하세요."+
+	"서비스가 이미지 없이 응답했어요. 다시 시도하거나 룩을 바꿔 보세요.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		43,
+		12,
+		6,
+		6,
+		3,
+		6,
+		10,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		6,
+		6,
+		6,
+		14,
+		13,
+		16,
+		13,
+		6,
+		6,
+		6,
+		6,
+		14,
+		14,
+		13,
+		12,
+		54,
+		33,
+		39,
+		52,
+		10,
+		6,
+		13,
+		16,
+		16,
+		6,
+		17,
+		6,
+		9,
+		6,
+		13,
+		6,
+		10,
+		6,
+		13,
+		13,
+		6,
+		9,
+		13,
+		6,
+		3,
+		6,
+		6,
+		6,
+		6,
+		9,
+		9,
+		6,
+		3,
+		38,
+		13,
+		13,
+		32,
+		22,
+		25,
+		12,
+		7,
+		16,
+		10,
+		10,
+		13,
+		32,
+		63,
+		33,
+		83,
+		28,
+		16,
+		16,
+		6,
+		13,
+		16,
+		16,
+		6,
+		12,
+		15,
+		15,
+		6,
+		33,
+		30,
+		26,
+		62,
+		25,
+		25,
+		25,
+		22,
+		6,
+		26,
+		63,
+		42,
+		17,
+		12,
+		19,
+		90,
+		12,
+		31,
+		14,
+		26,
+		20,
+		13,
+		6,
+		12,
+		6,
+		25,
+		6,
+		13,
+		19,
+		9,
+		22,
+		6,
+		9,
+		6,
+		7,
+		22,
+		6,
+		9,
+		6,
+		13,
+		6,
+		16,
+		16,
+		52,
+		19,
+		151,
+		135,
+		190,
+		121,
+		64,
+		6,
+		6,
+		6,
+		6,
+		6,
+		16,
+		9,
+		13,
+		12,
+		6,
+		6,
+		6,
+		113,
+		34,
+		112,
+		73,
+		121,
+		139,
+		39,
+		71,
+		61,
+		80,
+		94,
+	})
+
+// textsPtBR are the messages without arguments in pt-BR.
+var textsPtBR = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"Código aberto · grátis · sem conta"+
+	"Estúdio"+
+	"Guarda-roupa"+
+	"Criações"+
+	"Eu"+
+	"Seções"+
+	"Este look"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"Rosto"+
+	"Roupa"+
+	"Pose"+
+	"Não escolhido"+
+	"Escolha um rosto"+
+	"Escolha uma roupa"+
+	"Defina a pose"+
+	"Etapas"+
+	"Concluído"+
+	"Voltar"+
+	"Fechar"+
+	"Próximo: roupa"+
+	"Próximo: pose"+
+	"Me surpreenda"+
+	"Gerar"+
+	"Gerar · configure um serviço de IA"+
+	"Escolha uma pose primeiro."+
+	"Configure um serviço de IA primeiro."+
+	"Grátis e de código aberto; configure uma vez só"+
+	"Gerando"+
+	"Cancelar"+
+	"Falha ao gerar"+
+	"Trocar rosto"+
+	"Trocar pose"+
+	"Ampliar"+
+	"Redimensionar a coluna"+
+	"Reduzir"+
+	"Galerias"+
+	"Todos"+
+	"Todos os ângulos"+
+	"Frente"+
+	"Três quartos"+
+	"Perfil"+
+	"De cima"+
+	"De baixo"+
+	"Curto"+
+	"Médio"+
+	"Na altura dos ombros"+
+	"Longo"+
+	"Primavera"+
+	"Verão"+
+	"Outono"+
+	"Inverno"+
+	"Festa"+
+	"Moda praia"+
+	"Lingerie"+
+	"Sexy"+
+	"18+"+
+	"Não foi possível carregar a galeria"+
+	"Tentar de novo"+
+	"Instruções extras"+
+	"Algo mais, como iluminação ou fundo"+
+	"Adicionar aos favoritos"+
+	"Remover dos favoritos"+
+	"Favoritos"+
+	"Minhas roupas"+
+	"Galeria de roupas"+
+	"Adicionar roupas"+
+	"Vestindo"+
+	"Vestir"+
+	"Nenhum favorito ainda"+
+	"Toque em ♡ numa roupa da galeria para guardá-la aqui."+
+	"Nenhuma roupa adicionada ainda"+
+	"Adicione uma foto de roupas estendidas ou num cabide."+
+	"Mesmo rosto, outra roupa"+
+	"Rosto usado"+
+	"Pose usada"+
+	"De novo"+
+	"Gerar de novo"+
+	"Salvar em Criações"+
+	"Em Criações"+
+	"Ver"+
+	"Exportar"+
+	"Exportado"+
+	"Excluído"+
+	"Excluir"+
+	"Excluir esta imagem?"+
+	"Ela será removida deste dispositivo."+
+	"Você tem 18 anos ou mais?"+
+	"Isto mostra conteúdo adulto, apenas para maiores de 18 anos."+
+	"Tenho 18 anos ou mais"+
+	"Tenho menos de 18 anos"+
+	"Não foi possível salvar"+
+	"Voltar ao look"+
+	"Mostrar"+
+	"Seu lookbook está vazio"+
+	"Gere um look e salve em Criações para guardá-lo aqui."+
+	"Nenhuma imagem favorita ainda"+
+	"Crie seu primeiro look"+
+	"Serviço de IA"+
+	"Configurações do serviço de IA"+
+	"Configure um serviço de IA e teste a conexão para começar a criar looks."+
+	"Provedor"+
+	"Personalizado (compatível com OpenAI)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"Obter uma chave de API"+
+	"Avançado"+
+	"Retrato"+
+	"Quadrado"+
+	"Paisagem"+
+	"Restaurar padrões"+
+	"Versão"+
+	"Versão de desenvolvimento"+
+	"Verificar atualizações"+
+	"Configurações…"+
+	"Verificar Atualizações…"+
+	"Editar"+
+	"Janela"+
+	"Endereço"+
+	"Chave de API"+
+	"Chave de API (opcional)"+
+	"Mostrar"+
+	"Ocultar"+
+	"Modelo"+
+	"Nome da implantação"+
+	"Tamanho"+
+	"Testar conexão"+
+	"Testar de novo"+
+	"Conectado; você já pode criar looks."+
+	"Nenhum serviço de IA"+
+	"A chave fica nas chaves seguras deste dispositivo. As solicitações vão direto do seu dispositivo para o serviço que você configurou, sem passar por nenhum outro servidor."+
+	"As solicitações vão direto do seu dispositivo para o seu próprio servidor, sem passar por nenhum outro servidor e sem custo."+
+	"Esta versão web não guarda a chave depois que a página é fechada; digite-a de novo após recarregar. As solicitações vão direto do seu navegador para o serviço que você configurou."+
+	"Na versão web, as imagens e roupas duram enquanto esta página estiver aberta. Exporte as que quiser guardar."+
+	"Este dispositivo não tem um armazenamento seguro para a chave."+
+	"Sobre"+
+	"Fontes"+
+	"Configurações"+
+	"Geral"+
+	"Idioma"+
+	"Sistema"+
+	"Português (Brasil)"+
+	"Código-fonte"+
+	"Licença"+
+	"Poses"+
+	"Roupas"+
+	"Rostos"+
+	"Cada imagem das galerias só é baixada quando você a usa; o app não as inclui nem as redistribui."+
+	"Digite a chave de API primeiro."+
+	"O serviço recusou a chave. Verifique se ela está correta e se pode usar este modelo."+
+	"O endereço ou o modelo não foi encontrado. Verifique-os nas configurações de IA."+
+	"Solicitações demais, ou a conta está sem créditos. Tente mais tarde ou verifique o saldo."+
+	"A verificação de segurança do serviço bloqueou esta imagem. Tente outra roupa, outra pose ou outro serviço."+
+	"O serviço recusou a solicitação."+
+	"O serviço teve um problema. Tente mais tarde."+
+	"O serviço demorou demais para responder. Tente de novo."+
+	"Não foi possível acessar o serviço. Verifique a rede e o endereço."+
+	"O serviço respondeu sem uma imagem. Tente de novo ou mude o look.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		38,
+		8,
+		12,
+		10,
+		2,
+		8,
+		9,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		5,
+		5,
+		4,
+		14,
+		16,
+		17,
+		13,
+		6,
+		10,
+		6,
+		6,
+		15,
+		14,
+		13,
+		5,
+		36,
+		26,
+		37,
+		50,
+		7,
+		8,
+		14,
+		12,
+		11,
+		7,
+		22,
+		7,
+		8,
+		5,
+		17,
+		6,
+		13,
+		6,
+		7,
+		8,
+		5,
+		6,
+		20,
+		5,
+		9,
+		6,
+		6,
+		7,
+		5,
+		10,
+		8,
+		4,
+		3,
+		37,
+		14,
+		19,
+		37,
+		23,
+		21,
+		9,
+		13,
+		17,
+		16,
+		8,
+		6,
+		21,
+		56,
+		30,
+		53,
+		24,
+		11,
+		10,
+		7,
+		13,
+		20,
+		13,
+		3,
+		8,
+		9,
+		9,
+		7,
+		20,
+		37,
+		26,
+		61,
+		21,
+		22,
+		25,
+		14,
+		7,
+		24,
+		56,
+		29,
+		22,
+		14,
+		33,
+		75,
+		8,
+		38,
+		14,
+		26,
+		22,
+		9,
+		7,
+		8,
+		8,
+		18,
+		7,
+		26,
+		24,
+		18,
+		27,
+		6,
+		6,
+		9,
+		12,
+		23,
+		7,
+		7,
+		6,
+		21,
+		7,
+		15,
+		14,
+		38,
+		21,
+		175,
+		128,
+		189,
+		110,
+		63,
+		5,
+		6,
+		15,
+		5,
+		6,
+		7,
+		19,
+		13,
+		8,
+		5,
+		6,
+		6,
+		100,
+		31,
+		86,
+		84,
+		93,
+		112,
+		35,
+		46,
+		56,
+		70,
+		66,
+	})
+
+// textsRu are the messages without arguments in ru.
+var textsRu = i18n.NewTexts(""+
+	"Mirra"+
+	"Mirra"+
+	""+
+	"OPEN SOURCE"+
+	"Открытый код · бесплатно · без аккаунта"+
+	"Студия"+
+	"Гардероб"+
+	"Работы"+
+	"Профиль"+
+	"Разделы"+
+	"Этот образ"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"Лицо"+
+	"Наряд"+
+	"Поза"+
+	"Не выбрано"+
+	"Выберите лицо"+
+	"Выберите наряд"+
+	"Выберите позу"+
+	"Шаги"+
+	"Готово"+
+	"Назад"+
+	"Закрыть"+
+	"Далее: наряд"+
+	"Далее: поза"+
+	"Случайный образ"+
+	"Создать"+
+	"Создать · настройте ИИ-сервис"+
+	"Сначала выберите позу."+
+	"Сначала настройте ИИ-сервис."+
+	"Бесплатно и с открытым кодом — достаточно настроить один раз"+
+	"Создание"+
+	"Отмена"+
+	"Не удалось создать"+
+	"Сменить лицо"+
+	"Сменить позу"+
+	"Увеличить"+
+	"Изменить ширину колонки"+
+	"Уменьшить"+
+	"Галереи"+
+	"Все"+
+	"Все ракурсы"+
+	"Спереди"+
+	"Вполоборота"+
+	"Сбоку"+
+	"Сверху"+
+	"Снизу"+
+	"Короткие"+
+	"Средние"+
+	"До плеч"+
+	"Длинные"+
+	"Весна"+
+	"Лето"+
+	"Осень"+
+	"Зима"+
+	"Вечеринка"+
+	"Купальники"+
+	"Бельё"+
+	"Секси"+
+	"18+"+
+	"Не удалось загрузить галерею"+
+	"Повторить"+
+	"Дополнительные указания"+
+	"Что-то ещё, например свет или фон"+
+	"В избранное"+
+	"Убрать из избранного"+
+	"Избранное"+
+	"Моя одежда"+
+	"Галерея нарядов"+
+	"Добавить одежду"+
+	"Надето"+
+	"Надеть"+
+	"Пока нет избранного"+
+	"Нажмите ♡ на наряде в галерее, чтобы сохранить его здесь."+
+	"Одежда ещё не добавлена"+
+	"Добавьте фото одежды, разложенной на ровной поверхности или на вешалке."+
+	"То же лицо, другой наряд"+
+	"Использованное лицо"+
+	"Использованная поза"+
+	"Ещё раз"+
+	"Создать ещё раз"+
+	"Сохранить в работы"+
+	"В работах"+
+	"Открыть"+
+	"Экспорт"+
+	"Экспортировано"+
+	"Удалено"+
+	"Удалить"+
+	"Удалить это изображение?"+
+	"Оно будет удалено с этого устройства."+
+	"Вам уже есть 18?"+
+	"Здесь контент для взрослых — только для тех, кому 18 и больше."+
+	"Мне есть 18"+
+	"Мне нет 18"+
+	"Не удалось сохранить"+
+	"Назад к образу"+
+	"Показать"+
+	"Лукбук пока пуст"+
+	"Создайте образ и сохраните его в работы — он появится здесь."+
+	"Пока нет избранных изображений"+
+	"Создать первый образ"+
+	"ИИ-сервис"+
+	"Настройки ИИ-сервиса"+
+	"Настройте ИИ-сервис и проверьте подключение — и можно создавать образы."+
+	"Провайдер"+
+	"Другой (совместимый с OpenAI)"+
+	"Volcengine Ark"+
+	"Alibaba Cloud Model Studio"+
+	"Получить API-ключ"+
+	"Дополнительно"+
+	"Вертикальный"+
+	"Квадратный"+
+	"Горизонтальный"+
+	"Сбросить настройки"+
+	"Версия"+
+	"Сборка для разработки"+
+	"Проверить обновления"+
+	"Настройки…"+
+	"Проверить обновления…"+
+	"Правка"+
+	"Окно"+
+	"Адрес"+
+	"API-ключ"+
+	"API-ключ (необязательно)"+
+	"Показать"+
+	"Скрыть"+
+	"Модель"+
+	"Имя развёртывания"+
+	"Размер"+
+	"Проверить подключение"+
+	"Проверить снова"+
+	"Подключено — можно создавать образы."+
+	"ИИ-сервис не настроен"+
+	"Ключ хранится в связке ключей этого устройства. Запросы идут напрямую с вашего устройства в настроенный сервис, без других серверов."+
+	"Запросы идут напрямую с вашего устройства на ваш собственный сервер, без других серверов и бесплатно."+
+	"Веб-версия не хранит ключ после закрытия страницы; после перезагрузки введите его снова. Запросы идут напрямую из вашего браузера в настроенный сервис."+
+	"В веб-версии изображения и одежда хранятся, пока открыта эта страница. Экспортируйте то, что хотите сохранить."+
+	"На этом устройстве нет защищённого хранилища для ключа."+
+	"О приложении"+
+	"Источники"+
+	"Настройки"+
+	"Общие"+
+	"Язык"+
+	"Как в системе"+
+	"Русский"+
+	"Исходный код"+
+	"Лицензия"+
+	"Позы"+
+	"Наряды"+
+	"Лица"+
+	"Каждое изображение из галереи загружается, только когда вы его используете; приложение не содержит и не распространяет их."+
+	"Сначала введите API-ключ."+
+	"Сервис отклонил ключ. Проверьте, что он верный и даёт доступ к этой модели."+
+	"Адрес или модель не найдены. Проверьте их в настройках ИИ."+
+	"Слишком много запросов или на счёте закончились средства. Повторите позже или проверьте баланс."+
+	"Проверка безопасности сервиса остановила это изображение. Попробуйте другой наряд, позу или сервис."+
+	"Сервис отклонил запрос."+
+	"Ошибка на стороне сервиса. Повторите позже."+
+	"Сервис слишком долго не отвечал. Повторите попытку."+
+	"Не удалось связаться с сервисом. Проверьте сеть и адрес."+
+	"Сервис ответил без изображения. Повторите попытку или измените образ.",
+	[]uint16{
+		5,
+		5,
+		0,
+		11,
+		72,
+		12,
+		16,
+		12,
+		14,
+		14,
+		19,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		8,
+		10,
+		8,
+		19,
+		25,
+		27,
+		25,
+		8,
+		12,
+		10,
+		14,
+		22,
+		20,
+		29,
+		14,
+		54,
+		41,
+		52,
+		112,
+		16,
+		12,
+		34,
+		23,
+		23,
+		18,
+		44,
+		18,
+		14,
+		6,
+		21,
+		14,
+		22,
+		10,
+		12,
+		10,
+		16,
+		14,
+		13,
+		14,
+		10,
+		8,
+		10,
+		8,
+		18,
+		20,
+		10,
+		10,
+		3,
+		53,
+		18,
+		45,
+		59,
+		21,
+		38,
+		18,
+		19,
+		29,
+		29,
+		12,
+		12,
+		36,
+		104,
+		43,
+		131,
+		43,
+		37,
+		37,
+		13,
+		28,
+		34,
+		17,
+		14,
+		14,
+		28,
+		14,
+		14,
+		45,
+		68,
+		26,
+		110,
+		18,
+		16,
+		38,
+		26,
+		16,
+		30,
+		110,
+		57,
+		38,
+		17,
+		38,
+		132,
+		18,
+		47,
+		14,
+		26,
+		29,
+		26,
+		24,
+		20,
+		28,
+		35,
+		12,
+		40,
+		39,
+		21,
+		42,
+		12,
+		8,
+		10,
+		12,
+		41,
+		16,
+		12,
+		12,
+		33,
+		12,
+		41,
+		29,
+		68,
+		39,
+		243,
+		186,
+		278,
+		201,
+		102,
+		23,
+		18,
+		18,
+		10,
+		8,
+		24,
+		14,
+		23,
+		16,
+		8,
+		12,
+		8,
+		225,
+		43,
+		135,
+		105,
+		176,
+		184,
+		43,
+		79,
+		94,
+		102,
+		128,
+	})
+
 // textsZhHans are the messages without arguments in zh-Hans.
 var textsZhHans = i18n.NewTexts(""+
 	"镜衣"+
@@ -1191,14 +3935,375 @@ var textsZhHans = i18n.NewTexts(""+
 		75,
 	})
 
+// textsZhHant are the messages without arguments in zh-Hant.
+var textsZhHant = i18n.NewTexts(""+
+	"鏡衣"+
+	"Mirra"+
+	"鏡衣"+
+	"OPEN SOURCE"+
+	"開源版 · 免費使用 · 無需帳號"+
+	"工作室"+
+	"衣櫥"+
+	"作品"+
+	"我的"+
+	"分區"+
+	"本次造型"+
+	"TODAY'S LOOK"+
+	"LIVE PREVIEW"+
+	"THIS LOOK"+
+	"WARDROBE"+
+	"LOOKBOOK"+
+	"SETTINGS"+
+	"01 FACE"+
+	"02 OUTFIT"+
+	"03 POSE"+
+	"臉孔"+
+	"服裝"+
+	"姿勢"+
+	"未選擇"+
+	"選擇臉孔"+
+	"挑選服裝"+
+	"設定姿勢"+
+	"步驟"+
+	"完成"+
+	"返回"+
+	"關閉"+
+	"下一步 · 選服裝"+
+	"下一步 · 選姿勢"+
+	"隨機一套"+
+	"生成造型"+
+	"生成造型 · 先設定 AI 服務"+
+	"請先選一個姿勢。"+
+	"請先設定 AI 服務。"+
+	"開源版免費使用，設定一次即可"+
+	"正在生成"+
+	"取消"+
+	"生成失敗"+
+	"換臉孔"+
+	"換姿勢"+
+	"放大"+
+	"調整欄寬"+
+	"縮小"+
+	"素材庫"+
+	"全部"+
+	"全部角度"+
+	"正面"+
+	"斜側"+
+	"側面"+
+	"俯視"+
+	"仰視"+
+	"短髮"+
+	"中髮"+
+	"中長髮"+
+	"長髮"+
+	"春"+
+	"夏"+
+	"秋"+
+	"冬"+
+	"派對"+
+	"泳裝"+
+	"內衣"+
+	"性感"+
+	"18+"+
+	"圖庫載入失敗"+
+	"重試"+
+	"補充要求"+
+	"補充要求，例如光線、背景"+
+	"收藏"+
+	"取消收藏"+
+	"收藏"+
+	"我的上傳"+
+	"服裝庫"+
+	"上傳衣服"+
+	"正在穿"+
+	"穿上生成"+
+	"還沒有收藏"+
+	"到「服裝庫」點 ♡ 收藏喜歡的搭配"+
+	"還沒上傳過衣服"+
+	"點「上傳衣服」，拍一張平放或掛著的衣服照片即可"+
+	"同一張臉，一鍵換搭配"+
+	"使用的臉孔"+
+	"使用的姿勢"+
+	"再生成"+
+	"再生成一次"+
+	"儲存到作品"+
+	"已在作品中"+
+	"去查看"+
+	"匯出"+
+	"已匯出"+
+	"作品已刪除"+
+	"刪除"+
+	"刪除這張圖片？"+
+	"會從這台裝置上移除。"+
+	"你已年滿 18 歲嗎？"+
+	"這裡是成人內容，僅限 18 歲以上的使用者瀏覽。"+
+	"已滿 18 歲"+
+	"未滿 18 歲"+
+	"儲存失敗"+
+	"返回編輯"+
+	"作品篩選"+
+	"造型冊還是空的"+
+	"生成後點「儲存到作品」，就會收進這本造型冊"+
+	"還沒有收藏的作品"+
+	"去生成第一套"+
+	"AI 服務"+
+	"AI 服務設定"+
+	"開源版無需帳號——設定一次 AI 服務並測試連線，就可以開始生成造型。"+
+	"服務商"+
+	"自訂（OpenAI 相容）"+
+	"火山方舟"+
+	"阿里雲百煉"+
+	"取得 API Key"+
+	"進階設定"+
+	"直式"+
+	"方形"+
+	"橫式"+
+	"恢復預設值"+
+	"版本"+
+	"開發版"+
+	"檢查更新"+
+	"設定…"+
+	"檢查更新…"+
+	"編輯"+
+	"視窗"+
+	"API 位址"+
+	"API Key"+
+	"API Key（可留空）"+
+	"顯示"+
+	"隱藏"+
+	"模型"+
+	"部署名稱"+
+	"尺寸"+
+	"測試連線"+
+	"重新測試"+
+	"連線成功，可以開始生成了"+
+	"未設定 AI 服務"+
+	"Key 只儲存在本機的系統鑰匙圈，不經過任何第三方伺服器；請求從你的裝置直接傳送到你設定的服務。"+
+	"請求從你的裝置直接傳送到你自己架設的伺服器，不經過任何第三方伺服器，也不產生費用。"+
+	"網頁版不會保存 Key，重新整理頁面後需要重新輸入；請求從你的瀏覽器直接傳送到你設定的服務。"+
+	"網頁版的作品和衣服照片只保存在目前的頁面，關閉前請匯出想保留的。"+
+	"這台裝置沒有可以保存 Key 的安全儲存空間。"+
+	"關於"+
+	"素材來源"+
+	"設定"+
+	"一般"+
+	"語言"+
+	"跟隨系統"+
+	"繁體中文"+
+	"原始碼"+
+	"開源授權"+
+	"姿勢素材"+
+	"服裝素材"+
+	"臉孔素材"+
+	"每張圖庫圖片只在你使用時個別取得，App 不內建、也不轉發這些圖片。"+
+	"請先輸入 API Key。"+
+	"服務拒絕了這個 Key，請檢查它是否正確、能否使用這個模型。"+
+	"找不到這個位址或模型，請到 AI 設定中檢查。"+
+	"請求次數過多，或帳戶額度已用完。請稍後再試，或檢查餘額。"+
+	"服務商的安全審查擋下了這張圖。可以換一套服裝或姿勢，或換一家服務商再試。"+
+	"服務拒絕了這個請求。"+
+	"服務發生問題，請稍後再試。"+
+	"服務回應逾時，請重試。"+
+	"無法連上服務，請檢查網路和位址。"+
+	"服務回傳了結果，但沒有圖片。請重試，或換一套搭配。",
+	[]uint16{
+		6,
+		5,
+		6,
+		11,
+		41,
+		9,
+		6,
+		6,
+		6,
+		6,
+		12,
+		12,
+		12,
+		9,
+		8,
+		8,
+		8,
+		7,
+		9,
+		7,
+		6,
+		6,
+		6,
+		9,
+		12,
+		12,
+		12,
+		6,
+		6,
+		6,
+		6,
+		22,
+		22,
+		12,
+		12,
+		35,
+		24,
+		25,
+		42,
+		12,
+		6,
+		12,
+		9,
+		9,
+		6,
+		12,
+		6,
+		9,
+		6,
+		12,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
+		9,
+		6,
+		3,
+		3,
+		3,
+		3,
+		6,
+		6,
+		6,
+		6,
+		3,
+		18,
+		6,
+		12,
+		36,
+		6,
+		12,
+		6,
+		12,
+		9,
+		12,
+		9,
+		12,
+		15,
+		47,
+		21,
+		69,
+		30,
+		15,
+		15,
+		9,
+		15,
+		15,
+		15,
+		9,
+		6,
+		9,
+		15,
+		6,
+		21,
+		30,
+		25,
+		64,
+		13,
+		13,
+		12,
+		12,
+		12,
+		21,
+		63,
+		24,
+		18,
+		9,
+		15,
+		97,
+		9,
+		25,
+		12,
+		15,
+		14,
+		12,
+		6,
+		6,
+		6,
+		15,
+		6,
+		9,
+		12,
+		9,
+		15,
+		6,
+		6,
+		10,
+		7,
+		22,
+		6,
+		6,
+		6,
+		12,
+		6,
+		12,
+		12,
+		36,
+		19,
+		136,
+		123,
+		130,
+		96,
+		59,
+		6,
+		12,
+		6,
+		6,
+		6,
+		12,
+		12,
+		9,
+		12,
+		12,
+		12,
+		12,
+		94,
+		23,
+		82,
+		61,
+		84,
+		108,
+		30,
+		39,
+		33,
+		48,
+		75,
+	})
+
 // texts returns the messages without arguments in lang, nil for a
 // language the catalog lacks.
 func texts(lang string) *i18n.Texts {
 	switch lang {
 	case "en":
 		return textsEn
+	case "de":
+		return textsDe
+	case "es":
+		return textsEs
+	case "fr":
+		return textsFr
+	case "it":
+		return textsIt
+	case "ja":
+		return textsJa
+	case "ko":
+		return textsKo
+	case "pt-BR":
+		return textsPtBR
+	case "ru":
+		return textsRu
 	case "zh-Hans":
 		return textsZhHans
+	case "zh-Hant":
+		return textsZhHant
 	}
 	return nil
 }
@@ -1410,8 +4515,26 @@ func (msgs Messages) WorksTabCount(n int) string {
 		switch lang {
 		case "", "en":
 			return "Works " + msgs.arg(i18n.FormatNumber("en", float64(n)))
+		case "de":
+			return "Werke " + i18n.FormatNumber("de", float64(n))
+		case "es":
+			return "Obras " + i18n.FormatNumber("es", float64(n))
+		case "fr":
+			return "Créations " + i18n.FormatNumber("fr", float64(n))
+		case "it":
+			return "Creazioni " + i18n.FormatNumber("it", float64(n))
+		case "ja":
+			return "作品 " + i18n.FormatNumber("ja", float64(n))
+		case "ko":
+			return "작품 " + i18n.FormatNumber("ko", float64(n))
+		case "pt-BR":
+			return "Criações " + i18n.FormatNumber("pt-BR", float64(n))
+		case "ru":
+			return "Работы " + i18n.FormatNumber("ru", float64(n))
 		case "zh-Hans":
 			return "作品 " + i18n.FormatNumber("zh-Hans", float64(n))
+		case "zh-Hant":
+			return "作品 " + i18n.FormatNumber("zh-Hant", float64(n))
 		}
 	}
 }
@@ -1462,7 +4585,25 @@ func (msgs Messages) EyebrowTodayGroup(group string) string {
 		switch lang {
 		case "", "en":
 			return "TODAY'S LOOK · " + msgs.arg(group)
+		case "de":
+			return "TODAY'S LOOK · " + group
+		case "es":
+			return "TODAY'S LOOK · " + group
+		case "fr":
+			return "TODAY'S LOOK · " + group
+		case "it":
+			return "TODAY'S LOOK · " + group
+		case "ja":
+			return "TODAY'S LOOK · " + group
+		case "ko":
+			return "TODAY'S LOOK · " + group
+		case "pt-BR":
+			return "TODAY'S LOOK · " + group
+		case "ru":
+			return "TODAY'S LOOK · " + group
 		case "zh-Hans":
+			return "TODAY'S LOOK · " + group
+		case "zh-Hant":
 			return "TODAY'S LOOK · " + group
 		}
 	}
@@ -1495,7 +4636,25 @@ func (msgs Messages) EyebrowPreviewGroup(group string) string {
 		switch lang {
 		case "", "en":
 			return "LIVE PREVIEW · " + msgs.arg(group)
+		case "de":
+			return "LIVE PREVIEW · " + group
+		case "es":
+			return "LIVE PREVIEW · " + group
+		case "fr":
+			return "LIVE PREVIEW · " + group
+		case "it":
+			return "LIVE PREVIEW · " + group
+		case "ja":
+			return "LIVE PREVIEW · " + group
+		case "ko":
+			return "LIVE PREVIEW · " + group
+		case "pt-BR":
+			return "LIVE PREVIEW · " + group
+		case "ru":
+			return "LIVE PREVIEW · " + group
 		case "zh-Hans":
+			return "LIVE PREVIEW · " + group
+		case "zh-Hant":
 			return "LIVE PREVIEW · " + group
 		}
 	}
@@ -1547,7 +4706,25 @@ func (msgs Messages) EyebrowLookbookNo(no string) string {
 		switch lang {
 		case "", "en":
 			return "LOOKBOOK · NO." + msgs.arg(no)
+		case "de":
+			return "LOOKBOOK · NO." + no
+		case "es":
+			return "LOOKBOOK · NO." + no
+		case "fr":
+			return "LOOKBOOK · NO." + no
+		case "it":
+			return "LOOKBOOK · NO." + no
+		case "ja":
+			return "LOOKBOOK · NO." + no
+		case "ko":
+			return "LOOKBOOK · NO." + no
+		case "pt-BR":
+			return "LOOKBOOK · NO." + no
+		case "ru":
+			return "LOOKBOOK · NO." + no
 		case "zh-Hans":
+			return "LOOKBOOK · NO." + no
+		case "zh-Hant":
 			return "LOOKBOOK · NO." + no
 		}
 	}
@@ -1571,8 +4748,26 @@ func (msgs Messages) EyebrowNewLook(n int) string {
 		switch lang {
 		case "", "en":
 			return "NEW LOOK · TRY " + msgs.arg(i18n.FormatNumber("en", float64(n)))
+		case "de":
+			return "NEW LOOK · VERSUCH " + i18n.FormatNumber("de", float64(n))
+		case "es":
+			return "NEW LOOK · INTENTO " + i18n.FormatNumber("es", float64(n))
+		case "fr":
+			return "NEW LOOK · ESSAI " + i18n.FormatNumber("fr", float64(n))
+		case "it":
+			return "NEW LOOK · TRY " + i18n.FormatNumber("it", float64(n))
+		case "ja":
+			return "NEW LOOK · " + i18n.FormatNumber("ja", float64(n)) + " 回目の生成"
+		case "ko":
+			return "NEW LOOK · " + i18n.FormatNumber("ko", float64(n)) + "번째 생성"
+		case "pt-BR":
+			return "NEW LOOK · TENTATIVA " + i18n.FormatNumber("pt-BR", float64(n))
+		case "ru":
+			return "NEW LOOK · попытка " + i18n.FormatNumber("ru", float64(n))
 		case "zh-Hans":
 			return "NEW LOOK · 第 " + i18n.FormatNumber("zh-Hans", float64(n)) + " 次生成"
+		case "zh-Hant":
+			return "NEW LOOK · 第 " + i18n.FormatNumber("zh-Hant", float64(n)) + " 次生成"
 		}
 	}
 }
@@ -1665,7 +4860,25 @@ func (msgs Messages) StepTab(n string, name string) string {
 		switch lang {
 		case "", "en":
 			return msgs.arg(n) + " " + msgs.arg(name)
+		case "de":
+			return n + " " + name
+		case "es":
+			return n + " " + name
+		case "fr":
+			return n + " " + name
+		case "it":
+			return n + " " + name
+		case "ja":
+			return n + " " + name
+		case "ko":
+			return n + " " + name
+		case "pt-BR":
+			return n + " " + name
+		case "ru":
+			return n + " " + name
 		case "zh-Hans":
+			return n + " " + name
+		case "zh-Hant":
 			return n + " " + name
 		}
 	}
@@ -1696,8 +4909,26 @@ func (msgs Messages) SelectedItem(id string) string {
 		switch lang {
 		case "", "en":
 			return "Selected · " + msgs.arg(id)
+		case "de":
+			return "Ausgewählt · " + id
+		case "es":
+			return "Seleccionado · " + id
+		case "fr":
+			return "Sélection · " + id
+		case "it":
+			return "Selezionato · " + id
+		case "ja":
+			return "選択中 · " + id
+		case "ko":
+			return "선택됨 · " + id
+		case "pt-BR":
+			return "Selecionado · " + id
+		case "ru":
+			return "Выбрано · " + id
 		case "zh-Hans":
 			return "已选 · " + id
+		case "zh-Hant":
+			return "已選 · " + id
 		}
 	}
 }
@@ -1790,8 +5021,26 @@ func (msgs Messages) ViaService(service string) string {
 		switch lang {
 		case "", "en":
 			return "Made through " + msgs.arg(service) + ", with no third party"
+		case "de":
+			return "Erstellt über " + service + ", ohne Dritte"
+		case "es":
+			return "Creado con " + service + ", sin intermediarios"
+		case "fr":
+			return "Généré via " + service + ", sans intermédiaire"
+		case "it":
+			return "Creato con " + service + ", senza terze parti"
+		case "ja":
+			return "「" + service + "」で生成 · 第三者を経由しません"
+		case "ko":
+			return service + "(으)로 생성 · 제3자를 거치지 않아요"
+		case "pt-BR":
+			return "Gerado via " + service + ", sem intermediários"
+		case "ru":
+			return "Создаётся через " + service + ", без посредников"
 		case "zh-Hans":
 			return "通过「" + service + "」生成 · 不经过第三方"
+		case "zh-Hant":
+			return "透過「" + service + "」生成 · 不經過第三方"
 		}
 	}
 }
@@ -1875,8 +5124,26 @@ func (msgs Messages) ZoomPercent(n int) string {
 		switch lang {
 		case "", "en":
 			return msgs.arg(i18n.FormatNumber("en", float64(n))) + "%"
+		case "de":
+			return i18n.FormatNumber("de", float64(n)) + " %"
+		case "es":
+			return i18n.FormatNumber("es", float64(n)) + "%"
+		case "fr":
+			return i18n.FormatNumber("fr", float64(n)) + "\u00a0%"
+		case "it":
+			return i18n.FormatNumber("it", float64(n)) + "%"
+		case "ja":
+			return i18n.FormatNumber("ja", float64(n)) + "%"
+		case "ko":
+			return i18n.FormatNumber("ko", float64(n)) + "%"
+		case "pt-BR":
+			return i18n.FormatNumber("pt-BR", float64(n)) + "%"
+		case "ru":
+			return i18n.FormatNumber("ru", float64(n)) + "%"
 		case "zh-Hans":
 			return i18n.FormatNumber("zh-Hans", float64(n)) + "%"
+		case "zh-Hant":
+			return i18n.FormatNumber("zh-Hant", float64(n)) + "%"
 		}
 	}
 }
@@ -1911,8 +5178,26 @@ func (msgs Messages) AllCount(n int) string {
 		switch lang {
 		case "", "en":
 			return "All " + msgs.arg(i18n.FormatNumber("en", float64(n)))
+		case "de":
+			return "Alle " + i18n.FormatNumber("de", float64(n))
+		case "es":
+			return "Todo " + i18n.FormatNumber("es", float64(n))
+		case "fr":
+			return "Tout " + i18n.FormatNumber("fr", float64(n))
+		case "it":
+			return "Tutti " + i18n.FormatNumber("it", float64(n))
+		case "ja":
+			return "すべて " + i18n.FormatNumber("ja", float64(n))
+		case "ko":
+			return "전체 " + i18n.FormatNumber("ko", float64(n))
+		case "pt-BR":
+			return "Todos " + i18n.FormatNumber("pt-BR", float64(n))
+		case "ru":
+			return "Все " + i18n.FormatNumber("ru", float64(n))
 		case "zh-Hans":
 			return "全部 " + i18n.FormatNumber("zh-Hans", float64(n))
+		case "zh-Hant":
+			return "全部 " + i18n.FormatNumber("zh-Hant", float64(n))
 		}
 	}
 }
@@ -2157,8 +5442,26 @@ func (msgs Messages) FavoritesCount(n int) string {
 		switch lang {
 		case "", "en":
 			return "Favorites " + msgs.arg(i18n.FormatNumber("en", float64(n)))
+		case "de":
+			return "Favoriten " + i18n.FormatNumber("de", float64(n))
+		case "es":
+			return "Favoritos " + i18n.FormatNumber("es", float64(n))
+		case "fr":
+			return "Favoris " + i18n.FormatNumber("fr", float64(n))
+		case "it":
+			return "Preferiti " + i18n.FormatNumber("it", float64(n))
+		case "ja":
+			return "お気に入り " + i18n.FormatNumber("ja", float64(n))
+		case "ko":
+			return "즐겨찾기 " + i18n.FormatNumber("ko", float64(n))
+		case "pt-BR":
+			return "Favoritos " + i18n.FormatNumber("pt-BR", float64(n))
+		case "ru":
+			return "Избранное " + i18n.FormatNumber("ru", float64(n))
 		case "zh-Hans":
 			return "收藏 " + i18n.FormatNumber("zh-Hans", float64(n))
+		case "zh-Hant":
+			return "收藏 " + i18n.FormatNumber("zh-Hant", float64(n))
 		}
 	}
 }
@@ -2186,8 +5489,26 @@ func (msgs Messages) UploadsCount(n int) string {
 		switch lang {
 		case "", "en":
 			return "My clothes " + msgs.arg(i18n.FormatNumber("en", float64(n)))
+		case "de":
+			return "Meine Kleidung " + i18n.FormatNumber("de", float64(n))
+		case "es":
+			return "Mi ropa " + i18n.FormatNumber("es", float64(n))
+		case "fr":
+			return "Mes vêtements " + i18n.FormatNumber("fr", float64(n))
+		case "it":
+			return "I miei vestiti " + i18n.FormatNumber("it", float64(n))
+		case "ja":
+			return "マイ服 " + i18n.FormatNumber("ja", float64(n))
+		case "ko":
+			return "내 옷 " + i18n.FormatNumber("ko", float64(n))
+		case "pt-BR":
+			return "Minhas roupas " + i18n.FormatNumber("pt-BR", float64(n))
+		case "ru":
+			return "Моя одежда " + i18n.FormatNumber("ru", float64(n))
 		case "zh-Hans":
 			return "我的上传 " + i18n.FormatNumber("zh-Hans", float64(n))
+		case "zh-Hant":
+			return "我的上傳 " + i18n.FormatNumber("zh-Hant", float64(n))
 		}
 	}
 }
@@ -2215,8 +5536,26 @@ func (msgs Messages) GalleryCount(n int) string {
 		switch lang {
 		case "", "en":
 			return "Gallery " + msgs.arg(i18n.FormatNumber("en", float64(n)))
+		case "de":
+			return "Galerie " + i18n.FormatNumber("de", float64(n))
+		case "es":
+			return "Galería " + i18n.FormatNumber("es", float64(n))
+		case "fr":
+			return "Galerie " + i18n.FormatNumber("fr", float64(n))
+		case "it":
+			return "Galleria " + i18n.FormatNumber("it", float64(n))
+		case "ja":
+			return "ギャラリー " + i18n.FormatNumber("ja", float64(n))
+		case "ko":
+			return "갤러리 " + i18n.FormatNumber("ko", float64(n))
+		case "pt-BR":
+			return "Galeria " + i18n.FormatNumber("pt-BR", float64(n))
+		case "ru":
+			return "Галерея " + i18n.FormatNumber("ru", float64(n))
 		case "zh-Hans":
 			return "服装库 " + i18n.FormatNumber("zh-Hans", float64(n))
+		case "zh-Hant":
+			return "服裝庫 " + i18n.FormatNumber("zh-Hant", float64(n))
 		}
 	}
 }
@@ -2239,7 +5578,25 @@ func (msgs Messages) UploadName(n string) string {
 		switch lang {
 		case "", "en":
 			return "My clothes " + msgs.arg(n)
+		case "de":
+			return "Meine Kleidung " + n
+		case "es":
+			return "Mi ropa " + n
+		case "fr":
+			return "Mon vêtement " + n
+		case "it":
+			return "I miei vestiti " + n
+		case "ja":
+			return "マイ服 " + n
+		case "ko":
+			return "내 옷 " + n
+		case "pt-BR":
+			return "Minha roupa " + n
+		case "ru":
+			return "Моя одежда " + n
 		case "zh-Hans":
+			return "我的衣服 " + n
+		case "zh-Hant":
 			return "我的衣服 " + n
 		}
 	}
@@ -2277,8 +5634,26 @@ func (msgs Messages) TapToTry(group string) string {
 		switch lang {
 		case "", "en":
 			return "Tap to try on · " + msgs.arg(group)
+		case "de":
+			return "Tippen zum Anprobieren · " + group
+		case "es":
+			return "Toca para probártelo · " + group
+		case "fr":
+			return "Touchez pour essayer · " + group
+		case "it":
+			return "Tocca per provarlo · " + group
+		case "ja":
+			return "タップして試着 · " + group
+		case "ko":
+			return "탭해서 입어 보기 · " + group
+		case "pt-BR":
+			return "Toque para provar · " + group
+		case "ru":
+			return "Нажмите, чтобы примерить · " + group
 		case "zh-Hans":
 			return "点一下试穿 · " + group
+		case "zh-Hant":
+			return "點一下試穿 · " + group
 		}
 	}
 }
@@ -2343,8 +5718,26 @@ func (msgs Messages) SwapTo(name string) string {
 		switch lang {
 		case "", "en":
 			return "Wear " + msgs.arg(name)
+		case "de":
+			return name + " anziehen"
+		case "es":
+			return "Ponerse " + name
+		case "fr":
+			return "Porter " + name
+		case "it":
+			return "Indossa " + name
+		case "ja":
+			return "「" + name + "」に着替える"
+		case "ko":
+			return name + " 입기"
+		case "pt-BR":
+			return "Vestir " + name
+		case "ru":
+			return "Надеть «" + name + "»"
 		case "zh-Hans":
 			return "换成「" + name + "」"
+		case "zh-Hant":
+			return "換成「" + name + "」"
 		}
 	}
 }
@@ -2409,8 +5802,26 @@ func (msgs Messages) SavedToWorks(no string) string {
 		switch lang {
 		case "", "en":
 			return "Saved as No." + msgs.arg(no)
+		case "de":
+			return "Als Nr. " + no + " gesichert"
+		case "es":
+			return "Guardado como n.º " + no
+		case "fr":
+			return "Enregistré sous le n° " + no
+		case "it":
+			return "Salvato come No." + no
+		case "ja":
+			return "No." + no + " として保存しました"
+		case "ko":
+			return "No." + no + "(으)로 저장했어요"
+		case "pt-BR":
+			return "Salvo como No." + no
+		case "ru":
+			return "Сохранено как № " + no
 		case "zh-Hans":
 			return "已保存为作品 No." + no
+		case "zh-Hant":
+			return "已儲存為作品 No." + no
 		}
 	}
 }
@@ -2559,8 +5970,26 @@ func (msgs Messages) OpenWork(no string) string {
 		switch lang {
 		case "", "en":
 			return "Open No." + msgs.arg(no)
+		case "de":
+			return "Nr. " + no + " öffnen"
+		case "es":
+			return "Abrir n.º " + no
+		case "fr":
+			return "Ouvrir le n° " + no
+		case "it":
+			return "Apri No." + no
+		case "ja":
+			return "No." + no + " を開く"
+		case "ko":
+			return "No." + no + " 열기"
+		case "pt-BR":
+			return "Abrir No." + no
+		case "ru":
+			return "Открыть № " + no
 		case "zh-Hans":
 			return "打开作品 No." + no
+		case "zh-Hant":
+			return "開啟作品 No." + no
 		}
 	}
 }
@@ -2845,8 +6274,26 @@ func (msgs Messages) ConnectionFailed(error_ string) string {
 		switch lang {
 		case "", "en":
 			return "Couldn't connect: " + msgs.arg(error_)
+		case "de":
+			return "Keine Verbindung: " + error_
+		case "es":
+			return "No se pudo conectar: " + error_
+		case "fr":
+			return "Connexion impossible\u00a0: " + error_
+		case "it":
+			return "Impossibile connettersi: " + error_
+		case "ja":
+			return "接続できませんでした: " + error_
+		case "ko":
+			return "연결하지 못했어요: " + error_
+		case "pt-BR":
+			return "Falha na conexão: " + error_
+		case "ru":
+			return "Не удалось подключиться: " + error_
 		case "zh-Hans":
 			return "连接失败：" + error_
+		case "zh-Hant":
+			return "連線失敗：" + error_
 		}
 	}
 }
@@ -2876,8 +6323,26 @@ func (msgs Messages) StatusConnected(service string) string {
 		switch lang {
 		case "", "en":
 			return msgs.arg(service) + " · connected"
+		case "de":
+			return service + " · verbunden"
+		case "es":
+			return service + " · conectado"
+		case "fr":
+			return service + " · connecté"
+		case "it":
+			return service + " · connesso"
+		case "ja":
+			return service + " · 接続済み"
+		case "ko":
+			return service + " · 연결됨"
+		case "pt-BR":
+			return service + " · conectado"
+		case "ru":
+			return service + " · подключено"
 		case "zh-Hans":
 			return service + " · 已连接"
+		case "zh-Hant":
+			return service + " · 已連線"
 		}
 	}
 }
@@ -2900,8 +6365,26 @@ func (msgs Messages) StatusUntested(service string) string {
 		switch lang {
 		case "", "en":
 			return msgs.arg(service) + " · not tested"
+		case "de":
+			return service + " · nicht getestet"
+		case "es":
+			return service + " · sin probar"
+		case "fr":
+			return service + " · non testé"
+		case "it":
+			return service + " · non provato"
+		case "ja":
+			return service + " · 未テスト"
+		case "ko":
+			return service + " · 테스트 안 함"
+		case "pt-BR":
+			return service + " · não testado"
+		case "ru":
+			return service + " · не проверено"
 		case "zh-Hans":
 			return service + " · 未测试"
+		case "zh-Hant":
+			return service + " · 未測試"
 		}
 	}
 }
@@ -2924,8 +6407,26 @@ func (msgs Messages) StatusTesting(service string) string {
 		switch lang {
 		case "", "en":
 			return msgs.arg(service) + " · testing…"
+		case "de":
+			return service + " · wird getestet …"
+		case "es":
+			return service + " · probando…"
+		case "fr":
+			return service + " · test en cours…"
+		case "it":
+			return service + " · prova in corso…"
+		case "ja":
+			return service + " · テスト中…"
+		case "ko":
+			return service + " · 테스트 중…"
+		case "pt-BR":
+			return service + " · testando…"
+		case "ru":
+			return service + " · проверка…"
 		case "zh-Hans":
 			return service + " · 测试中…"
+		case "zh-Hant":
+			return service + " · 測試中…"
 		}
 	}
 }
@@ -2948,8 +6449,26 @@ func (msgs Messages) StatusFailed(service string) string {
 		switch lang {
 		case "", "en":
 			return msgs.arg(service) + " · can't connect"
+		case "de":
+			return service + " · keine Verbindung"
+		case "es":
+			return service + " · sin conexión"
+		case "fr":
+			return service + " · connexion impossible"
+		case "it":
+			return service + " · impossibile connettersi"
+		case "ja":
+			return service + " · 接続できません"
+		case "ko":
+			return service + " · 연결 실패"
+		case "pt-BR":
+			return service + " · sem conexão"
+		case "ru":
+			return service + " · нет подключения"
 		case "zh-Hans":
 			return service + " · 连接失败"
+		case "zh-Hant":
+			return service + " · 連線失敗"
 		}
 	}
 }
