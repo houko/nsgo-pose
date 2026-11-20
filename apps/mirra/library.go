@@ -609,6 +609,9 @@ func (s *studio) toggleAdult(k Kind) {
 			return
 		}
 		s.adultOK.Set(true)
+		if err := s.cx.Storage().SetItem(keyAdult, "1"); err != nil {
+			s.toastError(t.SaveFailed(), err)
+		}
 		show(true)
 	})
 }

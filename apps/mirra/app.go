@@ -93,7 +93,7 @@ type studio struct {
 	filter [3]*core.Signal[string]
 	// adult says whether each gallery shows its adults-only items instead of those for everyone.
 	adult [3]*core.Signal[bool]
-	// adultOK is the user's answer that they are 18 or older, asked once a launch.
+	// adultOK is the user's answer that they are 18 or older, asked once and kept, since works and favorites from the adults-only categories show without asking.
 	adultOK *core.Signal[bool]
 	note    *core.Signal[string]
 
@@ -211,7 +211,7 @@ func newStudio(cx *core.Scope, a App) *studio {
 		favorites:     core.NewSignalFunc(cx, favorites, itemsEqual),
 		uploads:       core.NewSignalFunc[[]Item](cx, nil, itemsEqual),
 		closet:        core.NewSignal(cx, closetGallery),
-		adultOK:       core.NewSignal(cx, false),
+		adultOK:       core.NewSignal(cx, isStored(store, keyAdult)),
 	}
 	for k := range s.chosen {
 		kind := Kind(k)
@@ -541,4 +541,13 @@ func (s *studio) src(uri string) core.ImageSource {
 		return s.pics.Source(uri)
 	}
 	return core.Src(uri)
+}
+
+// keyAdult is the storage key that holds "1" once the user said they are 18 or older.
+const keyAdult = "adult-ok"
+
+// isStored says whether key holds "1".
+func isStored(store core.Storage, key string) bool {
+	v, ok := store.GetItem(key)
+	return ok && v == "1"
 }
