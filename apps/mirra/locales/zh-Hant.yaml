@@ -190,6 +190,17 @@ errServer: 服務發生問題，請稍後再試。
 errTimeout: 服務回應逾時，請重試。
 errNetwork: 無法連上服務，請檢查網路和位址。
 errNoImage: 服務回傳了結果，但沒有圖片。請重試，或換一套搭配。
+styleLabel: 風格
+styleStudio: 攝影棚
+styleStreet: 街拍
+styleWhite: 白底
+styleFilm: 底片
+styleAnime: 動漫
+searchModels: 搜尋模型
+noModelMatches: 沒有符合的模型
+refreshModels: 重新取得模型清單
+modelsFailed: "無法取得模型清單：{error}"
+
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: 編輯
   window: 視窗

@@ -190,6 +190,17 @@ errServer: Beim Dienst ist ein Fehler aufgetreten. Versuch es später erneut.
 errTimeout: Der Dienst hat zu lange gebraucht. Versuch es erneut.
 errNetwork: Dienst nicht erreichbar. Prüfe das Netzwerk und die Adresse.
 errNoImage: Der Dienst hat ohne Bild geantwortet. Versuch es erneut oder ändere den Look.
+styleLabel: Stil
+styleStudio: Studio
+styleStreet: Straße
+styleWhite: Weißer Hintergrund
+styleFilm: Film
+styleAnime: Anime
+searchModels: Modelle suchen
+noModelMatches: Kein passendes Modell
+refreshModels: Modelle neu laden
+modelsFailed: "Modelle konnten nicht geladen werden: {error}"
+
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Bearbeiten
   window: Fenster

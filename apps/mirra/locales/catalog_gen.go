@@ -2599,6 +2599,12 @@ var textsDe = i18n.NewTexts(""+
 	"18+"+
 	"Galerie konnte nicht geladen werden"+
 	"Erneut versuchen"+
+	"Stil"+
+	"Studio"+
+	"Straße"+
+	"Weißer Hintergrund"+
+	"Film"+
+	"Anime"+
 	"Zusätzliche Anweisungen"+
 	"Sonst noch etwas, etwa Licht oder Hintergrund"+
 	"Zu Favoriten hinzufügen"+
@@ -2665,6 +2671,9 @@ var textsDe = i18n.NewTexts(""+
 	"Ausblenden"+
 	"Modell"+
 	"Deployment-Name"+
+	"Modelle suchen"+
+	"Kein passendes Modell"+
+	"Modelle neu laden"+
 	"Größe"+
 	"Verbindung testen"+
 	"Erneut testen"+
@@ -2769,6 +2778,12 @@ var textsDe = i18n.NewTexts(""+
 		3,
 		35,
 		16,
+		4,
+		6,
+		7,
+		19,
+		4,
+		5,
 		24,
 		45,
 		24,
@@ -2835,6 +2850,9 @@ var textsDe = i18n.NewTexts(""+
 		10,
 		6,
 		15,
+		14,
+		21,
+		17,
 		7,
 		17,
 		13,
@@ -2942,6 +2960,12 @@ var textsEs = i18n.NewTexts(""+
 	"18+"+
 	"No se pudo cargar la galería"+
 	"Reintentar"+
+	"Estilo"+
+	"Estudio"+
+	"Calle"+
+	"Fondo blanco"+
+	"Película"+
+	"Anime"+
 	"Instrucciones adicionales"+
 	"Algo más, como la luz o el fondo"+
 	"Añadir a favoritos"+
@@ -3008,6 +3032,9 @@ var textsEs = i18n.NewTexts(""+
 	"Ocultar"+
 	"Modelo"+
 	"Nombre de la implementación"+
+	"Buscar modelos"+
+	"Ningún modelo coincide"+
+	"Volver a listar los modelos"+
 	"Tamaño"+
 	"Probar conexión"+
 	"Probar de nuevo"+
@@ -3112,6 +3139,12 @@ var textsEs = i18n.NewTexts(""+
 		3,
 		29,
 		10,
+		6,
+		7,
+		5,
+		12,
+		9,
+		5,
 		25,
 		33,
 		19,
@@ -3178,6 +3211,9 @@ var textsEs = i18n.NewTexts(""+
 		7,
 		6,
 		28,
+		14,
+		23,
+		27,
 		7,
 		16,
 		15,
@@ -3285,6 +3321,12 @@ var textsFr = i18n.NewTexts(""+
 	"18+"+
 	"Impossible de charger la galerie"+
 	"Réessayer"+
+	"Style"+
+	"Studio"+
+	"Rue"+
+	"Fond blanc"+
+	"Argentique"+
+	"Anime"+
 	"Instructions supplémentaires"+
 	"Autre chose, comme l’éclairage ou l’arrière-plan"+
 	"Ajouter aux favoris"+
@@ -3351,6 +3393,9 @@ var textsFr = i18n.NewTexts(""+
 	"Masquer"+
 	"Modèle"+
 	"Nom du déploiement"+
+	"Rechercher des modèles"+
+	"Aucun modèle ne correspond"+
+	"Relister les modèles"+
 	"Format"+
 	"Tester la connexion"+
 	"Tester à nouveau"+
@@ -3455,6 +3500,12 @@ var textsFr = i18n.NewTexts(""+
 		3,
 		32,
 		10,
+		5,
+		6,
+		3,
+		10,
+		10,
+		5,
 		29,
 		54,
 		19,
@@ -3521,6 +3572,9 @@ var textsFr = i18n.NewTexts(""+
 		7,
 		7,
 		19,
+		23,
+		27,
+		21,
 		6,
 		19,
 		17,
@@ -3628,6 +3682,12 @@ var textsIt = i18n.NewTexts(""+
 	"18+"+
 	"Impossibile caricare la galleria"+
 	"Riprova"+
+	"Stile"+
+	"Studio"+
+	"Strada"+
+	"Sfondo bianco"+
+	"Pellicola"+
+	"Anime"+
 	"Istruzioni aggiuntive"+
 	"Altro, come luce o sfondo"+
 	"Aggiungi ai preferiti"+
@@ -3694,6 +3754,9 @@ var textsIt = i18n.NewTexts(""+
 	"Nascondi"+
 	"Modello"+
 	"Nome del deployment"+
+	"Cerca modelli"+
+	"Nessun modello corrisponde"+
+	"Ricarica l’elenco dei modelli"+
 	"Dimensioni"+
 	"Prova connessione"+
 	"Riprova"+
@@ -3798,6 +3861,12 @@ var textsIt = i18n.NewTexts(""+
 		3,
 		32,
 		7,
+		5,
+		6,
+		6,
+		13,
+		9,
+		5,
 		21,
 		25,
 		21,
@@ -3864,6 +3933,9 @@ var textsIt = i18n.NewTexts(""+
 		8,
 		7,
 		19,
+		13,
+		26,
+		31,
 		10,
 		17,
 		7,
@@ -3971,6 +4043,12 @@ var textsJa = i18n.NewTexts(""+
 	"18+"+
 	"ギャラリーを読み込めませんでした"+
 	"再試行"+
+	"スタイル"+
+	"スタジオ"+
+	"ストリート"+
+	"白背景"+
+	"フィルム"+
+	"アニメ"+
 	"追加の指示"+
 	"照明や背景など、そのほかの要望"+
 	"お気に入りに追加"+
@@ -4037,6 +4115,9 @@ var textsJa = i18n.NewTexts(""+
 	"隠す"+
 	"モデル"+
 	"デプロイ名"+
+	"モデルを検索"+
+	"一致するモデルがありません"+
+	"モデル一覧を再取得"+
 	"サイズ"+
 	"接続をテスト"+
 	"再テスト"+
@@ -4141,6 +4222,12 @@ var textsJa = i18n.NewTexts(""+
 		3,
 		48,
 		9,
+		12,
+		12,
+		15,
+		9,
+		12,
+		9,
 		15,
 		45,
 		24,
@@ -4207,6 +4294,9 @@ var textsJa = i18n.NewTexts(""+
 		6,
 		9,
 		15,
+		18,
+		39,
+		27,
 		9,
 		18,
 		12,
@@ -4314,6 +4404,12 @@ var textsKo = i18n.NewTexts(""+
 	"18+"+
 	"갤러리를 불러오지 못했어요"+
 	"다시 시도"+
+	"스타일"+
+	"스튜디오"+
+	"스트리트"+
+	"흰 배경"+
+	"필름"+
+	"애니"+
 	"추가 요청"+
 	"조명, 배경 등 추가 요청"+
 	"즐겨찾기에 추가"+
@@ -4380,6 +4476,9 @@ var textsKo = i18n.NewTexts(""+
 	"숨기기"+
 	"모델"+
 	"배포 이름"+
+	"모델 검색"+
+	"일치하는 모델이 없어요"+
+	"모델 목록 다시 불러오기"+
 	"크기"+
 	"연결 테스트"+
 	"다시 테스트"+
@@ -4484,6 +4583,12 @@ var textsKo = i18n.NewTexts(""+
 		3,
 		38,
 		13,
+		9,
+		12,
+		12,
+		10,
+		6,
+		6,
 		13,
 		32,
 		22,
@@ -4550,6 +4655,9 @@ var textsKo = i18n.NewTexts(""+
 		9,
 		6,
 		13,
+		13,
+		32,
+		33,
 		6,
 		16,
 		16,
@@ -4657,6 +4765,12 @@ var textsPtBR = i18n.NewTexts(""+
 	"18+"+
 	"Não foi possível carregar a galeria"+
 	"Tentar de novo"+
+	"Estilo"+
+	"Estúdio"+
+	"Rua"+
+	"Fundo branco"+
+	"Filme"+
+	"Anime"+
 	"Instruções extras"+
 	"Algo mais, como iluminação ou fundo"+
 	"Adicionar aos favoritos"+
@@ -4723,6 +4837,9 @@ var textsPtBR = i18n.NewTexts(""+
 	"Ocultar"+
 	"Modelo"+
 	"Nome da implantação"+
+	"Buscar modelos"+
+	"Nenhum modelo encontrado"+
+	"Listar os modelos de novo"+
 	"Tamanho"+
 	"Testar conexão"+
 	"Testar de novo"+
@@ -4827,6 +4944,12 @@ var textsPtBR = i18n.NewTexts(""+
 		3,
 		37,
 		14,
+		6,
+		8,
+		3,
+		12,
+		5,
+		5,
 		19,
 		37,
 		23,
@@ -4893,6 +5016,9 @@ var textsPtBR = i18n.NewTexts(""+
 		7,
 		6,
 		21,
+		14,
+		24,
+		25,
 		7,
 		15,
 		14,
@@ -5000,6 +5126,12 @@ var textsRu = i18n.NewTexts(""+
 	"18+"+
 	"Не удалось загрузить галерею"+
 	"Повторить"+
+	"Стиль"+
+	"Студия"+
+	"Улица"+
+	"Белый фон"+
+	"Плёнка"+
+	"Аниме"+
 	"Дополнительные указания"+
 	"Что-то ещё, например свет или фон"+
 	"В избранное"+
@@ -5066,6 +5198,9 @@ var textsRu = i18n.NewTexts(""+
 	"Скрыть"+
 	"Модель"+
 	"Имя развёртывания"+
+	"Поиск моделей"+
+	"Нет подходящих моделей"+
+	"Обновить список моделей"+
 	"Размер"+
 	"Проверить подключение"+
 	"Проверить снова"+
@@ -5170,6 +5305,12 @@ var textsRu = i18n.NewTexts(""+
 		3,
 		53,
 		18,
+		10,
+		12,
+		10,
+		17,
+		12,
+		10,
 		45,
 		59,
 		21,
@@ -5236,6 +5377,9 @@ var textsRu = i18n.NewTexts(""+
 		12,
 		12,
 		33,
+		25,
+		42,
+		44,
 		12,
 		41,
 		29,
@@ -5704,6 +5848,12 @@ var textsZhHant = i18n.NewTexts(""+
 	"18+"+
 	"圖庫載入失敗"+
 	"重試"+
+	"風格"+
+	"攝影棚"+
+	"街拍"+
+	"白底"+
+	"底片"+
+	"動漫"+
 	"補充要求"+
 	"補充要求，例如光線、背景"+
 	"收藏"+
@@ -5770,6 +5920,9 @@ var textsZhHant = i18n.NewTexts(""+
 	"隱藏"+
 	"模型"+
 	"部署名稱"+
+	"搜尋模型"+
+	"沒有符合的模型"+
+	"重新取得模型清單"+
 	"尺寸"+
 	"測試連線"+
 	"重新測試"+
@@ -5874,6 +6027,12 @@ var textsZhHant = i18n.NewTexts(""+
 		3,
 		18,
 		6,
+		6,
+		9,
+		6,
+		6,
+		6,
+		6,
 		12,
 		36,
 		6,
@@ -5940,6 +6099,9 @@ var textsZhHant = i18n.NewTexts(""+
 		6,
 		6,
 		12,
+		12,
+		21,
+		24,
 		6,
 		12,
 		12,
@@ -7919,8 +8081,26 @@ func (msgs Messages) ModelsFailed(error_ string) string {
 		switch lang {
 		case "", "en":
 			return "Couldn't list the models: " + msgs.arg(error_)
+		case "de":
+			return "Modelle konnten nicht geladen werden: " + error_
+		case "es":
+			return "No se pudieron listar los modelos: " + error_
+		case "fr":
+			return "Impossible de lister les modèles\u00a0: " + error_
+		case "it":
+			return "Impossibile elencare i modelli: " + error_
+		case "ja":
+			return "モデル一覧を取得できませんでした：" + error_
+		case "ko":
+			return "모델 목록을 불러오지 못했어요: " + error_
+		case "pt-BR":
+			return "Não foi possível listar os modelos: " + error_
+		case "ru":
+			return "Не удалось получить список моделей: " + error_
 		case "zh-Hans":
 			return "没能获取模型列表：" + error_
+		case "zh-Hant":
+			return "無法取得模型清單：" + error_
 		}
 	}
 }

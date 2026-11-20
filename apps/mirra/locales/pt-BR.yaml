@@ -190,6 +190,17 @@ errServer: O serviço teve um problema. Tente mais tarde.
 errTimeout: O serviço demorou demais para responder. Tente de novo.
 errNetwork: Não foi possível acessar o serviço. Verifique a rede e o endereço.
 errNoImage: O serviço respondeu sem uma imagem. Tente de novo ou mude o look.
+styleLabel: Estilo
+styleStudio: Estúdio
+styleStreet: Rua
+styleWhite: Fundo branco
+styleFilm: Filme
+styleAnime: Anime
+searchModels: Buscar modelos
+noModelMatches: Nenhum modelo encontrado
+refreshModels: Listar os modelos de novo
+modelsFailed: "Não foi possível listar os modelos: {error}"
+
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Editar
   window: Janela

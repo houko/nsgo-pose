@@ -190,6 +190,17 @@ errServer: Ошибка на стороне сервиса. Повторите �
 errTimeout: Сервис слишком долго не отвечал. Повторите попытку.
 errNetwork: Не удалось связаться с сервисом. Проверьте сеть и адрес.
 errNoImage: Сервис ответил без изображения. Повторите попытку или измените образ.
+styleLabel: Стиль
+styleStudio: Студия
+styleStreet: Улица
+styleWhite: Белый фон
+styleFilm: Плёнка
+styleAnime: Аниме
+searchModels: Поиск моделей
+noModelMatches: Нет подходящих моделей
+refreshModels: Обновить список моделей
+modelsFailed: "Не удалось получить список моделей: {error}"
+
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: Правка
   window: Окно

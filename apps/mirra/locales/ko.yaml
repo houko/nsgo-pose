@@ -190,6 +190,17 @@ errServer: 서비스에 문제가 생겼어요. 잠시 후 다시 시도하세�
 errTimeout: 서비스 응답이 너무 늦어요. 다시 시도하세요.
 errNetwork: 서비스에 연결할 수 없어요. 네트워크와 주소를 확인하세요.
 errNoImage: 서비스가 이미지 없이 응답했어요. 다시 시도하거나 룩을 바꿔 보세요.
+styleLabel: 스타일
+styleStudio: 스튜디오
+styleStreet: 스트리트
+styleWhite: 흰 배경
+styleFilm: 필름
+styleAnime: 애니
+searchModels: 모델 검색
+noModelMatches: 일치하는 모델이 없어요
+refreshModels: 모델 목록 다시 불러오기
+modelsFailed: "모델 목록을 불러오지 못했어요: {error}"
+
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: 편집
   window: 윈도우

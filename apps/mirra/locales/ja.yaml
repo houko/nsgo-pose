@@ -190,6 +190,17 @@ errServer: サービスで問題が発生しました。しばらくしてから
 errTimeout: サービスの応答がタイムアウトしました。再試行してください。
 errNetwork: サービスに接続できません。ネットワークとアドレスを確認してください。
 errNoImage: サービスから画像が返されませんでした。再試行するか、コーデを変更してください。
+styleLabel: スタイル
+styleStudio: スタジオ
+styleStreet: ストリート
+styleWhite: 白背景
+styleFilm: フィルム
+styleAnime: アニメ
+searchModels: モデルを検索
+noModelMatches: 一致するモデルがありません
+refreshModels: モデル一覧を再取得
+modelsFailed: "モデル一覧を取得できませんでした：{error}"
+
 github.com/nsgo-dev/nsgo/desktop/locales:
   edit: 編集
   window: ウインドウ
