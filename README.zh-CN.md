@@ -38,7 +38,7 @@
 - **结果由你决定去留。** 新生成的图片要点「保存到作品」才会入库。可以再生成，也可以一键给同一张脸、同一个姿势换一套衣服；可以收藏、导出、删除。
 - **衣橱。** 用 ♡ 收藏喜欢的服装，上传自己的衣服照片（平铺或挂拍），随时看到当前正在穿的那套。
 - **造型册。** 保存的作品带编号，可以收藏，再次打开时会带回生成它的那套造型。
-- **主流服务商，或你自己的服务。** 预置了 OpenAI、Google Gemini、火山方舟、xAI、OpenRouter、阿里云百炼和 Azure OpenAI，每家都带 logo 和获取 Key 的链接；也可以用 stable-diffusion.cpp 或任何 OpenAI 兼容的地址，Key 可以不填。每个服务商各自保存 Key 和设置。生成前可以先测试连接；Key 存在系统钥匙串里。
+- **主流服务商，或你自己的服务。** 预置了 OpenAI、Google Gemini、火山方舟、xAI、OpenRouter、EveryAPI、阿里云百炼和 Azure OpenAI，每家都带 logo 和获取 Key 的链接；也可以用 stable-diffusion.cpp 或任何 OpenAI 兼容的地址，Key 可以不填。每个服务商各自保存 Key 和设置。生成前可以先测试连接；Key 存在系统钥匙串里。
 - **补充要求。** 写一句光线、背景之类的要求，随 prompt 一起发送。
 - **不用人像照片。** App 不读取任何人的照片：姿势库和服装库的条款禁止用它们的图片表现真实的人。上传的只能是衣服照片。
 - 界面有英文和简体中文。
@@ -107,6 +107,7 @@ go tool nsgo build                   # 打包 nsgo.yaml 里列出的所有平台
 | 火山方舟 | `POST /images/generations`，图片用 data URI；每次调用出一张 | `doubao-seedream-5-5-261028` |
 | xAI | `POST /images/edits`，JSON | `grok-imagine-image-2.0` |
 | OpenRouter | `POST /images`，input references | `bytedance-seed/seedream-4.5` |
+| EveryAPI | OpenAI 的 `POST /images/edits`，multipart；中国大陆可改用 `https://api-cn.everyapi.ai/v1` | `gpt-image-2` |
 | 阿里云百炼 | 千问图像编辑的多模态生成接口；最多 3 张图 | `qwen-image-2.0-pro` |
 | Azure OpenAI | 在你资源的 `/openai/v1` 上调用 OpenAI 的编辑接口，`api-key` 请求头 | 你的部署名 |
 | stable-diffusion.cpp | 它的服务端提供的 OpenAI 兼容 `/images/edits` | `sd-cpp-local` |

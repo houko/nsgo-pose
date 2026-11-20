@@ -12,6 +12,8 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	ailogo "github.com/yldm-tech/ai-logo/nsgo"
 )
 
 // apiCall is what a fake provider received.
@@ -362,5 +364,28 @@ func TestSafetyRefusals(t *testing.T) {
 	defer ark.Close()
 	if _, err := generate(context.Background(), ark.Client(), Config{Protocol: protoSeedream, BaseURL: ark.URL, APIKey: "k", Model: "m"}, "p", nil, 1); !errors.Is(err, errBlocked) {
 		t.Errorf("Ark's per-image refusal: %v", err)
+	}
+}
+
+// TestPresetLogos parses every preset's mark, in color or plain as icon draws it, so a logo name the library doesn't have fails here rather than when the settings draw it.
+func TestPresetLogos(t *testing.T) {
+	for _, p := range providers {
+		if p.Logo == "" {
+			continue
+		}
+		_, colorErr := ailogo.Parse(p.Logo, ailogo.Color)
+		if _, monoErr := ailogo.Parse(p.Logo, ailogo.Mono); colorErr != nil && monoErr != nil {
+			t.Errorf("%s: %v", p.ID, monoErr)
+		}
+	}
+	if _, err := ailogo.Parse("everyapi", ailogo.Color); err != nil {
+		t.Errorf("EveryAPI has no color mark: %v", err)
+	}
+}
+
+func TestEveryAPIIsOpenAICompatible(t *testing.T) {
+	p := providerByID("everyapi")
+	if p.ID != "everyapi" || p.Protocol != protoOpenAI || p.BaseURL != "https://api.everyapi.ai/v1" || p.Model != defaultModel {
+		t.Errorf("EveryAPI preset = %+v", p)
 	}
 }

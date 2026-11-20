@@ -96,6 +96,8 @@ var providers = []provider{
 		KeyURL: "https://console.x.ai/team/default/api-keys", KeyHint: "xai-…"},
 	{ID: "openrouter", Name: "OpenRouter", Logo: "openrouter", Protocol: protoOpenRouter, BaseURL: "https://openrouter.ai/api/v1", Model: "bytedance-seed/seedream-4.5", Size: defaultSize,
 		KeyURL: "https://openrouter.ai/keys", KeyHint: "sk-or-…"},
+	{ID: "everyapi", Name: "EveryAPI", Logo: "everyapi", Protocol: protoOpenAI, BaseURL: "https://api.everyapi.ai/v1", Model: defaultModel, Size: defaultSize,
+		KeyURL: "https://app.everyapi.ai", KeyHint: "sk-everyapi-…"},
 	{ID: "dashscope", Name: "Alibaba Cloud Model Studio", Local: func(t locales.Messages) string { return t.ProviderDashScope() }, Logo: "bailian", Protocol: protoDashScope,
 		BaseURL: "https://dashscope.aliyuncs.com/api/v1", Model: "qwen-image-2.0-pro", Size: defaultSize,
 		KeyURL: "https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key", KeyHint: "sk-…"},

@@ -38,7 +38,7 @@
 - **A result you decide on.** A new picture waits until you save it to Works. Generate it again, or put another outfit on the same face and pose with one tap; star it, export it or delete it.
 - **Wardrobe.** Keep outfits you like with ♡, add photos of your own clothes laid flat or on a hanger, and see what the look is wearing.
 - **Lookbook.** Saved pictures are numbered, can be starred, and open again with the look they were made from.
-- **The main image providers, or your own server.** OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, Alibaba Cloud Model Studio and Azure OpenAI are preset, each with its logo and a link to get a key; stable-diffusion.cpp or any OpenAI-compatible address works too, with the key optional. Each provider keeps its own key and settings. Test the connection before generating; keys are kept in the system keychain.
+- **The main image providers, or your own server.** OpenAI, Google Gemini, Volcengine Ark, xAI, OpenRouter, EveryAPI, Alibaba Cloud Model Studio and Azure OpenAI are preset, each with its logo and a link to get a key; stable-diffusion.cpp or any OpenAI-compatible address works too, with the key optional. Each provider keeps its own key and settings. Test the connection before generating; keys are kept in the system keychain.
 - **Extra instructions.** Add a line such as lighting or background, sent along with the prompt.
 - **No photos of you.** The app takes no picture of a person: the pose and outfit galleries' terms forbid using their images to depict real people. Photos you add are of clothes only.
 - English and Simplified Chinese.
@@ -107,6 +107,7 @@ Open **Me** on a phone, or the settings button at the top right on the desktop, 
 | Volcengine Ark | `POST /images/generations`, images as data URIs; one picture a call | `doubao-seedream-5-5-261028` |
 | xAI | `POST /images/edits`, JSON | `grok-imagine-image-2.0` |
 | OpenRouter | `POST /images`, input references | `bytedance-seed/seedream-4.5` |
+| EveryAPI | OpenAI's `POST /images/edits`, multipart; `https://api-cn.everyapi.ai/v1` from mainland China | `gpt-image-2` |
 | Alibaba Cloud Model Studio | Qwen image editing's multimodal generation; up to 3 images | `qwen-image-2.0-pro` |
 | Azure OpenAI | OpenAI's edit on your resource's `/openai/v1`, `api-key` header | your deployment's name |
 | stable-diffusion.cpp | its server's OpenAI-compatible `/images/edits` | `sd-cpp-local` |
