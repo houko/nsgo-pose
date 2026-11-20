@@ -289,6 +289,31 @@ func TestAdvancedSettings(t *testing.T) {
 	}
 }
 
+// TestDesktopSettingsTabs puts the desktop settings on tabs down the side: the service first, the address, model and size on their own tab, and Generate without a service back on the service's.
+func TestDesktopSettingsTabs(t *testing.T) {
+	app := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}), nsgotest.Size(1440, 1000))
+	app.Press("id:open-settings")
+	app.WaitFor("id:api-key", wait)
+	app.Find("id:test-connection")
+	if app.Exists("id:base-url") || app.Exists("id:version") {
+		t.Error("the service's tab shows another tab's settings")
+	}
+	app.Press("id:settings-nav-advanced")
+	app.WaitFor("id:base-url", wait)
+	app.Find("id:size-portrait")
+	if app.Exists("id:api-key") {
+		t.Error("the advanced tab shows the key")
+	}
+	app.Press("id:settings-nav-sources")
+	app.WaitFor("text:Poses", wait)
+	app.Press("id:settings-close")
+	// The dialog leaves once its motion ends, which runs on the test's clock.
+	app.Advance(200 * time.Millisecond)
+	app.WaitForGone("id:settings-dialog", wait)
+	app.Press("id:generate")
+	app.WaitFor("id:api-key", wait)
+}
+
 // TestCheckForUpdatesWhereTheAppUpdates offers the check on the platforms whose copies update themselves from the releases, and not on the web or iOS.
 func TestCheckForUpdatesWhereTheAppUpdates(t *testing.T) {
 	for _, c := range []struct {
@@ -301,6 +326,7 @@ func TestCheckForUpdatesWhereTheAppUpdates(t *testing.T) {
 		}
 		app := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en", OS: c.os}), nsgotest.Size(1440, 1000))
 		app.Press("id:open-settings")
+		app.Press("id:settings-nav-about")
 		app.WaitFor("id:version", wait)
 		if got := app.Exists("id:check-updates"); got != c.want {
 			t.Errorf("on %v the check is offered: %v, want %v", c.os, got, c.want)
@@ -474,7 +500,7 @@ func TestMacMenuOpensSettingsAndChecksForUpdates(t *testing.T) {
 	}
 	app := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en", OS: core.OSMacOS}), nsgotest.Size(1440, 1000))
 	app.ChooseMenu("Mirra", "Settings…")
-	app.WaitFor("id:version", wait)
+	app.WaitFor("id:settings", wait)
 	if nsgotest.Target() == "" {
 		app.ChooseMenu("Mirra", "Check for Updates…")
 		if checks := app.UpdateChecks; len(checks) != 1 || checks[0] {
