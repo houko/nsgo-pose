@@ -225,6 +225,10 @@ const (
 	textVersion
 	textVersionDevelopment
 	textCheckForUpdates
+	textMenuSettings
+	textMenuCheckForUpdates
+	textMenuEdit
+	textMenuWindow
 	textBaseURL
 	textApiKey
 	textApiKeyOptional
@@ -386,6 +390,10 @@ var keyOfText = [numTexts]string{
 	"version",
 	"versionDevelopment",
 	"checkForUpdates",
+	"menuSettings",
+	"menuCheckForUpdates",
+	"menuEdit",
+	"menuWindow",
 	"baseURL",
 	"apiKey",
 	"apiKeyOptional",
@@ -545,6 +553,10 @@ var textsEn = i18n.NewTexts(""+
 	"Version"+
 	"Development build"+
 	"Check for updates"+
+	"Settings…"+
+	"Check for Updates…"+
+	"Edit"+
+	"Window"+
 	"Address"+
 	"API key"+
 	"API key (optional)"+
@@ -701,6 +713,10 @@ var textsEn = i18n.NewTexts(""+
 		7,
 		17,
 		17,
+		11,
+		20,
+		4,
+		6,
 		7,
 		7,
 		18,
@@ -860,6 +876,10 @@ var textsZhHans = i18n.NewTexts(""+
 	"版本"+
 	"开发版"+
 	"检查更新"+
+	"设置…"+
+	"检查更新…"+
+	"编辑"+
+	"窗口"+
 	"接口地址"+
 	"API Key"+
 	"API Key（可留空）"+
@@ -1016,6 +1036,10 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		9,
 		12,
+		9,
+		15,
+		6,
+		6,
 		12,
 		7,
 		22,
@@ -2470,6 +2494,34 @@ func CheckForUpdates(cx *core.Scope) string { return For(cx).CheckForUpdates() }
 
 // CheckForUpdates is the package's CheckForUpdates in the language of msgs.
 func (msgs Messages) CheckForUpdates() string { return msgs.text(textCheckForUpdates) }
+
+// MenuSettings says "Settings…"
+// in the language the app shows under cx.
+func MenuSettings(cx *core.Scope) string { return For(cx).MenuSettings() }
+
+// MenuSettings is the package's MenuSettings in the language of msgs.
+func (msgs Messages) MenuSettings() string { return msgs.text(textMenuSettings) }
+
+// MenuCheckForUpdates says "Check for Updates…"
+// in the language the app shows under cx.
+func MenuCheckForUpdates(cx *core.Scope) string { return For(cx).MenuCheckForUpdates() }
+
+// MenuCheckForUpdates is the package's MenuCheckForUpdates in the language of msgs.
+func (msgs Messages) MenuCheckForUpdates() string { return msgs.text(textMenuCheckForUpdates) }
+
+// MenuEdit says "Edit"
+// in the language the app shows under cx.
+func MenuEdit(cx *core.Scope) string { return For(cx).MenuEdit() }
+
+// MenuEdit is the package's MenuEdit in the language of msgs.
+func (msgs Messages) MenuEdit() string { return msgs.text(textMenuEdit) }
+
+// MenuWindow says "Window"
+// in the language the app shows under cx.
+func MenuWindow(cx *core.Scope) string { return For(cx).MenuWindow() }
+
+// MenuWindow is the package's MenuWindow in the language of msgs.
+func (msgs Messages) MenuWindow() string { return msgs.text(textMenuWindow) }
 
 // BaseURL says "Address"
 // in the language the app shows under cx.
