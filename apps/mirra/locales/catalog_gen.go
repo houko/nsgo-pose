@@ -249,6 +249,8 @@ const (
 	textPageOnly
 	textKeyUnavailable
 	textAboutSection
+	textSourcesSection
+	textSettings
 	textSourceCode
 	textLicense
 	textSourcesPose
@@ -416,6 +418,8 @@ var keyOfText = [numTexts]string{
 	"pageOnly",
 	"keyUnavailable",
 	"aboutSection",
+	"sourcesSection",
+	"settings",
 	"sourceCode",
 	"license",
 	"sourcesPose",
@@ -581,6 +585,8 @@ var textsEn = i18n.NewTexts(""+
 	"In the web version, pictures and clothes last as long as this page. Export the ones you want to keep."+
 	"This device has no secure store for the key."+
 	"About"+
+	"Sources"+
+	"Settings"+
 	"Source code"+
 	"License"+
 	"Poses"+
@@ -743,6 +749,8 @@ var textsEn = i18n.NewTexts(""+
 		101,
 		44,
 		5,
+		7,
+		8,
 		11,
 		7,
 		5,
@@ -908,6 +916,8 @@ var textsZhHans = i18n.NewTexts(""+
 	"网页版的作品和衣服照片只保存在当前页面，关闭前请导出想保留的。"+
 	"这台设备没有可以保存 Key 的安全存储。"+
 	"关于"+
+	"素材来源"+
+	"设置"+
 	"源代码"+
 	"开源许可"+
 	"姿势素材"+
@@ -1069,6 +1079,8 @@ var textsZhHans = i18n.NewTexts(""+
 		121,
 		93,
 		53,
+		6,
+		12,
 		6,
 		9,
 		12,
@@ -2794,6 +2806,20 @@ func AboutSection(cx *core.Scope) string { return For(cx).AboutSection() }
 
 // AboutSection is the package's AboutSection in the language of msgs.
 func (msgs Messages) AboutSection() string { return msgs.text(textAboutSection) }
+
+// SourcesSection says "Sources"
+// in the language the app shows under cx.
+func SourcesSection(cx *core.Scope) string { return For(cx).SourcesSection() }
+
+// SourcesSection is the package's SourcesSection in the language of msgs.
+func (msgs Messages) SourcesSection() string { return msgs.text(textSourcesSection) }
+
+// Settings says "Settings"
+// in the language the app shows under cx.
+func Settings(cx *core.Scope) string { return For(cx).Settings() }
+
+// Settings is the package's Settings in the language of msgs.
+func (msgs Messages) Settings() string { return msgs.text(textSettings) }
 
 // SourceCode says "Source code"
 // in the language the app shows under cx.

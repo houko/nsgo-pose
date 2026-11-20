@@ -112,6 +112,8 @@ type studio struct {
 	conn                   *core.Signal[connState]
 	connErr                *core.Signal[string]
 	showKey, settingsShown *core.Signal[bool]
+	// settingsTab is the desktop settings' tab on show.
+	settingsTab *core.Signal[string]
 	// keyKept says whether the key outlives the page: false in a browser, which has no secure store.
 	keyKept *core.Signal[bool]
 
@@ -214,6 +216,7 @@ func newStudio(cx *core.Scope, a App) *studio {
 		connErr:       core.NewSignal(cx, ""),
 		showKey:       core.NewSignal(cx, false),
 		settingsShown: core.NewSignal(cx, false),
+		settingsTab:   core.NewSignal(cx, settingsService),
 		keyKept:       core.NewSignal(cx, true),
 		works:         core.NewSignalFunc[[]work](cx, nil, nil),
 		favoritesOn:   core.NewSignal(cx, false),
@@ -344,6 +347,7 @@ func (s *studio) configured() bool {
 // openSettings shows the AI service settings: a dialog on the desktop, the Me tab on a phone.
 func (s *studio) openSettings() {
 	if s.wide() {
+		s.settingsTab.Set(settingsService)
 		s.settingsShown.Set(true)
 		return
 	}

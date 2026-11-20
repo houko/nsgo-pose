@@ -209,6 +209,8 @@ privacyWeb: "This web version keeps no key once the page closes; enter it again 
 pageOnly: In the web version, pictures and clothes last as long as this page. Export the ones you want to keep.
 keyUnavailable: This device has no secure store for the key.
 aboutSection: About
+sourcesSection: Sources
+settings: Settings
 sourceCode: Source code
 license: License
 sourcesPose: Poses

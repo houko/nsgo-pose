@@ -167,6 +167,8 @@ privacyWeb: 网页版不会保存 Key，刷新页面后需要重新填写；请�
 pageOnly: 网页版的作品和衣服照片只保存在当前页面，关闭前请导出想保留的。
 keyUnavailable: 这台设备没有可以保存 Key 的安全存储。
 aboutSection: 关于
+sourcesSection: 素材来源
+settings: 设置
 sourceCode: 源代码
 license: 开源许可
 sourcesPose: 姿势素材
