@@ -374,7 +374,7 @@ func field(cx *core.Scope, label func() string, in core.Node) core.Node {
 type serviceForm struct {
 	// intro asks for a service while none is set up.
 	intro, provider core.Node
-	// fields are the chosen provider's: the key and what it needs beside it in basic, the address, model and size in advanced. They are built in a Dynamic that tracks the provider.
+	// fields are the chosen provider's: the key, the model and what they need beside them in basic, the address and size in advanced. They are built in a Dynamic that tracks the provider.
 	fields func(cx *core.Scope) (basic, advanced []core.Node)
 	// changed says whether an advanced setting differs from the preset's.
 	changed func() bool
@@ -382,7 +382,7 @@ type serviceForm struct {
 	test, privacy core.Node
 }
 
-// serviceForm sets up the AI service: the provider, its key and where to get one, its address, model and size, and a test of the connection. Each provider keeps its own settings, so switching back finds them again.
+// serviceForm sets up the AI service: the provider, its key and where to get one, its model, its address and size, and a test of the connection. Each provider keeps its own settings, so switching back finds them again.
 func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 	t := locales.For(cx)
 	colors := ui.ColorsOf(cx)
@@ -450,7 +450,7 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 		}}
 	changed := func() bool {
 		_, set := s.current()
-		return set.url.Get() != "" || set.model.Get() != "" || set.size.Get() != ""
+		return set.url.Get() != "" || set.size.Get() != ""
 	}
 	fields := func(cx *core.Scope) (basic, advanced []core.Node) {
 		p, set := s.current()
@@ -509,7 +509,7 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 				for _, f := range []struct {
 					name string
 					sig  *core.Signal[string]
-				}{{"url", set.url}, {"model", set.model}, {"size", set.size}} {
+				}{{"url", set.url}, {"size", set.size}} {
 					f.sig.Set("")
 					store.RemoveItem(p.storageKey(f.name))
 				}
@@ -535,9 +535,6 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 				return true
 			})
 		}
-		if !p.Deployment {
-			advanced = append(advanced, model)
-		}
 		advanced = append(advanced,
 			field(cx, t.Size, sizes),
 			core.View{Style: core.Style{Direction: core.Row}, Children: []core.Node{reset}})
@@ -545,9 +542,8 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 		if p.BaseURL == "" {
 			basic = append(basic, address)
 		}
-		if p.Deployment {
-			basic = append(basic, model)
-		}
+		// The model is chosen with the key, on the same page: its list comes from the key.
+		basic = append(basic, model)
 		return basic, advanced
 	}
 	result := core.Dynamic(func(cx *core.Scope) core.Node {
@@ -594,7 +590,7 @@ func (s *studio) serviceForm(cx *core.Scope) serviceForm {
 	}
 }
 
-// serviceSettings is the AI service in one column, as the phone's Me tab shows it, with the address, model and size under Advanced.
+// serviceSettings is the AI service in one column, as the phone's Me tab shows it, with the address and size under Advanced.
 func (s *studio) serviceSettings(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	f := s.serviceForm(cx)

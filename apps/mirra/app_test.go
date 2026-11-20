@@ -252,6 +252,7 @@ func TestAdvancedSettings(t *testing.T) {
 	fresh := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en"}))
 	fresh.Press("text:Me")
 	fresh.Find("id:api-key")
+	fresh.Find("id:model")
 	fresh.Find("id:version")
 	if fresh.Exists("id:base-url") {
 		t.Error("a fresh install shows the address before Advanced is opened")
@@ -295,14 +296,16 @@ func TestDesktopSettingsTabs(t *testing.T) {
 	app.Press("id:open-settings")
 	app.WaitFor("id:api-key", wait)
 	app.Find("id:test-connection")
+	// The model is chosen beside the key, whose models it lists.
+	app.Find("id:model")
 	if app.Exists("id:base-url") || app.Exists("id:version") {
 		t.Error("the service's tab shows another tab's settings")
 	}
 	app.Press("id:settings-nav-advanced")
 	app.WaitFor("id:base-url", wait)
 	app.Find("id:size-portrait")
-	if app.Exists("id:api-key") {
-		t.Error("the advanced tab shows the key")
+	if app.Exists("id:api-key") || app.Exists("id:model") {
+		t.Error("the advanced tab shows the key or the model")
 	}
 	app.Press("id:settings-nav-sources")
 	app.WaitFor("text:Poses", wait)
