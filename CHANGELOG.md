@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The update prompts show what the new version changes: its section of this changelog, in Sparkle's and WinSparkle's dialogs on macOS and Windows and below the version on Android.
+
 ## 0.8.2 - 2026-11-20
 
 - The answer to the 18+ switch's age question is kept, as works and favorites from those categories show on later launches; it was asked again every launch.

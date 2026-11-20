@@ -180,13 +180,20 @@ jobs:
           # Only a release build gets the updates key: the appcasts other builds would make are thrown away.
           UPDATES_KEY: ${{ inputs.tag != '' && matrix.appcast && secrets.NSGO_UPDATES_KEY || '' }}
           RELEASE: ${{ inputs.tag != '' && matrix.appcast && 'true' || '' }}
+          TAG: ${{ inputs.tag }}
         run: |
+          notes=()
           if [ -n "$RELEASE" ]; then
             if [ -z "$UPDATES_KEY" ]; then
               echo "::error::The NSGO_UPDATES_KEY secret is not set, so installed copies could not update to this release."
               exit 1
             fi
             export NSGO_UPDATES_KEY=$UPDATES_KEY
+            # The appcasts carry the version's section of CHANGELOG.md, which the update prompts show.
+            .github/scripts/changelog.sh notes "$TAG" > "$RUNNER_TEMP/release-notes.md"
+            if [ -s "$RUNNER_TEMP/release-notes.md" ]; then
+              notes=(-release-notes "$RUNNER_TEMP/release-notes.md")
+            fi
           fi
           sign=()
           if [ -n "$IDENTITY" ]; then
@@ -206,7 +213,7 @@ jobs:
             sign=(-keystore "$KEYSTORE")
           fi
           cd apps/mirra
-          go tool nsgo build -target "$TARGET" -output "$RUNNER_TEMP/packages" "${sign[@]}"
+          go tool nsgo build -target "$TARGET" -output "$RUNNER_TEMP/packages" "${sign[@]}" "${notes[@]}"
       # Gatekeeper's own check of what users download: the app is signed with the Developer ID and the hardened runtime, and the disk image carries its notarization ticket.
       - name: Check the macOS signature
         if: steps.macos.outcome == 'success'
