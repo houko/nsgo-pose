@@ -117,6 +117,8 @@ adultConfirm: 你已年滿 18 歲嗎？
 adultConfirmBody: 這裡是成人內容，僅限 18 歲以上的使用者瀏覽。
 adultYes: 已滿 18 歲
 adultNo: 未滿 18 歲
+adultSetting: 18+ 分類
+adultSettingDetail: 開啟圖庫的 18+ 分類時不再詢問年齡
 saveFailed: 儲存失敗
 backToEdit: 返回編輯
 worksFilter: 作品篩選
@@ -156,6 +158,9 @@ size: 尺寸
 testConnection: 測試連線
 testAgain: 重新測試
 connectionOK: 連線成功，可以開始生成了
+connectionUntested: 尚未測試
+connectionTesting: 正在測試…
+connectionFailedShort: 連線失敗
 connectionFailed: 連線失敗：{error}
 statusUnconfigured: 未設定 AI 服務
 statusConnected: "{service} · 已連線"
@@ -179,6 +184,7 @@ license: 開源授權
 sourcesPose: 姿勢素材
 sourcesOutfit: 服裝素材
 sourcesFace: 臉孔素材
+sourcesBackgrounds: 背景素材
 sourcesFooter: 每張圖庫圖片只在你使用時個別取得，App 不內建、也不轉發這些圖片。
 errNoKey: 請先輸入 API Key。
 errKeyRefused: 服務拒絕了這個 Key，請檢查它是否正確、能否使用這個模型。

@@ -1918,6 +1918,8 @@ const (
 	textAdultConfirmBody
 	textAdultYes
 	textAdultNo
+	textAdultSetting
+	textAdultSettingDetail
 	textSaveFailed
 	textBackToEdit
 	textWorksFilter
@@ -1959,6 +1961,9 @@ const (
 	textTestConnection
 	textTestAgain
 	textConnectionOK
+	textConnectionUntested
+	textConnectionTesting
+	textConnectionFailedShort
 	textStatusUnconfigured
 	textPrivacyCloud
 	textPrivacyLocal
@@ -1977,6 +1982,7 @@ const (
 	textSourcesPose
 	textSourcesOutfit
 	textSourcesFace
+	textSourcesBackgrounds
 	textSourcesFooter
 	textErrNoKey
 	textErrKeyRefused
@@ -2110,6 +2116,8 @@ var keyOfText = [numTexts]string{
 	"adultConfirmBody",
 	"adultYes",
 	"adultNo",
+	"adultSetting",
+	"adultSettingDetail",
 	"saveFailed",
 	"backToEdit",
 	"worksFilter",
@@ -2151,6 +2159,9 @@ var keyOfText = [numTexts]string{
 	"testConnection",
 	"testAgain",
 	"connectionOK",
+	"connectionUntested",
+	"connectionTesting",
+	"connectionFailedShort",
 	"statusUnconfigured",
 	"privacyCloud",
 	"privacyLocal",
@@ -2169,6 +2180,7 @@ var keyOfText = [numTexts]string{
 	"sourcesPose",
 	"sourcesOutfit",
 	"sourcesFace",
+	"sourcesBackgrounds",
 	"sourcesFooter",
 	"errNoKey",
 	"errKeyRefused",
@@ -2300,6 +2312,8 @@ var textsEn = i18n.NewTexts(""+
 	"This shows adult content, for people 18 and older only."+
 	"I'm 18 or older"+
 	"I'm under 18"+
+	"18+ categories"+
+	"Show the galleries' 18+ categories without asking your age"+
 	"Couldn't save"+
 	"Back to the look"+
 	"Show"+
@@ -2341,6 +2355,9 @@ var textsEn = i18n.NewTexts(""+
 	"Test connection"+
 	"Test again"+
 	"Connected; you can start making looks."+
+	"Not tested yet"+
+	"Testing…"+
+	"Couldn't connect"+
 	"No AI service"+
 	"The key stays in this device's keychain. Requests go straight from your device to the service you set up, through no other server."+
 	"Requests go straight from your device to your own server, through no other server, at no cost."+
@@ -2359,6 +2376,7 @@ var textsEn = i18n.NewTexts(""+
 	"Poses"+
 	"Outfits"+
 	"Faces"+
+	"Backgrounds"+
 	"Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them."+
 	"Enter the API key first."+
 	"The service refused the key. Check that it is right and may use this model."+
@@ -2487,6 +2505,8 @@ var textsEn = i18n.NewTexts(""+
 		55,
 		15,
 		12,
+		14,
+		58,
 		13,
 		16,
 		4,
@@ -2528,6 +2548,9 @@ var textsEn = i18n.NewTexts(""+
 		15,
 		10,
 		38,
+		14,
+		10,
+		16,
 		13,
 		130,
 		94,
@@ -2546,6 +2569,7 @@ var textsEn = i18n.NewTexts(""+
 		5,
 		7,
 		5,
+		11,
 		99,
 		24,
 		75,
@@ -2677,6 +2701,8 @@ var textsDe = i18n.NewTexts(""+
 	"Hier werden Inhalte für Erwachsene gezeigt, nur für Personen ab 18."+
 	"Ich bin 18 oder älter"+
 	"Ich bin unter 18"+
+	"18+-Kategorien"+
+	"Die 18+-Kategorien der Galerien zeigen, ohne nach dem Alter zu fragen"+
 	"Sichern fehlgeschlagen"+
 	"Zurück zum Look"+
 	"Anzeigen"+
@@ -2718,6 +2744,9 @@ var textsDe = i18n.NewTexts(""+
 	"Verbindung testen"+
 	"Erneut testen"+
 	"Verbunden; du kannst Looks erstellen."+
+	"Noch nicht getestet"+
+	"Wird getestet …"+
+	"Keine Verbindung"+
 	"Kein KI-Dienst"+
 	"Der Schlüssel bleibt im Schlüsselbund dieses Geräts. Anfragen gehen direkt von deinem Gerät an den eingerichteten Dienst, über keinen anderen Server."+
 	"Anfragen gehen direkt von deinem Gerät an deinen eigenen Server, über keinen anderen Server und kostenlos."+
@@ -2736,6 +2765,7 @@ var textsDe = i18n.NewTexts(""+
 	"Posen"+
 	"Outfits"+
 	"Gesichter"+
+	"Hintergründe"+
 	"Jedes Galeriebild wird erst geladen, wenn du es verwendest; die App liefert sie weder mit noch verbreitet sie sie weiter."+
 	"Gib zuerst den API-Schlüssel ein."+
 	"Der Dienst hat den Schlüssel abgelehnt. Prüfe, ob er stimmt und für dieses Modell freigegeben ist."+
@@ -2864,6 +2894,8 @@ var textsDe = i18n.NewTexts(""+
 		69,
 		22,
 		16,
+		14,
+		69,
 		22,
 		16,
 		8,
@@ -2905,6 +2937,9 @@ var textsDe = i18n.NewTexts(""+
 		17,
 		13,
 		37,
+		19,
+		17,
+		16,
 		14,
 		154,
 		108,
@@ -2923,6 +2958,7 @@ var textsDe = i18n.NewTexts(""+
 		5,
 		7,
 		9,
+		13,
 		121,
 		34,
 		101,
@@ -3054,6 +3090,8 @@ var textsEs = i18n.NewTexts(""+
 	"Esto muestra contenido para adultos, solo para mayores de 18 años."+
 	"Tengo 18 años o más"+
 	"Soy menor de 18"+
+	"Categorías 18+"+
+	"Mostrar las categorías 18+ de las galerías sin preguntar la edad"+
 	"No se pudo guardar"+
 	"Volver al look"+
 	"Mostrar"+
@@ -3095,6 +3133,9 @@ var textsEs = i18n.NewTexts(""+
 	"Probar conexión"+
 	"Probar de nuevo"+
 	"Conectado; ya puedes crear looks."+
+	"Aún sin probar"+
+	"Probando…"+
+	"No se pudo conectar"+
 	"Sin servicio de IA"+
 	"La clave se queda en el llavero de este dispositivo. Las solicitudes van directamente de tu dispositivo al servicio que configuraste, sin pasar por ningún otro servidor."+
 	"Las solicitudes van directamente de tu dispositivo a tu propio servidor, sin pasar por ningún otro servidor y sin coste."+
@@ -3113,6 +3154,7 @@ var textsEs = i18n.NewTexts(""+
 	"Poses"+
 	"Atuendos"+
 	"Rostros"+
+	"Fondos"+
 	"Cada imagen de las galerías se descarga solo cuando la usas; la app no las incluye ni las redistribuye."+
 	"Introduce primero la clave de API."+
 	"El servicio rechazó la clave. Comprueba que sea correcta y que pueda usar este modelo."+
@@ -3241,6 +3283,8 @@ var textsEs = i18n.NewTexts(""+
 		67,
 		21,
 		15,
+		15,
+		66,
 		18,
 		14,
 		7,
@@ -3282,6 +3326,9 @@ var textsEs = i18n.NewTexts(""+
 		16,
 		15,
 		33,
+		15,
+		11,
+		19,
 		18,
 		170,
 		121,
@@ -3300,6 +3347,7 @@ var textsEs = i18n.NewTexts(""+
 		5,
 		8,
 		7,
+		6,
 		104,
 		34,
 		87,
@@ -3431,6 +3479,8 @@ var textsFr = i18n.NewTexts(""+
 	"Ce contenu est réservé aux adultes de 18 ans et plus."+
 	"J’ai 18 ans ou plus"+
 	"J’ai moins de 18 ans"+
+	"Catégories 18+"+
+	"Afficher les catégories 18+ des galeries sans demander votre âge"+
 	"Impossible d’enregistrer"+
 	"Retour au look"+
 	"Afficher"+
@@ -3472,6 +3522,9 @@ var textsFr = i18n.NewTexts(""+
 	"Tester la connexion"+
 	"Tester à nouveau"+
 	"Connecté\u00a0; vous pouvez commencer à créer des looks."+
+	"Pas encore testé"+
+	"Test en cours…"+
+	"Connexion impossible"+
 	"Aucun service d’IA"+
 	"La clé reste dans le trousseau de cet appareil. Les requêtes vont directement de votre appareil au service configuré, sans passer par un autre serveur."+
 	"Les requêtes vont directement de votre appareil à votre propre serveur, sans passer par un autre serveur et sans frais."+
@@ -3490,6 +3543,7 @@ var textsFr = i18n.NewTexts(""+
 	"Poses"+
 	"Tenues"+
 	"Visages"+
+	"Décors"+
 	"Chaque image des galeries n’est récupérée que lorsque vous l’utilisez\u00a0; l’app ne les intègre ni ne les redistribue."+
 	"Saisissez d’abord la clé API."+
 	"Le service a refusé la clé. Vérifiez qu’elle est correcte et qu’elle autorise ce modèle."+
@@ -3618,6 +3672,8 @@ var textsFr = i18n.NewTexts(""+
 		55,
 		21,
 		22,
+		15,
+		66,
 		26,
 		14,
 		8,
@@ -3659,6 +3715,9 @@ var textsFr = i18n.NewTexts(""+
 		19,
 		17,
 		55,
+		17,
+		16,
+		20,
 		20,
 		154,
 		121,
@@ -3676,6 +3735,7 @@ var textsFr = i18n.NewTexts(""+
 		7,
 		5,
 		6,
+		7,
 		7,
 		126,
 		32,
@@ -3808,6 +3868,8 @@ var textsIt = i18n.NewTexts(""+
 	"Qui ci sono contenuti per adulti, riservati a chi ha almeno 18 anni."+
 	"Ho almeno 18 anni"+
 	"Ho meno di 18 anni"+
+	"Categorie 18+"+
+	"Mostra le categorie 18+ delle gallerie senza chiedere l’età"+
 	"Impossibile salvare"+
 	"Torna al look"+
 	"Mostra"+
@@ -3849,6 +3911,9 @@ var textsIt = i18n.NewTexts(""+
 	"Prova connessione"+
 	"Riprova"+
 	"Connesso; puoi iniziare a creare look."+
+	"Non ancora testato"+
+	"Test in corso…"+
+	"Connessione non riuscita"+
 	"Nessun servizio IA"+
 	"La chiave resta nel portachiavi di questo dispositivo. Le richieste vanno direttamente dal tuo dispositivo al servizio che hai configurato, senza passare da altri server."+
 	"Le richieste vanno direttamente dal tuo dispositivo al tuo server, senza passare da altri server e senza costi."+
@@ -3867,6 +3932,7 @@ var textsIt = i18n.NewTexts(""+
 	"Pose"+
 	"Outfit"+
 	"Visi"+
+	"Sfondi"+
 	"Ogni immagine delle gallerie viene scaricata solo quando la usi; l’app non le include né le ridistribuisce."+
 	"Inserisci prima la chiave API."+
 	"Il servizio ha rifiutato la chiave. Verifica che sia corretta e che possa usare questo modello."+
@@ -3995,6 +4061,8 @@ var textsIt = i18n.NewTexts(""+
 		68,
 		17,
 		18,
+		13,
+		62,
 		19,
 		13,
 		6,
@@ -4037,6 +4105,9 @@ var textsIt = i18n.NewTexts(""+
 		7,
 		38,
 		18,
+		16,
+		24,
+		18,
 		170,
 		111,
 		194,
@@ -4054,6 +4125,7 @@ var textsIt = i18n.NewTexts(""+
 		4,
 		6,
 		4,
+		6,
 		110,
 		30,
 		95,
@@ -4185,6 +4257,8 @@ var textsJa = i18n.NewTexts(""+
 	"成人向けのコンテンツです。18 歳以上の方のみご覧いただけます。"+
 	"18 歳以上です"+
 	"18 歳未満です"+
+	"18+ カテゴリ"+
+	"ギャラリーの 18+ カテゴリを開くときに年齢を確認しない"+
 	"保存できませんでした"+
 	"コーデに戻る"+
 	"表示"+
@@ -4226,6 +4300,9 @@ var textsJa = i18n.NewTexts(""+
 	"接続をテスト"+
 	"再テスト"+
 	"接続しました。コーデの生成を始められます。"+
+	"未テスト"+
+	"テスト中…"+
+	"接続できませんでした"+
 	"AI サービス未設定"+
 	"キーはこのデバイスのキーチェーンにのみ保存されます。リクエストは他のサーバーを経由せず、デバイスから設定したサービスへ直接送信されます。"+
 	"リクエストは他のサーバーを経由せず、デバイスからご自身のサーバーへ直接送信されます。費用はかかりません。"+
@@ -4244,6 +4321,7 @@ var textsJa = i18n.NewTexts(""+
 	"ポーズ"+
 	"服装"+
 	"顔"+
+	"背景素材"+
 	"ギャラリーの画像は使うときにだけ個別に取得します。アプリに同梱したり再配布したりすることはありません。"+
 	"先に API Key を入力してください。"+
 	"サービスがキーを拒否しました。キーが正しいか、このモデルを使えるかを確認してください。"+
@@ -4372,6 +4450,8 @@ var textsJa = i18n.NewTexts(""+
 		90,
 		18,
 		18,
+		16,
+		77,
 		30,
 		18,
 		6,
@@ -4413,6 +4493,9 @@ var textsJa = i18n.NewTexts(""+
 		18,
 		12,
 		63,
+		12,
+		15,
+		30,
 		24,
 		204,
 		156,
@@ -4431,6 +4514,7 @@ var textsJa = i18n.NewTexts(""+
 		9,
 		6,
 		3,
+		12,
 		153,
 		45,
 		129,
@@ -4562,6 +4646,8 @@ var textsKo = i18n.NewTexts(""+
 	"성인 콘텐츠예요. 만 18세 이상만 볼 수 있어요."+
 	"만 18세 이상이에요"+
 	"만 18세 미만이에요"+
+	"18+ 카테고리"+
+	"갤러리의 18+ 카테고리를 열 때 나이를 묻지 않아요"+
 	"저장하지 못했어요"+
 	"룩으로 돌아가기"+
 	"보기"+
@@ -4603,6 +4689,9 @@ var textsKo = i18n.NewTexts(""+
 	"연결 테스트"+
 	"다시 테스트"+
 	"연결됐어요. 이제 룩을 만들 수 있어요."+
+	"아직 테스트하지 않음"+
+	"테스트 중…"+
+	"연결하지 못했어요"+
 	"AI 서비스 없음"+
 	"Key는 이 기기의 키체인에만 저장돼요. 요청은 다른 서버를 거치지 않고 기기에서 설정한 서비스로 바로 전송돼요."+
 	"요청은 다른 서버를 거치지 않고 기기에서 내가 운영하는 서버로 바로 전송되며, 비용이 들지 않아요."+
@@ -4621,6 +4710,7 @@ var textsKo = i18n.NewTexts(""+
 	"포즈"+
 	"의상"+
 	"얼굴"+
+	"배경 소재"+
 	"갤러리 이미지는 사용할 때만 하나씩 가져와요. 앱에 포함하거나 재배포하지 않아요."+
 	"먼저 API Key를 입력하세요."+
 	"서비스가 Key를 거부했어요. Key가 올바른지, 이 모델을 사용할 수 있는지 확인하세요."+
@@ -4749,6 +4839,8 @@ var textsKo = i18n.NewTexts(""+
 		62,
 		25,
 		25,
+		16,
+		67,
 		25,
 		22,
 		6,
@@ -4790,6 +4882,9 @@ var textsKo = i18n.NewTexts(""+
 		16,
 		16,
 		52,
+		29,
+		16,
+		25,
 		19,
 		151,
 		135,
@@ -4808,6 +4903,7 @@ var textsKo = i18n.NewTexts(""+
 		6,
 		6,
 		6,
+		13,
 		113,
 		34,
 		112,
@@ -4939,6 +5035,8 @@ var textsPtBR = i18n.NewTexts(""+
 	"Isto mostra conteúdo adulto, apenas para maiores de 18 anos."+
 	"Tenho 18 anos ou mais"+
 	"Tenho menos de 18 anos"+
+	"Categorias 18+"+
+	"Mostrar as categorias 18+ das galerias sem perguntar a idade"+
 	"Não foi possível salvar"+
 	"Voltar ao look"+
 	"Mostrar"+
@@ -4980,6 +5078,9 @@ var textsPtBR = i18n.NewTexts(""+
 	"Testar conexão"+
 	"Testar de novo"+
 	"Conectado; você já pode criar looks."+
+	"Ainda não testado"+
+	"Testando…"+
+	"Não foi possível conectar"+
 	"Nenhum serviço de IA"+
 	"A chave fica nas chaves seguras deste dispositivo. As solicitações vão direto do seu dispositivo para o serviço que você configurou, sem passar por nenhum outro servidor."+
 	"As solicitações vão direto do seu dispositivo para o seu próprio servidor, sem passar por nenhum outro servidor e sem custo."+
@@ -4998,6 +5099,7 @@ var textsPtBR = i18n.NewTexts(""+
 	"Poses"+
 	"Roupas"+
 	"Rostos"+
+	"Cenários"+
 	"Cada imagem das galerias só é baixada quando você a usa; o app não as inclui nem as redistribui."+
 	"Digite a chave de API primeiro."+
 	"O serviço recusou a chave. Verifique se ela está correta e se pode usar este modelo."+
@@ -5126,6 +5228,8 @@ var textsPtBR = i18n.NewTexts(""+
 		61,
 		21,
 		22,
+		14,
+		60,
 		25,
 		14,
 		7,
@@ -5167,6 +5271,9 @@ var textsPtBR = i18n.NewTexts(""+
 		15,
 		14,
 		38,
+		18,
+		11,
+		27,
 		21,
 		175,
 		128,
@@ -5185,6 +5292,7 @@ var textsPtBR = i18n.NewTexts(""+
 		5,
 		6,
 		6,
+		9,
 		100,
 		31,
 		86,
@@ -5316,6 +5424,8 @@ var textsRu = i18n.NewTexts(""+
 	"Здесь контент для взрослых — только для тех, кому 18 и больше."+
 	"Мне есть 18"+
 	"Мне нет 18"+
+	"Категории 18+"+
+	"Показывать категории 18+ в галереях, не спрашивая возраст"+
 	"Не удалось сохранить"+
 	"Назад к образу"+
 	"Показать"+
@@ -5357,6 +5467,9 @@ var textsRu = i18n.NewTexts(""+
 	"Проверить подключение"+
 	"Проверить снова"+
 	"Подключено — можно создавать образы."+
+	"Ещё не проверено"+
+	"Проверка…"+
+	"Не удалось подключиться"+
 	"ИИ-сервис не настроен"+
 	"Ключ хранится в связке ключей этого устройства. Запросы идут напрямую с вашего устройства в настроенный сервис, без других серверов."+
 	"Запросы идут напрямую с вашего устройства на ваш собственный сервер, без других серверов и бесплатно."+
@@ -5375,6 +5488,7 @@ var textsRu = i18n.NewTexts(""+
 	"Позы"+
 	"Наряды"+
 	"Лица"+
+	"Фоны"+
 	"Каждое изображение из галереи загружается, только когда вы его используете; приложение не содержит и не распространяет их."+
 	"Сначала введите API-ключ."+
 	"Сервис отклонил ключ. Проверьте, что он верный и даёт доступ к этой модели."+
@@ -5503,6 +5617,8 @@ var textsRu = i18n.NewTexts(""+
 		110,
 		18,
 		16,
+		22,
+		103,
 		38,
 		26,
 		16,
@@ -5544,6 +5660,9 @@ var textsRu = i18n.NewTexts(""+
 		41,
 		29,
 		68,
+		30,
+		19,
+		44,
 		39,
 		243,
 		186,
@@ -5561,6 +5680,7 @@ var textsRu = i18n.NewTexts(""+
 		16,
 		8,
 		12,
+		8,
 		8,
 		225,
 		43,
@@ -5693,6 +5813,8 @@ var textsZhHans = i18n.NewTexts(""+
 	"这里是成人内容，仅限 18 岁及以上的用户浏览。"+
 	"已满 18 岁"+
 	"未满 18 岁"+
+	"18+ 分类"+
+	"打开图库的 18+ 分类时不再询问年龄"+
 	"保存失败"+
 	"返回编辑"+
 	"作品筛选"+
@@ -5734,6 +5856,9 @@ var textsZhHans = i18n.NewTexts(""+
 	"测试连接"+
 	"重新测试"+
 	"连接成功，可以开始生成了"+
+	"尚未测试"+
+	"正在测试…"+
+	"连接失败"+
 	"未配置 AI 服务"+
 	"Key 只保存在本机系统钥匙串，不经过任何第三方服务器；请求从你的设备直接发往你配置的服务。"+
 	"请求从你的设备直接发往你自己部署的服务，不经过任何第三方服务器，也不产生费用。"+
@@ -5752,6 +5877,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"姿势素材"+
 	"服装素材"+
 	"人脸素材"+
+	"背景素材"+
 	"每张图库图片只在你使用时单独获取，App 不内置、也不转发这些图片。"+
 	"请先填写 API Key。"+
 	"服务拒绝了这个 Key，请检查它是否正确、能否使用这个模型。"+
@@ -5880,6 +6006,8 @@ var textsZhHans = i18n.NewTexts(""+
 		64,
 		13,
 		13,
+		10,
+		47,
 		12,
 		12,
 		12,
@@ -5921,6 +6049,9 @@ var textsZhHans = i18n.NewTexts(""+
 		12,
 		12,
 		36,
+		12,
+		15,
+		12,
 		19,
 		130,
 		117,
@@ -5935,6 +6066,7 @@ var textsZhHans = i18n.NewTexts(""+
 		12,
 		12,
 		9,
+		12,
 		12,
 		12,
 		12,
@@ -6070,6 +6202,8 @@ var textsZhHant = i18n.NewTexts(""+
 	"這裡是成人內容，僅限 18 歲以上的使用者瀏覽。"+
 	"已滿 18 歲"+
 	"未滿 18 歲"+
+	"18+ 分類"+
+	"開啟圖庫的 18+ 分類時不再詢問年齡"+
 	"儲存失敗"+
 	"返回編輯"+
 	"作品篩選"+
@@ -6111,6 +6245,9 @@ var textsZhHant = i18n.NewTexts(""+
 	"測試連線"+
 	"重新測試"+
 	"連線成功，可以開始生成了"+
+	"尚未測試"+
+	"正在測試…"+
+	"連線失敗"+
 	"未設定 AI 服務"+
 	"Key 只儲存在本機的系統鑰匙圈，不經過任何第三方伺服器；請求從你的裝置直接傳送到你設定的服務。"+
 	"請求從你的裝置直接傳送到你自己架設的伺服器，不經過任何第三方伺服器，也不產生費用。"+
@@ -6129,6 +6266,7 @@ var textsZhHant = i18n.NewTexts(""+
 	"姿勢素材"+
 	"服裝素材"+
 	"臉孔素材"+
+	"背景素材"+
 	"每張圖庫圖片只在你使用時個別取得，App 不內建、也不轉發這些圖片。"+
 	"請先輸入 API Key。"+
 	"服務拒絕了這個 Key，請檢查它是否正確、能否使用這個模型。"+
@@ -6257,6 +6395,8 @@ var textsZhHant = i18n.NewTexts(""+
 		64,
 		13,
 		13,
+		10,
+		47,
 		12,
 		12,
 		12,
@@ -6298,6 +6438,9 @@ var textsZhHant = i18n.NewTexts(""+
 		12,
 		12,
 		36,
+		12,
+		15,
+		12,
 		19,
 		136,
 		123,
@@ -6312,6 +6455,7 @@ var textsZhHant = i18n.NewTexts(""+
 		12,
 		12,
 		9,
+		12,
 		12,
 		12,
 		12,
@@ -8010,6 +8154,20 @@ func AdultNo(cx *core.Scope) string { return For(cx).AdultNo() }
 // AdultNo is the package's AdultNo in the language of msgs.
 func (msgs Messages) AdultNo() string { return msgs.text(textAdultNo) }
 
+// AdultSetting says "18+ categories"
+// in the language the app shows under cx.
+func AdultSetting(cx *core.Scope) string { return For(cx).AdultSetting() }
+
+// AdultSetting is the package's AdultSetting in the language of msgs.
+func (msgs Messages) AdultSetting() string { return msgs.text(textAdultSetting) }
+
+// AdultSettingDetail says "Show the galleries' 18+ categories without asking your age"
+// in the language the app shows under cx.
+func AdultSettingDetail(cx *core.Scope) string { return For(cx).AdultSettingDetail() }
+
+// AdultSettingDetail is the package's AdultSettingDetail in the language of msgs.
+func (msgs Messages) AdultSettingDetail() string { return msgs.text(textAdultSettingDetail) }
+
 // SaveFailed says "Couldn't save"
 // in the language the app shows under cx.
 func SaveFailed(cx *core.Scope) string { return For(cx).SaveFailed() }
@@ -8381,6 +8539,27 @@ func ConnectionOK(cx *core.Scope) string { return For(cx).ConnectionOK() }
 // ConnectionOK is the package's ConnectionOK in the language of msgs.
 func (msgs Messages) ConnectionOK() string { return msgs.text(textConnectionOK) }
 
+// ConnectionUntested says "Not tested yet"
+// in the language the app shows under cx.
+func ConnectionUntested(cx *core.Scope) string { return For(cx).ConnectionUntested() }
+
+// ConnectionUntested is the package's ConnectionUntested in the language of msgs.
+func (msgs Messages) ConnectionUntested() string { return msgs.text(textConnectionUntested) }
+
+// ConnectionTesting says "Testing…"
+// in the language the app shows under cx.
+func ConnectionTesting(cx *core.Scope) string { return For(cx).ConnectionTesting() }
+
+// ConnectionTesting is the package's ConnectionTesting in the language of msgs.
+func (msgs Messages) ConnectionTesting() string { return msgs.text(textConnectionTesting) }
+
+// ConnectionFailedShort says "Couldn't connect"
+// in the language the app shows under cx.
+func ConnectionFailedShort(cx *core.Scope) string { return For(cx).ConnectionFailedShort() }
+
+// ConnectionFailedShort is the package's ConnectionFailedShort in the language of msgs.
+func (msgs Messages) ConnectionFailedShort() string { return msgs.text(textConnectionFailedShort) }
+
 // ConnectionFailed says "Couldn't connect: {error}"
 // in the language the app shows under cx.
 //
@@ -8718,6 +8897,13 @@ func SourcesFace(cx *core.Scope) string { return For(cx).SourcesFace() }
 
 // SourcesFace is the package's SourcesFace in the language of msgs.
 func (msgs Messages) SourcesFace() string { return msgs.text(textSourcesFace) }
+
+// SourcesBackgrounds says "Backgrounds"
+// in the language the app shows under cx.
+func SourcesBackgrounds(cx *core.Scope) string { return For(cx).SourcesBackgrounds() }
+
+// SourcesBackgrounds is the package's SourcesBackgrounds in the language of msgs.
+func (msgs Messages) SourcesBackgrounds() string { return msgs.text(textSourcesBackgrounds) }
 
 // SourcesFooter says "Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them."
 // in the language the app shows under cx.

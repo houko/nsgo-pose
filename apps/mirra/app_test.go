@@ -213,12 +213,13 @@ func TestProvidersKeepTheirSettings(t *testing.T) {
 	app.Find("id:get-key")
 	app.Press("id:provider")
 	app.Press("role:option Google Gemini")
-	app.WaitFor("text:No AI service", wait)
+	app.WaitFor("id:conn-unconfigured", wait)
 	app.Type("id:api-key", "g-key")
-	app.WaitFor("text:Google Gemini · not tested", wait)
+	app.WaitFor("id:conn-untested", wait)
 	app.Press("id:provider")
 	app.Press("role:option /^OpenAI$/")
-	app.WaitFor("text:OpenAI · not tested", wait)
+	app.WaitFor("id:service-header >> text:OpenAI", wait)
+	app.Find("id:conn-untested")
 	app.Press("id:provider")
 	app.Press("role:option stable-diffusion.cpp")
 	if app.Exists("id:get-key") {
@@ -343,7 +344,10 @@ func TestConnectionTestReportsFailure(t *testing.T) {
 	app.Press("text:Me")
 	app.Press("id:test-connection")
 	app.WaitFor("id:conn-failed", wait)
-	app.Find("text:/can't connect/")
+	app.Find("id:conn-failed-short")
+	if got := app.Find("id:conn-failed").Text; !strings.Contains(got, "refused the key") {
+		t.Errorf("the reason under the header is %q", got)
+	}
 }
 
 // TestAdultChipAsksAge keeps the adults-only outfits out of sight until the user says they are 18 or older.
@@ -734,4 +738,55 @@ func TestBackgroundTab(t *testing.T) {
 	app.WaitFor("id:clear-background", wait)
 	app.Press("label:Indoor · " + bg.ID)
 	app.WaitFor("text:No background", wait)
+}
+
+// TestAdultSetting turns the galleries' 18+ categories on in the settings, which asks the age once, and off again, which forgets the answer and leaves an 18+ category on show.
+func TestAdultSetting(t *testing.T) {
+	app, _ := start(t, &fakeAPI{}, "k", nsgotest.PendingAlerts())
+	app.Press("text:Me")
+	if app.Find("id:adult-switch").Props.Checked {
+		t.Fatal("the 18+ switch is on before the user was asked")
+	}
+	app.Press("id:adult-switch")
+	app.Answer(0)
+	if app.Find("id:adult-switch").Props.Checked {
+		t.Error("answering under 18 turned the switch on")
+	}
+	app.Press("id:adult-switch")
+	app.Answer(1)
+	app.WaitUntil(wait, func() bool { return app.Find("id:adult-switch").Props.Checked })
+	if !isStored(app.Storage(), keyAdult) {
+		t.Error("the answer was not kept")
+	}
+	// With the answer kept, the wardrobe's 18+ chip shows its outfits without asking.
+	app.Press("text:Wardrobe")
+	app.Press("id:closet-gallery")
+	app.WaitFor(outfitKnit, wait)
+	app.Press("id:chip-adult")
+	app.WaitFor(outfitLingerie, wait)
+	app.Press("text:Me")
+	app.Press("id:adult-switch")
+	app.WaitUntil(wait, func() bool { return !app.Find("id:adult-switch").Props.Checked })
+	if isStored(app.Storage(), keyAdult) {
+		t.Error("turning the switch off kept the answer")
+	}
+	app.Press("text:Wardrobe")
+	app.WaitFor(outfitKnit, wait)
+	if app.Exists(outfitLingerie) {
+		t.Error("an 18+ category stayed on show after the switch was turned off")
+	}
+}
+
+// TestServiceHeader shows the chosen provider with the connection's state, untested until the test passes.
+func TestServiceHeader(t *testing.T) {
+	app, _ := start(t, &fakeAPI{}, "k", nsgotest.Size(1440, 1000))
+	app.Press("id:open-settings")
+	app.Press("id:settings-nav-service")
+	app.WaitFor("id:service-header", wait)
+	app.Find("id:conn-untested")
+	app.Press("id:test-connection")
+	app.WaitFor("id:conn-ok", wait)
+	if app.Exists("id:conn-untested") {
+		t.Error("the header still says untested after the test passed")
+	}
 }

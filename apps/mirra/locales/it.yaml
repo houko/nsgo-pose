@@ -117,6 +117,8 @@ adultConfirm: Hai almeno 18 anni?
 adultConfirmBody: Qui ci sono contenuti per adulti, riservati a chi ha almeno 18 anni.
 adultYes: Ho almeno 18 anni
 adultNo: Ho meno di 18 anni
+adultSetting: Categorie 18+
+adultSettingDetail: Mostra le categorie 18+ delle gallerie senza chiedere l’età
 saveFailed: Impossibile salvare
 backToEdit: Torna al look
 worksFilter: Mostra
@@ -156,6 +158,9 @@ size: Dimensioni
 testConnection: Prova connessione
 testAgain: Riprova
 connectionOK: Connesso; puoi iniziare a creare look.
+connectionUntested: Non ancora testato
+connectionTesting: Test in corso…
+connectionFailedShort: Connessione non riuscita
 connectionFailed: "Impossibile connettersi: {error}"
 statusUnconfigured: Nessun servizio IA
 statusConnected: "{service} · connesso"
@@ -179,6 +184,7 @@ license: Licenza
 sourcesPose: Pose
 sourcesOutfit: Outfit
 sourcesFace: Visi
+sourcesBackgrounds: Sfondi
 sourcesFooter: Ogni immagine delle gallerie viene scaricata solo quando la usi; l’app non le include né le ridistribuisce.
 errNoKey: Inserisci prima la chiave API.
 errKeyRefused: Il servizio ha rifiutato la chiave. Verifica che sia corretta e che possa usare questo modello.

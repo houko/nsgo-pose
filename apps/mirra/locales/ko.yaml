@@ -117,6 +117,8 @@ adultConfirm: 만 18세 이상인가요?
 adultConfirmBody: 성인 콘텐츠예요. 만 18세 이상만 볼 수 있어요.
 adultYes: 만 18세 이상이에요
 adultNo: 만 18세 미만이에요
+adultSetting: 18+ 카테고리
+adultSettingDetail: 갤러리의 18+ 카테고리를 열 때 나이를 묻지 않아요
 saveFailed: 저장하지 못했어요
 backToEdit: 룩으로 돌아가기
 worksFilter: 보기
@@ -156,6 +158,9 @@ size: 크기
 testConnection: 연결 테스트
 testAgain: 다시 테스트
 connectionOK: 연결됐어요. 이제 룩을 만들 수 있어요.
+connectionUntested: 아직 테스트하지 않음
+connectionTesting: 테스트 중…
+connectionFailedShort: 연결하지 못했어요
 connectionFailed: "연결하지 못했어요: {error}"
 statusUnconfigured: AI 서비스 없음
 statusConnected: "{service} · 연결됨"
@@ -179,6 +184,7 @@ license: 라이선스
 sourcesPose: 포즈
 sourcesOutfit: 의상
 sourcesFace: 얼굴
+sourcesBackgrounds: 배경 소재
 sourcesFooter: 갤러리 이미지는 사용할 때만 하나씩 가져와요. 앱에 포함하거나 재배포하지 않아요.
 errNoKey: 먼저 API Key를 입력하세요.
 errKeyRefused: 서비스가 Key를 거부했어요. Key가 올바른지, 이 모델을 사용할 수 있는지 확인하세요.

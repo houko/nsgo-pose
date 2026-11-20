@@ -131,6 +131,8 @@ adultConfirm: 你已年满 18 岁吗？
 adultConfirmBody: 这里是成人内容，仅限 18 岁及以上的用户浏览。
 adultYes: 已满 18 岁
 adultNo: 未满 18 岁
+adultSetting: 18+ 分类
+adultSettingDetail: 打开图库的 18+ 分类时不再询问年龄
 saveFailed: 保存失败
 backToEdit: 返回编辑
 worksFilter: 作品筛选
@@ -174,6 +176,9 @@ size: 尺寸
 testConnection: 测试连接
 testAgain: 重新测试
 connectionOK: 连接成功，可以开始生成了
+connectionUntested: 尚未测试
+connectionTesting: 正在测试…
+connectionFailedShort: 连接失败
 connectionFailed: 连接失败：{error}
 statusUnconfigured: 未配置 AI 服务
 statusConnected: "{service} · 已连接"
@@ -199,6 +204,7 @@ license: 开源许可
 sourcesPose: 姿势素材
 sourcesOutfit: 服装素材
 sourcesFace: 人脸素材
+sourcesBackgrounds: 背景素材
 sourcesFooter: 每张图库图片只在你使用时单独获取，App 不内置、也不转发这些图片。
 errNoKey: 请先填写 API Key。
 errKeyRefused: 服务拒绝了这个 Key，请检查它是否正确、能否使用这个模型。

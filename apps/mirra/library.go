@@ -675,6 +675,11 @@ func (s *studio) toggleAdult(k Kind) {
 		show(true)
 		return
 	}
+	s.confirmAdult(func() { show(true) })
+}
+
+// confirmAdult asks the user whether they are 18 or older and, if they say so, keeps the answer and calls then.
+func (s *studio) confirmAdult(then func()) {
 	t := locales.For(s.cx)
 	base.ShowAlertDialog(s.cx, base.AlertDialog{Title: t.AdultConfirm(), Description: t.AdultConfirmBody(), Actions: []core.AlertAction{
 		{Label: t.AdultNo(), Role: core.AlertCancel}, {Label: t.AdultYes()},
@@ -686,6 +691,23 @@ func (s *studio) toggleAdult(k Kind) {
 		if err := s.cx.Storage().SetItem(keyAdult, "1"); err != nil {
 			s.toastError(t.SaveFailed(), err)
 		}
-		show(true)
+		if then != nil {
+			then()
+		}
 	})
+}
+
+// setAdultOK is the settings' 18+ switch: on asks the age question, off forgets the answer and leaves any 18+ category on show, so the galleries ask again.
+func (s *studio) setAdultOK(on bool) {
+	if on {
+		s.confirmAdult(nil)
+		return
+	}
+	s.adultOK.Set(false)
+	s.cx.Storage().RemoveItem(keyAdult)
+	for k := range s.adult {
+		if s.adult[k].Get() {
+			s.toggleAdult(Kind(k))
+		}
+	}
 }

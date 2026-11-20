@@ -161,6 +161,8 @@ adultConfirm: Are you 18 or older?
 adultConfirmBody: This shows adult content, for people 18 and older only.
 adultYes: "I'm 18 or older"
 adultNo: "I'm under 18"
+adultSetting: 18+ categories
+adultSettingDetail: Show the galleries' 18+ categories without asking your age
 saveFailed: Couldn't save
 backToEdit: Back to the look
 worksFilter: Show
@@ -208,6 +210,9 @@ size: Size
 testConnection: Test connection
 testAgain: Test again
 connectionOK: Connected; you can start making looks.
+connectionUntested: Not tested yet
+connectionTesting: Testing…
+connectionFailedShort: Couldn't connect
 connectionFailed:
   message: "Couldn't connect: {error}"
   description: Under Test connection; error says what went wrong, with what the service said on a line of its own.
@@ -243,6 +248,7 @@ license: License
 sourcesPose: Poses
 sourcesOutfit: Outfits
 sourcesFace: Faces
+sourcesBackgrounds: Backgrounds
 sourcesFooter: Each gallery image is fetched only when you use it; the app neither bundles nor redistributes them.
 errNoKey: Enter the API key first.
 errKeyRefused: The service refused the key. Check that it is right and may use this model.
