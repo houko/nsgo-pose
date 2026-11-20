@@ -21,6 +21,7 @@ const posePage = `<!doctype html><html><body><script>
 const META={"lines": ["全身1人・標準系", "2人絡み"]};
 const D=[{"id": "full_sexy_P000_front", "系統": "全身1人・セクシー系", "ポーズ番号": "P000", "分類": "立ち", "ポーズ名": "S字立ち", "アングル": "正面", "サムネ": "thumbs/s.jpg", "原寸": "img/s.png"},
 {"id": "full_std_P001_front", "系統": "全身1人・標準系", "ポーズ番号": "P001", "分類": "立ち", "ポーズ名": "片手を腰に当てて立つ", "アングル": "正面", "サムネ": "thumbs/full_std_P001_front.jpg", "原寸": "img/full_std_P001_front.png"},
+{"id": "full_std_P001_side", "系統": "全身1人・標準系", "ポーズ番号": "P001", "分類": "立ち", "ポーズ名": "片手を腰に当てて立つ", "アングル": "横", "サムネ": "thumbs/full_std_P001_side.jpg", "原寸": "img/full_std_P001_side.png"},
 {"id": "upper_P002_side", "系統": "上半身1人", "ポーズ番号": "P002", "分類": "ひねり", "ポーズ名": "振り返る", "アングル": "横", "サムネ": "thumbs/upper_P002_side.jpg", "原寸": "img/upper_P002_side.png"},
 {"id": "pair_P003_front", "系統": "2人絡み", "ポーズ番号": "P003", "分類": "密着", "ポーズ名": "x", "アングル": "正面", "サムネ": "thumbs/pair.jpg", "原寸": "img/pair.png"},
 {"id": "full_sexy_P004_front", "系統": "全身1人・セクシー系", "ポーズ番号": "P004", "分類": "セクシー・露骨寄り系", "ポーズ名": "x", "アングル": "正面", "サムネ": "thumbs/x.jpg", "原寸": "img/x.png"}];

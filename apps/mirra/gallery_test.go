@@ -24,7 +24,7 @@ func TestFetchCatalogs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := ids(poses.Items), []string{"full_std_P001_front", "upper_P002_side", "full_sexy_P000_front", "full_sexy_P004_front", "pair_P003_front"}; !slices.Equal(got, want) {
+	if got, want := ids(poses.Items), []string{"full_std_P001_front", "full_std_P001_side", "upper_P002_side", "full_sexy_P000_front", "full_sexy_P004_front", "pair_P003_front"}; !slices.Equal(got, want) {
 		t.Errorf("pose ids = %v, want %v", got, want)
 	}
 	if want := []string{"正面", "横"}; !slices.Equal(poses.Groups, want) {
@@ -104,5 +104,27 @@ func TestAdultPose(t *testing.T) {
 		if got := adultPose(c.line, c.category); got != c.adult {
 			t.Errorf("adultPose(%q, %q) = %v, want %v", c.line, c.category, got, c.adult)
 		}
+	}
+}
+
+func TestPoseAngles(t *testing.T) {
+	_, sites := newServer(t, &fakeAPI{})
+	poses, err := FetchCatalog(context.Background(), http.DefaultClient, sites, KindPose)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := ids(poses.Angles(poses.Items[0])); !slices.Equal(got, []string{"full_std_P001_front", "full_std_P001_side"}) {
+		t.Errorf("angles of P001 = %v", got)
+	}
+	if got := poses.Angles(Item{ID: "an outfit"}); got != nil {
+		t.Errorf("an item of no set has angles %v", got)
+	}
+	// Angles come in the chips' order, whatever the gallery's.
+	c := Catalog{Items: []Item{{ID: "low", Set: "a", Group: "下から"}, {ID: "b", Set: "b", Group: "正面"}, {ID: "front", Set: "a", Group: "正面"}, {ID: "side", Set: "a", Group: "横"}}}
+	if got := ids(c.Angles(c.Items[0])); !slices.Equal(got, []string{"front", "side", "low"}) {
+		t.Errorf("angles = %v", got)
+	}
+	if poseSet("全身1人・標準系", "") != "" {
+		t.Error("a pose with no number is in a set")
 	}
 }

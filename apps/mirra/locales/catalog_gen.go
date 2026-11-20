@@ -150,6 +150,7 @@ const (
 	textZoomOut
 	textFiltersLabel
 	textAll
+	textAllAngles
 	textAngleFront
 	textAngleThreeQuarter
 	textAngleSide
@@ -315,6 +316,7 @@ var keyOfText = [numTexts]string{
 	"zoomOut",
 	"filtersLabel",
 	"all",
+	"allAngles",
 	"angleFront",
 	"angleThreeQuarter",
 	"angleSide",
@@ -478,6 +480,7 @@ var textsEn = i18n.NewTexts(""+
 	"Zoom out"+
 	"Galleries"+
 	"All"+
+	"All angles"+
 	"Front"+
 	"Three-quarter"+
 	"Side"+
@@ -638,6 +641,7 @@ var textsEn = i18n.NewTexts(""+
 		8,
 		9,
 		3,
+		10,
 		5,
 		13,
 		4,
@@ -801,6 +805,7 @@ var textsZhHans = i18n.NewTexts(""+
 	"缩小"+
 	"素材库"+
 	"全部"+
+	"全部角度"+
 	"正面"+
 	"斜侧"+
 	"侧面"+
@@ -961,6 +966,7 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		9,
 		6,
+		12,
 		6,
 		6,
 		6,
@@ -1783,6 +1789,13 @@ func (msgs Messages) AllCount(n int) string {
 		}
 	}
 }
+
+// AllAngles says "All angles"
+// in the language the app shows under cx.
+func AllAngles(cx *core.Scope) string { return For(cx).AllAngles() }
+
+// AllAngles is the package's AllAngles in the language of msgs.
+func (msgs Messages) AllAngles() string { return msgs.text(textAllAngles) }
 
 // AngleFront says "Front"
 // in the language the app shows under cx.
