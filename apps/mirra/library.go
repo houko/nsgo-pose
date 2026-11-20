@@ -533,6 +533,11 @@ func (s *studio) statusBadge(cx *core.Scope) core.Node {
 	}
 }
 
+// surpriseButton puts a look together at random.
+func (s *studio) surpriseButton(cx *core.Scope) core.Node {
+	return ui.IconButton{Icon: lucide.Dices, Label: locales.For(cx).Surprise(), Variant: ui.IconButtonRaised, TestID: "surprise", OnPress: s.surprise}
+}
+
 // generateButton starts the look, or opens the service's settings while none is set up.
 func (s *studio) generateButton(cx *core.Scope) core.Node {
 	t := locales.For(cx)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Surprise me, the dice beside the studio's title on the phone and the canvas's zoom on the desktop, chooses a face, an outfit and a pose at random from what each gallery shows, adults-only items only where they are turned on.
+
 ## 0.10.0 - 2026-11-20
 
 - All angles, beside the pose's angle chips, makes one sheet of the look from every camera angle of the pose side by side, the same person and outfit in each, on a landscape canvas. The angles go to the image service joined into one reference, which any service takes; a work keeps its angles, and Generate again makes the sheet again. Two-person poses make one picture as before.

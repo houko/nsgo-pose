@@ -135,7 +135,7 @@ func (s *studio) homePage(cx *core.Scope) base.NavPage {
 	}
 	top := core.View{Style: core.Style{Position: core.Absolute, Top: core.Pt(0), Left: core.Pt(16), Right: core.Pt(16), Direction: core.Row,
 		JustifyContent: core.JustifySpaceBetween, AlignItems: core.AlignCenter, PaddingEnv: core.EnvEdges{Top: core.EnvSafeArea}, Padding: core.Edges{Top: 12}},
-		Children: []core.Node{brandPill(cx), s.statusBadge(cx)}}
+		Children: []core.Node{brandPill(cx), core.View{Style: core.Style{Direction: core.Row, AlignItems: core.AlignCenter, Gap: 8}, Children: []core.Node{s.surpriseButton(cx), s.statusBadge(cx)}}}}
 	var cards []core.Node
 	for _, k := range steps {
 		cards = append(cards, s.elementCard(cx, k))

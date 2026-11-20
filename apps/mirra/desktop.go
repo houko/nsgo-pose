@@ -184,7 +184,7 @@ func (s *studio) previewCanvas(cx *core.Scope) core.Node {
 				return t.EyebrowPreviewGroup(groupLabel(t, c.Group))
 			}
 			return t.EyebrowPreview()
-		}, func() string { return lookTitle(t, look()) }, func() string { return lookLine(t, look()) }, nil, zoom),
+		}, func() string { return lookTitle(t, look()) }, func() string { return lookLine(t, look()) }, nil, s.surpriseButton(cx), zoom),
 		stage,
 	)
 }
