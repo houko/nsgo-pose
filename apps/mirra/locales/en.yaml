@@ -260,3 +260,9 @@ errServer: The service had a problem. Try again later.
 errTimeout: The service took too long to answer. Try again.
 errNetwork: Couldn't reach the service. Check the network and the address.
 errNoImage: The service answered without a picture. Try again, or change the look.
+viewFullScreen: View full screen
+previousWork: Previous work
+nextWork: Next work
+workPosition:
+  message: "{n, number} / {count, number}"
+  description: Which of the shown works is on show, over the full-screen picture, as "3 / 12".

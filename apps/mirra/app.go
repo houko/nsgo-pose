@@ -116,6 +116,8 @@ type studio struct {
 	busy   *core.Signal[bool]
 	cancel context.CancelFunc
 	shot   *core.Signal[*shot]
+	// fullScreen shows the picture on show over the whole window.
+	fullScreen *core.Signal[bool]
 	zoom   *core.Signal[int]
 
 	// provider is the chosen AI service's ID, and settings what the user set for each one.
@@ -186,6 +188,7 @@ func (a App) Root(cx *core.Scope) core.Node {
 							Else: s.phone,
 						},
 						core.Show{When: s.busy.Get, Then: s.generatingScreen},
+						core.Show{When: func() bool { return s.fullScreen.Get() && s.shot.Get() != nil }, Then: s.viewer},
 					}}
 				})
 			}),
@@ -233,6 +236,7 @@ func newStudio(cx *core.Scope, a App) *studio {
 		style:         core.NewSignal(cx, storedStyle(store)),
 		busy:          core.NewSignal(cx, false),
 		shot:          core.NewSignal[*shot](cx, nil),
+		fullScreen:    core.NewSignal(cx, false),
 		zoom:          core.NewSignal(cx, 100),
 		provider:      core.NewSignal(cx, providerByID(chosen).ID),
 		settings:      settings,
@@ -457,6 +461,7 @@ func (s *studio) cancelGenerating() {
 // showShot puts a picture on show: in the desktop's canvas, or as the phone studio's result page.
 func (s *studio) showShot(sh *shot) {
 	s.shot.Set(sh)
+	s.fullScreen.Set(false)
 	s.section.Set(sectionStudio)
 	if !s.wide() {
 		s.studioNav.SetRoutes(route{page: pageHome}, route{page: pageShot})
@@ -466,13 +471,17 @@ func (s *studio) showShot(sh *shot) {
 // closeShot leaves the picture on show and goes back to the look.
 func (s *studio) closeShot() {
 	s.shot.Set(nil)
+	s.fullScreen.Set(false)
 	if !s.wide() {
 		s.studioNav.SetRoutes(route{page: pageHome})
 	}
 }
 
 // openWork shows a saved work with the look it was made from, which Generate again starts from.
-func (s *studio) openWork(w work) {
+func (s *studio) openWork(w work) { s.showShot(s.workShot(w)) }
+
+// workShot chooses the look a saved work was made from and returns the work as the shot to show.
+func (s *studio) workShot(w work) *shot {
 	for k, it := range map[Kind]*Item{KindFace: w.Face, KindCostume: w.Costume, KindPose: w.Pose} {
 		if it != nil {
 			s.chosen[k].Set(it)
@@ -483,7 +492,7 @@ func (s *studio) openWork(w work) {
 	s.sheet.Set(len(w.Views) > 1)
 	s.setStyle(w.Style)
 	saved := w
-	s.showShot(&shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Background: w.Background, Views: w.Views, Style: w.Style}, Saved: &saved})
+	return &shot{Path: w.Path, Req: Request{Face: w.Face, Costume: w.Costume, Pose: w.Pose, Background: w.Background, Views: w.Views, Style: w.Style}, Saved: &saved}
 }
 
 // saveShot keeps the picture on show in Works, numbered after the others.

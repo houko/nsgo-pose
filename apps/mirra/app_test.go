@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -789,4 +790,94 @@ func TestServiceHeader(t *testing.T) {
 	if app.Exists("id:conn-untested") {
 		t.Error("the header still says untested after the test passed")
 	}
+}
+
+// TestStepThroughWorksAndFullScreen steps from one saved picture to the next as the Works page orders them, by its arrows and the keyboard, and shows the picture full screen with its place among them, closing on Escape; the favorites filter limits the steps to the favorites.
+func TestStepThroughWorksAndFullScreen(t *testing.T) {
+	app := threeWorks(t)
+	app.Press("label:Open No.03")
+	app.WaitFor("text:LOOKBOOK · NO.03", wait)
+	if app.Exists("id:previous-work") {
+		t.Error("the newest work has a previous one")
+	}
+	app.Press("id:next-work")
+	app.WaitFor("text:LOOKBOOK · NO.02", wait)
+	app.Key("right")
+	app.WaitFor("text:LOOKBOOK · NO.01", wait)
+	if app.Exists("id:next-work") {
+		t.Error("the oldest work has a next one")
+	}
+	app.Key("left")
+	app.WaitFor("text:LOOKBOOK · NO.02", wait)
+	app.Key("right")
+	app.WaitFor("text:LOOKBOOK · NO.01", wait)
+
+	app.Press("id:open-full-screen")
+	app.WaitFor("id:full-screen-image", wait)
+	app.WaitFor("text:3 / 3", wait)
+	app.Key("left")
+	app.WaitFor("text:2 / 3", wait)
+	app.Key("escape")
+	app.WaitForGone("id:full-screen-image", wait)
+	app.WaitFor("text:LOOKBOOK · NO.02", wait)
+
+	// With the favorites filter on, only the favorites are stepped through.
+	app.Press("id:favorite")
+	app.Press("id:close-shot")
+	app.Press("text:Works")
+	app.Press("id:works-favorites")
+	app.Press("label:Open No.02")
+	app.WaitFor("text:LOOKBOOK · NO.02", wait)
+	if app.Exists("id:next-work") || app.Exists("id:previous-work") {
+		t.Error("a lone favorite steps to works the filter hides")
+	}
+	app.Press("id:full-screen")
+	app.WaitFor("text:1 / 1", wait)
+	app.Press("id:close-full-screen")
+	app.WaitForGone("id:full-screen-image", wait)
+}
+
+// threeWorks saves three pictures of one look on a phone and shows Works.
+func threeWorks(t *testing.T) *nsgotest.App {
+	t.Helper()
+	app, dir := start(t, &fakeAPI{}, "k")
+	makeLook(t, app)
+	app.Press("id:save-to-works")
+	app.WaitFor("id:saved", wait)
+	// Pictures and works are named by the time, which stands still in a test until it is advanced.
+	for try := 2; try <= 3; try++ {
+		app.Advance(time.Second)
+		app.Press("id:regenerate")
+		app.WaitFor(fmt.Sprintf("text:NEW LOOK · TRY %d", try), wait)
+		app.Advance(time.Second)
+		app.Press("id:save-to-works")
+		app.WaitFor("id:saved", wait)
+	}
+	if ws := works(t, dir); len(ws) != 3 {
+		t.Fatalf("works = %d, want 3", len(ws))
+	}
+	app.Press("id:close-shot")
+	app.Press("text:Works")
+	return app
+}
+
+// TestSwipeAndZoomAWork swipes from one saved picture to the next, on the result and full screen, where a pinch zooms it so a drag moves it instead, until it is zoomed out again. A target cannot make up the gestures, so it runs headless: https://github.com/nsgo-dev/nsgo/issues/1043
+func TestSwipeAndZoomAWork(t *testing.T) {
+	app := threeWorks(t)
+	app.Press("label:Open No.03")
+	app.WaitFor("text:LOOKBOOK · NO.03", wait)
+	app.Pan("id:open-full-screen", core.Point{X: -30}, core.Point{X: -120})
+	app.WaitFor("text:LOOKBOOK · NO.02", wait)
+	app.Pan("id:open-full-screen", core.Point{X: 30}, core.Point{X: 120})
+	app.WaitFor("text:LOOKBOOK · NO.03", wait)
+	app.Press("id:full-screen")
+	app.WaitFor("text:1 / 3", wait)
+	app.Pinch("id:full-screen-stage", 1.4, 2.5)
+	app.Pan("id:full-screen-stage", core.Point{X: -30}, core.Point{X: -150})
+	if !app.Exists("text:1 / 3") {
+		t.Error("a drag on a zoomed picture stepped to another work")
+	}
+	app.Pinch("id:full-screen-stage", 0.6, 0.3)
+	app.Pan("id:full-screen-stage", core.Point{X: -30}, core.Point{X: -150})
+	app.WaitFor("text:2 / 3", wait)
 }

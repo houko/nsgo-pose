@@ -333,3 +333,7 @@ github.com/nsgo-dev/nsgo/base/textview/locales:
   alertImportant: 重要
   alertWarning: 警告
   alertCaution: 注意
+viewFullScreen: 全螢幕檢視
+previousWork: 上一張作品
+nextWork: 下一張作品
+workPosition: "{n, number} / {count, number}"

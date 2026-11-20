@@ -127,17 +127,19 @@ func (s *studio) shotPage(cx *core.Scope) core.Node {
 		if sh == nil {
 			return nil
 		}
-		picture := core.View{Style: fill, Children: []core.Node{
-			core.Image{Source: s.src(sh.Path), ResizeMode: core.Contain, TestID: "shot-image", Label: lookTitle(t, sh.Req), Style: core.Style{Width: core.Pct(100), Height: core.Pct(100)}},
+		s.stepKeys(cx)
+		picture := core.View{Style: fill, Children: append([]core.Node{
+			s.pictureButton(cx, sh),
 			core.View{Style: core.Style{Position: core.Absolute, Top: core.Pt(12), Left: core.Pt(16), Right: core.Pt(16), Direction: core.Row, Gap: 10}, Children: []core.Node{
 				ui.IconButton{Icon: lucide.X, Label: t.Close(), Variant: ui.IconButtonRaised, TestID: "close-shot", OnPress: s.closeShot},
 				core.View{Style: core.Style{FlexGrow: 1}},
+				s.fullScreenButton(cx),
 				ui.IconButton{Icon: lucide.Download, Label: t.Export(), Variant: ui.IconButtonRaised, TestID: "export", OnPress: func() { s.saveFile(cx, sh.Path) }},
 				ui.IconButton{Icon: lucide.Trash, Label: t.Delete(), Variant: ui.IconButtonRaised, TestID: "delete", OnPress: s.discardShot},
 				s.favoriteButton(cx, sh),
 			}},
 			core.View{Style: core.Style{Position: core.Absolute, Right: core.Pt(16), Bottom: core.Pt(12)}, Children: []core.Node{s.usedRefs(cx, sh)}},
-		}}
+		}, s.stepButtons(cx)...)}
 		return core.View{TestID: "shot", StyleFunc: func() core.Style { return fill.Merge(core.Style{Background: colors.Background()}) }, Children: []core.Node{
 			picture,
 			core.View{Style: core.Style{Padding: core.Symmetric(14, 20), Gap: 14, PaddingEnv: core.EnvEdges{Bottom: core.EnvSafeArea}}, Children: []core.Node{
