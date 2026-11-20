@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.8.1 - 2026-11-20
+
 - Two-person poses ask the image model for two adults, with the chosen face and outfit on the main one, where the prompt asked for one person.
 ## 0.8.0 - 2026-11-20
 
