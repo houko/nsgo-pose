@@ -131,6 +131,7 @@ func (s *studio) desktopStudio(cx *core.Scope) core.Node {
 	right := panel(cx, fill.Merge(core.Style{Gap: 12}),
 		core.View{Style: core.Style{Gap: 4}, Children: []core.Node{eyebrow(cx, t.EyebrowThisLook), display(t.LookTitle, 22)}},
 		core.View{Style: core.Style{Gap: 10}, Children: rows},
+		s.styleChips(cx),
 		s.noteInput(cx),
 		core.View{Style: core.Style{FlexGrow: 1}},
 		s.needHint(cx),

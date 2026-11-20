@@ -173,6 +173,12 @@ const (
 	textAdultChip
 	textLoadFailed
 	textRetry
+	textStyleLabel
+	textStyleStudio
+	textStyleStreet
+	textStyleWhite
+	textStyleFilm
+	textStyleAnime
 	textNoteLabel
 	textNotePlaceholder
 	textFavorite
@@ -348,6 +354,12 @@ var keyOfText = [numTexts]string{
 	"adultChip",
 	"loadFailed",
 	"retry",
+	"styleLabel",
+	"styleStudio",
+	"styleStreet",
+	"styleWhite",
+	"styleFilm",
+	"styleAnime",
 	"noteLabel",
 	"notePlaceholder",
 	"favorite",
@@ -521,6 +533,12 @@ var textsEn = i18n.NewTexts(""+
 	"18+"+
 	"Couldn't load the gallery"+
 	"Retry"+
+	"Style"+
+	"Studio"+
+	"Street"+
+	"White backdrop"+
+	"Film"+
+	"Anime"+
 	"Extra instructions"+
 	"Anything else, such as lighting or background"+
 	"Add to favorites"+
@@ -690,6 +708,12 @@ var textsEn = i18n.NewTexts(""+
 		4,
 		3,
 		25,
+		5,
+		5,
+		6,
+		6,
+		14,
+		4,
 		5,
 		18,
 		45,
@@ -864,6 +888,12 @@ var textsZhHans = i18n.NewTexts(""+
 	"18+"+
 	"图库加载失败"+
 	"重试"+
+	"风格"+
+	"影棚"+
+	"街拍"+
+	"白底"+
+	"胶片"+
+	"动漫"+
 	"补充要求"+
 	"补充要求，例如光线、背景"+
 	"收藏"+
@@ -1033,6 +1063,12 @@ var textsZhHans = i18n.NewTexts(""+
 		6,
 		3,
 		18,
+		6,
+		6,
+		6,
+		6,
+		6,
+		6,
 		6,
 		12,
 		36,
@@ -2004,6 +2040,48 @@ func Retry(cx *core.Scope) string { return For(cx).Retry() }
 
 // Retry is the package's Retry in the language of msgs.
 func (msgs Messages) Retry() string { return msgs.text(textRetry) }
+
+// StyleLabel says "Style"
+// in the language the app shows under cx.
+func StyleLabel(cx *core.Scope) string { return For(cx).StyleLabel() }
+
+// StyleLabel is the package's StyleLabel in the language of msgs.
+func (msgs Messages) StyleLabel() string { return msgs.text(textStyleLabel) }
+
+// StyleStudio says "Studio"
+// in the language the app shows under cx.
+func StyleStudio(cx *core.Scope) string { return For(cx).StyleStudio() }
+
+// StyleStudio is the package's StyleStudio in the language of msgs.
+func (msgs Messages) StyleStudio() string { return msgs.text(textStyleStudio) }
+
+// StyleStreet says "Street"
+// in the language the app shows under cx.
+func StyleStreet(cx *core.Scope) string { return For(cx).StyleStreet() }
+
+// StyleStreet is the package's StyleStreet in the language of msgs.
+func (msgs Messages) StyleStreet() string { return msgs.text(textStyleStreet) }
+
+// StyleWhite says "White backdrop"
+// in the language the app shows under cx.
+func StyleWhite(cx *core.Scope) string { return For(cx).StyleWhite() }
+
+// StyleWhite is the package's StyleWhite in the language of msgs.
+func (msgs Messages) StyleWhite() string { return msgs.text(textStyleWhite) }
+
+// StyleFilm says "Film"
+// in the language the app shows under cx.
+func StyleFilm(cx *core.Scope) string { return For(cx).StyleFilm() }
+
+// StyleFilm is the package's StyleFilm in the language of msgs.
+func (msgs Messages) StyleFilm() string { return msgs.text(textStyleFilm) }
+
+// StyleAnime says "Anime"
+// in the language the app shows under cx.
+func StyleAnime(cx *core.Scope) string { return For(cx).StyleAnime() }
+
+// StyleAnime is the package's StyleAnime in the language of msgs.
+func (msgs Messages) StyleAnime() string { return msgs.text(textStyleAnime) }
 
 // NoteLabel says "Extra instructions"
 // in the language the app shows under cx.

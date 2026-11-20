@@ -144,6 +144,7 @@ func (s *studio) homePage(cx *core.Scope) base.NavPage {
 		core.View{Style: fill, Children: []core.Node{hero, top}},
 		core.View{Style: core.Style{Padding: core.Symmetric(12, 16), Gap: 12}, Children: []core.Node{
 			core.View{Style: core.Style{Direction: core.Row, Gap: 10}, Children: cards},
+			s.styleChips(cx),
 			s.needHint(cx),
 			s.generateButton(cx),
 		}},
@@ -177,7 +178,7 @@ func (s *studio) editorPage(cx *core.Scope) base.NavPage {
 		case KindCostume:
 			return next(t.NextPose(), KindPose)
 		}
-		return core.View{Style: core.Style{Gap: 8}, Children: []core.Node{s.needHint(cx), s.generateButton(cx)}}
+		return core.View{Style: core.Style{Gap: 8}, Children: []core.Node{s.styleChips(cx), s.needHint(cx), s.generateButton(cx)}}
 	})
 	return ui.NavPage(cx, core.Screen{TitleFunc: func() string { return stepTitle(t, s.step.Get()) }, Style: fill, Children: []core.Node{
 		core.View{Style: fill.Merge(core.Style{Padding: core.Symmetric(8, 16), Gap: 12}), Children: []core.Node{

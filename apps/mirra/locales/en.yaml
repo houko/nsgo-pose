@@ -100,6 +100,12 @@ groupSexy: Sexy
 adultChip: 18+
 loadFailed: Couldn't load the gallery
 retry: Retry
+styleLabel: Style
+styleStudio: Studio
+styleStreet: Street
+styleWhite: White backdrop
+styleFilm: Film
+styleAnime: Anime
 noteLabel: Extra instructions
 notePlaceholder: Anything else, such as lighting or background
 favorite: Add to favorites

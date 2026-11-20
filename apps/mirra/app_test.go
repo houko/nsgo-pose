@@ -626,3 +626,30 @@ func TestLanguageSetting(t *testing.T) {
 	desk.Find("id:settings-nav-general")
 	desk.Find("id:settings-dialog")
 }
+
+func TestStyleIsSentKeptAndRestored(t *testing.T) {
+	api := &fakeAPI{}
+	app, dir := start(t, api, "k")
+	app.Press("id:style-Street")
+	makeLook(t, app)
+	if p := api.last().Prompt; !strings.Contains(p, "on a city street") {
+		t.Errorf("prompt = %q", p)
+	}
+	if v, _ := app.Storage().GetItem(keyStyle); v != string(StyleStreet) {
+		t.Errorf("stored style = %q", v)
+	}
+	app.Press("id:save-to-works")
+	app.WaitFor("id:saved", wait)
+	if ws := works(t, dir); len(ws) != 1 || ws[0].Style != StyleStreet {
+		t.Fatalf("works = %+v", ws)
+	}
+
+	srv, _ := newServer(t, api)
+	stored := testStorage(srv.URL)
+	stored[keyStyle] = string(StyleFilm)
+	again, _ := start(t, api, "k", nsgotest.Storage(stored))
+	again.WaitFor("id:style-Film", wait)
+	if !again.Find("id:style-Film").Props.Selected || again.Find("id:style-Studio").Props.Selected {
+		t.Error("the stored style is not the one chosen")
+	}
+}

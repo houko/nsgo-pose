@@ -564,6 +564,31 @@ func (s *studio) needHint(cx *core.Scope) core.Node {
 	}}
 }
 
+// styleLabel is a style's name on its chip.
+func styleLabel(t locales.Messages, st Style) string {
+	switch st {
+	case StyleStreet:
+		return t.StyleStreet()
+	case StyleWhite:
+		return t.StyleWhite()
+	case StyleFilm:
+		return t.StyleFilm()
+	case StyleAnime:
+		return t.StyleAnime()
+	}
+	return t.StyleStudio()
+}
+
+// styleChips chooses the look's style.
+func (s *studio) styleChips(cx *core.Scope) core.Node {
+	t := locales.For(cx)
+	var options []chipOption
+	for _, st := range Styles {
+		options = append(options, chipOption{value: string(st), label: styleLabel(t, st)})
+	}
+	return chips(cx, t.StyleLabel(), "style", options, func() string { return string(s.style.Get()) }, func(v string) { s.setStyle(Style(v)) })
+}
+
 func (s *studio) noteInput(cx *core.Scope) core.Node {
 	t := locales.For(cx)
 	return ui.Input{Value: s.note.Get, OnChange: s.note.Set, Multiline: true, Label: t.NoteLabel(), Placeholder: t.NotePlaceholder(), TestID: "note"}

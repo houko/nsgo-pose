@@ -45,8 +45,39 @@ type Request struct {
 	Note    string
 	// Views are every camera angle of a one-person pose, Pose among them, for a sheet that shows the look from each side by side; nil for one picture of Pose.
 	Views []*Item
+	// Style is how the picture is shot or drawn, the studio's photo when "".
+	Style Style
 	// Count is how many pictures to ask for, 1 when 0.
 	Count int
+}
+
+// Style is a look's kind of picture: where it is shot, in what light, or whether it is drawn.
+type Style string
+
+const (
+	StyleStudio Style = ""
+	StyleStreet Style = "street"
+	StyleWhite  Style = "white"
+	StyleFilm   Style = "film"
+	StyleAnime  Style = "anime"
+)
+
+// Styles are the styles in the order the studio offers them.
+var Styles = []Style{StyleStudio, StyleStreet, StyleWhite, StyleFilm, StyleAnime}
+
+// shot says what kind of picture the style makes and where, as "Create one <kind> of <people> in exactly that pose, framing and camera angle, <scene>." reads.
+func (st Style) shot() (kind, scene string) {
+	switch st {
+	case StyleStreet:
+		return "photorealistic candid street-style photo", "on a city street in natural daylight, with a shallow depth of field"
+	case StyleWhite:
+		return "photorealistic e-commerce model photo", "on a pure white background with even lighting, showing the whole outfit"
+	case StyleFilm:
+		return "35mm film photograph", "with warm tones, subtle grain and golden-hour light"
+	case StyleAnime:
+		return "high-quality anime illustration", "with clean line art and soft cel shading, on a simple background"
+	}
+	return "photorealistic photo", "on a plain light studio background"
 }
 
 // Errors the UI explains in the user's language.
@@ -77,7 +108,8 @@ func (r Request) Prompt() string {
 		return r.sheetPrompt()
 	}
 	var b strings.Builder
-	b.WriteString("Image 1 is a faceless gray mannequin showing a pose and a camera angle. Create one photorealistic photo of a single adult person in exactly that pose, framing and camera angle, on a plain light studio background.")
+	kind, scene := r.Style.shot()
+	fmt.Fprintf(&b, "Image 1 is a faceless gray mannequin showing a pose and a camera angle. Create one %s of a single adult person in exactly that pose, framing and camera angle, %s.", kind, scene)
 	n := 2
 	if r.Costume != nil {
 		fmt.Fprintf(&b, " Image %d shows an outfit with no one wearing it: dress the person in exactly that outfit, with the same garments, colors, materials, patterns and details, fitted naturally to their body and pose.", n)
@@ -98,7 +130,7 @@ func (r Request) Prompt() string {
 // sheetPrompt is the prompt of a sheet: image 1 is the pose's angles side by side, which the picture lays out the same way.
 func (r Request) sheetPrompt() string {
 	var b strings.Builder
-	kind, scene := "photorealistic photo", "on a plain light studio background"
+	kind, scene := r.Style.shot()
 	n := len(r.Views)
 	fmt.Fprintf(&b, "Image 1 shows the same pose from %d camera angles in %d panels side by side, a faceless gray mannequin in each. Create one %s laid out the same way: %d panels side by side, each showing the same single adult person in exactly that pose and the camera angle of the matching panel, %s. The person, face, hair, outfit and lighting are identical in every panel.", n, n, kind, n, scene)
 	if r.Costume != nil {
@@ -126,7 +158,8 @@ func boolInt(b bool) int {
 // pairPrompt is the prompt of a two-person pose: the look's outfit and face go to the person the pose centers on, and the other person is an adult of their own.
 func (r Request) pairPrompt() string {
 	var b strings.Builder
-	b.WriteString("Image 1 shows two faceless gray mannequins in a pose and a camera angle. Create one photorealistic photo of two adult people in exactly that pose, framing and camera angle, on a plain light studio background. Call the more prominent figure the main person and the other the partner.")
+	kind, scene := r.Style.shot()
+	fmt.Fprintf(&b, "Image 1 shows two faceless gray mannequins in a pose and a camera angle. Create one %s of two adult people in exactly that pose, framing and camera angle, %s. Call the more prominent figure the main person and the other the partner.", kind, scene)
 	n := 2
 	if r.Costume != nil {
 		fmt.Fprintf(&b, " Image %d shows an outfit with no one wearing it: dress the main person in exactly that outfit, with the same garments, colors, materials, patterns and details, fitted naturally to their body and pose. Dress the partner in simple clothes that suit it.", n)
