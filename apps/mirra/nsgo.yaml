@@ -24,3 +24,7 @@ build:
 
 # The GitHub repository whose releases the install scripts install from.
 release: { github: yldm-ai/mirra }
+
+# The app updates itself from the latest release: Sparkle on macOS and WinSparkle on Windows check daily, Android as it starts, each reading appcast-<target>.xml, which a release build signs with the secret key in NSGO_UPDATES_KEY (the Package workflow). key is its public half, as nsgo keygen printed it; a copy keeps only updates signed with it.
+updates:
+  key: wsnufR2hksnmx3vHSwehpAXMKLlrZTbzMSsQAenB7Ys=

@@ -283,6 +283,25 @@ func TestAdvancedSettings(t *testing.T) {
 	}
 }
 
+// TestCheckForUpdatesWhereTheAppUpdates offers the check on the platforms whose copies update themselves from the releases, and not on the web or iOS.
+func TestCheckForUpdatesWhereTheAppUpdates(t *testing.T) {
+	for _, c := range []struct {
+		os   core.OS
+		want bool
+	}{{core.OSMacOS, true}, {core.OSWindows, true}, {core.OSAndroid, true}, {core.OSWeb, false}, {core.OSIOS, false}} {
+		// A target runs on its own OS, which an Environment does not change.
+		if nsgotest.Target() != "" && c.os != core.OSMacOS {
+			continue
+		}
+		app := nsgotest.Start(t, App{DataDir: t.TempDir()}.Root, nsgotest.Environment(core.Environment{Locale: "en", OS: c.os}), nsgotest.Size(1440, 1000))
+		app.Press("id:open-settings")
+		app.WaitFor("id:version", wait)
+		if got := app.Exists("id:check-updates"); got != c.want {
+			t.Errorf("on %v the check is offered: %v, want %v", c.os, got, c.want)
+		}
+	}
+}
+
 func TestConnectionTestReportsFailure(t *testing.T) {
 	app, _ := start(t, &fakeAPI{}, "bad")
 	app.Press("text:Me")

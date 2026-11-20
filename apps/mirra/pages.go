@@ -10,6 +10,7 @@ import (
 	"github.com/nsgo-dev/nsgo/core"
 	"github.com/nsgo-dev/nsgo/icons/lucide"
 	"github.com/nsgo-dev/nsgo/ui"
+	"github.com/nsgo-dev/nsgo/updater"
 	"github.com/yldm-ai/mirra/apps/mirra/locales"
 )
 
@@ -493,14 +494,30 @@ func (s *studio) aboutLinks(cx *core.Scope) core.Node {
 	if version == "" {
 		version = t.VersionDevelopment()
 	}
-	return ui.FormSection{Title: t.AboutSection(), Children: []core.Node{
-		ui.FormRow{Title: t.Version(), Detail: version, OnPress: open(repoURL + "/releases"), TestID: "version"},
+	rows := []core.Node{ui.FormRow{Title: t.Version(), Detail: version, OnPress: open(repoURL + "/releases"), TestID: "version"}}
+	if updatable(cx.Env()) {
+		// updater shows what it finds: Sparkle's or WinSparkle's window on the desktop, an alert that installs the signed APK on Android.
+		rows = append(rows, ui.FormRow{Title: t.CheckForUpdates(), OnPress: func() { updater.Check(cx) }, TestID: "check-updates"})
+	}
+	return ui.FormSection{Title: t.AboutSection(), Children: append(rows,
 		ui.FormRow{Title: t.SourceCode(), Detail: "GitHub", OnPress: open(repoURL)},
 		ui.FormRow{Title: t.License(), Detail: "MIT", OnPress: open(repoURL + "/blob/main/LICENSE")},
 		ui.FormRow{Title: t.SourcesPose(), Detail: "POSE-DB-01", OnPress: open(DefaultSites.Pose)},
 		ui.FormRow{Title: t.SourcesOutfit(), Detail: "COSTUME-DB-01", OnPress: open(DefaultSites.Costume)},
 		ui.FormRow{Title: t.SourcesFace(), Detail: "FACE REFERENCE · CC0", OnPress: open(DefaultSites.Face)},
-	}, Footer: t.SourcesFooter()}
+	), Footer: t.SourcesFooter()}
+}
+
+// updatable says whether the app updates itself where it runs: the desktop and Android copies from the latest release. The web build is always the latest, and the iOS app, which is built from source, is in no store to ask.
+func updatable(env *core.Env) bool {
+	if env.Simulated() {
+		return false
+	}
+	switch env.OS() {
+	case core.OSMacOS, core.OSWindows, core.OSLinux, core.OSAndroid:
+		return true
+	}
+	return false
 }
 
 // card is a rounded panel on the page.

@@ -169,6 +169,7 @@ sizeLandscape: Landscape
 resetDefaults: Reset to defaults
 version: Version
 versionDevelopment: Development build
+checkForUpdates: Check for updates
 baseURL: Address
 apiKey: API key
 apiKeyOptional: API key (optional)

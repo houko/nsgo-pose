@@ -120,9 +120,9 @@ The connection test asks the provider for its models; Volcengine Ark and Model S
 
 | Platform | State |
 | --- | --- |
-| macOS | Runs; tested in a real window. Releases carry a disk image signed with a Developer ID and notarized |
-| Windows | Releases carry an installer signed with a code signing certificate; not yet run on a device |
-| Android | `nsgo build` makes an APK; releases carry it once its signing key is set up. Not yet run on a device |
+| macOS | Runs; tested in a real window. Releases carry a disk image signed with a Developer ID and notarized; the app updates itself through Sparkle |
+| Windows | Releases carry an installer signed with a code signing certificate, and the app updates itself through WinSparkle; not yet run on a device |
+| Android | Releases carry an APK signed with the release key, and the app offers each newer one as it starts; not yet run on a device |
 | iOS | Build from source (`go tool nsgo dev -target ios_simulator`); not yet run on a device |
 | Linux | Not in the build targets yet; NSGo supports it, untested here |
 | Web | Runs at [yldm-ai.github.io/mirra/app/](https://yldm-ai.github.io/mirra/app/), built with the website. A browser has no secure store or file system for the app, so the key, works and added clothes last as long as the page; export pictures to keep them |
@@ -165,7 +165,9 @@ Pushes to `main` that touch it, the app or the screenshots publish it to GitHub 
 
 ### Releases
 
-`.github/workflows/ci.yml` tests the app, vets every target, builds every package and the website on pull requests and on `main`. Once it passes on `main`, `.github/workflows/release.yml` releases what the Conventional Commits since the last tag call for: `feat` is a minor version, `fix` and `perf` a patch, and `docs`, `chore` and the `website` scope release nothing. It writes the version into `apps/mirra/nsgo.yaml`, makes `CHANGELOG.md`'s Unreleased section the version's section (or writes one from the commits when Unreleased is empty), commits and tags `vX.Y.Z`, builds the packages (`.github/workflows/package.yml`), publishes them with their checksums and provenance, and rebuilds the website, whose download cards link them. Run Release by hand from `main` to force a bump. The macOS package is signed and notarized and the Windows one signed with the organization's certificates; the Android APK ships once the `ANDROID_KEYSTORE`, `NSGO_KEYSTORE_PASSWORD` and `NSGO_KEY_PASSWORD` secrets hold its release key, since installed copies update only to an APK signed with the same key.
+`.github/workflows/ci.yml` tests the app, vets every target, builds every package and the website on pull requests and on `main`. Once it passes on `main`, `.github/workflows/release.yml` releases what the Conventional Commits since the last tag call for: `feat` is a minor version, `fix` and `perf` a patch, and `docs`, `chore` and the `website` scope release nothing. It writes the version into `apps/mirra/nsgo.yaml`, makes `CHANGELOG.md`'s Unreleased section the version's section (or writes one from the commits when Unreleased is empty), commits and tags `vX.Y.Z`, builds the packages (`.github/workflows/package.yml`), publishes them with their checksums and provenance, and rebuilds the website, whose download cards link them. Run Release by hand from `main` to force a bump. The macOS package is signed and notarized and the Windows one signed with the organization's certificates; the Android APK is signed with the release key in the `ANDROID_KEYSTORE`, `NSGO_KEYSTORE_PASSWORD` and `NSGO_KEY_PASSWORD` secrets, since installed copies update only to an APK signed with the same key.
+
+Installed copies update themselves from the latest release. A release build signs each installer with the secret key in the `NSGO_UPDATES_KEY` secret and uploads each desktop and Android target's `appcast-<target>.xml`; `apps/mirra/nsgo.yaml`'s `updates.key` is its public half, and a copy installs only what that key signed. On macOS Sparkle and on Windows WinSparkle check once a day, Android checks as the app starts, and **Check for updates** under About checks at once. Keep the secret key: without it no installed copy can update again. Versions up to 0.7.0 carry no updater and are reinstalled once.
 
 ## License
 

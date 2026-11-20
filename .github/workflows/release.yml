@@ -134,6 +134,7 @@ jobs:
       ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
       NSGO_KEYSTORE_PASSWORD: ${{ secrets.NSGO_KEYSTORE_PASSWORD }}
       NSGO_KEY_PASSWORD: ${{ secrets.NSGO_KEY_PASSWORD }}
+      NSGO_UPDATES_KEY: ${{ secrets.NSGO_UPDATES_KEY }}
 
   publish:
     name: Publish
